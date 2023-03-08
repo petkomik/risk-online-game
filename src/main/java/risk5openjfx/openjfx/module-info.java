@@ -1,3 +1,4 @@
+package risk5openjfx.openjfx;
 module risk5openjfx.openjfx {
     requires javafx.controls;
     requires javafx.fxml;
