@@ -1,3 +1,5 @@
+//@author Stefan Rogalski
+
 package game.entities;
 
 public class Player {
