@@ -3,7 +3,9 @@ target/
 target/*
 **/target
 /target
-target/classes/*
+target/.gitignore
+target/classes/.gitignore
+
 
 # Package Files #
 *.jar
@@ -15,3 +17,5 @@ target/classes/*
 
 # Compiled class file
 *.class
+
+
