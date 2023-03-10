@@ -1,0 +1,16 @@
+## ignores all files in target when pushing
+target/
+target/*
+**/target
+/target
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Compiled class file
+*.class
