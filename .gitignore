@@ -3,6 +3,7 @@ target/
 target/*
 **/target
 /target
+target/classes/*
 
 # Package Files #
 *.jar
