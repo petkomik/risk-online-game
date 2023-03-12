@@ -5,6 +5,9 @@ target/*
 /target
 target/.gitignore
 target/classes/.gitignore
+./target/*
+/target
+./target/classes/*
 
 
 # Package Files #
