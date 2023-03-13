@@ -1,6 +1,6 @@
 //@author Stefan Rogalski
 
-package game.entities;
+package game.models;
 
 public class Player {
 
