@@ -12,7 +12,7 @@ import java.io.IOException;
 public class MainApp extends Application{
 	
 	private AnchorPane anchorPane;
-    private static Scene scene;
+    private Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
