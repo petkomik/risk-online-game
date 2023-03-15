@@ -2,7 +2,6 @@ package database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import game.models.Player;
 
@@ -34,7 +33,6 @@ public class DatabaseHandler extends Database {
 			stm1.executeUpdate();
 			this.connection.commit();
 			stm1.close();
-			System.out.println("\nHat geklappt mit PersonalPlayer:\nName: " + p.getName() + "\nID: " + p.getId() + "\n");
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
