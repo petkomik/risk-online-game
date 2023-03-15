@@ -14,7 +14,10 @@ public class TestDB {
 		CreateDatabase db = new CreateDatabase();
 		db.createTables();
 		DatabaseHandler dbH = new DatabaseHandler();
+		
+		dbH.deletePlayer(11111);
 		Player p1 = new Player(11111, 4, "Max", "blue", "C:\\user\\exmaplePath\\furtherExample\\photo.jpg", LocalTime.now(), true);
 		dbH.createPlayerData(p1);
+		
 	}
 }
