@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import general.Parameter;
+
 /**
  * 
  * @author malaji
@@ -29,7 +31,7 @@ public class MainApp extends Application{
     	// Setting the anchor pane as a root into the scene
         scene = new Scene(anchorPane);
         // Getting the pic transparent-risk.png
-        Image image = new Image("/risk5/src/main/resources/risk5openjfx/openjfx/transparent-risk.png");
+        Image image = new Image(Parameter.logoImage);
         // Setting the pic transparent-risk.png as logo of the stage
         stage.getIcons().add(image);
         // Setting the scene into the stage
@@ -47,9 +49,8 @@ public class MainApp extends Application{
         return fxmlLoader.load();
     }
     
-	public static void runMainApp() {
-		launch();
-
+	public static void runMainApp(String[] args) {
+		launch(args);
 	}
 
 }
