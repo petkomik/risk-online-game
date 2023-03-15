@@ -2,17 +2,19 @@ package database;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import game.models.Player;
 
 /**
- * contains methods to get the data from the database and store it on the databse.
+ * contains methods to get the data from the database and store it on the database.
  *
  * @author jorohr
  */
 public class DatabaseHandler extends Database {
 	
 	private PreparedStatement stm1;
+	
 	public DatabaseHandler() {
 		super();
 	}
@@ -37,6 +39,29 @@ public class DatabaseHandler extends Database {
 			e.printStackTrace();
 		}
 	}
+	
+	public void deletePlayer(int id) {
+		try {
+			String sql = "DELETE FROM Players WHERE PlayerID = " + id + ";";
+			Statement stm = super.connection.createStatement();
+			stm.executeUpdate(sql);
+			this.connection.commit();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updatePlayerInfo(String value,String attribute, Player p1) {
+		try {
+			String sql = "UPDATE Players SET " + attribute + " = '" + value + "' WHERE PlayerID = " + p1.getId();
+			Statement stm = super.connection.createStatement();
+			stm.executeUpdate(sql);
+			this.connection.commit();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	
 }
