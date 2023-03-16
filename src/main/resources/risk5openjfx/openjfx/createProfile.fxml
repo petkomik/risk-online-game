@@ -14,8 +14,8 @@
       <Label fx:id="usernameLabel" layoutX="360.0" layoutY="307.0" text="USERNAME" />
       <Label fx:id="passwordLabel" layoutX="360.0" layoutY="367.0" text="PASSWORD" />
       <TextField layoutX="675.0" layoutY="200.0" prefHeight="30.0" prefWidth="240.0" />
-      <TextField layoutX="675.0" layoutY="320.0" prefHeight="30.0" prefWidth="240.0" />
       <TextField layoutX="675.0" layoutY="260.0" prefHeight="30.0" prefWidth="240.0" />
+      <TextField layoutX="675.0" layoutY="320.0" prefHeight="30.0" prefWidth="240.0" />
       <PasswordField layoutX="675.0" layoutY="380.0" prefHeight="30.0" prefWidth="240.0" />
       <Button fx:id="createProfileButton" layoutX="802.0" layoutY="451.0" mnemonicParsing="false" onAction="#clickCreate" text="CREATE" />
    </children>
