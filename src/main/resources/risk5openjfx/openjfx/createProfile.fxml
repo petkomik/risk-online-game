@@ -6,9 +6,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="risk5openjfx.openjfx.CreateProfilePaneController">
    <children>
-      <Button fx:id="backButton" layoutX="39.0" layoutY="40.0" mnemonicParsing="false" text="BACK" />
+      <Button fx:id="backButton" layoutX="39.0" layoutY="40.0" mnemonicParsing="false" onAction="#clickBack" text="BACK" />
       <Label fx:id="firstNameLabel" layoutX="360.0" layoutY="187.0" text="FIRST NAME" />
       <Label fx:id="lastNameLabel" layoutX="360.0" layoutY="247.0" text="LAST NAME" />
       <Label fx:id="usernameLabel" layoutX="360.0" layoutY="307.0" text="USERNAME" />
@@ -17,6 +17,6 @@
       <TextField layoutX="675.0" layoutY="320.0" prefHeight="30.0" prefWidth="240.0" />
       <TextField layoutX="675.0" layoutY="260.0" prefHeight="30.0" prefWidth="240.0" />
       <PasswordField layoutX="675.0" layoutY="380.0" prefHeight="30.0" prefWidth="240.0" />
-      <Button fx:id="createProfileButton" layoutX="802.0" layoutY="451.0" mnemonicParsing="false" text="CREATE" />
+      <Button fx:id="createProfileButton" layoutX="802.0" layoutY="451.0" mnemonicParsing="false" onAction="#clickCreate" text="CREATE" />
    </children>
 </AnchorPane>
