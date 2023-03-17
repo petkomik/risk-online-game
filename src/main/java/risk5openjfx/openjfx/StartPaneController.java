@@ -14,6 +14,9 @@ public class StartPaneController {
 	private AnchorPane anchorPane;
 	
 	public void clickPlay(ActionEvent e) throws IOException {
+		
+		(new GameSound()).buttonClickForwardSound();
+		
 		Node node = (Node)e.getSource();
 		stage = (Stage)node.getScene().getWindow();
 		anchorPane = (AnchorPane) loadFXML("createProfile");

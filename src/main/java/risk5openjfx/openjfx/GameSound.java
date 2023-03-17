@@ -22,4 +22,12 @@ public class GameSound {
 		mediaPlayer.play();
 	}
 	
+	public void buttonClickForwardSound() {
+		new MediaPlayer(new Media(new File(Parameter.buttonClick03Sound).toURI().toString())).play();
+	}
+	
+	public void buttonClickBackwardSound() {
+		new MediaPlayer(new Media(new File(Parameter.buttonClick04Sound).toURI().toString())).play();
+	}
+	
 }

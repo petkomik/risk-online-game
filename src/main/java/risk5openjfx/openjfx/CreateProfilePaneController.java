@@ -14,6 +14,9 @@ public class CreateProfilePaneController {
 	private AnchorPane anchorPane;
 	
     public void clickCreate(ActionEvent e) throws IOException {
+    	
+    	(new GameSound()).buttonClickForwardSound();
+    	
     	Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage)node.getScene().getWindow();
@@ -26,6 +29,9 @@ public class CreateProfilePaneController {
 	}
 	
 	public void clickBack(ActionEvent e) throws IOException {
+		
+		(new GameSound()).buttonClickBackwardSound();
+		
 		Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage)node.getScene().getWindow();
