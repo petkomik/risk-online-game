@@ -1,15 +1,21 @@
 package risk5openjfx.openjfx;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import java.io.File;
+import java.io.IOException;
+
+import general.Parameter;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class GameSound {
-
+	private Media media;
+	private MediaPlayer mediaPlayer;
+	
+	public void startThemeSong() {
+		File file = new File(Parameter.themeSong);
+		media = new Media(file.toURI().toString());
+		mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.play();
+	}
+	
 }

@@ -1,16 +1,18 @@
 package risk5openjfx.openjfx;
 
+import java.io.File;
+import java.io.IOException;
+
+import general.Parameter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-
-import general.Parameter;
 
 /**
  * 
@@ -42,6 +44,16 @@ public class MainApp extends Application{
         stage.setResizable(false);
         // Showing the stage
         stage.show();
+        
+        /**************** Sound *************************//**
+        File file = new File(Parameter.themeSong);
+		Media media = new Media(file.toURI().toString());
+		System.out.println(file.toURI().toString());
+		MediaPlayer mediaPlayer = new MediaPlayer(media);
+		mediaPlayer.play();*/
+        
+        (new GameSound()).startThemeSong();
+		
     }
 
     private Parent loadFXML(String fxml) throws IOException {
