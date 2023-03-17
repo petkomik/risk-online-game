@@ -1,7 +1,13 @@
-//@author Stefan Rogalski
+
 package game.models;
 
 import java.time.LocalTime;
+
+/**
+ * 
+ * @author srogalsk
+ *
+ */
 
 enum Difficulty {
 	EASY,
