@@ -6,7 +6,11 @@ import java.io.IOException;
 import general.Parameter;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-
+/**
+ * 
+ * @author srogalsk
+ *
+ */
 public class GameSound {
 	private Media media;
 	private MediaPlayer mediaPlayer;
