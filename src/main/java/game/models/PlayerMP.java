@@ -15,4 +15,14 @@ public class PlayerMP extends Player {
 		this.profile = profile;
 	}
 
+	
+	
+	//@author pmikov
+	public int getRank() {
+		int wins = profile.getWins();
+		int losses = profile.getLoses();
+		int rank = wins / (wins + losses);
+		return rank;
+	}
+	
 }
