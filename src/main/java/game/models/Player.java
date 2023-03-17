@@ -11,7 +11,7 @@ import game.Profile;
  * @author jorohr
  */
 
-public class Player {
+public abstract class Player {
 	
 	private GameState gameState;
 	

@@ -16,12 +16,12 @@ public class CreateDatabase extends Database {
 
 	public void createTables() {
 		CreateDatabase cdb = new CreateDatabase();
-		cdb.createTable_Players();
+		cdb.createTable_Profiles();
 		cdb.createTable_Games();
 		cdb.disconnect();
 	}
 
-	private void createTable_Players() {
+	private void createTable_Profiles() {
 		dropTable("Profiles");
 		try (Statement stm = connection.createStatement()){
 			String sql = "CREATE TABLE IF NOT EXISTS Profiles "

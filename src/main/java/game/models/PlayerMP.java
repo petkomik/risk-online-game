@@ -4,10 +4,15 @@ package game.models;
 
 import java.time.LocalTime;
 
-public class PlayerMP extends Player {
+import game.Profile;
 
-	public PlayerMP() {
+public class PlayerMP extends Player {
+	
+	private Profile profile;
+	
+	public PlayerMP(Profile profile) {
 		
+		this.profile = profile;
 	}
 
 }
