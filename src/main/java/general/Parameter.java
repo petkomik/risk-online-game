@@ -16,6 +16,8 @@ public class Parameter {
 	public static final String dbName = "risk-database.db";
 	public static final String soundsdir = resourcesdir + "sounds" + sep;
 	public static final String themeSong = soundsdir + "Now-We-Ride.mp3";
-
+	
+	public static final String buttonClick03Sound = soundsdir + "zapsplat_multimedia_button_click_fast_short_003.mp3";
+	public static final String buttonClick04Sound = soundsdir + "zapsplat_multimedia_button_click_fast_short_004.mp3";
 }
 
