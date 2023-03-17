@@ -7,7 +7,6 @@ package game.models;
  */
 
 public enum Continent {
-	
 	Africa,
 	Asia,
 	Australia,
