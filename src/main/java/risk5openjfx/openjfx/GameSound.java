@@ -20,6 +20,7 @@ public class GameSound {
 		media = new Media(file.toURI().toString());
 		mediaPlayer = new MediaPlayer(media);
 		mediaPlayer.play();
+		mediaPlayer.setAutoPlay(true);
 	}
 	
 	public void buttonClickForwardSound() {
