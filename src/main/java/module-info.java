@@ -4,6 +4,7 @@ module risk5openjfx.openjfx {
     requires javafx.fxml;
     requires java.sql;
 	requires javafx.base;
+	requires javafx.media;
 
     opens risk5openjfx.openjfx to javafx.fxml;
     exports risk5openjfx.openjfx;
