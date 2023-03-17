@@ -3,6 +3,7 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -41,5 +42,15 @@ public class Database {
 			e.printStackTrace();
 		}
 		System.out.println("Database was closed");
-	}   
+	}
+	
+	protected void dropTable(String name) {
+		try (Statement statement = connection.createStatement()) {
+			String sql = "DROP TABLE IF EXISTS " + name;
+			statement.executeUpdate(sql);
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
