@@ -14,9 +14,9 @@ public class TestDB {
 	public static void main(String[]args) {
 		CreateDatabase db = new CreateDatabase();
 		db.createTables();
-		DatabaseHandler dbH = new DatabaseHandler();
+		PlayerProfileHandler dbH = new PlayerProfileHandler();
 		
-		dbH.deletePlayer(11111);
+		dbH.deleteProfile(11111);
 		Profile p1 = new Profile(11,  "userName", "firstName", "lastName", "color", 3, 2, "photo", "password", 1);
 		Profile p2 = 	new Profile(113,  "userName", "firstName", "lastName", "color", 3, 2, "photo", "password", 1);
 		
