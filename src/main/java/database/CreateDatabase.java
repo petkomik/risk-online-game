@@ -22,15 +22,19 @@ public class CreateDatabase extends Database {
 	}
 
 	private void createTable_Players() {
-
+		dropTable("Profiles");
 		try (Statement stm = connection.createStatement()){
-			String sql = "CREATE TABLE IF NOT EXISTS Players "
+			String sql = "CREATE TABLE IF NOT EXISTS Profiles "
 					+ "(PlayerID INTGEGER PRIMARY KEY, "
-					+ "Name TEXT NOT NULL, "
-					+ "Wins INTEGER NOT NULL, "
-					+ "Color TEXT NOT NULL,"
-					+ "Photo TEXT NOT NULL, "
-					+ "GameTime TEXT NOT NULL, "
+					+ "UserName TEXT NOT NULL, "
+					+ "FirstName TEXT NOT NULL, "
+					+ "LastName TEXT NOT NULL, "
+					+ "Wins INTEGER, "
+					+ "Color TEXT,"
+					+ "Photo TEXT, "
+					+ "Loses INTEGER, "
+					+ "Password TEXT NOT NULL, "
+					+ "Score INTEGER, "
 					+ "IsPersonal BIT NOT NULL);";
 			stm.executeUpdate(sql);
 			connection.commit();
@@ -41,6 +45,7 @@ public class CreateDatabase extends Database {
 			System.exit(0);
 		}
 	}
+
 
 	private void createTable_Games() {
 		try (Statement stm = connection.createStatement()){
