@@ -55,12 +55,22 @@ public class MainApp extends Application{
         (new GameSound()).startThemeSong();
 		
     }
-
+    /**
+     * 
+     * @param fxml, file name without the ending .fxml
+     * @return Parent object, to be set as a root in a Secene object
+     * @throws IOException
+     * 
+     * This method is responsible for loading a fxml file
+     */
     private Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
-    
+    /**
+     * this class method enables the launching of the App outside the class
+     * @param args
+     */
 	public static void runMainApp(String[] args) {
 		launch(args);
 	}
