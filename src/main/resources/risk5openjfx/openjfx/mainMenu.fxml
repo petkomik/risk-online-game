@@ -6,9 +6,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="628.0" layoutY="260.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="PLAY TUTORIAL" />
-      <Button layoutX="628.0" layoutY="330.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="PROFILE SETTINGS" />
-      <Button layoutX="628.0" layoutY="400.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="SINGLEPLAYER" />
-      <Button layoutX="628.0" layoutY="470.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="MULTIPLAYER" />
+      <Button layoutX="658.0" layoutY="260.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="PLAY TUTORIAL" />
+      <Button layoutX="658.0" layoutY="330.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="PROFILE SETTINGS" />
+      <Button layoutX="658.0" layoutY="400.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="SINGLEPLAYER" />
+      <Button layoutX="658.0" layoutY="470.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="220.0" text="MULTIPLAYER" />
    </children>
 </AnchorPane>
