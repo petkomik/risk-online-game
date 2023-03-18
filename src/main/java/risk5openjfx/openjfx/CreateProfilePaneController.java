@@ -9,10 +9,19 @@ import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author majda
+ * The class handles the event on the create profile frame
+ */
 public class CreateProfilePaneController {
 	private Stage stage;
 	private AnchorPane anchorPane;
-	
+	/**
+	 * The method handles the event, when the player clicks on the button 'create'
+	 * @param e
+	 * @throws IOException
+	 */
     public void clickCreate(ActionEvent e) throws IOException {
     	
     	(new GameSound()).buttonClickForwardSound();
@@ -27,7 +36,11 @@ public class CreateProfilePaneController {
 		// Showing the Stage
 		stage.show();
 	}
-	
+    /**
+	 * The method handles the event, when the player clicks on the button 'back'
+	 * @param e
+	 * @throws IOException
+	 */
 	public void clickBack(ActionEvent e) throws IOException {
 		
 		(new GameSound()).buttonClickBackwardSound();
@@ -42,7 +55,14 @@ public class CreateProfilePaneController {
 		// Showing the Stage
 		stage.show();
 	}
-	
+	/**
+     * 
+     * @param fxml, file name without the ending .fxml
+     * @return Parent object, to be set as a root in a Secene object
+     * @throws IOException
+     * 
+     * This method is responsible for loading a fxml file
+     */
 	private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
