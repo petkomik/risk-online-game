@@ -1,11 +1,18 @@
 package risk5openjfx.openjfx;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
+import general.Parameter;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 /**
@@ -13,9 +20,28 @@ import javafx.stage.Stage;
  * @author majda
  * this class handles the events on the very first frame
  */
-public class StartPaneController {
+public class StartPaneController implements Initializable{
 	private Stage stage;
 	private AnchorPane anchorPane;
+	private double w = Parameter.screenWidth;
+	private double h = Parameter.screenHeight;
+	
+	@FXML
+	private ImageView imageView;
+	@FXML
+	private Button playButton;
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		imageView.setFitWidth(w*0.391);
+		imageView.setFitHeight(h*0.347);
+		imageView.setLayoutX(w*0.305);
+		imageView.setLayoutY(h*0.076);
+		playButton.setPrefSize(w*0.13, h*0.058);
+		playButton.setLayoutX(w*0.435);
+		playButton.setLayoutY(h*0.471);
+	}
+	
 	/**
 	 * this method shows the create profile frame after the player has clicked the button 'play'
 	 * @param e
