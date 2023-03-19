@@ -1,5 +1,7 @@
 package general;
 
+import javafx.stage.Screen;
+
 /**
  * Parameter class to get to directories, files, the database, etc.
  *
@@ -19,5 +21,8 @@ public class Parameter {
 	
 	public static final String buttonClick03Sound = soundsdir + "zapsplat_multimedia_button_click_fast_short_003.mp3";
 	public static final String buttonClick04Sound = soundsdir + "zapsplat_multimedia_button_click_fast_short_004.mp3";
+	
+	public static final double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+	public static final double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
 }
 
