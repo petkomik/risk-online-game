@@ -10,7 +10,7 @@
       <Button fx:id="playButton" mnemonicParsing="false" onAction="#clickPlay" text="PLAY" />
       <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../../../../../../../Desktop/workspace/Risk/src/main/resources/org/openjfx/Risk/transparent-risk.png" />
+            <Image url="@../../images/transparent-risk.png" />
          </image>
       </ImageView>
    </children>
