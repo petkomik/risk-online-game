@@ -5,10 +5,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1536.0" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="risk5openjfx.openjfx.StartPaneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="risk5openjfx.openjfx.StartPaneController">
    <children>
-      <Button fx:id="playButton" layoutX="636.0" layoutY="405.0" mnemonicParsing="false" onAction="#clickPlay" prefHeight="55.0" prefWidth="260.0" text="PLAY" />
-      <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="525.0" layoutX="535.0" layoutY="158.0" pickOnBounds="true" preserveRatio="true">
+      <Button fx:id="playButton" mnemonicParsing="false" onAction="#clickPlay" text="PLAY" />
+      <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../../../../../../../../Desktop/workspace/Risk/src/main/resources/org/openjfx/Risk/transparent-risk.png" />
          </image>
