@@ -30,6 +30,8 @@ public class MainApp extends Application{
     public void start(Stage stage) throws IOException {
     	// Getting the anchor pane from the file main.fxml
     	anchorPane = (AnchorPane) loadFXML("main");
+    	// Setting the size of the pane
+        anchorPane.setPrefSize(Parameter.screenWidth, Parameter.screenHeight);
     	// Setting the anchor pane as a root into the scene
         scene = new Scene(anchorPane);
         // Getting the pic transparent-risk.png
