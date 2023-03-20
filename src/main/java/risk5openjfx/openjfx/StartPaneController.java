@@ -54,6 +54,7 @@ public class StartPaneController implements Initializable{
 		Node node = (Node)e.getSource();
 		stage = (Stage)node.getScene().getWindow();
 		anchorPane = (AnchorPane) loadFXML("createProfile");
+		anchorPane.setPrefSize(w, h);
 		stage.getScene().setRoot(anchorPane);
 		stage.show();
 
