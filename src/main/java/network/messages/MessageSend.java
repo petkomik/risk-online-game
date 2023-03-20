@@ -21,5 +21,22 @@ public class MessageSend extends Message {
 		this.playerFrom = playerFrom;
 		this.playerTo = playerTo;
 	}
+	
+	public MessageSend(String message) {
+		super(MessageType.MessageSend);
+		this.message = message;
+	}
+	
+	public Player getPlayerFrom() {
+		return playerFrom;
+	}
+	
+	public Player getPlayerTo() {
+		return playerTo;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
 
 }
