@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -47,10 +48,10 @@ public class CreateProfilePaneController implements Initializable{
 	@FXML
 	private TextField usernameTF;
 	@FXML
-	private TextField passwordF;
+	private PasswordField passwordField;
 
 	@FXML
-	private Button createButton;
+	private Button createProfileButton;
 	
 	/*
 	 * This private method is an help method to initialize the x and y coordinates
@@ -65,15 +66,17 @@ public class CreateProfilePaneController implements Initializable{
 		
 		backButton.setPrefSize(w*0.062, h*0.058);
 		
-		firstNameLabel.setPrefSize(w*0.124, h*0.058);
-		lastNameLabel.setPrefSize(w*0.124, h*0.058);
-		usernameLabel.setPrefSize(w*0.124, h*0.058);
-		passwordLabel.setPrefSize(w*0.124, h*0.058);
+		firstNameLabel.setPrefSize(w*0.134, h*0.058);
+		lastNameLabel.setPrefSize(w*0.134, h*0.058);
+		usernameLabel.setPrefSize(w*0.134, h*0.058);
+		passwordLabel.setPrefSize(w*0.134, h*0.058);
 		
 		firstNameTF.setPrefSize(w*0.156, h*0.035);
 		lastNameTF.setPrefSize(w*0.156, h*0.035);
 		usernameTF.setPrefSize(w*0.156, h*0.035);
-		passwordF.setPrefSize(w*0.156, h*0.035);
+		passwordField.setPrefSize(w*0.156, h*0.035);
+		
+		createProfileButton.setPrefSize(w*0.075, h*0.058);
 		
 		/* Setting the x and y coordinates of each element */
 		this.setXYof(0.026, 0.046, backButton);
@@ -84,8 +87,8 @@ public class CreateProfilePaneController implements Initializable{
 		this.setXYof(0.439, 0.231, firstNameTF);
 		this.setXYof(0.439, 0.301, lastNameTF);
 		this.setXYof(0.439, 0.37, usernameTF);
-		this.setXYof(0.439, 0.44, passwordF);
-		this.setXYof(0.521, 0.521, createButton);
+		this.setXYof(0.439, 0.44, passwordField);
+		this.setXYof(0.521, 0.521, createProfileButton);
 	}
 	/**
 	 * The method handles the event, when the player clicks on the button 'create'
