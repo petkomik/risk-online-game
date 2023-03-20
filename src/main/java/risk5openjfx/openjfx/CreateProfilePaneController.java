@@ -1,11 +1,19 @@
 package risk5openjfx.openjfx;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
+import general.Parameter;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -14,9 +22,71 @@ import javafx.stage.Stage;
  * @author majda
  * The class handles the event on the create profile frame
  */
-public class CreateProfilePaneController {
+public class CreateProfilePaneController implements Initializable{
 	private Stage stage;
 	private AnchorPane anchorPane;
+	
+	private double w = Parameter.screenWidth;
+	private double h = Parameter.screenHeight;
+	
+	@FXML
+	private Button backButton;
+	@FXML
+	private Label firstNameLabel;
+	@FXML
+	private Label lastNameLabel;
+	@FXML
+	private Label usernameLabel;
+	@FXML
+	private Label passwordLabel;
+	
+	@FXML
+	private TextField firstNameTF;
+	@FXML
+	private TextField lastNameTF;
+	@FXML
+	private TextField usernameTF;
+	@FXML
+	private TextField passwordF;
+
+	@FXML
+	private Button createButton;
+	
+	/*
+	 * This private method is an help method to initialize the x and y coordinates
+	 */
+	private void setXYof(double relativeX, double relativeY, Node node) {
+		node.setLayoutX(w*relativeX);
+		node.setLayoutY(h*relativeY);
+	}
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		/* Setting the size of each element */
+		
+		backButton.setPrefSize(w*0.062, h*0.058);
+		
+		firstNameLabel.setPrefSize(w*0.124, h*0.058);
+		lastNameLabel.setPrefSize(w*0.124, h*0.058);
+		usernameLabel.setPrefSize(w*0.124, h*0.058);
+		passwordLabel.setPrefSize(w*0.124, h*0.058);
+		
+		firstNameTF.setPrefSize(w*0.156, h*0.035);
+		lastNameTF.setPrefSize(w*0.156, h*0.035);
+		usernameTF.setPrefSize(w*0.156, h*0.035);
+		passwordF.setPrefSize(w*0.156, h*0.035);
+		
+		/* Setting the x and y coordinates of each element */
+		this.setXYof(0.026, 0.046, backButton);
+		this.setXYof(0.234, 0.22, firstNameLabel);
+		this.setXYof(0.234, 0.289, lastNameLabel);
+		this.setXYof(0.234, 0.359, usernameLabel);
+		this.setXYof(0.234, 0.428, passwordLabel);
+		this.setXYof(0.439, 0.231, firstNameTF);
+		this.setXYof(0.439, 0.301, lastNameTF);
+		this.setXYof(0.439, 0.37, usernameTF);
+		this.setXYof(0.439, 0.44, passwordF);
+		this.setXYof(0.521, 0.521, createButton);
+	}
 	/**
 	 * The method handles the event, when the player clicks on the button 'create'
 	 * @param e
@@ -31,6 +101,8 @@ public class CreateProfilePaneController {
 		stage = (Stage)node.getScene().getWindow();
 		// changing the AnchorPane from the main file
 		anchorPane = (AnchorPane) loadFXML("mainMenu");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
 		// Setting the AnchorPane as a root of the main scene
 		stage.getScene().setRoot(anchorPane);
 		// Showing the Stage
@@ -50,6 +122,8 @@ public class CreateProfilePaneController {
 		stage = (Stage)node.getScene().getWindow();
 		// changing the AnchorPane from the main file
 		anchorPane = (AnchorPane) loadFXML("main");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
 		// Setting the AnchorPane as a root of the main scene
 		stage.getScene().setRoot(anchorPane);
 		// Showing the Stage
