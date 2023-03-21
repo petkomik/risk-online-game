@@ -64,19 +64,19 @@ public class CreateProfilePaneController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		/* Setting the size of each element */
 		
-		backButton.setPrefSize(w*0.081, h*0.058);
+		backButton.setPrefSize(w*0.091, h*0.058);
 		
-		firstNameLabel.setPrefSize(w*0.134, h*0.058);
-		lastNameLabel.setPrefSize(w*0.134, h*0.058);
-		usernameLabel.setPrefSize(w*0.134, h*0.058);
-		passwordLabel.setPrefSize(w*0.134, h*0.058);
+		firstNameLabel.setPrefSize(w*0.143, h*0.058);
+		lastNameLabel.setPrefSize(w*0.143, h*0.058);
+		usernameLabel.setPrefSize(w*0.143, h*0.058);
+		passwordLabel.setPrefSize(w*0.143, h*0.058);
 		
 		firstNameTF.setPrefSize(w*0.156, h*0.035);
 		lastNameTF.setPrefSize(w*0.156, h*0.035);
 		usernameTF.setPrefSize(w*0.156, h*0.035);
 		passwordField.setPrefSize(w*0.156, h*0.035);
 		
-		createProfileButton.setPrefSize(w*0.081, h*0.058);
+		createProfileButton.setPrefSize(w*0.091, h*0.058);
 		
 		/* Setting the x and y coordinates of each element */
 		this.setXYof(0.026, 0.046, backButton);
@@ -88,7 +88,7 @@ public class CreateProfilePaneController implements Initializable{
 		this.setXYof(0.439, 0.301, lastNameTF);
 		this.setXYof(0.439, 0.37, usernameTF);
 		this.setXYof(0.439, 0.44, passwordField);
-		this.setXYof(0.514, 0.521, createProfileButton);
+		this.setXYof(0.505, 0.521, createProfileButton);
 	}
 	/**
 	 * The method handles the event, when the player clicks on the button 'create'
