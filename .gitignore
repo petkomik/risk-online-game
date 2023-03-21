@@ -21,4 +21,6 @@ target/classes/.gitignore
 # Compiled class file
 *.class
 
+# Database
+/risk-database.db
 
