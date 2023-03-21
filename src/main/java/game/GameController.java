@@ -1,6 +1,5 @@
 package game;
 
-import database.CreateDatabase;
 import database.PlayerProfileHandler;
 
 /**
