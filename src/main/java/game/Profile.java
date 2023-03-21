@@ -56,7 +56,7 @@ public class Profile {
 		this.lastName = lastName;
 		this.userName = userName;
 		this.password = password;
-		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", ""));
+		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", "").replace("T", "").substring(15,24));
 	}
 
 	public String getColor() {

@@ -17,7 +17,7 @@ public class TestDB {
 		PlayerProfileHandler dbH = new PlayerProfileHandler();
 		
 		dbH.deleteProfile(11111);
-		Profile p1 = new Profile(11,  "userName", "firstName", "lastName", "color", 3, 2, "photo", "password", 1);
+		Profile p1 = new Profile("userName", "firstName", "lastName", "password");
 		Profile p2 = 	new Profile(113,  "userName", "firstName", "lastName", "color", 3, 2, "photo", "password", 1);
 		
 		dbH.createProfileData(p1);
