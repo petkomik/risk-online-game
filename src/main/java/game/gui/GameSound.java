@@ -6,6 +6,7 @@ import java.io.IOException;
 import general.Parameter;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 /**
  * 
  * @author srogalsk
@@ -21,6 +22,13 @@ public class GameSound {
 		mediaPlayer = new MediaPlayer(media);
 		mediaPlayer.play();
 		mediaPlayer.setAutoPlay(true);
+		mediaPlayer.setOnEndOfMedia(new Runnable() {
+	        @Override
+	        public void run() {
+	            mediaPlayer.seek(Duration.ZERO);
+	            mediaPlayer.play();
+	        }
+	    });
 	}
 	
 	public void buttonClickForwardSound() {
@@ -30,5 +38,7 @@ public class GameSound {
 	public void buttonClickBackwardSound() {
 		new MediaPlayer(new Media(new File(Parameter.buttonClick04Sound).toURI().toString())).play();
 	}
+	
+	
 	
 }
