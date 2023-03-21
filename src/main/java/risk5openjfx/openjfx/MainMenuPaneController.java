@@ -37,9 +37,9 @@ public class MainMenuPaneController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		double btnW = w * 0.143;
+		double btnW = w * 0.163;
 		double btnH = h * 0.058;
-		double btnX = w * 0.428;
+		double btnX = w * 0.419;
 		playTutorialButton.setPrefSize(btnW, btnH);
 		profileSettingsButton.setPrefSize(btnW, btnH);
 		singleplayerButton.setPrefSize(btnW, btnH);
