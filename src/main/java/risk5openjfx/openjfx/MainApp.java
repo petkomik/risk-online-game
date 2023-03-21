@@ -3,6 +3,7 @@ package risk5openjfx.openjfx;
 import java.io.File;
 import java.io.IOException;
 
+import game.GameController;
 import general.Parameter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -21,8 +23,20 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application{
 	
+	public static final double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+	public static final double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
 	private AnchorPane anchorPane;
     private Scene scene;
+    private static GameController gameController = new GameController();
+    
+    /**
+     * This method returns the GameController instance
+     * @return gameController 
+     */
+    public static GameController getGameController() {
+    	return MainApp.gameController;
+    }
+    
     /**
      * This method initializes the required elements
      */
@@ -31,7 +45,7 @@ public class MainApp extends Application{
     	// Getting the anchor pane from the file main.fxml
     	anchorPane = (AnchorPane) loadFXML("main");
     	// Setting the size of the pane
-        anchorPane.setPrefSize(Parameter.screenWidth, Parameter.screenHeight);
+        anchorPane.setPrefSize(MainApp.screenWidth, MainApp.screenHeight);
     	// Setting the anchor pane as a root into the scene
         scene = new Scene(anchorPane);
         // Getting the pic transparent-risk.png
