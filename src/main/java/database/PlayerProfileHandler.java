@@ -1,11 +1,12 @@
 package database;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import game.Profile;
-import game.models.Player;
 
 /**
  * contains methods to get the Profile data from the database and store it on the database.
@@ -64,6 +65,58 @@ public class PlayerProfileHandler extends Database {
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Profile getProfileByID(int id) {
+		try(Statement stm = this.connection.createStatement()){
+			String sql = "SELECT * FROM Players WHERE PlayerID= " + id + ";";
+			
+			ResultSet rs = stm.executeQuery(sql);
+			if(rs.next()) {
+				String color = rs.getString("Color");
+				String userName = rs.getString("UserName");
+				String firstName = rs.getString("firstName");
+				String lastName = rs.getString("lastName");
+				int wins = rs.getInt("Wins");
+				int loses = rs.getInt("Loses");
+				String photo = rs.getString("Photo");	
+				String password = rs.getString("password");
+				int isPersonal = 1;
+				
+				return new Profile(id, userName, firstName, lastName, color, wins, loses, photo, password, isPersonal);
+			}
+			rs.close();					
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}	
+		return null;
+	}
+	
+	public ArrayList<Profile> getAllProfiles(){
+		ArrayList<Profile> list = new ArrayList<Profile>();
+		try(Statement stm = this.connection.createStatement()){
+			String sql = "SELECT * FROM Players;";
+			
+			ResultSet rs = stm.executeQuery(sql);
+			while(rs.next()) {
+				int id = rs.getInt("PlayerID");
+				String color = rs.getString("Color");
+				String userName = rs.getString("UserName");
+				String firstName = rs.getString("FirstName");
+				String lastName = rs.getString("lastName");
+				int wins = rs.getInt("Wins");
+				int loses = rs.getInt("Loses");
+				String photo = rs.getString("Photo");	
+				String password = rs.getString("password");
+				int isPersonal = 1;
+				
+				list.add(new Profile(id, userName, firstName, lastName, color, wins, loses, photo, password, isPersonal));
+			}
+			rs.close();					
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}	
+		return list;
 	}
 
 	
