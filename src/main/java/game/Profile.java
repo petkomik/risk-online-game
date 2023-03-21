@@ -48,6 +48,13 @@ public class Profile {
 		
 	}
 
+	public Profile(String firstName, String lastName, String userName, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
+		this.password = password;
+	}
+
 	public String getColor() {
 		return color;
 	}
