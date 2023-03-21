@@ -28,7 +28,7 @@ public class MainApp extends Application{
 	private AnchorPane anchorPane;
     private Scene scene;
     private static GameController gameController = new GameController();
-    
+    public static GameSound sound;
     /**
      * This method returns the GameController instance
      * @return gameController 
@@ -70,7 +70,8 @@ public class MainApp extends Application{
 		MediaPlayer mediaPlayer = new MediaPlayer(media);
 		mediaPlayer.play();*/
         
-        (new GameSound()).startThemeSong();
+        sound = new GameSound();
+        sound.startThemeSong(); 
 		
     }
     /**
