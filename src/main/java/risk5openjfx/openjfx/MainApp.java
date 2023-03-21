@@ -23,8 +23,8 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application{
 	
-	public static final double screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
-	public static final double screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
+	public static double screenWidth;
+	public static double screenHeight;
 	private AnchorPane anchorPane;
     private Scene scene;
     private static GameController gameController = new GameController();
@@ -42,6 +42,8 @@ public class MainApp extends Application{
      */
     @Override
     public void start(Stage stage) throws IOException {
+    	screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
+    	screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
     	// Getting the anchor pane from the file main.fxml
     	anchorPane = (AnchorPane) loadFXML("main");
     	// Setting the size of the pane
