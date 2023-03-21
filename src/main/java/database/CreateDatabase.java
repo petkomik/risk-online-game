@@ -22,7 +22,6 @@ public class CreateDatabase extends Database {
 	}
 
 	private void createTable_Profiles() {
-		dropTable("Profiles");
 		try (Statement stm = connection.createStatement()){
 			String sql = "CREATE TABLE IF NOT EXISTS Profiles "
 					+ "(PlayerID INTGEGER PRIMARY KEY, "
