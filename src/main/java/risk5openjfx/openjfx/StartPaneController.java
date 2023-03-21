@@ -23,8 +23,8 @@ import javafx.stage.Stage;
 public class StartPaneController implements Initializable{
 	private Stage stage;
 	private AnchorPane anchorPane;
-	private double w = Parameter.screenWidth;
-	private double h = Parameter.screenHeight;
+	private double w = MainApp.screenWidth;
+	private double h = MainApp.screenHeight;
 	
 	@FXML
 	private ImageView imageView;
