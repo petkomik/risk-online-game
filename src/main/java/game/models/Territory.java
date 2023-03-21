@@ -1,5 +1,8 @@
 package game.models;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Territory class handles the territories in the game as an object
  * @author srogalsk
@@ -9,9 +12,10 @@ package game.models;
 public class Territory {
 	
 	private Player ownedByPlayer;
-	private Continent continent;
+	private final Continent continent;
 	private int numberOfTroops;
-	private CountryName countryName;
+	private final CountryName countryName;
+	private ArrayList<Territory> neighboringTerritories = new ArrayList<>();
 	
 	public Territory(CountryName countryName, Continent continent) {
 		this.countryName = countryName;
@@ -33,6 +37,9 @@ public class Territory {
 	public CountryName getCountryName() {
 		return countryName;
 	}
+	public ArrayList<Territory> getNeighboringTerritories() {
+		return neighboringTerritories;
+	}
 	
 	/**Setters*/
 	public void setNumberOfTroops(int numberOfTroops) {
@@ -40,6 +47,9 @@ public class Territory {
 	}
 	public void setOwnedByPlayer(Player ownedByPlayer) {
 		this.ownedByPlayer = ownedByPlayer;
+	}
+	public void setNeighboringTerritories(ArrayList<Territory> territoryNeighbours) {
+		this.neighboringTerritories = territoryNeighbours;
 	}
 	
 }
