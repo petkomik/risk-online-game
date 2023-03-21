@@ -1,43 +1,98 @@
 package network;
-import java.io.*;
-import java.net.*;
-import java.security.MessageDigest;
 
-class ClientHandler extends Thread {
-    private Socket client;
-    private PrintWriter pw;
-    private BufferedReader br;
 
-    public ClientHandler(Socket client) throws IOException {
-        this.client = client;
-        pw = new PrintWriter(client.getOutputStream());
-        br = new BufferedReader(new InputStreamReader(client.getInputStream()));
-    }
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.util.ArrayList;
 
-    @Override
-    public void run() {
-      
-    	try {
-            String message = br.readLine();
-            System.out.println("Received message from client: " + message);
-            String result = additionFromServer(message);
-            pw.println(result);
-            pw.flush();
-        } catch (IOException e) {
-            System.out.println("Error while communicating with client");
-        } finally {
-            try {
-                client.close();
-            } catch (IOException e) {
-                System.out.println("Error while closing client connection");
-            }
-        }
-       
-    }
+public class ClientHandler implements Runnable {
 
-    public String additionFromServer(String message) {
-        // Perform addition calculation here and return the result
-        // In this example, we are simply adding a string to the end of the original message
-        return message + " addition from server";
-    }
+	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+	private Socket socket;
+	private BufferedReader bufferReader;
+	private BufferedWriter bufferWirter;
+	private String clientUsername;
+
+	public ClientHandler(Socket socket)
+			 {
+		this.socket = socket;
+
+		try {
+			this.bufferReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.bufferWirter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			this.clientUsername = bufferReader.readLine();
+			clientHandlers.add(this);
+			broadcastMessage("SERVER: " + clientUsername + " has entered the chat");
+		} catch (IOException e) {
+			closeEverything(socket, bufferReader, bufferWirter);
+			e.printStackTrace();
+		}
+
+	}
+
+	private void broadcastMessage(String message) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				if (!clientHandler.clientUsername.equals(clientUsername)) {
+					clientHandler.bufferWirter.write(message);
+					clientHandler.bufferWirter.newLine();
+					clientHandler.bufferWirter.flush();
+				}
+			} catch (IOException e) {
+				closeEverything(socket, bufferReader, bufferWirter);
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public void removeClientHandler() {
+
+		clientHandlers.remove(this);
+		broadcastMessage("Server:  " + this.clientUsername + " has left the chat");
+
+	}
+
+	@Override
+	public void run() {
+		String messageFromClient;
+		while (socket.isConnected()) {
+			try {
+
+				messageFromClient = bufferReader.readLine();
+				broadcastMessage(messageFromClient);
+			} catch (Exception e) {
+				closeEverything(socket, bufferReader, bufferWirter);
+			}
+		}
+	}
+
+	private void closeEverything(Socket socket2, BufferedReader bufferReader2, BufferedWriter bufferWirter2) {
+		removeClientHandler();
+		try {
+			if (socket2 != null) {
+				
+				socket2.close();
+			}
+			if (bufferWirter2 != null) {
+				
+				socket2.close();
+			}
+			if (bufferReader2 != null) {
+				
+				socket2.close();
+			}
+
+			bufferReader2.close();
+			bufferWirter2.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }

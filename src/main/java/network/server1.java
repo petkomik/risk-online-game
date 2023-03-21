@@ -1,29 +1,53 @@
 package network;
-//Server Code
-import java.io.*;
-import java.net.*;
+
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class server1 {
- private static ServerSocket serverSocket;
- private static int i = 0;
 
- public static void main(String[] args) throws IOException {
-     try {
-         serverSocket = new ServerSocket(4998);
-         serverSocket.setReuseAddress(true);
-         System.out.println("Waiting for connection...");
-     } catch (Exception e) {
-         System.out.println("Unable to connect");
-         return;
-     }
+	
+	private ServerSocket serverSocket;
 
-     while (true) {
-         Socket socket = serverSocket.accept();
-         i++;
-
-         ClientHandler newClient = new ClientHandler(socket);
-         newClient.start();
-         System.out.println("Client " + i + " connected");
-     }
- }
+	public server1(ServerSocket serverSocket) {
+		this.serverSocket = serverSocket;
+	}
+	public void startServer() {
+		
+		try {
+			while(!serverSocket.isClosed()) {
+			Socket socket =	serverSocket.accept();
+			System.out.println("A new Client has connected ");
+			ClientHandler clientHandler = new ClientHandler(socket);
+			
+			
+			Thread player = new Thread(clientHandler);
+			player.start();
+			
+				
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void closeServerSocket() {
+		try {
+			if (serverSocket != null) {
+				serverSocket.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public static void main(String[] args) throws IOException {
+		ServerSocket serverSocket = new ServerSocket(1234);
+		server1 server = new server1(serverSocket);
+		server.startServer(); 
+	}
 }
