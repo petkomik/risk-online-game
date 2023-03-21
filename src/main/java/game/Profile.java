@@ -9,45 +9,44 @@ import java.time.LocalDateTime;
  */
 public class Profile {
 	
-	private String color;
+	private int id;
 	private String userName;
 	private String firstName;
 	private String lastName;
-	private int id;
-	private String photo;
-	private int loses;
-	private int wins;
+	private String color;
 	private String password;
-	
+	private int wins;
+	private int loses;
+	private String photo;
+		
 	private int isPersonal;
-	
-	
+
 	public Profile(int id,  String userName, String firstName, String lastName,String color,  int wins, int loses, String photo, String password, int isPersonal) {
 		
-		this.setId(id);
-		this.setUserName(userName);
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.setColor(color);
-		this.setPhoto(photo);
-		this.setLoses(loses);;
-		this.setWins(wins);
-		this.setPassword(password);
-		this.setPersonal(isPersonal);
+		this.color = color;
+		this.userName = userName;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.id = id;
+		this.photo = photo;
+		this.loses = loses;
+		this.wins = wins;
+		this.password = password;
+		this.isPersonal = isPersonal;
 		
 	}
 	
 	public Profile(int id, String userName, String firstName, String lastName, String color, String photo, int wins, int loses, String password) {
 		
-		this.setId(id);
-		this.setUserName(userName);
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.setColor(color);
-		this.setPhoto(photo);
-		this.setLoses(loses);
-		this.setWins(wins);
-		this.setPassword(password);
+		this.color = color;
+		this.userName = userName;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.id = id;
+		this.photo = photo;
+		this.loses = loses;
+		this.wins = wins;
+		this.password = password;
 		
 	}
 
