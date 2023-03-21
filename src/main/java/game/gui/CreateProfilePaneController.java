@@ -1,9 +1,10 @@
-package risk5openjfx.openjfx;
+package game.gui;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import game.WrongTextFieldInputException;
 import general.Parameter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -103,7 +104,11 @@ public class CreateProfilePaneController implements Initializable{
     	String username = usernameTF.getText();
     	String password = passwordField.getText();
     	if(!firstName.isBlank() && !lastName.isBlank() && !username.isBlank() && !password.isBlank()) {
-    		MainApp.getGameController().createFirstProfile(firstName, lastName, username, password);
+    		try {
+				MainApp.getGameController().createFirstProfile(firstName, lastName, username, password);
+			} catch (WrongTextFieldInputException e1) {
+				e1.printStackTrace();
+			}
         	Node node = (Node)e.getSource();
     		// Getting the Stage where the event is happened
     		stage = (Stage)node.getScene().getWindow();

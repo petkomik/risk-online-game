@@ -6,6 +6,6 @@ module risk5openjfx.openjfx {
 	requires javafx.base;
 	requires javafx.media;
 
-    opens risk5openjfx.openjfx to javafx.fxml;
-    exports risk5openjfx.openjfx;
+    opens game.gui to javafx.fxml;
+    exports game.gui;
 }

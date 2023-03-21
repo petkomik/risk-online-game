@@ -1,4 +1,4 @@
-package risk5openjfx.openjfx;
+package game.gui;
 
 import java.io.File;
 import java.io.IOException;

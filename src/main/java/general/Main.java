@@ -1,6 +1,6 @@
 package general;
 
-import risk5openjfx.openjfx.MainApp;
+import game.gui.MainApp;
 /**
  * Main class to run the implementation
  *
