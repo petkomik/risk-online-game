@@ -66,10 +66,10 @@ public class CreateProfilePaneController implements Initializable{
 		
 		backButton.setPrefSize(w*0.091, h*0.058);
 		
-		firstNameLabel.setPrefSize(w*0.143, h*0.058);
-		lastNameLabel.setPrefSize(w*0.143, h*0.058);
-		usernameLabel.setPrefSize(w*0.143, h*0.058);
-		passwordLabel.setPrefSize(w*0.143, h*0.058);
+		firstNameLabel.setPrefSize(w*0.163, h*0.058);
+		lastNameLabel.setPrefSize(w*0.163, h*0.058);
+		usernameLabel.setPrefSize(w*0.163, h*0.058);
+		passwordLabel.setPrefSize(w*0.163, h*0.058);
 		
 		firstNameTF.setPrefSize(w*0.156, h*0.035);
 		lastNameTF.setPrefSize(w*0.156, h*0.035);
