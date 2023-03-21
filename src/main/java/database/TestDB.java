@@ -1,9 +1,6 @@
 package database;
 
-import java.time.LocalTime;
-
 import game.Profile;
-import game.models.Player;
 
 /**
  * class to test the database.
@@ -12,8 +9,7 @@ import game.models.Player;
  */
 public class TestDB {
 	public static void main(String[]args) {
-		CreateDatabase db = new CreateDatabase();
-		db.createTables();
+		
 		PlayerProfileHandler dbH = new PlayerProfileHandler();
 		
 		dbH.deleteProfile(11111);
