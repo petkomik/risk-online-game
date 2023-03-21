@@ -18,7 +18,7 @@ public enum CountryName {
 	Venezuela,
 	Brazil,
 	Peru,
-	Argentinia,
+	Argentina,
 	Iceland,
 	Scandinavia,
 	GreatBritain,
