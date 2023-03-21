@@ -27,8 +27,8 @@ public class CreateProfilePaneController implements Initializable{
 	private Stage stage;
 	private AnchorPane anchorPane;
 	
-	private double w = Parameter.screenWidth;
-	private double h = Parameter.screenHeight;
+	private double w = MainApp.screenWidth;
+	private double h = MainApp.screenHeight;
 	
 	@FXML
 	private Button backButton;
@@ -98,18 +98,28 @@ public class CreateProfilePaneController implements Initializable{
     public void clickCreate(ActionEvent e) throws IOException {
     	
     	(new GameSound()).buttonClickForwardSound();
+    	String firstName = firstNameTF.getText();
+    	String lastName = lastNameTF.getText();
+    	String username = usernameTF.getText();
+    	String password = passwordField.getText();
+    	if(!firstName.isBlank() && !lastName.isBlank() && !username.isBlank() && !password.isBlank()) {
+    		MainApp.getGameController().createFirstProfile(firstName, lastName, username, password);
+        	Node node = (Node)e.getSource();
+    		// Getting the Stage where the event is happened
+    		stage = (Stage)node.getScene().getWindow();
+    		// changing the AnchorPane from the main file
+    		anchorPane = (AnchorPane) loadFXML("mainMenu");
+    		// Setting the size of the anchorPane
+    		anchorPane.setPrefSize(w, h);
+    		// Setting the AnchorPane as a root of the main scene
+    		stage.getScene().setRoot(anchorPane);
+    		// Showing the Stage
+    		stage.show();
+    	}
+    	else {
+    		
+    	}
     	
-    	Node node = (Node)e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage)node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("mainMenu");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
-		stage.show();
 	}
     /**
 	 * The method handles the event, when the player clicks on the button 'back'
