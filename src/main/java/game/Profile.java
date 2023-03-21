@@ -1,4 +1,7 @@
 package game;
+
+import java.time.LocalDateTime;
+
 /**
  * Profile class to handle data via database.
  *
@@ -53,6 +56,7 @@ public class Profile {
 		this.lastName = lastName;
 		this.userName = userName;
 		this.password = password;
+		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", ""));
 	}
 
 	public String getColor() {
