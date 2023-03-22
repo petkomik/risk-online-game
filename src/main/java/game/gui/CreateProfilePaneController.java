@@ -106,9 +106,7 @@ public class CreateProfilePaneController implements Initializable{
     	if(!firstName.isBlank() && !lastName.isBlank() && !username.isBlank() && !password.isBlank()) {
     		try {
 				MainApp.getGameController().createFirstProfile(firstName, lastName, username, password);
-			} catch (WrongTextFieldInputException e1) {
-				e1.printStackTrace();
-			}
+			
         	Node node = (Node)e.getSource();
     		// Getting the Stage where the event is happened
     		stage = (Stage)node.getScene().getWindow();
@@ -120,6 +118,9 @@ public class CreateProfilePaneController implements Initializable{
     		stage.getScene().setRoot(anchorPane);
     		// Showing the Stage
     		stage.show();
+    		} catch (WrongTextFieldInputException e1) {
+				System.out.println(e1.getMessage());
+			}
     	}
     	else {
     		

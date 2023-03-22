@@ -66,7 +66,7 @@ public class GameController {
 
 	}
 
-	public void createFirstProfile(String userName, String firstName, String lastName, String password)
+	public void createFirstProfile(String firstName, String lastName, String userName, String password)
 			throws WrongTextFieldInputException {
 		/*checking for inputs*/
 		if (userName.isBlank()) {
