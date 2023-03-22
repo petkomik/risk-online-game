@@ -8,6 +8,6 @@
       <Button fx:id="playTutorialButton" mnemonicParsing="false" text="PLAY TUTORIAL" />
       <Button fx:id="profileSettingsButton" mnemonicParsing="false" text="PROFILE SETTINGS" />
       <Button fx:id="singleplayerButton" mnemonicParsing="false" text="SINGLEPLAYER" />
-      <Button fx:id="multiplayerButton" mnemonicParsing="false" text="MULTIPLAYER" />
+      <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showMultiplayerScene" text="MULTIPLAYER" />
    </children>
 </AnchorPane>

@@ -56,6 +56,28 @@ public class MainMenuPaneController implements Initializable{
 		multiplayerButton.setLayoutY(h*0.544);
 	}
 	
+	/**
+	 * The method handles the event, when the player clicks on the button 'Multiplayer'
+	 * @param e
+	 * @throws IOException
+	 */
+	public void showMultiplayerScene(ActionEvent e) throws IOException {
+		
+		(new GameSound()).buttonClickForwardSound();
+		
+		Node node = (Node)e.getSource();
+		// Getting the Stage where the event is happened
+		stage = (Stage)node.getScene().getWindow();
+		// changing the AnchorPane from the main file
+		anchorPane = (AnchorPane) loadFXML("MultiplayerHostJoinFrame");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
+		// Setting the AnchorPane as a root of the main scene
+		stage.getScene().setRoot(anchorPane);
+		// Showing the Stage
+		stage.show();
+	}
+	
 //	public void clickDisplayStatistics(ActionEvent e) throws IOException {
 //		Node node = (Node)e.getSource();
 //		// Getting the Stage where the event is happened
