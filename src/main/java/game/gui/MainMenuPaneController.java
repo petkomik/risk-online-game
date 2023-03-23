@@ -54,6 +54,12 @@ public class MainMenuPaneController implements Initializable{
 		profileSettingsButton.setLayoutY(h*0.382);
 		singleplayerButton.setLayoutY(h*0.463);
 		multiplayerButton.setLayoutY(h*0.544);
+		
+		double fontSize = 0.078 * Math.sqrt(Math.pow(btnW, 2.0)+Math.pow(btnH, 2.0));
+		playTutorialButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		profileSettingsButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		singleplayerButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		multiplayerButton.setStyle("-fx-font-size: "+fontSize+"px;");
 	}
 	
 	/**
