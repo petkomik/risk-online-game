@@ -90,6 +90,16 @@ public class CreateProfilePaneController implements Initializable {
 		this.setXYof(0.439, 0.37, usernameTF);
 		this.setXYof(0.439, 0.44, passwordField);
 		this.setXYof(0.505, 0.521, createProfileButton);
+		
+		/* Setting the font size */
+		double fontSize = 0.135 * Math.sqrt(Math.pow(backButton.getPrefWidth(), 2.0)+Math.pow(backButton.getPrefHeight(), 2.0));
+		backButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		createProfileButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		fontSize = 0.137 * Math.sqrt(Math.pow(firstNameLabel.getPrefWidth(), 2.0)+Math.pow(firstNameLabel.getPrefHeight(), 2.0));
+		firstNameLabel.setStyle("-fx-font-size: "+fontSize+"px;");
+		lastNameLabel.setStyle("-fx-font-size: "+fontSize+"px;");
+		usernameLabel.setStyle("-fx-font-size: "+fontSize+"px;");
+		passwordLabel.setStyle("-fx-font-size: "+fontSize+"px;");
 	}
 
 	/**
