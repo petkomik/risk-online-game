@@ -40,6 +40,8 @@ public class StartPaneController implements Initializable{
 		playButton.setPrefSize(w*0.13, h*0.058);
 		playButton.setLayoutX(w*0.435);
 		playButton.setLayoutY(h*0.471);
+		double fontSize = 0.097 * Math.sqrt(Math.pow(playButton.getPrefWidth(), 2.0)+Math.pow(playButton.getPrefHeight(), 2.0));
+		playButton.setStyle("-fx-font-size: "+fontSize+"px;");
 	}
 	
 	/**
