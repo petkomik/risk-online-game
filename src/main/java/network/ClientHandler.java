@@ -67,6 +67,7 @@ public class ClientHandler implements Runnable {
 				broadcastMessage(messageFromClient);
 			} catch (Exception e) {
 				closeEverything(socket, bufferReader, bufferWirter);
+				break;
 			}
 		}
 	}
