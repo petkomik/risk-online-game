@@ -32,6 +32,11 @@ public class MultplayerHostJoinController implements Initializable {
 
 		hostGameButton.setLayoutY(h*0.301);
 		joinGameButton.setLayoutY(h*0.382);	
+		
+		double fontSize = 0.078 * Math.sqrt(Math.pow(btnW, 2.0)+Math.pow(btnH, 2.0));
+		hostGameButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		joinGameButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		
 	}
 
 }
