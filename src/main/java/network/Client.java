@@ -1,111 +1,105 @@
 package network;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+import network.messages.Message;
+import network.messages.MessageSend;
+
 public class Client {
-	private Socket socket;
-	private BufferedReader bufferReader;
-	private BufferedWriter bufferWirter;
-	private String userName;
+    private Socket socket;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
+    private String userName;
 
-	public Client(Socket socket, String userName) {
-		this.userName = userName;
-		this.socket = socket;
-		try {
-			this.bufferReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.bufferWirter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		} catch (IOException e) {
-			closeEverything(socket, bufferReader, bufferWirter);
-			e.printStackTrace();
-		}
+    public Client(Socket socket, String userName) {
+        this.userName = userName;
+        this.socket = socket;
+        try {
+            this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+            this.inputStream = new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            closeEverything(socket, inputStream, outputStream);
+            e.printStackTrace();
+        }
 
-	}
+    }
 
-	private void closeEverything(Socket socket2, BufferedReader bufferReader2, BufferedWriter bufferWirter2) {
+    private void closeEverything(Socket socket2, ObjectInputStream inputStream2, ObjectOutputStream outputStream2) {
 
-		try {
-			if (socket2 != null) {
+        try {
+            if (socket2 != null) {
+                socket2.close();
+            }
+            if (outputStream2 != null) {
+                outputStream2.close();
+            }
+            if (inputStream2 != null) {
+                inputStream2.close();
+            }
+        } catch (IOException e) {
+            closeEverything(socket2, inputStream2, outputStream2);
+            e.printStackTrace();
+        }
 
-				socket2.close();
-			}
-			if (bufferWirter2 != null) {
+    }
 
-				socket2.close();
-			}
-			if (bufferReader2 != null) {
+    public void sendMessage() {
 
-				socket2.close();
-			}
+        try {
+            outputStream.writeObject(new MessageSend(userName));
+            outputStream.flush();
 
-			bufferReader2.close();
-			bufferWirter2.close();
-		} catch (IOException e) {
-			closeEverything(socket2, bufferReader2, bufferWirter2);
-			e.printStackTrace();
-		}
+            Scanner scanner = new Scanner(System.in);
+            while (socket.isConnected()) {
+                outputStream.writeObject(new MessageSend(userName + ": " + scanner.nextLine()));
+                outputStream.flush();
+            }
 
-	}
+        } catch (Exception e) {
+            closeEverything(socket, inputStream, outputStream);
+        }
+    }
 
-	public void sendMessage() {
+    public void listenForMessage() {
 
-		try {
-			bufferWirter.write(userName);
-			bufferWirter.newLine();
-			bufferWirter.flush();
+        new Thread(new Runnable() {
 
-			Scanner scanner = new Scanner(System.in);
-			while (socket.isConnected()) {
-				bufferWirter.write(userName + "; " + scanner.nextLine());
-				bufferWirter.newLine();
-				bufferWirter.flush();
-			}
+            @Override
+            public void run() {
+                Message msg;
+                while (socket.isConnected()) {
+                    try {
+                        msg = (MessageSend) inputStream.readObject();
+                        System.out.println(((MessageSend)msg).getMessage());
+                    } catch (Exception e) {
+                        closeEverything(socket, inputStream, outputStream);
+                        e.printStackTrace();
+                        break;
+                    }
 
-		} catch (Exception e) {
-			closeEverything(socket, bufferReader, bufferWirter);
-		}
-	}
+                }
 
-	public void listenForMessage() {
+            }
+        }).start();
+    }
 
-		new Thread(new Runnable() {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(" Enter your user name for the group chat ");
+        String username = sc.nextLine();
+        Socket socket;
+        try {
+            socket = new Socket("localhost", 1234);
+            Client client = new Client(socket, username);
+            client.listenForMessage();
+            client.sendMessage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-			@Override
-			public void run() {
-				String msg;
-				while (socket.isConnected()) {
-					try {
-						msg = bufferReader.readLine();
-						System.out.println(msg);
-					} catch (IOException e) {
-						closeEverything(socket, bufferReader, bufferWirter);
-						e.printStackTrace();
-					}
-
-				}
-
-			}
-		}).start();
-	}
-public static void main(String[] args) {
-	Scanner sc = new Scanner(System.in);
-	System.out.println(" Enter your user name for the group chat ");
-	String username = sc.nextLine();
-	Socket socket;
-	try {
-		socket = new Socket("localhost", 1234);
-		Client client = new Client(socket , username);
-		client.listenForMessage();
-		client.sendMessage();
-	} catch (IOException e) {
-		
-		e.printStackTrace();
-	}
-	
-}
+    }
 }
