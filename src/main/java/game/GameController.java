@@ -18,6 +18,15 @@ public class GameController {
 
 	private Profile profile;
 	private HashMap<CountryName,Territory> territories;
+	private static GameController gameController;
+	
+	private GameController() {
+		
+	}
+	
+	public static GameController getInstance() {
+		return GameController.gameController;
+	}
 	
 	private void createTerritories() {
 		// add territories for each country name
