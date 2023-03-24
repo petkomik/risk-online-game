@@ -27,14 +27,13 @@ public class MainApp extends Application{
 	public static double screenHeight;
 	private AnchorPane anchorPane;
     private Scene scene;
-    private static GameController gameController = new GameController();
     public static GameSound themeSound;
     /**
      * This method returns the GameController instance
      * @return gameController 
      */
     public static GameController getGameController() {
-    	return MainApp.gameController;
+    	return GameController.getInstance();
     }
     
     /**
