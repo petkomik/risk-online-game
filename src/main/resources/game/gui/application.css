@@ -31,7 +31,7 @@
     -fx-font-weight: bold;
     -fx-padding: 10 20 10 20;
 }
-#firstNameLabel, #lastNameLabel, #usernameLabel, #passwordLabel{
+.label{
 	-fx-text-fill: white;
 
 }
