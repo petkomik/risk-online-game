@@ -12,10 +12,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -29,6 +31,8 @@ public class CreateProfilePaneController implements Initializable {
 
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
+	
+	private GameSound gameSound = new GameSound();
 
 	@FXML
 	private Button backButton;
@@ -110,32 +114,31 @@ public class CreateProfilePaneController implements Initializable {
 	 */
 	public void clickCreate(ActionEvent e) throws IOException {
 
-		(new GameSound()).buttonClickForwardSound();
+		gameSound.buttonClickForwardSound();
 		String firstName = firstNameTF.getText();
 		String lastName = lastNameTF.getText();
 		String username = usernameTF.getText();
 		String password = passwordField.getText();
-		if (!firstName.isBlank() && !lastName.isBlank() && !username.isBlank() && !password.isBlank()) {
-			try {
-				MainApp.getGameController().createFirstProfile(firstName, lastName, username, password);
+		try {
+			MainApp.getGameController().createFirstProfile(firstName, lastName, username, password);
 
-				Node node = (Node) e.getSource();
-				// Getting the Stage where the event is happened
-				stage = (Stage) node.getScene().getWindow();
-				// changing the AnchorPane from the main file
-				anchorPane = (AnchorPane) loadFXML("mainMenu");
-				// Setting the size of the anchorPane
-				anchorPane.setPrefSize(w, h);
-				// Setting the AnchorPane as a root of the main scene
-				stage.getScene().setRoot(anchorPane);
-				// Showing the Stage
-				stage.show();
-			} catch (WrongTextFieldInputException e1) {
-				System.out.println(e1.getMessage());
-			}
-		} else {
-
+			Node node = (Node) e.getSource();
+			// Getting the Stage where the event is happened
+			stage = (Stage) node.getScene().getWindow();
+			// changing the AnchorPane from the main file
+			anchorPane = (AnchorPane) loadFXML("mainMenu");
+			// Setting the size of the anchorPane
+			anchorPane.setPrefSize(w, h);
+			// Setting the AnchorPane as a root of the main scene
+			stage.getScene().setRoot(anchorPane);
+			// Showing the Stage
+			stage.show();
+		} catch (WrongTextFieldInputException e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText(e1.getMessage());
+			alert.show();
 		}
+
 
 	}
 
@@ -147,13 +150,13 @@ public class CreateProfilePaneController implements Initializable {
 	 */
 	public void clickBack(ActionEvent e) throws IOException {
 
-		(new GameSound()).buttonClickBackwardSound();
+		gameSound.buttonClickBackwardSound();
 
 		Node node = (Node) e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage) node.getScene().getWindow();
 		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("main");
+		anchorPane = (AnchorPane) loadFXML("userAccess");
 		// Setting the size of the anchorPane
 		anchorPane.setPrefSize(w, h);
 		// Setting the AnchorPane as a root of the main scene
