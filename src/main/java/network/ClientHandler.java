@@ -23,7 +23,8 @@ public class ClientHandler implements Runnable {
         try {
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            this.clientUsername = ((MessageSend) objectInputStream.readObject()).getMessage();
+            Message clientIdentifierMessage = ((Message) objectInputStream.readObject());
+            this.clientUsername = ((MessageSend)clientIdentifierMessage).getMessage();
             clientHandlers.add(this);
             broadcastMessage(new MessageSend("SERVER: " + clientUsername + " has entered the chat"));
         } catch (IOException | ClassNotFoundException e) {

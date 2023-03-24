@@ -21,6 +21,8 @@ public class Client {
         try {
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
+            outputStream.writeObject(new MessageSend(userName));
+            outputStream.flush();
         } catch (IOException e) {
             closeEverything(socket, inputStream, outputStream);
             e.printStackTrace();
@@ -50,9 +52,6 @@ public class Client {
     public void sendMessage() {
 
         try {
-            outputStream.writeObject(new MessageSend(userName));
-            outputStream.flush();
-
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()) {
                 outputStream.writeObject(new MessageSend(userName + ": " + scanner.nextLine()));
@@ -73,8 +72,15 @@ public class Client {
                 Message msg;
                 while (socket.isConnected()) {
                     try {
-                        msg = (MessageSend) inputStream.readObject();
-                        System.out.println(((MessageSend)msg).getMessage());
+                        msg = (Message) inputStream.readObject();
+                        switch(msg.getMessageType()) {
+						case MessageSend:
+	                        System.out.println(((MessageSend)msg).getMessage());
+							break;
+						default:
+							break;
+                        
+                        }
                     } catch (Exception e) {
                         closeEverything(socket, inputStream, outputStream);
                         e.printStackTrace();
