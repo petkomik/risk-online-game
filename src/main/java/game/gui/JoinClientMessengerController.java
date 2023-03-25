@@ -26,7 +26,7 @@ import javafx.scene.text.TextFlow;
 import network.Client;
 import network.Server;
 
-public class HostServerMessengerController implements Initializable {
+public class JoinClientMessengerController implements Initializable {
 
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
@@ -40,7 +40,6 @@ public class HostServerMessengerController implements Initializable {
 	@FXML
 	private ScrollPane scrollPaneMain;
 
-	private Server server;
 	private static Client client;
 	private static Socket socket;
 	private int port;
@@ -61,7 +60,6 @@ public class HostServerMessengerController implements Initializable {
 		
 		port = 1234; 
 		try {
-			server = Server.createServer(port);
 			client = Client.createClient(port);
 			client.listenForMessage(vBoxMessages);
 		} catch (IOException e1) {
@@ -100,6 +98,7 @@ public class HostServerMessengerController implements Initializable {
 						@Override
 						public void run() {
 							client.sendMessage(messageToSend);
+
 						}
 					});
 

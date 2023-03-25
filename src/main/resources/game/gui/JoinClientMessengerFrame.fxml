@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="root" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.gui.JoinClientMessengerController">
+   <children>
+	  <Button fx:id="sendButton" mnemonicParsing="false" text="SEND" />
+	  <TextField fx:id="textFieldMessage"/>
+	  <ScrollPane fx:id="scrollPaneMain">
+		  <content>
+			<VBox fx:id="vBoxMessages"/>
+		  </content>
+	  </ScrollPane>
+	  <Label text="Chat">
+	  	<font>
+	  		<Font name="Arial Rounded MT Bold" size="23"></Font>
+	  	</font>
+	  </Label>
+   </children>
+</AnchorPane>
