@@ -77,7 +77,7 @@ public class Database {
 			stm.executeUpdate(sql);
 			connection.commit();
 			
-			System.out.println("Table Players was created...");
+			System.out.println("Table Profiles was created...");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.exit(0);
