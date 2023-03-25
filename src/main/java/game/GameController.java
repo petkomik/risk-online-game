@@ -18,7 +18,7 @@ public class GameController {
 
 	private Profile profile;
 	private HashMap<CountryName,Territory> territories;
-	private static GameController gameController;
+	private static GameController gameController = new GameController();
 	
 	private GameController() {
 		
