@@ -49,7 +49,6 @@ public class MultplayerHostJoinController implements Initializable {
 
 	public void startServer(ActionEvent e) throws IOException {
 
-		(new GameSound()).buttonClickForwardSound();
 
 		Node node = (Node) e.getSource();
 		// Getting the Stage where the event is happened
@@ -62,10 +61,14 @@ public class MultplayerHostJoinController implements Initializable {
 		stage.getScene().setRoot(anchorPane);
 		// Showing the Stage
 		stage.show();
+		
+		(new GameSound()).buttonClickForwardSound();
+
 	}
 	
 	public void joinServer(ActionEvent e) throws IOException {
-		
+		(new GameSound()).buttonClickForwardSound();
+
 	}
 	
 	private static Parent loadFXML(String fxml) throws IOException {

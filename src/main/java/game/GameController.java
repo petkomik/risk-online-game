@@ -15,9 +15,8 @@ import game.models.Territory;
  */
 
 public class GameController {
-
-	private Profile profile;
 	private HashMap<CountryName,Territory> territories;
+	
 	private static GameController gameController = new GameController();
 	
 	private GameController() {
@@ -73,35 +72,6 @@ public class GameController {
 		territories.put(CountryName.SouthAfrica, new Territory(CountryName.SouthAfrica, Continent.Africa));
 
 
-	}
-
-	public void createFirstProfile(String firstName, String lastName, String userName, String password)
-			throws WrongTextFieldInputException {
-		/*checking for inputs*/
-		if (userName.isBlank()) {
-			throw new WrongTextFieldInputException("Username must not be blank.");
-		} else if (!userName.matches("[a-zA-Z0-9]+")) {
-			throw new WrongTextFieldInputException("Username must only contains characters or numbers.");
-		}
-		if (firstName.isBlank()) {
-			throw new WrongTextFieldInputException("Firstname must not be blank.");
-		} else if (!firstName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-			throw new WrongTextFieldInputException(
-					"Firstname must only contains characters or hyphens and must start and end with a character.");
-		}
-		if (lastName.isBlank()) {
-			throw new WrongTextFieldInputException("Lastname must not be blank.");
-		} else if (!lastName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-			throw new WrongTextFieldInputException(
-					"Lastname must only contains characters or hyphens and must start and end with a character.");
-		}
-		if (password.isBlank()) {
-			throw new WrongTextFieldInputException("Password must not be blank.");
-		}
-		/*Profile creating*/
-		profile = new Profile(firstName, lastName, userName, password);
-		PlayerProfileHandler dbH = new PlayerProfileHandler();
-		dbH.createProfileData(profile);
 	}
 
 }

@@ -120,7 +120,7 @@ public class CreateProfilePaneController implements Initializable {
 		String username = usernameTF.getText();
 		String password = passwordField.getText();
 		try {
-			MainApp.getGameController().createFirstProfile(firstName, lastName, username, password);
+			MainApp.getAppController().createFirstProfile(firstName, lastName, username, password);
 
 			Node node = (Node) e.getSource();
 			// Getting the Stage where the event is happened

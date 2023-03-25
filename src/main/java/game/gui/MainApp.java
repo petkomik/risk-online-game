@@ -1,9 +1,8 @@
 package game.gui;
 
-import java.io.File;
 import java.io.IOException;
 
-import game.GameController;
+import general.AppController;
 import general.Parameter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,8 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -28,12 +25,14 @@ public class MainApp extends Application{
 	private AnchorPane anchorPane;
     private Scene scene;
     public static GameSound themeSound;
+    public static AppController appController;
     /**
      * This method returns the GameController instance
      * @return gameController 
      */
-    public static GameController getGameController() {
-    	return GameController.getInstance();
+    public static AppController getAppController() {
+    	MainApp.appController = AppController.getInstance();
+    	return MainApp.appController;
     }
     
     /**
