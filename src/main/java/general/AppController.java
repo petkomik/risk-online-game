@@ -1,13 +1,9 @@
 package general;
 
-import java.util.HashMap;
 
 import database.PlayerProfileHandler;
-import game.GameController;
 import game.Profile;
 import game.WrongTextFieldInputException;
-import game.models.CountryName;
-import game.models.Territory;
 
 /**
  * Class for the application logic handling
@@ -17,18 +13,10 @@ import game.models.Territory;
  */
 
 public class AppController {
-	private Profile profile;
-	private HashMap<CountryName,Territory> territories;
+	private static Profile profile;
 	private static AppController appController = new AppController();
-	
-	private AppController() {
-		
-	}
-	
-	public static AppController getInstance() {
-		return AppController.appController;
-	}
-	
+	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
+
 	
 	/**
 	 * @param firstName
@@ -37,7 +25,9 @@ public class AppController {
 	 * @param password
 	 * @throws WrongTextFieldInputException
 	 */
-	public void createFirstProfile(String firstName, String lastName, String userName, String password)
+
+	
+	public static void createFirstProfile(String firstName, String lastName, String userName, String password)
 			throws WrongTextFieldInputException {
 		/*checking for inputs*/
 		if (userName.isBlank()) {
@@ -61,8 +51,25 @@ public class AppController {
 			throw new WrongTextFieldInputException("Password must not be blank.");
 		}
 		/*Profile creating*/
-		profile = new Profile(firstName, lastName, userName, password);
-		PlayerProfileHandler dbH = new PlayerProfileHandler();
+		AppController.profile = new Profile(firstName, lastName, userName, password);
 		dbH.createProfileData(profile);
+	}
+	
+	public static boolean logIntoProfile(String username, String password) {
+		for(Profile profile : dbH.getAllProfiles()) {
+			if(profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
+				AppController.profile=profile;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static AppController getInstance() {
+		return AppController.appController;
+	}
+	
+	public static Profile getProfile() {
+		return AppController.profile;
 	}
 }

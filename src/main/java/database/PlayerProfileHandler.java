@@ -69,7 +69,7 @@ public class PlayerProfileHandler extends Database {
 	
 	public Profile getProfileByID(int id) {
 		try(Statement stm = this.connection.createStatement()){
-			String sql = "SELECT * FROM Players WHERE PlayerID= " + id + ";";
+			String sql = "SELECT * FROM Profiles WHERE PlayerID= " + id + ";";
 			
 			ResultSet rs = stm.executeQuery(sql);
 			if(rs.next()) {
@@ -95,7 +95,7 @@ public class PlayerProfileHandler extends Database {
 	public ArrayList<Profile> getAllProfiles(){
 		ArrayList<Profile> list = new ArrayList<Profile>();
 		try(Statement stm = this.connection.createStatement()){
-			String sql = "SELECT * FROM Players;";
+			String sql = "SELECT * FROM Profiles;";
 			
 			ResultSet rs = stm.executeQuery(sql);
 			while(rs.next()) {

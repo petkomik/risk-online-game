@@ -4,19 +4,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import game.WrongTextFieldInputException;
+import general.AppController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -91,13 +89,13 @@ public class LogInPaneController implements Initializable{
 		gameSound.buttonClickForwardSound();
 		
 //		try {
-//			MainApp.getGameController().checkLogInData();
+			boolean loginSuccess = AppController.logIntoProfile(usernameTF.getText().trim(), passwordField.getText().trim());
 
 			Node node = (Node) e.getSource();
 			// Getting the Stage where the event is happened
 			stage = (Stage) node.getScene().getWindow();
 			// changing the AnchorPane from the main file
-			anchorPane = (AnchorPane) loadFXML("mainMenu");
+			anchorPane = loginSuccess ? (AnchorPane) loadFXML("mainMenu"):(AnchorPane) loadFXML("logIn");
 			// Setting the size of the anchorPane
 			anchorPane.setPrefSize(w, h);
 			// Setting the AnchorPane as a root of the main scene
