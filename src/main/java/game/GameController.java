@@ -1,10 +1,11 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import database.PlayerProfileHandler;
 import game.models.Continent;
 import game.models.CountryName;
+import game.models.Player;
 import game.models.Territory;
 
 /**
@@ -16,15 +17,38 @@ import game.models.Territory;
 
 public class GameController {
 	private HashMap<CountryName,Territory> territories;
+	private ArrayList<Player> players;
+	private GameState gameState;
 	
-	private static GameController gameController = new GameController();
+	private boolean isTutorial;
+	private GameController gameController;
 	
-	private GameController() {
-		
+	public GameController getInstance() {
+		return this.gameController;
 	}
 	
-	public static GameController getInstance() {
-		return GameController.gameController;
+	/**
+	 * Constructor for the class
+	 */
+	private GameController(boolean isTutorial) {
+		createTerritories();
+		this.isTutorial = isTutorial;
+		this.gameState = new GameState();
+	}
+	
+	
+	
+	public void addPlayer(Player player) {
+		players.add(player);
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		return this.players;
+	}
+	
+	public void startGame() {
+		Player playersTurn;
+		
 	}
 	
 	private void createTerritories() {
@@ -70,8 +94,6 @@ public class GameController {
 		territories.put(CountryName.Congo, new Territory(CountryName.Congo, Continent.Africa));
 		territories.put(CountryName.Madagascar, new Territory(CountryName.Madagascar, Continent.Africa));
 		territories.put(CountryName.SouthAfrica, new Territory(CountryName.SouthAfrica, Continent.Africa));
-
-
 	}
 
 }
