@@ -11,19 +11,21 @@ import game.Profile;
  * @author jorohr
  */
 
-public abstract class Player {
+public class Player {
 	
 	private GameState gameState;
-	
 	private String color;
 	private String name;
+	private int rank;
 	
 	public Player() {
 		
 	}
 	
 	
-	public abstract int getRank(); 
+	public int getRank() {
+		return rank;
+	}
 	
 
 	

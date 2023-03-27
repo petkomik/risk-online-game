@@ -9,5 +9,11 @@ package network.messages;
 public enum MessageType {
 	Connect,
 	Disconnect,
-	MessageSend;
+	MessageSend,
+	MessageProfile,
+	MessageMove,
+	MessagePlacingTroops,
+	MessageAttack,
+	MessageDiceThrow;
+	
 }
