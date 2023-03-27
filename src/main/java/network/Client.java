@@ -6,25 +6,29 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+import game.Profile;
 import game.gui.HostServerMessengerController;
 import general.AppController;
 import javafx.scene.layout.VBox;
 import network.messages.Message;
+import network.messages.MessageProfile;
 import network.messages.MessageSend;
 
 public class Client {
 	private Socket socket;
 	private ObjectInputStream inputStream;
 	private ObjectOutputStream outputStream;
+	private Profile profile;
 	private String userName;
 
-	public Client(Socket socket, String userName) {
-		this.userName = userName;
+	public Client(Socket socket, Profile profile) {
+		this.profile = profile;
+		this.userName = profile.getUserName();
 		this.socket = socket;
 		try {
 			this.outputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
-			outputStream.writeObject(new MessageSend(userName));
+			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
 		} catch (IOException e) {
 			closeEverything(socket, inputStream, outputStream);
@@ -141,11 +145,12 @@ public class Client {
 	}
 
 	public static Client createClient(int port) throws IOException {
-		String username = AppController.getInstance().getProfile().getUserName();
+		AppController.getInstance();
+		Profile profile = AppController.getProfile();
 		Socket socket;
 		Client client;
 		socket = new Socket("localhost", port);
-		client = new Client(socket, username);
+		client = new Client(socket, profile);
 		return client;
 	}
 
@@ -153,10 +158,11 @@ public class Client {
 		Scanner sc = new Scanner(System.in);
 		System.out.println(" Enter your user name for the group chat ");
 		String username = sc.nextLine();
+		Profile profile = null;
 		Socket socket;
 		try {
 			socket = new Socket("localhost", 1234);
-			Client client = new Client(socket, username);
+			Client client = new Client(socket, profile);
 			client.listenForMessage();
 			client.sendMessageViaConsole();
 		} catch (IOException e) {

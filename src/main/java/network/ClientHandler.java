@@ -6,7 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import game.Profile;
 import network.messages.Message;
+import network.messages.MessageProfile;
 import network.messages.MessageSend;
 
 public class ClientHandler implements Runnable {
@@ -15,6 +17,7 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
+    private Profile profile;
     private String clientUsername;
 
     public ClientHandler(Socket socket) {
@@ -24,7 +27,8 @@ public class ClientHandler implements Runnable {
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             Message clientIdentifierMessage = ((Message) objectInputStream.readObject());
-            this.clientUsername = ((MessageSend)clientIdentifierMessage).getMessage();
+            this.profile = ((MessageProfile)clientIdentifierMessage).getProfile();
+            this.clientUsername = profile.getUserName();
             clientHandlers.add(this);
             broadcastMessage(new MessageSend("SERVER: " + clientUsername + " has entered the chat"));
         } catch (IOException | ClassNotFoundException e) {
