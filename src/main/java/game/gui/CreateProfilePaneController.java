@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -136,7 +137,11 @@ public class CreateProfilePaneController implements Initializable {
 		} catch (WrongTextFieldInputException e1) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText(e1.getMessage());
-			alert.show();
+			alert.setHeaderText("ERROR");
+			alert.setTitle("");
+			Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
+			tmp.getIcons().add(new Image(Parameter.errorIcon));
+			alert.showAndWait();
 		}
 
 
