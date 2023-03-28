@@ -5,16 +5,21 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import general.AppController;
+import general.Parameter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -87,10 +92,10 @@ public class LogInPaneController implements Initializable{
 	public void clickLogIn(ActionEvent e) throws IOException {
 
 		gameSound.buttonClickForwardSound();
-		
-//		try {
-			boolean loginSuccess = AppController.logIntoProfile(usernameTF.getText().trim(), passwordField.getText().trim());
 
+		boolean loginSuccess = AppController.logIntoProfile(usernameTF.getText().trim(), passwordField.getText().trim());
+
+		if(loginSuccess) {
 			Node node = (Node) e.getSource();
 			// Getting the Stage where the event is happened
 			stage = (Stage) node.getScene().getWindow();
@@ -102,11 +107,18 @@ public class LogInPaneController implements Initializable{
 			stage.getScene().setRoot(anchorPane);
 			// Showing the Stage
 			stage.show();
-//		} catch (WrongTextFieldInputException e1) {
-//			Alert alert = new Alert(AlertType.ERROR);
-//			alert.setContentText(e1.getMessage());
-//			alert.show();
-//		}
+		}
+		else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText("Username or password is incorrect!");
+			alert.setHeaderText("ERROR");
+			alert.setTitle("");
+			Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
+			tmp.getIcons().add(new Image(Parameter.errorIcon));
+			alert.showAndWait();
+		}
+
+
 	
 
 	}
