@@ -44,6 +44,7 @@ public class HostServerMessengerController implements Initializable {
 	private static Client client;
 	private static Socket socket;
 	private int port;
+	private String host;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -59,10 +60,11 @@ public class HostServerMessengerController implements Initializable {
 
 		/******/
 		
-		port = 1234; 
+		port = 1234;
+		host = "localhost";
 		try {
 			server = Server.createServer(port);
-			client = Client.createClient(port);
+			client = Client.createClient(host, port);
 			client.listenForMessage(vBoxMessages);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block

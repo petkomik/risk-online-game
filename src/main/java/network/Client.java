@@ -144,16 +144,17 @@ public class Client {
 		}).start();
 	}
 
-	public static Client createClient(int port) throws IOException {
+	public static Client createClient(String host, int port) throws IOException {
 		AppController.getInstance();
 		Profile profile = AppController.getProfile();
 		Socket socket;
 		Client client;
-		socket = new Socket("localhost", port);
+		socket = new Socket(host, port);
 		client = new Client(socket, profile);
 		return client;
 	}
 
+	/** main for explicit testing
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		System.out.println(" Enter your user name for the group chat ");
@@ -170,5 +171,6 @@ public class Client {
 		}
 
 	}
+	*/
 
 }

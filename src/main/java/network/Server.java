@@ -52,13 +52,16 @@ public class Server {
 		ServerSocket serverSocket = new ServerSocket(port);
 		Server server = new Server(serverSocket);
 		server.startServer();
+		System.out.println(serverSocket.getLocalSocketAddress());
 		return server;
 
 	}
 
+	/** main for specific testing
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = new ServerSocket(1234);
 		Server server = new Server(serverSocket);
 		server.startServer();
 	}
+	*/
 }
