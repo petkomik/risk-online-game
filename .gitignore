@@ -1,4 +1,4 @@
-## ignores all files in target when pushing
+# ignores all files in target when pushing #
 target/
 target/*
 **/target
@@ -22,5 +22,5 @@ target/classes/.gitignore
 *.class
 
 # Database
-/risk-database.db
-
+src/main/resources/risk-database.db
+risk-database.db

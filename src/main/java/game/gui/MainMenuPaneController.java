@@ -84,6 +84,22 @@ public class MainMenuPaneController implements Initializable{
 		stage.show();
 	}
 	
+	public void showBattleScene(ActionEvent e) throws IOException {
+		(new GameSound()).buttonClickForwardSound();
+		Node node = (Node)e.getSource();
+		// Getting the Stage where the event is happened
+		stage = (Stage)node.getScene().getWindow();
+		// changing the AnchorPane from the main file
+		anchorPane = (AnchorPane) loadFXML("BattleWindowFrame");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
+		// Setting the AnchorPane as a root of the main scene
+		stage.getScene().setRoot(anchorPane);
+		// Showing the Stage
+		stage.show();
+		
+	}
+	
 //	public void clickDisplayStatistics(ActionEvent e) throws IOException {
 //		Node node = (Node)e.getSource();
 //		// Getting the Stage where the event is happened
@@ -99,7 +115,7 @@ public class MainMenuPaneController implements Initializable{
 	/**
      * 
      * @param fxml, file name without the ending .fxml
-     * @return Parent object, to be set as a root in a Secene object
+     * @return Parent object, to be set as a root in a Scene object
      * @throws IOException
      * 
      * This method is responsible for loading a fxml file
