@@ -90,7 +90,7 @@ public class MainMenuPaneController implements Initializable{
 		// Getting the Stage where the event is happened
 		stage = (Stage)node.getScene().getWindow();
 		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("BattleWindowFrame");
+		anchorPane = (AnchorPane) loadFXML("battleWindowFrame");
 		// Setting the size of the anchorPane
 		anchorPane.setPrefSize(w, h);
 		// Setting the AnchorPane as a root of the main scene
