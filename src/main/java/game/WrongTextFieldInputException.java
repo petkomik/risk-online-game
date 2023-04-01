@@ -1,5 +1,11 @@
 package game;
 
+/**
+ * Exception class for wrong text input
+ * @author srogalsk
+ *
+ */
+
 public class WrongTextFieldInputException extends Exception {
 
 	private static final long serialVersionUID = 1L;
