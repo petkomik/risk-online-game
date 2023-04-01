@@ -2,6 +2,7 @@ package general;
 
 
 import database.PlayerProfileHandler;
+import game.GameController;
 import game.Profile;
 import game.WrongTextFieldInputException;
 
@@ -16,6 +17,7 @@ public class AppController {
 	private static Profile profile;
 	private static AppController appController = new AppController();
 	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
+	private static GameController gameController;
 
 	
 	/**
@@ -25,8 +27,6 @@ public class AppController {
 	 * @param password
 	 * @throws WrongTextFieldInputException
 	 */
-
-	
 	public static void createFirstProfile(String firstName, String lastName, String userName, String password)
 			throws WrongTextFieldInputException {
 		/*checking for inputs*/
@@ -63,6 +63,10 @@ public class AppController {
 			}
 		}
 		return false;
+	}
+	
+	public static void startGame() {
+		gameController = new GameController(false);
 	}
 	
 	public static AppController getInstance() {

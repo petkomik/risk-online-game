@@ -1,6 +1,8 @@
-//@author Stefan Rogalski
-
 package game.models;
+
+/**
+ * @author srogalsk
+ */
 
 import java.time.LocalTime;
 
@@ -11,18 +13,16 @@ public class PlayerMP extends Player {
 	private Profile profile;
 	
 	public PlayerMP(Profile profile) {
-		
+		super(profile.getUserName(), profile.getId());
 		this.profile = profile;
 	}
 
 	
-	
-	//@author pmikov
-	public int getRank() {
-		int wins = profile.getWins();
-		int losses = profile.getLoses();
-		int rank = wins / (wins + losses);
-		return rank;
-	}
+//	public int getRank() {
+//		int wins = profile.getWins();
+//		int losses = profile.getLoses();
+//		int rank = wins / (wins + losses);
+//		return rank;
+//	}
 	
 }

@@ -13,19 +13,33 @@ import game.Profile;
 
 public class Player {
 	
-	private GameState gameState;
-	private String color;
 	private String name;
+	private String color;
+	private int id;
 	private int rank;
 	
-	public Player() {
-		
+	public Player(String name, int id) {
+		this.name = name;
+		this.id = id;
 	}
 	
+	public void incrementRank() {
+		rank+=1;
+	}
 	
 	public int getRank() {
 		return rank;
 	}
+	
+	public int getID() {
+		return this.id;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	
 	
 
 	

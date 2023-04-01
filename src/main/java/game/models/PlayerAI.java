@@ -18,9 +18,14 @@ enum Difficulty {
 public class PlayerAI extends Player {
 	Difficulty level;
 	
-	public PlayerAI(Difficulty setLevel) {
+	public PlayerAI(Player player, Difficulty level) {
+		super(player.getName(), player.getID());
+		this.level = level;
+	}
+	
+	public PlayerAI(String name, int id, Difficulty setLevel) {
+		super(name, id);
 		this.level = setLevel;
-		
 	}
 	
 	public int getRank() {

@@ -30,12 +30,11 @@ public class GameController {
 	/**
 	 * Constructor for the class
 	 */
-	private GameController(boolean isTutorial) {
+	public GameController(boolean isTutorial) {
 		createTerritories();
 		this.isTutorial = isTutorial;
 		this.gameState = new GameState();
 	}
-	
 	
 	
 	public void addPlayer(Player player) {
