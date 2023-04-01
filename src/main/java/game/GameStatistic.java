@@ -21,8 +21,15 @@ public class GameStatistic {
 		countID++;
 		this.setGameID(gameID);
 		this.setStartTime(LocalDateTime.now());
+		this.setNumberOfPlayers(numberOfPlayers);	
+	}
+	
+	public GameStatistic(int gameID, int length, LocalDateTime startTime, int idOfWinner, int numberOfPlayers) {
+		this.setGameID(gameID);
+		this.setLength(length);
+		this.setStartTime(startTime);
+		this.setIdOfWinner(idOfWinner);
 		this.setNumberOfPlayers(numberOfPlayers);
-		
 	}
 
 	public int getGameID() {
