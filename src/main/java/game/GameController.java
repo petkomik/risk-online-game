@@ -87,14 +87,14 @@ public class GameController {
 	        });
 	        messageThread.start();
 		}
-		if(interactionCount >= players.size()) {
-			interactionCount = 0;
-			return firstPlayer;
+		while((interactionCount < players.size())) {
+			Thread.sleep(100); // to avoid busy waiting
 		}
-		// return null;
+		interactionCount = 0;
+		return firstPlayer;
 	}
 	
-	private static int getRandomDiceNumber() {
+	private static synchronized int getRandomDiceNumber() {
 		return (int)(Math.random() * 6) + 1;
 	}
 	
