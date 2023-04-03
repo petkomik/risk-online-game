@@ -91,7 +91,7 @@ public class GameController {
 			interactionCount = 0;
 			return firstPlayer;
 		}
-		return null;
+		// return null;
 	}
 	
 	private static int getRandomDiceNumber() {
