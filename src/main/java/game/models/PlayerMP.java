@@ -1,19 +1,14 @@
 package game.models;
 
-/**
- * @author srogalsk
- */
-
-import java.time.LocalTime;
-
 import game.Profile;
+import network.ClientHandler;
 
 public class PlayerMP extends Player {
 	
 	private Profile profile;
 	
-	public PlayerMP(Profile profile) {
-		super(profile.getUserName(), profile.getId());
+	public PlayerMP(Profile profile, ClientHandler clientHandler) {
+		super(profile.getUserName(), profile.getId(), clientHandler);
 		this.profile = profile;
 	}
 

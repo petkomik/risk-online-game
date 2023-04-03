@@ -1,7 +1,7 @@
 
 package game.models;
 
-import java.time.LocalTime;
+import network.ClientHandler;
 
 /**
  * 
@@ -19,12 +19,12 @@ public class PlayerAI extends Player {
 	Difficulty level;
 	
 	public PlayerAI(Player player, Difficulty level) {
-		super(player.getName(), player.getID());
+		super(player.getName(), player.getID(), player.getClientHandler());
 		this.level = level;
 	}
 	
-	public PlayerAI(String name, int id, Difficulty setLevel) {
-		super(name, id);
+	public PlayerAI(String name, int id, ClientHandler clientHandler, Difficulty setLevel) {
+		super(name, id, clientHandler);
 		this.level = setLevel;
 	}
 	

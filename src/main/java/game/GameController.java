@@ -1,5 +1,6 @@
 package game;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,6 +20,8 @@ public class GameController {
 	private HashMap<CountryName,Territory> territories;
 	private ArrayList<Player> players;
 	private GameState gameState;
+	private LocalDateTime gameTimer;
+	volatile int interactionCount;
 	
 	private boolean isTutorial;
 	private GameController gameController;
@@ -47,7 +50,50 @@ public class GameController {
 	
 	public void startGame() {
 		Player playersTurn;
+		gameTimer = LocalDateTime.now();
 		
+	}
+	
+	public Player diceThrowToDetermineTheBeginner() {
+		Player firstPlayer;
+		int highestDiceNumber;
+		interactionCount = 0;
+		for(Player p: players) {
+			Thread messageThread = new Thread(() -> {
+				int diceNumber = getRandomDiceNumber();
+	            try {
+	                boolean messageAchieved = p.awaitMessage(10_000, "");
+	                
+	            
+	                if(messageAchieved) { // if player interacts in time 
+	                	p.sendMessage(new MessageDiceThrow(diceNumber));
+	                	if(diceNumber >= highestDiceNumber) {
+	        				firstPlayer = p;
+	        			}
+	                	interactionCount++;
+	                } else { // if Player did not responds in time
+	                	p.sendMessage(new MessageDiceThrow(0));
+	                	if(diceNumber >= highestDiceNumber) {
+	        				firstPlayer = p;
+	        			}
+	                	interactionCount++;
+	                }
+	            } catch (InterruptedException e) {
+	            	System.out.println("Thread \"Dice Throw Beginn\" interupted by player " + p.getName());
+	            }
+	            
+	        });
+	        messageThread.start();
+		}
+		if(interactionCount >= players.size()) {
+			interactionCount = 0;
+			return firstPlayer;
+		}
+		return null;
+	}
+	
+	private static int getRandomDiceNumber() {
+		return (int)(Math.random() * 6) + 1;
 	}
 	
 	private void createTerritories() {
