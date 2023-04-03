@@ -51,7 +51,8 @@ public class GameController {
 	public void startGame() {
 		Player playersTurn;
 		gameTimer = LocalDateTime.now();
-		
+		playersTurn = diceThrowToDetermineTheBeginner();
+		playersTurn.sendMessage(new MessagePlayerTurn("PlayerAction: ChooseCountry"));
 	}
 	
 	public Player diceThrowToDetermineTheBeginner() {
