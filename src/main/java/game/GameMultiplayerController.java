@@ -20,18 +20,18 @@ import network.messages.MessagePossessCountry;
  */
 
 public class GameMultiplayerController {
-	private HashMap<CountryName,Territory> territories;
+	private HashMap<CountryName, Territory> territories;
 	private ArrayList<PlayerMP> players;
 	private GameState gameState;
 	private LocalDateTime gameTimer;
 	volatile int interactionCount;
-	
+
 	private GameMultiplayerController multiplayerGameController;
-	
+
 	public GameMultiplayerController getInstance() {
 		return this.multiplayerGameController;
 	}
-	
+
 	/**
 	 * Constructor for the class
 	 */
@@ -39,16 +39,15 @@ public class GameMultiplayerController {
 		createTerritories();
 		this.gameState = new GameState();
 	}
-	
-	
+
 	public void addPlayer(PlayerMP player) {
 		players.add(player);
 	}
-	
+
 	public ArrayList<PlayerMP> getPlayers() {
 		return this.players;
 	}
-	
+
 	public void startGame() {
 		PlayerMP playersTurn;
 		gameTimer = LocalDateTime.now();
@@ -58,12 +57,34 @@ public class GameMultiplayerController {
 		playersTurn.getClientHandler().broadcastMessage(new MessagePlayerTurn(playersTurn));
 		playersTurn.getClientHandler().sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
 		countryPossession();
+		gameRound();
 	}
-	
+
+	private void gameRound() {
+		
+	}
+
 	private void countryPossession() {
-		for(PlayerMP p : players) {
-			p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-			MessagePossessCountry messagePossessCountry = p.awaitMessage(10_000, MessageType.MessagePossessCountry);
+		boolean countryLeftToPick = true;
+
+		while (countryLeftToPick) {
+			for (PlayerMP p : players) {
+				p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
+				MessagePossessCountry messagePossessCountry = (MessagePossessCountry) p.awaitMessage(10_000,
+						MessageType.MessagePossessCountry);
+				boolean countryPossessionSucces = possessCountry(messagePossessCountry.getCountryName(), p);
+				if (!countryPossessionSucces) {
+					p.getClientHandler().sendMessage(new MessageErrorInput());
+					// TODO choose random country and add it to the player
+				}
+				countryLeftToPick = false;
+				for(Territory t: territories.values()) {
+					if(t.getOwnedByPlayer() == null) {
+						countryLeftToPick = true;
+						break;
+					}
+				}
+			}
 		}
 	}
 
@@ -71,61 +92,64 @@ public class GameMultiplayerController {
 		PlayerMP firstPlayer;
 		int highestDiceNumber;
 		interactionCount = 0;
-		for(PlayerMP p: players) {
+		for (PlayerMP p : players) {
 			Thread messageThread = new Thread(() -> {
 				int diceNumber = getRandomDiceNumber();
-	            try {
-	                boolean messageAchieved = p.awaitMessage(10_000, MessageType.MessageDiceThrow);
-	                
-	            
-	                if(messageAchieved) { // if player interacts in time 
-	                	p.sendMessage(new MessageDiceThrow(diceNumber));
-	                	if(diceNumber >= highestDiceNumber) {
-	        				firstPlayer = p;
-	        			}
-	                	interactionCount++;
-	                } else { // if Player did not responds in time
-	                	p.sendMessage(new MessageDiceThrow(0));
-	                	if(diceNumber >= highestDiceNumber) {
-	        				firstPlayer = p;
-	        			}
-	                	interactionCount++;
-	                }
-	            } catch (InterruptedException e) {
-	            	System.out.println("Thread \"Dice Throw Beginn\" interupted by player " + p.getName());
-	            }
-	            
-	        });
-	        messageThread.start();
+				try {
+					MessageDiceThrow messageDiceThrow = p.awaitMessage(10_000, MessageType.MessageDiceThrow);
+
+					if (messageDiceThrow != null) { // if player interacts in time
+						p.sendMessage(new MessageDiceThrow(diceNumber));
+						if (diceNumber >= highestDiceNumber) {
+							firstPlayer = p;
+						}
+						interactionCount++;
+					} else { // if Player did not responds in time
+						p.sendMessage(new MessageDiceThrow(0));
+						if (diceNumber >= highestDiceNumber) {
+							firstPlayer = p;
+						}
+						interactionCount++;
+					}
+				} catch (InterruptedException e) {
+					System.out.println("Thread \"Dice Throw Beginn\" interupted by player " + p.getName());
+				}
+
+			});
+			messageThread.start();
 		}
-		while((interactionCount < players.size())) {
+		while ((interactionCount < players.size())) {
 			Thread.sleep(100); // to avoid busy waiting
 		}
 		interactionCount = 0;
 		return firstPlayer;
 	}
-	
+
 	private static synchronized int getRandomDiceNumber() {
-		return (int)(Math.random() * 6) + 1;
+		return (int) (Math.random() * 6) + 1;
 	}
-	
+
 	public boolean possessCountry(CountryName countryName, Player player) {
-		if(territories.get(countryName) == null) {
+		if (territories.get(countryName) == null) {
 			territories.get(countryName).setOwnedByPlayer(player);
+			territories.get(countryName).setNumberOfTroops(1);;
 			return true;
 		}
 		return false;
 	}
-	
+
 	private void createTerritories() {
 		// add territories for each country name
 		territories.put(CountryName.Alaska, new Territory(CountryName.Alaska, Continent.NorthAmerica));
 		territories.put(CountryName.Alberta, new Territory(CountryName.Alberta, Continent.NorthAmerica));
-		territories.put(CountryName.NorthwestTerritory, new Territory(CountryName.NorthwestTerritory, Continent.NorthAmerica));
+		territories.put(CountryName.NorthwestTerritory,
+				new Territory(CountryName.NorthwestTerritory, Continent.NorthAmerica));
 		territories.put(CountryName.Ontario, new Territory(CountryName.Ontario, Continent.NorthAmerica));
 		territories.put(CountryName.Quebec, new Territory(CountryName.Quebec, Continent.NorthAmerica));
-		territories.put(CountryName.WesternUnitedStates, new Territory(CountryName.WesternUnitedStates, Continent.NorthAmerica));
-		territories.put(CountryName.EasternUnitedStates, new Territory(CountryName.EasternUnitedStates, Continent.NorthAmerica));
+		territories.put(CountryName.WesternUnitedStates,
+				new Territory(CountryName.WesternUnitedStates, Continent.NorthAmerica));
+		territories.put(CountryName.EasternUnitedStates,
+				new Territory(CountryName.EasternUnitedStates, Continent.NorthAmerica));
 		territories.put(CountryName.CentralAmerica, new Territory(CountryName.CentralAmerica, Continent.NorthAmerica));
 		territories.put(CountryName.Venezuela, new Territory(CountryName.Venezuela, Continent.SouthAmerica));
 		territories.put(CountryName.Brazil, new Territory(CountryName.Brazil, Continent.SouthAmerica));
