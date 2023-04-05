@@ -70,16 +70,39 @@ public class GameMultiplayerController {
 			p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
 			MessagePlacingTroops messagePossessCountry = (MessagePlacingTroops) p.awaitMessage(10_000,
 					MessageType.MessagePlacingTroops);
+			// TODO
 		}
 		return winner;
 	}
 
 	public int getNewTroopsCountForPlayer(PlayerMP player) {
-		int troops = 3;
-		for (Territory t : territories.values()) {
-
+		int troops = 0;
+		troops += player.getOwnedCountries().size()/3;
+		if(player.getOwnedContinents() != null) {
+			for(Continent c : player.getOwnedContinents()) {
+				switch(c) {
+				case Africa:
+					troops += 3;
+					break;
+				case Asia:
+					troops += 7;
+					break;
+				case Australia:
+					troops += 2;
+					break;
+				case Europe:
+					troops += 5;
+					break;
+				case NorthAmerica:
+					troops += 5;
+					break;
+				case SouthAmerica:
+					troops += 2;
+					break;
+				}
+			}
 		}
-		return troops;
+		return troops<3?3:troops;
 	}
 
 	private void countryPossession() {
@@ -125,6 +148,13 @@ public class GameMultiplayerController {
 						countryLeftToPick = true;
 						break;
 					}
+				}
+			}
+			for(PlayerMP p : players) {
+				while(p.getTroopsAvailable() > 0) {
+					p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
+					MessagePossessCountry messagePossessCountry = (MessagePossessCountry) p.awaitMessage(10_000,
+							MessageType.MessagePossessCountry);
 				}
 			}
 		}

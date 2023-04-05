@@ -18,6 +18,8 @@ public class Player {
 	private ArrayList<Continent> ownedContinents;
 	private int sumOfAllTroops;
 	private int troopsAvailable;
+	private int numberOfCardsTurnedIn;
+	private ArrayList<Card> cards;
 
 	
 	public Player(String name, int id) {
