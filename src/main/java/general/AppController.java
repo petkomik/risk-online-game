@@ -2,7 +2,7 @@ package general;
 
 
 import database.PlayerProfileHandler;
-import game.GameController;
+import game.GameMultiplayerController;
 import game.Profile;
 import game.WrongTextFieldInputException;
 
@@ -17,7 +17,7 @@ public class AppController {
 	private static Profile profile;
 	private static AppController appController = new AppController();
 	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
-	private static GameController gameController;
+	private static GameMultiplayerController multiplayerGameController;
 
 	
 	/**
@@ -65,8 +65,8 @@ public class AppController {
 		return false;
 	}
 	
-	public static void startGame() {
-		gameController = new GameController(false);
+	public static void startMultiplayerGame() {
+		multiplayerGameController = new GameMultiplayerController();
 	}
 	
 	public static AppController getInstance() {

@@ -7,7 +7,9 @@ import java.util.HashMap;
 import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
+import game.models.PlayerMP;
 import game.models.Territory;
+import network.messages.MessageType;
 
 /**
  * Class for the actual game logic handling
@@ -16,55 +18,58 @@ import game.models.Territory;
  *
  */
 
-public class GameController {
+public class GameMultiplayerController {
 	private HashMap<CountryName,Territory> territories;
-	private ArrayList<Player> players;
+	private ArrayList<PlayerMP> players;
 	private GameState gameState;
 	private LocalDateTime gameTimer;
 	volatile int interactionCount;
 	
-	private boolean isTutorial;
-	private GameController gameController;
+	private GameMultiplayerController multiplayerGameController;
 	
-	public GameController getInstance() {
-		return this.gameController;
+	public GameMultiplayerController getInstance() {
+		return this.multiplayerGameController;
 	}
 	
 	/**
 	 * Constructor for the class
 	 */
-	public GameController(boolean isTutorial) {
+	public GameMultiplayerController() {
 		createTerritories();
-		this.isTutorial = isTutorial;
 		this.gameState = new GameState();
 	}
 	
 	
-	public void addPlayer(Player player) {
+	public void addPlayer(PlayerMP player) {
 		players.add(player);
 	}
 	
-	public ArrayList<Player> getPlayers() {
+	public ArrayList<PlayerMP> getPlayers() {
 		return this.players;
 	}
 	
 	public void startGame() {
-		Player playersTurn;
+		PlayerMP playersTurn;
 		gameTimer = LocalDateTime.now();
 		playersTurn = diceThrowToDetermineTheBeginner();
+		players.remove(playersTurn); // remove player from list to put him first
+		players.add(playersTurn);
 		playersTurn.broadcastMessage(new MessagePlayerTurn(playersTurn));
 		playersTurn.sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
+		for(Player p : players) {
+			p.sendMessage();
+		}
 	}
 	
-	public Player diceThrowToDetermineTheBeginner() {
-		Player firstPlayer;
+	public PlayerMP diceThrowToDetermineTheBeginner() {
+		PlayerMP firstPlayer;
 		int highestDiceNumber;
 		interactionCount = 0;
-		for(Player p: players) {
+		for(PlayerMP p: players) {
 			Thread messageThread = new Thread(() -> {
 				int diceNumber = getRandomDiceNumber();
 	            try {
-	                boolean messageAchieved = p.awaitMessage(10_000, "");
+	                boolean messageAchieved = p.awaitMessage(10_000, MessageType.MessageDiceThrow);
 	                
 	            
 	                if(messageAchieved) { // if player interacts in time 
@@ -96,6 +101,14 @@ public class GameController {
 	
 	private static synchronized int getRandomDiceNumber() {
 		return (int)(Math.random() * 6) + 1;
+	}
+	
+	public boolean possessCountry(CountryName countryName, Player player) {
+		if(territories.get(countryName) == null) {
+			territories.get(countryName).setOwnedByPlayer(player);
+			return true;
+		}
+		return false;
 	}
 	
 	private void createTerritories() {
