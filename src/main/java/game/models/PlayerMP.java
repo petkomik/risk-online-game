@@ -20,6 +20,7 @@ public class PlayerMP extends Player {
 		this.profile = profile;
 	}
 	
+	// To be called in the ClientHandler Protocol
 	public synchronized void messageAchieved(Message message) {
 		MessageType messageType = message.getMessageType();
 		if ((this.awaitingMessageType == messageType && messageRead)|| nextMessage.getMessageType() == messageType) {

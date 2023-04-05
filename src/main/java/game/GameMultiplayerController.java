@@ -57,16 +57,16 @@ public class GameMultiplayerController {
 		playersTurn.getClientHandler().broadcastMessage(new MessagePlayerTurn(playersTurn));
 		playersTurn.getClientHandler().sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
 		countryPossession();
-		gameRound();
+		PlayerMP winner = gameRound();
 	}
 
-	private void gameRound() {
-		
+	private PlayerMP gameRound() {
+		PlayerMP winner;
+		return winner;
 	}
 
 	private void countryPossession() {
 		boolean countryLeftToPick = true;
-
 		while (countryLeftToPick) {
 			for (PlayerMP p : players) {
 				p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));

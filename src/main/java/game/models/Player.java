@@ -22,7 +22,6 @@ public class Player {
 		this.id = id;
 	}
 	
-	// To be called in the ClientHandler Protocol
 	
 	public void incrementRank() {
 		rank+=1;
