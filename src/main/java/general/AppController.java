@@ -65,6 +65,13 @@ public class AppController {
 		return false;
 	}
 	
+	public void updateProfile(String value,String attribute) {
+		PlayerProfileHandler pph = new PlayerProfileHandler();
+		pph.updateProfileInfo(value, attribute, AppController.profile);
+		AppController.profile.setAttribute(attribute, value);
+	}
+
+	
 	public static void startMultiplayerGame() {
 		multiplayerGameController = new GameMultiplayerController();
 	}

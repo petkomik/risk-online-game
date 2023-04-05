@@ -145,5 +145,15 @@ public class Profile implements Serializable {
 	public void setLoses(int loses) {
 		this.loses = loses;
 	}
-
+	
+	public void setAttribute(String attribute, String value) {
+		switch(attribute) {
+		case "userName": this.setUserName(value);
+		case "firstName": this.setFirstName(value);
+		case "lastName": this.setLastName(value);
+		case "color": this.setColor(value);
+		case "photo": this.setPhoto(value);
+		case "password": this.setPassword(value);
+		}
+	}
 }
