@@ -15,6 +15,7 @@ public enum MessageType {
 	MessagePlacingTroops,
 	MessageAttack,
 	MessageDiceThrow,
-	MessagePlayerTurn;
+	MessagePlayerTurn,
+	MessagePossessCountry;
 	
 }

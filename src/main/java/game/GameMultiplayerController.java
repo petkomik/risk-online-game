@@ -10,6 +10,7 @@ import game.models.Player;
 import game.models.PlayerMP;
 import game.models.Territory;
 import network.messages.MessageType;
+import network.messages.MessagePossessCountry;
 
 /**
  * Class for the actual game logic handling
@@ -54,13 +55,18 @@ public class GameMultiplayerController {
 		playersTurn = diceThrowToDetermineTheBeginner();
 		players.remove(playersTurn); // remove player from list to put him first
 		players.add(playersTurn);
-		playersTurn.broadcastMessage(new MessagePlayerTurn(playersTurn));
-		playersTurn.sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
-		for(Player p : players) {
-			p.sendMessage();
-		}
+		playersTurn.getClientHandler().broadcastMessage(new MessagePlayerTurn(playersTurn));
+		playersTurn.getClientHandler().sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
+		countryPossession();
 	}
 	
+	private void countryPossession() {
+		for(PlayerMP p : players) {
+			p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
+			MessagePossessCountry messagePossessCountry = p.awaitMessage(10_000, MessageType.MessagePossessCountry);
+		}
+	}
+
 	public PlayerMP diceThrowToDetermineTheBeginner() {
 		PlayerMP firstPlayer;
 		int highestDiceNumber;

@@ -2,6 +2,7 @@ package game.models;
 
 import game.Profile;
 import network.ClientHandler;
+import network.messages.Message;
 import network.messages.MessageType;
 
 public class PlayerMP extends Player {
@@ -9,7 +10,9 @@ public class PlayerMP extends Player {
 	private Profile profile;
 	private ClientHandler clientHandler;
 	private volatile boolean messageAchieved = false;
+	private volatile boolean messageRead = false;
 	private volatile MessageType awaitingMessageType;
+	private volatile Message nextMessage;
 	
 	public PlayerMP(Profile profile, ClientHandler clientHandler) {
 		super(profile.getUserName(), profile.getId());
@@ -17,13 +20,15 @@ public class PlayerMP extends Player {
 		this.profile = profile;
 	}
 	
-	public void messageAchieved(MessageType messageType) {
-		if (this.awaitingMessageType == messageType) {
+	public synchronized void messageAchieved(Message message) {
+		MessageType messageType = message.getMessageType();
+		if ((this.awaitingMessageType == messageType && messageRead)|| nextMessage.getMessageType() == messageType) {
+			nextMessage = message;
 			messageAchieved = true;
 		}
 	}
 	
-	public boolean awaitMessage(int milliseconds, MessageType messageType) throws InterruptedException {
+	public Message awaitMessage(int milliseconds, MessageType messageType) throws InterruptedException {
 		//TODO
 		messageAchieved = false;
 		this.awaitingMessageType = messageType;
@@ -31,7 +36,14 @@ public class PlayerMP extends Player {
         while (!messageAchieved && System.currentTimeMillis() - startTime < milliseconds) {
             Thread.sleep(100); //Thread sleeps for 0.1 seconds to avoid busy waiting
         }
-		return messageAchieved;
+        synchronized (nextMessage) {
+			messageRead = true;
+			return nextMessage;
+		}
+	}
+
+	public ClientHandler getClientHandler() {
+		return clientHandler;
 	}
 	
 
