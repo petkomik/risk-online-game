@@ -46,6 +46,8 @@ public class PlayerMP extends Player {
 		return clientHandler;
 	}
 	
+	// hello
+	
 
 	
 //	public int getRank() {
