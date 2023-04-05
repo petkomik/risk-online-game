@@ -42,8 +42,14 @@ public class Territory {
 	}
 	
 	/**Setters*/
-	public void setNumberOfTroops(int numberOfTroops) {
-		this.numberOfTroops = numberOfTroops;
+//	public void setNumberOfTroops(int numberOfTroops) {
+//		this.numberOfTroops = numberOfTroops;
+//	}
+	public void addNumberOfTroops(int numberOfTroops) {
+		this.numberOfTroops += numberOfTroops;
+	}
+	public void removeNumberOfTroops(int numberOfTroops) {
+		this.numberOfTroops -= numberOfTroops;
 	}
 	public void setOwnedByPlayer(Player ownedByPlayer) {
 		this.ownedByPlayer = ownedByPlayer;

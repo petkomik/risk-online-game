@@ -55,6 +55,9 @@ public class Player {
 	public void setSumOfAllTroops(int sumOfAllTroops) {
 		this.sumOfAllTroops = sumOfAllTroops;
 	}
+	public void removeTroopsAvailable(int numberOfTroops) {
+		this.troopsAvailable -= numberOfTroops;
+	}
 
 
 	public ArrayList<Territory> getOwnedCountries() {
@@ -63,6 +66,7 @@ public class Player {
 
 	public void addOwnedCountries(Territory territory) {
 		this.ownedCountries.add(territory);
+		territory.setOwnedByPlayer(this);
 	}
 	
 	public ArrayList<Continent> getOwnedContinents() {

@@ -153,8 +153,14 @@ public class GameMultiplayerController {
 			for(PlayerMP p : players) {
 				while(p.getTroopsAvailable() > 0) {
 					p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-					MessagePossessCountry messagePossessCountry = (MessagePossessCountry) p.awaitMessage(10_000,
+					MessageChooseCountry messageChooseCountry = (MessageChooseCountry) p.awaitMessage(10_000,
 							MessageType.MessagePossessCountry);
+					if(messageChooseCountry.getCountry().getOwnedByPlayer() != p) {
+						p.getClientHandler().sendMessage(new MessageErrorInput());
+						// TODO send WrongCountry Message to player and wait for response again
+					}
+					p.setTroopsAvailable(p.getTroopsAvailable()-1);
+					messageChooseCountry.getCountry().addNumberOfTroops(1);
 				}
 			}
 		}
@@ -210,8 +216,8 @@ public class GameMultiplayerController {
 		if ((territories.get(countryName) == null) && (player.getTroopsAvailable() > 0)) {
 			territories.get(countryName).setOwnedByPlayer(player);
 			player.addOwnedCountries(territories.get(countryName));
-			territories.get(countryName).setNumberOfTroops(1);
-			player.setTroopsAvailable(player.getTroopsAvailable() - 1);
+			territories.get(countryName).addNumberOfTroops(1);
+			player.removeTroopsAvailable(1);
 			return true;
 		}
 		return false;
