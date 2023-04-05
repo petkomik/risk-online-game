@@ -1,7 +1,6 @@
 package game.models;
 
-import network.ClientHandler;
-import network.messages.MessageType;
+import java.util.ArrayList;
 
 /**
  * Player class to model the player entity
@@ -15,7 +14,11 @@ public class Player {
 	private String color;
 	private int id;
 	private int rank;
-	
+	private ArrayList<Territory> ownedCountries;
+	private ArrayList<Continent> ownedContinents;
+	private int sumOfAllTroops;
+	private int troopsAvailable;
+
 	
 	public Player(String name, int id) {
 		this.name = name;
@@ -37,6 +40,35 @@ public class Player {
 	
 	public String getName() {
 		return this.name;
+	}
+	public int getTroopsAvailable() {
+		return troopsAvailable;
+	}
+	public void setTroopsAvailable(int troopsAvailable) {
+		this.troopsAvailable = troopsAvailable;
+	}
+	public int getSumOfAllTroops() {
+		return sumOfAllTroops;
+	}
+	public void setSumOfAllTroops(int sumOfAllTroops) {
+		this.sumOfAllTroops = sumOfAllTroops;
+	}
+
+
+	public ArrayList<Territory> getOwnedCountries() {
+		return ownedCountries;
+	}
+
+	public void addOwnedCountries(Territory territory) {
+		this.ownedCountries.add(territory);
+	}
+	
+	public ArrayList<Continent> getOwnedContinents() {
+		return ownedContinents;
+	}
+	
+	public void updateOwnedContinents() {
+		
 	}
 	
 }

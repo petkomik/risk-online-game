@@ -2,15 +2,18 @@ package game;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerMP;
 import game.models.Territory;
-import network.messages.MessageType;
 import network.messages.MessagePossessCountry;
+import network.messages.MessageType;
 
 /**
  * Class for the actual game logic handling
@@ -21,6 +24,7 @@ import network.messages.MessagePossessCountry;
 
 public class GameMultiplayerController {
 	private HashMap<CountryName, Territory> territories;
+	private HashMap<Continent, ArrayList<Territory>> continents;
 	private ArrayList<PlayerMP> players;
 	private GameState gameState;
 	private LocalDateTime gameTimer;
@@ -62,11 +66,49 @@ public class GameMultiplayerController {
 
 	private PlayerMP gameRound() {
 		PlayerMP winner;
+		for (PlayerMP p : players) {
+			p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
+			MessagePlacingTroops messagePossessCountry = (MessagePlacingTroops) p.awaitMessage(10_000,
+					MessageType.MessagePlacingTroops);
+		}
 		return winner;
+	}
+
+	public int getNewTroopsCountForPlayer(PlayerMP player) {
+		int troops = 3;
+		for (Territory t : territories.values()) {
+
+		}
+		return troops;
 	}
 
 	private void countryPossession() {
 		boolean countryLeftToPick = true;
+		int troopsSize;
+		/** set available troopsize */
+		switch (players.size()) {
+		case 2:
+			troopsSize = 40;
+			break;
+		case 3:
+			troopsSize = 35;
+			break;
+		case 4:
+			troopsSize = 30;
+			break;
+		case 5:
+			troopsSize = 25;
+			break;
+		case 6:
+			troopsSize = 20;
+			break;
+		}
+		for (PlayerMP p : players) {
+			p.setTroopsAvailable(troopsSize);
+			p.setSumOfAllTroops(troopsSize);
+		}
+		/** *********** */
+
 		while (countryLeftToPick) {
 			for (PlayerMP p : players) {
 				p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
@@ -78,14 +120,15 @@ public class GameMultiplayerController {
 					// TODO choose random country and add it to the player
 				}
 				countryLeftToPick = false;
-				for(Territory t: territories.values()) {
-					if(t.getOwnedByPlayer() == null) {
+				for (Territory t : territories.values()) {
+					if (t.getOwnedByPlayer() == null) {
 						countryLeftToPick = true;
 						break;
 					}
 				}
 			}
 		}
+
 	}
 
 	public PlayerMP diceThrowToDetermineTheBeginner() {
@@ -129,10 +172,16 @@ public class GameMultiplayerController {
 		return (int) (Math.random() * 6) + 1;
 	}
 
+	public boolean placeTroops(CountryName countryName, int numberOfTroops) {
+		return false;
+	}
+
 	public boolean possessCountry(CountryName countryName, Player player) {
-		if (territories.get(countryName) == null) {
+		if ((territories.get(countryName) == null) && (player.getTroopsAvailable() > 0)) {
 			territories.get(countryName).setOwnedByPlayer(player);
-			territories.get(countryName).setNumberOfTroops(1);;
+			player.addOwnedCountries(territories.get(countryName));
+			territories.get(countryName).setNumberOfTroops(1);
+			player.setTroopsAvailable(player.getTroopsAvailable() - 1);
 			return true;
 		}
 		return false;
@@ -184,6 +233,19 @@ public class GameMultiplayerController {
 		territories.put(CountryName.Congo, new Territory(CountryName.Congo, Continent.Africa));
 		territories.put(CountryName.Madagascar, new Territory(CountryName.Madagascar, Continent.Africa));
 		territories.put(CountryName.SouthAfrica, new Territory(CountryName.SouthAfrica, Continent.Africa));
+	}
+
+	private void createContinents() {
+		continents.put(Continent.Australia,
+				new ArrayList<Territory>(Arrays.asList(territories.get(CountryName.Indonesia),
+						territories.get(CountryName.NewGuinea), territories.get(CountryName.EasternAustralia),
+						territories.get(CountryName.WesternAustralia))));
+
+		continents.put(Continent.Asia, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.Asia)).collect(Collectors.toList()));
+		continents.put(Continent.Africa, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.Africa)).collect(Collectors.toList()));
+		continents.put(Continent.NorthAmerica, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.NorthAmerica)).collect(Collectors.toList()));
+		continents.put(Continent.SouthAmerica, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.SouthAmerica)).collect(Collectors.toList()));
+		continents.put(Continent.Europe, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.Europe)).collect(Collectors.toList()));
 	}
 
 }
