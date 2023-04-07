@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import game.models.Continent;
@@ -54,6 +53,7 @@ public class GameMultiplayerController {
 
 	public void startGame() {
 		PlayerMP playersTurn;
+		PlayerMP winner;
 		gameTimer = LocalDateTime.now();
 		playersTurn = diceThrowToDetermineTheBeginner();
 		players.remove(playersTurn); // remove player from list to put him first
@@ -61,7 +61,7 @@ public class GameMultiplayerController {
 		playersTurn.getClientHandler().broadcastMessage(new MessagePlayerTurn(playersTurn));
 		playersTurn.getClientHandler().sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
 		countryPossession();
-		PlayerMP winner = gameRound();
+		winner = gameRound();
 	}
 
 	private PlayerMP gameRound() {
@@ -77,10 +77,12 @@ public class GameMultiplayerController {
 
 	public int getNewTroopsCountForPlayer(PlayerMP player) {
 		int troops = 0;
-		troops += player.getOwnedCountries().size()/3;
-		if(player.getOwnedContinents() != null) {
-			for(Continent c : player.getOwnedContinents()) {
-				switch(c) {
+		ArrayList<Continent> ownedContinents = player.getOwnedContinents();
+		
+		troops += ownedContinents.size() / 3;
+		if (ownedContinents != null) {
+			for (Continent c : ownedContinents) {
+				switch (c) {
 				case Africa:
 					troops += 3;
 					break;
@@ -102,12 +104,16 @@ public class GameMultiplayerController {
 				}
 			}
 		}
-		return troops<3?3:troops;
+		// TODO checking for cards that are turned in
+		return troops < 3 ? 3 : troops;
 	}
 
 	private void countryPossession() {
 		boolean countryLeftToPick = true;
 		int troopsSize;
+		boolean countryPossessionSucces;
+		MessagePossessCountry messagePossessCountry;
+		MessageChooseCountry messageChooseCountry;
 		/** set available troopsize */
 		switch (players.size()) {
 		case 2:
@@ -133,11 +139,11 @@ public class GameMultiplayerController {
 		/** *********** */
 
 		while (countryLeftToPick) {
-			for (PlayerMP p : players) {
+			for (PlayerMP p : players.) {
 				p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-				MessagePossessCountry messagePossessCountry = (MessagePossessCountry) p.awaitMessage(10_000,
+				messagePossessCountry = (MessagePossessCountry) p.awaitMessage(10_000,
 						MessageType.MessagePossessCountry);
-				boolean countryPossessionSucces = possessCountry(messagePossessCountry.getCountryName(), p);
+				countryPossessionSucces = possessCountry(messagePossessCountry.getCountryName(), p);
 				if (!countryPossessionSucces) {
 					p.getClientHandler().sendMessage(new MessageErrorInput());
 					// TODO choose random country and add it to the player
@@ -150,16 +156,18 @@ public class GameMultiplayerController {
 					}
 				}
 			}
-			for(PlayerMP p : players) {
-				while(p.getTroopsAvailable() > 0) {
+		}
+		while (players.stream().filter(o -> o.getTroopsAvailable() > 0) != null) {
+			for (PlayerMP p : players) {
+				while (p.getTroopsAvailable() > 0) {
 					p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-					MessageChooseCountry messageChooseCountry = (MessageChooseCountry) p.awaitMessage(10_000,
-							MessageType.MessagePossessCountry);
-					if(messageChooseCountry.getCountry().getOwnedByPlayer() != p) {
+					messageChooseCountry = (MessageChooseCountry) p.awaitMessage(10_000,
+							MessageType.MessagePlaceTroops);
+					if (messageChooseCountry.getCountry().getOwnedByPlayer() != p) {
 						p.getClientHandler().sendMessage(new MessageErrorInput());
 						// TODO send WrongCountry Message to player and wait for response again
 					}
-					p.setTroopsAvailable(p.getTroopsAvailable()-1);
+					p.removeTroopsAvailable(1);
 					messageChooseCountry.getCountry().addNumberOfTroops(1);
 				}
 			}
@@ -277,11 +285,16 @@ public class GameMultiplayerController {
 						territories.get(CountryName.NewGuinea), territories.get(CountryName.EasternAustralia),
 						territories.get(CountryName.WesternAustralia))));
 
-		continents.put(Continent.Asia, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.Asia)).collect(Collectors.toList()));
-		continents.put(Continent.Africa, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.Africa)).collect(Collectors.toList()));
-		continents.put(Continent.NorthAmerica, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.NorthAmerica)).collect(Collectors.toList()));
-		continents.put(Continent.SouthAmerica, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.SouthAmerica)).collect(Collectors.toList()));
-		continents.put(Continent.Europe, (ArrayList<Territory>) territories.values().stream().filter(o -> o.getContinent().equals(Continent.Europe)).collect(Collectors.toList()));
+		continents.put(Continent.Asia, (ArrayList<Territory>) territories.values().stream()
+				.filter(o -> o.getContinent().equals(Continent.Asia)).collect(Collectors.toList()));
+		continents.put(Continent.Africa, (ArrayList<Territory>) territories.values().stream()
+				.filter(o -> o.getContinent().equals(Continent.Africa)).collect(Collectors.toList()));
+		continents.put(Continent.NorthAmerica, (ArrayList<Territory>) territories.values().stream()
+				.filter(o -> o.getContinent().equals(Continent.NorthAmerica)).collect(Collectors.toList()));
+		continents.put(Continent.SouthAmerica, (ArrayList<Territory>) territories.values().stream()
+				.filter(o -> o.getContinent().equals(Continent.SouthAmerica)).collect(Collectors.toList()));
+		continents.put(Continent.Europe, (ArrayList<Territory>) territories.values().stream()
+				.filter(o -> o.getContinent().equals(Continent.Europe)).collect(Collectors.toList()));
 	}
 
 }

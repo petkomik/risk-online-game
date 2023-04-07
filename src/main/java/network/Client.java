@@ -50,7 +50,6 @@ public class Client {
 				inputStream2.close();
 			}
 		} catch (IOException e) {
-			closeEverything(socket2, inputStream2, outputStream2);
 			e.printStackTrace();
 		}
 
