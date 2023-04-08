@@ -1,7 +1,4 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
-.root{
-
-} 
 
 /*#backButton, #createProfileButton, #playButton */
 .button{
@@ -39,8 +36,16 @@
 		-fx-background-color: #4287f5;
 	
 }
-
 .mapBackground {
 	-fx-background-image:url("world-map6.png");
 	-fx-background-size:cover;
+}
+.countries{
+	-fx-fill: #cc9966;
+}
+.countries:hover{
+	-fx-fill: #ac7339;
+}
+#gameBoard{
+	-fx-background-color: #ecd9c6;
 }
