@@ -40,6 +40,7 @@ public class GameMultiplayerController {
 	 */
 	public GameMultiplayerController() {
 		createTerritories();
+		createContinents();
 		this.gameState = new GameState();
 	}
 
@@ -56,19 +57,36 @@ public class GameMultiplayerController {
 		PlayerMP winner;
 		gameTimer = LocalDateTime.now();
 		playersTurn = diceThrowToDetermineTheBeginner();
-		players.remove(playersTurn); // remove player from list to put him first
-		players.add(playersTurn);
+		
+		players = sortPlayerList(players, players.indexOf(playersTurn));
+		
 		playersTurn.getClientHandler().broadcastMessage(new MessagePlayerTurn(playersTurn));
 		playersTurn.getClientHandler().sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
 		countryPossession();
 		winner = gameRound();
 	}
+	
+	public ArrayList<PlayerMP> sortPlayerList(ArrayList<PlayerMP> players2, int firstPlayerIndex) {
+		ArrayList<PlayerMP> firstSublist;
+		ArrayList<PlayerMP> endSublist;
+		
+		firstSublist = (ArrayList<PlayerMP>) players2.subList(firstPlayerIndex, players2.size());
+		if(firstPlayerIndex > 0) {
+			endSublist = (ArrayList<PlayerMP>) players2.subList(0,firstPlayerIndex);
+			firstSublist.addAll(endSublist);
+		}
+		return firstSublist;
+		
+	}
 
 	private PlayerMP gameRound() {
 		PlayerMP winner;
-		for (PlayerMP p : players) {
+		PlayerMP p;
+		MessagePlacingTroops messagePossessCountry;
+		for (int index = 0; index < players.size(); index++) {
+			p = players.get(index);
 			p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-			MessagePlacingTroops messagePossessCountry = (MessagePlacingTroops) p.awaitMessage(10_000,
+			messagePossessCountry = (MessagePlacingTroops) p.awaitMessage(10_000,
 					MessageType.MessagePlacingTroops);
 			// TODO
 		}
@@ -138,8 +156,10 @@ public class GameMultiplayerController {
 		}
 		/** *********** */
 
+		PlayerMP p;
 		while (countryLeftToPick) {
-			for (PlayerMP p : players.) {
+			for (int index = 0; index < players.size(); index++) {
+				p = players.get(index);
 				p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
 				messagePossessCountry = (MessagePossessCountry) p.awaitMessage(10_000,
 						MessageType.MessagePossessCountry);
@@ -158,8 +178,9 @@ public class GameMultiplayerController {
 			}
 		}
 		while (players.stream().filter(o -> o.getTroopsAvailable() > 0) != null) {
-			for (PlayerMP p : players) {
-				while (p.getTroopsAvailable() > 0) {
+			for (int index = 0; index < players.size(); index++) {
+				p = players.get(index);
+				if (p.getTroopsAvailable() > 0) {
 					p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
 					messageChooseCountry = (MessageChooseCountry) p.awaitMessage(10_000,
 							MessageType.MessagePlaceTroops);
@@ -178,14 +199,18 @@ public class GameMultiplayerController {
 	public PlayerMP diceThrowToDetermineTheBeginner() {
 		PlayerMP firstPlayer;
 		int highestDiceNumber;
+		MessageDiceThrow messageDiceThrowRequest;
+		long startTime;
 		interactionCount = 0;
-		for (PlayerMP p : players) {
+		PlayerMP p;
+		for (int index = 0; index < players.size(); index++) {
+			p = players.get(index);
 			Thread messageThread = new Thread(() -> {
 				int diceNumber = getRandomDiceNumber();
 				try {
-					MessageDiceThrow messageDiceThrow = p.awaitMessage(10_000, MessageType.MessageDiceThrow);
+					messageDiceThrowRequest = p.awaitMessage(10_000, MessageType.MessageDiceThrowRequest);
 
-					if (messageDiceThrow != null) { // if player interacts in time
+					if (messageDiceThrowRequest != null) { // if player interacts in time
 						p.sendMessage(new MessageDiceThrow(diceNumber));
 						if (diceNumber >= highestDiceNumber) {
 							firstPlayer = p;
@@ -205,7 +230,9 @@ public class GameMultiplayerController {
 			});
 			messageThread.start();
 		}
-		while ((interactionCount < players.size())) {
+		
+		startTime = System.currentTimeMillis(); // to avoid a deadlock through possible player loss during that phase
+		while ((interactionCount < players.size()) || System.currentTimeMillis() - startTime < 12_000) {
 			Thread.sleep(100); // to avoid busy waiting
 		}
 		interactionCount = 0;
