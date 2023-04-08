@@ -100,6 +100,21 @@ public class MainMenuPaneController implements Initializable{
 		
 	}
 	
+	public void showSingleplayerScene(ActionEvent e) throws IOException {
+		(new GameSound()).buttonClickForwardSound();
+		Node node = (Node)e.getSource();
+		// Getting the Stage where the event is happened
+		stage = (Stage)node.getScene().getWindow();
+		// changing the AnchorPane from the main file
+		anchorPane = (AnchorPane) loadFXML("gameFrame");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
+		// Setting the AnchorPane as a root of the main scene
+		stage.getScene().setRoot(anchorPane);
+		// Showing the Stage
+		stage.show();
+		
+	}
 //	public void clickDisplayStatistics(ActionEvent e) throws IOException {
 //		Node node = (Node)e.getSource();
 //		// Getting the Stage where the event is happened

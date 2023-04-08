@@ -7,7 +7,7 @@
    <children>
       <Button fx:id="playTutorialButton" mnemonicParsing="false" onAction="#showBattleScene" text="PLAY TUTORIAL" />
       <Button fx:id="profileSettingsButton" mnemonicParsing="false" text="PROFILE SETTINGS" />
-      <Button fx:id="singleplayerButton" mnemonicParsing="false" text="SINGLEPLAYER" />
+      <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showSingleplayerScene" text="SINGLEPLAYER" />
       <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showMultiplayerScene" text="MULTIPLAYER" />
    </children>
 </AnchorPane>
