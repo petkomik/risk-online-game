@@ -72,7 +72,7 @@ public class MultplayerHostJoinController implements Initializable {
 		// Getting the Stage where the event is happened
 		stage = (Stage) node.getScene().getWindow();
 		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("JoinClientMessengerFrame");
+		anchorPane = (AnchorPane) loadFXML("MultiplayerJoinWindowFrame");
 		// Setting the size of the anchorPane
 		anchorPane.setPrefSize(w, h);
 		// Setting the AnchorPane as a root of the main scene
