@@ -71,10 +71,49 @@ public class ClientHandler implements Runnable {
 				case MessageSend:
 	                broadcastMessage(messageFromClient);
 					break;
-				default:
-					break;
+                case Connect:
+                    // Handle the connect message
+                    break;
+                case Disconnect:
+                    // Handle the disconnect message
+                    break;
+                case MessageProfile:
+                    // Handle the message profile message
+                    break;
+                case MessageMove:
+                    // Handle the message move message
+                    break;
+                case MessagePlacingTroops:
+                    // Handle the message placing troops message
+                    break;
+                case MessageAttack:
+                    // Handle the message attack message
+                    break;
+                case MessageDiceThrow:
+                    // Handle the message dice throw message
+                    break;
+                case MessagePlayerTurn:
+                    // Handle the message player turn message
+                    break;
+                case MessagePossessCountry:
+                    // Handle the message possess country message
+                    break;
+                case MessageChooseCountry:
+                    // Handle the message choose country message
+                    break;
+                case MessagePlaceTroops:
+                    // Handle the message place troops message
+                    break;
+                case MessageDiceThrowRequest:
+                    // Handle the message dice throw request message
+                    break;
+                default:
+                    // Handle unknown message types, if necessary
+                    break;
+            }
+ 
                 
-                }
+                
             } catch (Exception e) {
                 closeEverything(socket, objectInputStream, objectOutputStream);
                 break;
