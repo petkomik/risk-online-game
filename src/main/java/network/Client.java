@@ -11,6 +11,7 @@ import game.gui.HostServerMessengerController;
 import general.AppController;
 import javafx.scene.layout.VBox;
 import network.messages.Message;
+import network.messages.MessageConnect;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
 
@@ -85,7 +86,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void listenForMessage(VBox vBoxMessages) {
 		new Thread(new Runnable() {
 			@Override
@@ -109,7 +110,7 @@ public class Client {
 					}
 				}
 			}
-			
+
 		}).start();
 	}
 
@@ -127,6 +128,11 @@ public class Client {
 						case MessageSend:
 							System.out.println(((MessageSend) msg).getMessage());
 							break;
+						case Connect:
+							System.out.println(
+									"Player " + (((MessageConnect) msg).getPlayername()) + "has been connected ");
+							break;
+
 						default:
 							break;
 
@@ -153,23 +159,16 @@ public class Client {
 		return client;
 	}
 
-	/** main for explicit testing
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println(" Enter your user name for the group chat ");
-		String username = sc.nextLine();
-		Profile profile = null;
-		Socket socket;
-		try {
-			socket = new Socket("localhost", 1234);
-			Client client = new Client(socket, profile);
-			client.listenForMessage();
-			client.sendMessageViaConsole();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-	*/
+	/**
+	 * main for explicit testing public static void main(String[] args) { Scanner sc
+	 * = new Scanner(System.in); System.out.println(" Enter your user name for the
+	 * group chat "); String username = sc.nextLine(); Profile profile = null;
+	 * Socket socket; try { socket = new Socket("localhost", 1234); Client client =
+	 * new Client(socket, profile); client.listenForMessage();
+	 * client.sendMessageViaConsole(); } catch (IOException e) {
+	 * e.printStackTrace(); }
+	 * 
+	 * }
+	 */
 
 }
