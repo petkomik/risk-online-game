@@ -1,6 +1,5 @@
 package game;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,97 +10,24 @@ import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
-import game.models.PlayerMP;
 import game.models.Territory;
-import network.messages.MessagePossessCountry;
-import network.messages.MessageType;
 
-/**
- * Class for the actual multiplayer game logic handling
- * 
- * @author srogalsk
- *
- */
-
-public class GameMultiplayerController {
+public class GameController {
 	private HashMap<CountryName, Territory> territories;
 	private HashMap<Continent, ArrayList<Territory>> continents;
-	private ArrayList<PlayerMP> players;
-	private GameState gameState;
-	private LocalDateTime gameTimer;
-	private volatile int interactionCount;
+	private ArrayList<Player> players;
 	private volatile Player currentPlayer;
 	private int numberOfCardsTurnedIn;
+	private boolean gameIsOver;
 
-	private GameMultiplayerController multiplayerGameController;
-
-	public GameMultiplayerController getInstance() {
-		return this.multiplayerGameController;
-	}
-
-	/**
-	 * Constructor for the class
-	 */
-	public GameMultiplayerController() {
+	// Konstruktor
+	public GameController(ArrayList<Player> players) {
+		this.players = players;
 		createTerritories();
 		createContinents();
-		this.gameState = new GameState();
 	}
 
-	public void addPlayer(PlayerMP player) {
-		players.add(player);
-	}
-
-	public ArrayList<PlayerMP> getPlayers() {
-		return this.players;
-	}
-
-	public void startGame() {
-		PlayerMP playersTurn;
-		PlayerMP winner;
-		gameTimer = LocalDateTime.now();
-		playersTurn = diceThrowToDetermineTheBeginner();
-
-		players = sortPlayerList(players, players.indexOf(playersTurn));
-
-		playersTurn.getClientHandler().broadcastMessage(new MessagePlayerTurn(playersTurn));
-		playersTurn.getClientHandler().sendMessage(new MessagePlayerAction("PlayerAction: ChooseCountry"));
-
-		countryPossession();
-		winner = gameRound();
-	}
-
-	public ArrayList<PlayerMP> sortPlayerList(ArrayList<PlayerMP> players2, int firstPlayerIndex) {
-		ArrayList<PlayerMP> firstSublist;
-		ArrayList<PlayerMP> endSublist;
-
-		firstSublist = (ArrayList<PlayerMP>) players2.subList(firstPlayerIndex, players2.size());
-		if (firstPlayerIndex > 0) {
-			endSublist = (ArrayList<PlayerMP>) players2.subList(0, firstPlayerIndex);
-			firstSublist.addAll(endSublist);
-		}
-		return firstSublist;
-
-	}
-
-	private PlayerMP gameRound() {
-		PlayerMP winner;
-		PlayerMP p;
-		MessagePlacingTroopsRequest messagePossessCountryRequest;
-		while (players.stream().anyMatch(o -> o.getOwnedCountries().size() < territories.size())) {
-			for (int index = 0; index < players.size(); index++) {
-				p = players.get(index);
-				p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-				p.setCardsTurningInPhase(true);
-				messagePossessCountryRequest = (MessagePlacingTroopsRequest) p.awaitMessage(10_000, MessageType.MessagePlacingTroopsRequest);
-				// TODO
-
-			}
-		}
-		return winner;
-	}
-
-	public boolean turnInCards(ArrayList<Card> cards, PlayerMP player) {
+	public boolean turnInCards(ArrayList<Card> cards, Player player) {
 		if (player == null || currentPlayer != player) {
 			return false;
 		} else if (cards == null || cards.size() != 3) {
@@ -137,6 +63,21 @@ public class GameMultiplayerController {
 		return true;
 	}
 
+	public boolean possessCountry(CountryName countryName, Player player) {
+		if ((territories.get(countryName) == null) && (player.getTroopsAvailable() > 0)) {
+			territories.get(countryName).setOwnedByPlayer(player);
+			player.addOwnedCountries(territories.get(countryName));
+			territories.get(countryName).addNumberOfTroops(1);
+			player.removeTroopsAvailable(1);
+			return true;
+		}
+		return false;
+	}
+	
+	private static synchronized int getRandomDiceNumber() {
+		return (int) (Math.random() * 6) + 1;
+	}
+
 	public int getNewTroopsCountForPlayer(Player player) {
 		int troops = 0;
 		ArrayList<Continent> ownedContinents = player.getOwnedContinents();
@@ -168,139 +109,6 @@ public class GameMultiplayerController {
 		}
 		// TODO checking for cards that are turned in
 		return troops < 3 ? 3 : troops;
-	}
-
-	private void countryPossession() {
-		boolean countryLeftToPick = true;
-		int troopsSize;
-		boolean countryPossessionSucces;
-		MessagePossessCountryRequest messagePossessCountryRequest;
-		MessageChooseCountry messageChooseCountry;
-		/** set available troopsize */
-		switch (players.size()) {
-		case 2:
-			troopsSize = 40;
-			break;
-		case 3:
-			troopsSize = 35;
-			break;
-		case 4:
-			troopsSize = 30;
-			break;
-		case 5:
-			troopsSize = 25;
-			break;
-		case 6:
-			troopsSize = 20;
-			break;
-		}
-		for (PlayerMP p : players) {
-			p.setTroopsAvailable(troopsSize);
-			p.setSumOfAllTroops(troopsSize);
-		}
-		/** *********** */
-
-		PlayerMP p;
-		while (countryLeftToPick) {
-			for (int index = 0; index < players.size(); index++) {
-				p = players.get(index);
-				p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-				messagePossessCountryRequest = (MessagePossessCountryRequest) p.awaitMessage(10_000,
-						MessageType.MessagePossessCountryRequest);
-				countryPossessionSucces = possessCountry(messagePossessCountryRequest.getCountryName(), p);
-				if (!countryPossessionSucces) {
-					p.getClientHandler().sendMessage(new MessageErrorInput());
-					// TODO choose random country and add it to the player
-				}
-				countryLeftToPick = false;
-				for (Territory t : territories.values()) {
-					if (t.getOwnedByPlayer() == null) {
-						countryLeftToPick = true;
-						break;
-					}
-				}
-			}
-		}
-
-		while (players.stream().anyMatch(o -> o.getTroopsAvailable() > 0)) {
-			for (int index = 0; index < players.size(); index++) {
-				p = players.get(index);
-				if (p.getTroopsAvailable() > 0) {
-					p.getClientHandler().broadcastMessage(new MessagePlayerTurn(p));
-					messageChooseCountry = (MessageChooseCountry) p.awaitMessage(10_000,
-							MessageType.MessagePlaceTroops);
-					if (messageChooseCountry.getCountry().getOwnedByPlayer() != p) {
-						p.getClientHandler().sendMessage(new MessageErrorInput());
-						// TODO send WrongCountry Message to player and wait for response again
-					}
-					p.removeTroopsAvailable(1);
-					messageChooseCountry.getCountry().addNumberOfTroops(1);
-				}
-			}
-		}
-
-	}
-
-	public PlayerMP diceThrowToDetermineTheBeginner() {
-		PlayerMP firstPlayer;
-		int highestDiceNumber;
-		MessageDiceThrow messageDiceThrowRequest;
-		long startTime;
-		interactionCount = 0;
-		PlayerMP p;
-		for (int index = 0; index < players.size(); index++) {
-			p = players.get(index);
-			Thread messageThread = new Thread(() -> {
-				int diceNumber = getRandomDiceNumber();
-				try {
-					messageDiceThrowRequest = p.awaitMessage(10_000, MessageType.MessageDiceThrowRequest);
-
-					if (messageDiceThrowRequest != null) { // if player interacts in time
-						p.sendMessage(new MessageDiceThrow(diceNumber));
-						if (diceNumber >= highestDiceNumber) {
-							firstPlayer = p;
-						}
-						interactionCount++;
-					} else { // if Player did not responds in time
-						p.sendMessage(new MessageDiceThrow(0));
-						if (diceNumber >= highestDiceNumber) {
-							firstPlayer = p;
-						}
-						interactionCount++;
-					}
-				} catch (InterruptedException e) {
-					System.out.println("Thread \"Dice Throw Beginn\" interupted by player " + p.getName());
-				}
-
-			});
-			messageThread.start();
-		}
-
-		startTime = System.currentTimeMillis(); // to avoid a deadlock through possible player loss during that phase
-		while ((interactionCount < players.size()) || System.currentTimeMillis() - startTime < 12_000) {
-			Thread.sleep(100); // to avoid busy waiting
-		}
-		interactionCount = 0;
-		return firstPlayer;
-	}
-
-	private static synchronized int getRandomDiceNumber() {
-		return (int) (Math.random() * 6) + 1;
-	}
-
-	public boolean placeTroops(CountryName countryName, int numberOfTroops) {
-		return false;
-	}
-
-	public boolean possessCountry(CountryName countryName, Player player) {
-		if ((territories.get(countryName).getOwnedByPlayer() == null) && (player.getTroopsAvailable() > 0)) {
-			territories.get(countryName).setOwnedByPlayer(player);
-			player.addOwnedCountries(territories.get(countryName));
-			territories.get(countryName).addNumberOfTroops(1);
-			player.removeTroopsAvailable(1);
-			return true;
-		}
-		return false;
 	}
 
 	private void createTerritories() {
@@ -368,7 +176,7 @@ public class GameMultiplayerController {
 		continents.put(Continent.Europe, (ArrayList<Territory>) territories.values().stream()
 				.filter(o -> o.getContinent().equals(Continent.Europe)).collect(Collectors.toList()));
 	}
-	
+
 	public int getNumberOfCardsTurnedIn() {
 		return numberOfCardsTurnedIn;
 	}
@@ -376,9 +184,8 @@ public class GameMultiplayerController {
 	public void resetNumberOfCardsTurnedIn() {
 		this.numberOfCardsTurnedIn = 0;
 	}
-	
+
 	public void incrementNumberOfCardsTurnedIn() {
 		this.numberOfCardsTurnedIn += 1;
 	}
-
 }
