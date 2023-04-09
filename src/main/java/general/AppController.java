@@ -18,6 +18,8 @@ public class AppController {
 	private static AppController appController = new AppController();
 	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
 	private static GameMultiplayerController multiplayerGameController;
+	private static int portNumber = 1234;
+	private static String host = "localhost";
 
 	
 	/**
@@ -82,5 +84,21 @@ public class AppController {
 	
 	public static Profile getProfile() {
 		return AppController.profile;
+	}
+
+	public static int getPortNumber() {
+		return portNumber;
+	}
+
+	public static void setPortNumber(int portNumber) {
+		AppController.portNumber = portNumber;
+	}
+
+	public static String getHost() {
+		return host;
+	}
+
+	public static void setHost(String host) {
+		AppController.host = host;
 	}
 }

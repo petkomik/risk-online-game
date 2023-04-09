@@ -67,7 +67,6 @@ public class MultplayerHostJoinController implements Initializable {
 	}
 	
 	public void joinServer(ActionEvent e) throws IOException {
-		(new GameSound()).buttonClickForwardSound();
 		Node node = (Node) e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage) node.getScene().getWindow();

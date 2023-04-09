@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import general.AppController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -43,8 +44,8 @@ public class HostServerMessengerController implements Initializable {
 	private Server server;
 	private static Client client;
 	private static Socket socket;
-	private int port;
-	private String host;
+	private int port = AppController.getPortNumber();
+	private String host = AppController.getHost();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -60,8 +61,6 @@ public class HostServerMessengerController implements Initializable {
 
 		/******/
 		
-		port = 1234;
-		host = "localhost";
 		try {
 			server = Server.createServer(port);
 			client = Client.createClient(host, port);

@@ -99,7 +99,7 @@ public class MultiplayerJoinWindowController implements Initializable {
 		String ipAddress = ipAddressTF.getText();
 		String portNumber = portNumberTF.getText();
 		
-		Node node =(Node) e.getSource();
+		Node node = (Node) e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage) node.getScene().getWindow();
 		// changing the AnchorPane from the main file
@@ -114,6 +114,7 @@ public class MultiplayerJoinWindowController implements Initializable {
 	
 	public void clickBack(ActionEvent e) throws IOException {
 
+		gameSound.buttonClickBackwardSound();
 
 		Node node = (Node) e.getSource();
 		// Getting the Stage where the event is happened
