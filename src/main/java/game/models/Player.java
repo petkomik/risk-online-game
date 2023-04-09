@@ -84,6 +84,7 @@ public class Player {
 	        territoriesOwnedInContinent.put(continent, 0);
 	    }
 	    
+	    
 	    // Count the number of territories owned by the player in each continent
 	    for (Territory territory : this.getOwnedCountries().values()) {
 	        Continent continent = territory.getContinent();
