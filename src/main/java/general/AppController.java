@@ -5,6 +5,7 @@ import database.PlayerProfileHandler;
 import game.GameMultiplayerController;
 import game.Profile;
 import game.WrongTextFieldInputException;
+import network.Client;
 
 /**
  * Class for the application logic handling
@@ -20,6 +21,7 @@ public class AppController {
 	private static GameMultiplayerController multiplayerGameController;
 	private static int portNumber = 1234;
 	private static String host = "localhost";
+	private static Client client;
 
 	
 	/**
@@ -100,5 +102,13 @@ public class AppController {
 
 	public static void setHost(String host) {
 		AppController.host = host;
+	}
+
+	public static Client getClient() {
+		return client;
+	}
+
+	public static void setClient(Client client) {
+		AppController.client = client;
 	}
 }

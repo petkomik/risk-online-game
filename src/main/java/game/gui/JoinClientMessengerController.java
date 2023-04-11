@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import general.AppController;
+import general.Parameter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,14 +17,18 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import network.Client;
 import network.Server;
 
@@ -41,7 +46,7 @@ public class JoinClientMessengerController implements Initializable {
 	@FXML
 	private ScrollPane scrollPaneMain;
 
-	private static Client client;
+	private static Client client = AppController.getClient();
 	private static Socket socket;
 	private int port = AppController.getPortNumber();
 	private String host = AppController.getHost();
@@ -60,13 +65,9 @@ public class JoinClientMessengerController implements Initializable {
 
 		/******/
 		
-		try {
-			client = Client.createClient(host, port);
-			client.listenForMessage(vBoxMessages);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
+		
+		client.listenForMessage(vBoxMessages);
 		
 		vBoxMessages.heightProperty().addListener(new ChangeListener<Number>() {
 			@Override
