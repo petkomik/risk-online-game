@@ -22,6 +22,10 @@ public class Player {
 	private ArrayList<Card> cards;
 	private boolean canContinuePlaying = true;
 	private volatile boolean cardsTurningInPhase;
+	private volatile boolean initialPlacementPhase;
+	private volatile boolean preparationPhase;
+	private volatile boolean attackPhase;
+	private volatile boolean fortificationPhase;
 	
 	public Player(String name, int id) {
 		this.name = name;
@@ -133,6 +137,46 @@ public class Player {
 
 	public void setCardsTurningInPhase(boolean cardsTurningInPhase) {
 		this.cardsTurningInPhase = cardsTurningInPhase;
+	}
+
+
+	public boolean isInitialPlacementPhase() {
+		return initialPlacementPhase;
+	}
+
+
+	public void setInitialPlacementPhase(boolean initialPlacementPhase) {
+		this.initialPlacementPhase = initialPlacementPhase;
+	}
+
+
+	public boolean isPreparationPhase() {
+		return preparationPhase;
+	}
+
+
+	public void setPreparationPhase(boolean preparationPhase) {
+		this.preparationPhase = preparationPhase;
+	}
+
+
+	public boolean isAttackPhase() {
+		return attackPhase;
+	}
+
+
+	public void setAttackPhase(boolean attackPhase) {
+		this.attackPhase = attackPhase;
+	}
+
+
+	public boolean isFortificationPhase() {
+		return fortificationPhase;
+	}
+
+
+	public void setFortificationPhase(boolean fortificationPhase) {
+		this.fortificationPhase = fortificationPhase;
 	}
 	
 }

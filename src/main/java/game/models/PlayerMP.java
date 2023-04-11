@@ -26,12 +26,14 @@ public class PlayerMP extends Player {
 		if ((this.awaitingMessageType == messageType && messageRead)|| nextMessage.getMessageType() == messageType) {
 			nextMessage = message;
 			messageAchieved = true;
+			messageRead = false;
 		}
 	}
 	
 	public Message awaitMessage(int milliseconds, MessageType messageType) throws InterruptedException {
 		//TODO
 		messageAchieved = false;
+		messageRead = false;
 		this.awaitingMessageType = messageType;
 		long startTime = System.currentTimeMillis();
         while (!messageAchieved && System.currentTimeMillis() - startTime < milliseconds) {
