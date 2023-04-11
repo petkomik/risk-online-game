@@ -1,5 +1,6 @@
 package game;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,21 +11,41 @@ import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
+import game.models.PlayerMP;
 import game.models.Territory;
 
+/**
+ * Class for superclass GameController
+ * @author srogalsk
+ *
+ */
+
 public class GameController {
-	private HashMap<CountryName, Territory> territories;
-	private HashMap<Continent, ArrayList<Territory>> continents;
-	private ArrayList<Player> players;
-	private volatile Player currentPlayer;
-	private int numberOfCardsTurnedIn;
-	private boolean gameIsOver;
+	protected HashMap<CountryName, Territory> territories;
+	protected HashMap<Continent, ArrayList<Territory>> continents;
+	protected ArrayList<Player> players;
+	protected volatile Player currentPlayer;
+	protected int numberOfCardsTurnedIn;
+	protected boolean gameIsOver;
+	protected LocalDateTime gameTimer;
 
 	// Konstruktor
 	public GameController(ArrayList<Player> players) {
 		this.players = players;
 		createTerritories();
 		createContinents();
+	}
+	
+	public ArrayList<Player> sortPlayerList(ArrayList<Player> players, int firstPlayerIndex) {
+		ArrayList<Player> firstSublist;
+		ArrayList<Player> endSublist;
+
+		firstSublist = (ArrayList<Player>) players.subList(firstPlayerIndex, players.size());
+		if (firstPlayerIndex > 0) {
+			endSublist = (ArrayList<Player>) players.subList(0, firstPlayerIndex);
+			firstSublist.addAll(endSublist);
+		}
+		return firstSublist;
 	}
 
 	public boolean turnInCards(ArrayList<Card> cards, Player player) {
@@ -64,17 +85,21 @@ public class GameController {
 	}
 
 	public boolean possessCountry(CountryName countryName, Player player) {
-		if ((territories.get(countryName) == null) && (player.getTroopsAvailable() > 0)) {
+		if(player == null || !player.isInitialPlacementPhase()) {
+			return false;
+		}
+		if ((territories.get(countryName).getOwnedByPlayer() == null) && (player.getTroopsAvailable() > 0)) {
 			territories.get(countryName).setOwnedByPlayer(player);
 			player.addOwnedCountries(territories.get(countryName));
 			territories.get(countryName).addNumberOfTroops(1);
 			player.removeTroopsAvailable(1);
+			player.updateOwnedContinents(continents);
 			return true;
 		}
 		return false;
 	}
 	
-	private static synchronized int getRandomDiceNumber() {
+	public static synchronized int getRandomDiceNumber() {
 		return (int) (Math.random() * 6) + 1;
 	}
 
@@ -187,5 +212,13 @@ public class GameController {
 
 	public void incrementNumberOfCardsTurnedIn() {
 		this.numberOfCardsTurnedIn += 1;
+	}
+	
+	public void addPlayer(Player player) {
+		players.add(player);
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return this.players;
 	}
 }
