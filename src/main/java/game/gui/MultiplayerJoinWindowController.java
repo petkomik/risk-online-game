@@ -106,18 +106,27 @@ public class MultiplayerJoinWindowController implements Initializable {
 
 		try {
 
-			if (!ipAddress.isBlank() && ipAddress.matches("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b|localhost\\b\r\n" + "")) {
+			if (ipAddress.isBlank()) {
+				AppController.setHost(Parameter.hostDefault);
+			} else if (ipAddress.matches("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b|localhost\\b")) {
 				AppController.setHost(ipAddress);
+			} else {
+				throw new WrongTextFieldInputException("The Input can not be resolved to be an IP Address");
 			}
 
-			if (!portNumber.isBlank() && portNumber.matches("\\b\\d{1,5}\\b\r\n" + "")) {
+			if (portNumber.isBlank()) {
+				AppController.setPortNumber(Parameter.portDefault);
+			} else if (portNumber.matches(
+					"\\b(0|[1-9]\\d{0,4}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])\\b")) {
 				AppController.setPortNumber(Integer.parseInt(portNumber));
+			} else {
+				throw new WrongTextFieldInputException("The Input can not be resolved to be an Port");
 			}
 
 			AppController.setClient(Client.createClient(AppController.getHost(), AppController.getPortNumber()));
-		} catch (IOException e1) {
+		} catch (IOException | WrongTextFieldInputException e1) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText(e1.getMessage());
+			alert.setContentText(e1.getMessage() + ((e1 instanceof IOException) ? "\nHost: " + AppController.getHost() + " Port: " + AppController.getPortNumber(): ""));
 			alert.setHeaderText("ERROR");
 			alert.setTitle("");
 			Stage tmp = (Stage) alert.getDialogPane().getScene().getWindow();

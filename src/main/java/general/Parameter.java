@@ -23,6 +23,7 @@ public class Parameter {
 	public static final String buttonClick03Sound = soundsdir + "zapsplat_multimedia_button_click_fast_short_003.mp3";
 	public static final String buttonClick04Sound = soundsdir + "zapsplat_multimedia_button_click_fast_short_004.mp3";
 	
-	
+	public static final String hostDefault = "localhost";
+	public static final int portDefault = 1234;
 }
 

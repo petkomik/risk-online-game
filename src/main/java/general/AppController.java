@@ -19,8 +19,8 @@ public class AppController {
 	private static AppController appController = new AppController();
 	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
 	private static GameMultiplayerController multiplayerGameController;
-	private static int portNumber = 1234;
-	private static String host = "localhost";
+	private static int portNumber = Parameter.portDefault;
+	private static String host = Parameter.hostDefault;
 	private static Client client;
 
 	
