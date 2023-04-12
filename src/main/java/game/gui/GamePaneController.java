@@ -36,8 +36,8 @@ public class GamePaneController implements Initializable{
 		int i = 0;
 		for(Node n : gameBoard.getChildren()) {
 			if(n instanceof SVGPath) {
-				n.setScaleX(w*(0.2/1536));
-				n.setScaleY(h*(-0.2/864));
+				n.setScaleX(0.2);
+				n.setScaleY(-0.2);
 				// parsing the x coord into double value
 				double x = Double.parseDouble(coord[i][0]);
 				// setting the x coord during the run time and relative to the screen
