@@ -64,7 +64,7 @@ public class GameSingleplayerController extends GameController {
 	@Override
 	public boolean attackCountry(Player player, CountryName countryFrom, CountryName countryTo, int troops) {
 		
-		player
+		player.getName();
 		
 		return false;
 	}
