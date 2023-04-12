@@ -3,6 +3,8 @@ package game.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import game.GameController;
+
 /**
  * Player class to model the player entity
  *
@@ -72,16 +74,20 @@ public class Player {
 		return ownedCountries;
 	}
 
-	public void addOwnedCountries(Territory territory) {
+	public void addAndUpdateOwnedCountries(Territory territory) {
+		if(territory.getOwnedByPlayer() != null) {
+			territory.getOwnedByPlayer().getOwnedCountries().remove(territory.getCountryName(), territory);
+		}
 		this.ownedCountries.put(territory.getCountryName(),territory);
 		territory.setOwnedByPlayer(this);
+		updateOwnedContinents(GameController.getContinents());
 	}
 	
 	public ArrayList<Continent> getOwnedContinents() {
 		return ownedContinents;
 	}
 	
-	public void updateOwnedContinents(HashMap<Continent, ArrayList<Territory>> continents) {
+	private void updateOwnedContinents(HashMap<Continent, ArrayList<Territory>> continents) {
 		 // Create a HashMap to store the number of territories owned by the player in each continent
 	    HashMap<Continent, Integer> territoriesOwnedInContinent = new HashMap<>();
 	    for (Continent continent : continents.keySet()) {
