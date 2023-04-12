@@ -14,7 +14,10 @@ import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.SVGPath;
 
-
+/**
+ * @author majda
+ * This class handles the events on the game board 
+ */
 public class GamePaneController implements Initializable{
 	
 	private double w = MainApp.screenWidth;
@@ -35,15 +38,22 @@ public class GamePaneController implements Initializable{
 			if(n instanceof SVGPath) {
 				n.setScaleX(w*(0.2/1536));
 				n.setScaleY(h*(-0.2/864));
+				// parsing the x coord into double value
 				double x = Double.parseDouble(coord[i][0]);
+				// setting the x coord during the run time and relative to the screen
 				n.setLayoutX(((x+n.getLayoutX())/1536)*w-x);
+				// parsing the y coord into double value
 				double y = Double.parseDouble(coord[i][1]);
+				// setting the y coord during the run time and relative to the screen
 				n.setLayoutY(((y+n.getLayoutY())/864)*h-y);
 				i++;
 			}
 		}
 	}
-	
+	/*
+	 * coordinates are read from the file coord.txt and saved in the 
+	 * variable coord
+	 */
 	private void setUpCoords() {
 		coord = new String[48][2];
 		try {
@@ -52,7 +62,7 @@ public class GamePaneController implements Initializable{
 			String tmp = "";
 			int i = 0;
 			while((tmp = br.readLine()) != null) {
-				coord[i] = tmp.split(",");
+				coord[i] = tmp.split(","); // splitting the coordinates
 				i++;
 			}
 			fr.close();
