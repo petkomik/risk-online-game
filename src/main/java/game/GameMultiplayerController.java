@@ -32,6 +32,10 @@ public class GameMultiplayerController extends GameController {
 	public GameMultiplayerController(ArrayList <Player> players) {
 		super(players);
 	}
+	
+	public static GameMultiplayerController getInstance() {
+		return this;
+	}
 
 	public void startGame() {
 		PlayerMP playersTurn;

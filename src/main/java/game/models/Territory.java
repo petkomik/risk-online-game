@@ -15,11 +15,12 @@ public class Territory {
 	private final Continent continent;
 	private int numberOfTroops;
 	private final CountryName countryName;
-	private ArrayList<Territory> neighboringTerritories = new ArrayList<>();
+	private ArrayList<Territory> neighboringTerritories;
 	
 	public Territory(CountryName countryName, Continent continent) {
 		this.countryName = countryName;
 		this.continent = continent;
+		neighboringTerritories = new ArrayList<>();
 	}
 	
 	

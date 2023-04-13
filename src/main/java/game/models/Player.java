@@ -30,6 +30,9 @@ public class Player {
 	private volatile boolean fortificationPhase;
 	
 	public Player(String name, int id) {
+		ownedCountries = new HashMap<>();
+		ownedContinents = new ArrayList<>();
+		cards = new ArrayList<>();
 		this.name = name;
 		this.id = id;
 	}

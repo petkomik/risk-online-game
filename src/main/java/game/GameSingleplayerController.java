@@ -89,39 +89,36 @@ public class GameSingleplayerController extends GameController {
 		}
 
 		int[] diceNumberAttacker = new int[troops];
-		for(int i = 0; i < troops; i++) {
+		for (int i = 0; i < troops; i++) {
 			diceNumberAttacker[i] = getRandomDiceNumber();
 		}
-		diceNumberAttacker = Arrays.stream(diceNumberAttacker)
-			      .boxed()
-			      .sorted(Comparator.reverseOrder())
-			      .mapToInt(Integer::intValue)
-			      .toArray();
-		
+		diceNumberAttacker = Arrays.stream(diceNumberAttacker).boxed().sorted(Comparator.reverseOrder())
+				.mapToInt(Integer::intValue).toArray();
+
 		int[] diceNumberDefender = new int[territories.get(countryTo).getNumberOfTroops() > 1 ? 2 : 1];
-		for(int i = 0; i < diceNumberDefender.length; i++) {
+		for (int i = 0; i < diceNumberDefender.length; i++) {
 			diceNumberDefender[i] = getRandomDiceNumber();
 		}
+
+		diceNumberDefender = Arrays.stream(diceNumberAttacker).boxed().sorted(Comparator.reverseOrder())
+				.mapToInt(Integer::intValue).toArray();
 		
-		diceNumberDefender = Arrays.stream(diceNumberAttacker)
-			      .boxed()
-			      .sorted(Comparator.reverseOrder())
-			      .mapToInt(Integer::intValue)
-			      .toArray();
-		
-		for(int i = 0; i < diceNumberDefender.length; i++) {
-			if(diceNumberAttacker[i] > diceNumberDefender[i]) {
+		Player defender = territories.get(countryTo).getOwnedByPlayer();
+		for (int i = 0; i < diceNumberDefender.length; i++) {
+			if (diceNumberAttacker[i] > diceNumberDefender[i]) {
 				territories.get(countryTo).removeNumberOfTroops(1);
-				Player defender = territories.get(countryTo).getOwnedByPlayer();
-						defender.setSumOfAllTroops(defender.getSumOfAllTroops() - 1);
+				defender.setSumOfAllTroops(defender.getSumOfAllTroops() - 1);
 			} else {
 				territories.get(countryFrom).removeNumberOfTroops(1);
 				player.setSumOfAllTroops(player.getSumOfAllTroops() - 1);
 			}
 		}
-		
-		if(territories.get(countryTo).getNumberOfTroops() < 1) {
+
+		if (territories.get(countryTo).getNumberOfTroops() < 1) {
 			player.addAndUpdateOwnedCountries(territories.get(countryTo));
+			if(defender.getOwnedCountries().size() < 1) {
+				defender.setCanContinuePlaying(false);
+			}
 		}
 
 		if (territories.get(countryTo).getOwnedByPlayer() == player) {
@@ -145,6 +142,8 @@ public class GameSingleplayerController extends GameController {
 		} else if (territories.get(countryFrom).getNumberOfTroops() - 1 < troops) {
 			throw new WrongTroopsCountException(
 					"You dont have enough troops available and one soldier has to stay in your country", troops);
+		} else if (!territories.get(countryFrom).getNeighboringTerritories().stream().anyMatch(o -> o.equals(territories.get(countryTo)))) {
+			throw new WrongCountryException("The Countrys you have choosen are not neighbors", countryTo);
 		}
 		territories.get(countryFrom).removeNumberOfTroops(troops);
 		territories.get(countryTo).addNumberOfTroops(troops);

@@ -12,6 +12,7 @@ public enum CountryName {
 	NorthwestTerritory,
 	Ontario,
 	Quebec,
+	Greenland,
 	WesternUnitedStates,
 	EasternUnitedStates,
 	CentralAmerica,

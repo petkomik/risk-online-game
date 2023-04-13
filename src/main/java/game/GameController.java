@@ -32,6 +32,8 @@ public abstract class GameController {
 
 	// Konstruktor
 	public GameController(ArrayList<Player> players) {
+		territories = new HashMap<>();
+		continents = new HashMap<>();
 		this.players = players;
 		createTerritories();
 		createContinents();
@@ -198,6 +200,7 @@ public abstract class GameController {
 	private void createTerritories() {
 		// add territories for each country name
 		territories.put(CountryName.Alaska, new Territory(CountryName.Alaska, Continent.NorthAmerica));
+		territories.put(CountryName.Greenland, new Territory(CountryName.Greenland, Continent.NorthAmerica));
 		territories.put(CountryName.Alberta, new Territory(CountryName.Alberta, Continent.NorthAmerica));
 		territories.put(CountryName.NorthwestTerritory,
 				new Territory(CountryName.NorthwestTerritory, Continent.NorthAmerica));
@@ -241,6 +244,160 @@ public abstract class GameController {
 		territories.put(CountryName.Congo, new Territory(CountryName.Congo, Continent.Africa));
 		territories.put(CountryName.Madagascar, new Territory(CountryName.Madagascar, Continent.Africa));
 		territories.put(CountryName.SouthAfrica, new Territory(CountryName.SouthAfrica, Continent.Africa));
+
+		setNeighboringCountrys();
+	}
+
+	private void setNeighboringCountrys() {
+		territories.get(CountryName.Alaska)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Kamchatka),
+						territories.get(CountryName.NorthwestTerritory), territories.get(CountryName.Alberta))));
+
+		territories.get(CountryName.Alberta)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Alaska),
+						territories.get(CountryName.NorthwestTerritory), territories.get(CountryName.Ontario),
+						territories.get(CountryName.WesternUnitedStates))));
+
+		territories.get(CountryName.NorthwestTerritory).setNeighboringTerritories(
+				new ArrayList<>(Arrays.asList(territories.get(CountryName.Alaska), territories.get(CountryName.Alberta),
+						territories.get(CountryName.Ontario), territories.get(CountryName.Greenland))));
+
+		territories.get(CountryName.Ontario)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(
+						territories.get(CountryName.NorthwestTerritory), territories.get(CountryName.Alberta),
+						territories.get(CountryName.Quebec), territories.get(CountryName.WesternUnitedStates),
+						territories.get(CountryName.EasternUnitedStates), territories.get(CountryName.Greenland))));
+
+		territories.get(CountryName.Quebec)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Ontario),
+						territories.get(CountryName.EasternUnitedStates), territories.get(CountryName.Greenland))));
+
+		territories.get(CountryName.Greenland)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(
+						territories.get(CountryName.NorthwestTerritory), territories.get(CountryName.Ontario),
+						territories.get(CountryName.Quebec), territories.get(CountryName.Iceland))));
+
+		territories.get(CountryName.WesternUnitedStates)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Alberta),
+						territories.get(CountryName.Ontario), territories.get(CountryName.EasternUnitedStates),
+						territories.get(CountryName.CentralAmerica))));
+
+		territories.get(CountryName.EasternUnitedStates)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(
+						territories.get(CountryName.WesternUnitedStates), territories.get(CountryName.Ontario),
+						territories.get(CountryName.Quebec), territories.get(CountryName.CentralAmerica))));
+
+		territories.get(CountryName.CentralAmerica)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(
+						territories.get(CountryName.WesternUnitedStates),
+						territories.get(CountryName.EasternUnitedStates), territories.get(CountryName.Venezuela))));
+
+		territories.get(CountryName.Venezuela)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.CentralAmerica),
+						territories.get(CountryName.Brazil), territories.get(CountryName.Peru))));
+
+		territories.get(CountryName.Brazil).setNeighboringTerritories(
+				new ArrayList<>(Arrays.asList(territories.get(CountryName.Venezuela), territories.get(CountryName.Peru),
+						territories.get(CountryName.Argentina), territories.get(CountryName.NorthAfrica))));
+
+		territories.get(CountryName.Peru)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Venezuela),
+						territories.get(CountryName.Brazil), territories.get(CountryName.Argentina))));
+
+		territories.get(CountryName.Argentina).setNeighboringTerritories(
+				new ArrayList<>(Arrays.asList(territories.get(CountryName.Peru), territories.get(CountryName.Brazil))));
+		territories.get(CountryName.Iceland)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.GreatBritain),
+						territories.get(CountryName.Scandinavia), territories.get(CountryName.Greenland))));
+		territories.get(CountryName.Scandinavia)
+				.setNeighboringTerritories(new ArrayList<>(
+						Arrays.asList(territories.get(CountryName.Iceland), territories.get(CountryName.GreatBritain),
+								territories.get(CountryName.NorthernEurope), territories.get(CountryName.Ukraine))));
+		territories.get(CountryName.GreatBritain)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Iceland),
+						territories.get(CountryName.Scandinavia), territories.get(CountryName.NorthernEurope),
+						territories.get(CountryName.WesternEurope))));
+		territories.get(CountryName.NorthernEurope)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.GreatBritain),
+						territories.get(CountryName.Scandinavia), territories.get(CountryName.Ukraine),
+						territories.get(CountryName.SouthernEurope), territories.get(CountryName.WesternEurope))));
+		territories.get(CountryName.WesternEurope)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.GreatBritain),
+						territories.get(CountryName.NorthernEurope), territories.get(CountryName.SouthernEurope),
+						territories.get(CountryName.NorthAfrica))));
+		territories.get(CountryName.SouthernEurope)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.WesternEurope),
+						territories.get(CountryName.NorthernEurope), territories.get(CountryName.Ukraine),
+						territories.get(CountryName.MiddleEast), territories.get(CountryName.Egypt),
+						territories.get(CountryName.NorthAfrica))));
+		territories.get(CountryName.Ukraine)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Scandinavia),
+						territories.get(CountryName.NorthernEurope), territories.get(CountryName.SouthernEurope),
+						territories.get(CountryName.Afghanistan), territories.get(CountryName.Ural),
+						territories.get(CountryName.Siberia))));
+		territories.get(CountryName.Ural)
+				.setNeighboringTerritories(new ArrayList<>(
+						Arrays.asList(territories.get(CountryName.Ukraine), territories.get(CountryName.Afghanistan),
+								territories.get(CountryName.China), territories.get(CountryName.Siberia))));
+		territories.get(CountryName.Siberia)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Ural),
+						territories.get(CountryName.China), territories.get(CountryName.Mongolia),
+						territories.get(CountryName.Irkutsk), territories.get(CountryName.Yakutsk))));
+		territories.get(CountryName.Yakutsk)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Siberia),
+						territories.get(CountryName.Irkutsk), territories.get(CountryName.Kamchatka))));
+		territories.get(CountryName.Kamchatka)
+				.setNeighboringTerritories(new ArrayList<>(
+						Arrays.asList(territories.get(CountryName.Yakutsk), territories.get(CountryName.Irkutsk),
+								territories.get(CountryName.Mongolia), territories.get(CountryName.Japan))));
+
+		territories.get(CountryName.Irkutsk)
+				.setNeighboringTerritories(new ArrayList<>(
+						Arrays.asList(territories.get(CountryName.Siberia), territories.get(CountryName.Yakutsk),
+								territories.get(CountryName.Kamchatka), territories.get(CountryName.Mongolia))));
+		territories.get(CountryName.Mongolia)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Irkutsk),
+						territories.get(CountryName.Kamchatka), territories.get(CountryName.Japan),
+						territories.get(CountryName.China), territories.get(CountryName.Siberia))));
+		territories.get(CountryName.Afghanistan)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Ukraine),
+						territories.get(CountryName.Ural), territories.get(CountryName.China),
+						territories.get(CountryName.India), territories.get(CountryName.MiddleEast))));
+		territories.get(CountryName.Japan).setNeighboringTerritories(new ArrayList<>(
+				Arrays.asList(territories.get(CountryName.Kamchatka), territories.get(CountryName.Mongolia))));
+		territories.get(CountryName.China).setNeighboringTerritories(
+				new ArrayList<>(Arrays.asList(territories.get(CountryName.Siberia), territories.get(CountryName.Ural),
+						territories.get(CountryName.Afghanistan), territories.get(CountryName.India),
+						territories.get(CountryName.Mongolia), territories.get(CountryName.Siam))));
+		territories.get(CountryName.Siam)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.India),
+						territories.get(CountryName.China), territories.get(CountryName.Indonesia))));
+		territories.get(CountryName.India)
+				.setNeighboringTerritories(new ArrayList<>(
+						Arrays.asList(territories.get(CountryName.MiddleEast), territories.get(CountryName.Afghanistan),
+								territories.get(CountryName.China), territories.get(CountryName.Siam))));
+		territories.get(CountryName.MiddleEast)
+				.setNeighboringTerritories(new ArrayList<>(
+						Arrays.asList(territories.get(CountryName.Ukraine), territories.get(CountryName.Afghanistan),
+								territories.get(CountryName.India), territories.get(CountryName.EastAfrica),
+								territories.get(CountryName.Egypt), territories.get(CountryName.SouthernEurope))));
+		territories.get(CountryName.Indonesia).setNeighboringTerritories(new ArrayList<>(
+				Arrays.asList(territories.get(CountryName.Siam), territories.get(CountryName.NewGuinea))));
+		territories.get(CountryName.NewGuinea)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Indonesia),
+						territories.get(CountryName.WesternAustralia), territories.get(CountryName.EasternAustralia))));
+		territories.get(CountryName.EasternAustralia).setNeighboringTerritories(new ArrayList<>(
+				Arrays.asList(territories.get(CountryName.NewGuinea), territories.get(CountryName.WesternAustralia))));
+		territories.get(CountryName.WesternAustralia)
+				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Indonesia),
+						territories.get(CountryName.NewGuinea), territories.get(CountryName.EasternAustralia))));
+		territories.get(CountryName.Madagascar).setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.EastAfrica), territories.get(CountryName.SouthAfrica))));
+		territories.get(CountryName.NorthAfrica).setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.WesternEurope), territories.get(CountryName.SouthernEurope), territories.get(CountryName.Egypt), territories.get(CountryName.EastAfrica), territories.get(CountryName.Congo))));
+		territories.get(CountryName.Congo).setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.NorthAfrica), territories.get(CountryName.EastAfrica), territories.get(CountryName.SouthAfrica))));
+		territories.get(CountryName.Egypt).setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.NorthAfrica), territories.get(CountryName.EastAfrica), territories.get(CountryName.MiddleEast), territories.get(CountryName.SouthernEurope))));
+		territories.get(CountryName.EastAfrica).setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Egypt), territories.get(CountryName.NorthAfrica), territories.get(CountryName.Congo), territories.get(CountryName.SouthAfrica), territories.get(CountryName.Madagascar), territories.get(CountryName.MiddleEast))));
+		territories.get(CountryName.SouthAfrica).setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Congo), territories.get(CountryName.EastAfrica), territories.get(CountryName.Madagascar))));
+
 	}
 
 	private void createContinents() {
@@ -301,5 +458,10 @@ public abstract class GameController {
 		currentPlayer = nextPlayer;
 		return currentPlayer;
 
+	}
+	
+	public static void main(String[] args) {
+		GameSingleplayerController game = new GameSingleplayerController(null);
+		game.territories.values().stream().filter(o -> o.getNeighboringTerritories().size() == 0).collect(Collectors.toList()).stream().map(Territory::getCountryName).forEach(System.out::println);
 	}
 }
