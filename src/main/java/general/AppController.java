@@ -74,11 +74,6 @@ public class AppController {
 		pph.updateProfileInfo(value, attribute, AppController.profile);
 		AppController.profile.setAttribute(attribute, value);
 	}
-
-	
-	public static void startMultiplayerGame() {
-		multiplayerGameController = new GameMultiplayerController();
-	}
 	
 	public static AppController getInstance() {
 		return AppController.appController;

@@ -75,11 +75,12 @@ public class Player {
 	}
 
 	public void addAndUpdateOwnedCountries(Territory territory) {
-		if(territory.getOwnedByPlayer() != null) {
+		if(territory.getOwnedByPlayer() != null && territory.getOwnedByPlayer() != this) {
 			territory.getOwnedByPlayer().getOwnedCountries().remove(territory.getCountryName(), territory);
+			territory.getOwnedByPlayer().updateOwnedContinents(GameController.getContinents());
 		}
-		this.ownedCountries.put(territory.getCountryName(),territory);
 		territory.setOwnedByPlayer(this);
+ 		this.ownedCountries.put(territory.getCountryName(),territory);
 		updateOwnedContinents(GameController.getContinents());
 	}
 	

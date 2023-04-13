@@ -16,6 +16,7 @@ import game.models.Territory;
 
 /**
  * Class for superclass GameController
+ * 
  * @author srogalsk
  *
  */
@@ -35,21 +36,25 @@ public abstract class GameController {
 		createTerritories();
 		createContinents();
 	}
-	
+
 	public abstract void startGame();
-	
+
 	public abstract Player gameRound();
-	
-	public abstract boolean countryPossession(Player player, CountryName country);
-	
+
+	public abstract boolean countryPossession(Player player, CountryName country)
+			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException;
+
 	public abstract Player diceThrowToDetermineTheBeginner();
-	
-	public abstract boolean attackCountry(Player player, CountryName countryFrom, CountryName countryTo, int troops);
-	
-	public abstract boolean fortifyTroops(Player player, CountryName countryFrom, CountryName countryTo, int troops);
-	
-	public abstract boolean placeTroops(Player player, CountryName country, int troops);
-	
+
+	public abstract boolean attackCountry(Player player, CountryName countryFrom, CountryName countryTo, int troops)
+			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException;
+
+	public abstract boolean fortifyTroops(Player player, CountryName countryFrom, CountryName countryTo, int troops)
+			throws WrongPhaseException, WrongCountryException, WrongTroopsCountException;
+
+	public abstract boolean placeTroops(Player player, CountryName country, int troops)
+			throws WrongPhaseException, WrongCountryException, WrongTroopsCountException;
+
 	public void setInitialTroopsSize() {
 		int troopsSize = 0;
 		/** set available troopsize */
@@ -77,9 +82,9 @@ public abstract class GameController {
 			p.setTroopsAvailable(troopsSize);
 			p.setSumOfAllTroops(troopsSize);
 		}
-		/** *********** */		
+		/** *********** */
 	}
-	
+
 	public ArrayList<Player> sortPlayerList(ArrayList<Player> players, int firstPlayerIndex) {
 		ArrayList<Player> firstSublist;
 		ArrayList<Player> endSublist;
@@ -92,13 +97,14 @@ public abstract class GameController {
 		return firstSublist;
 	}
 
-	public boolean turnInCards(ArrayList<Card> cards, Player player) {
+	public boolean turnInCards(ArrayList<Card> cards, Player player)
+			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException {
 		if (player == null || currentPlayer != player) {
-			return false;
+			throw new WrongPhaseException("It is not your turn");
 		} else if (cards == null || cards.size() != 3) {
 			return false;
 		} else if (!player.isCardsTurningInPhase()) {
-			return false;
+			throw new WrongPhaseException("You cant turn in Cards right now");
 		} else if (!player.getCards().containsAll(cards)) {
 			return false;
 		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
@@ -111,25 +117,32 @@ public abstract class GameController {
 		switch (getNumberOfCardsTurnedIn()) {
 		case 1:
 			player.addTroopsAvailable(4);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 4);
 		case 2:
 			player.addTroopsAvailable(6);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 6);
 		case 3:
 			player.addTroopsAvailable(8);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 8);
 		case 4:
 			player.addTroopsAvailable(10);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 10);
 		case 5:
 			player.addTroopsAvailable(12);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 12);
 		case 6:
 			player.addTroopsAvailable(15);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 15);
 		default:
 			player.addTroopsAvailable((getNumberOfCardsTurnedIn() - 6) * 5 + 15);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + (getNumberOfCardsTurnedIn() - 6) * 5 + 15);
 		}
 
 		return true;
 	}
 
 	public boolean possessCountry(CountryName countryName, Player player) {
-		if(player == null || !player.isInitialPlacementPhase()) {
+		if (player == null || !player.isInitialPlacementPhase()) {
 			return false;
 		}
 		if ((territories.get(countryName).getOwnedByPlayer() == null) && (player.getTroopsAvailable() > 0)) {
@@ -141,7 +154,7 @@ public abstract class GameController {
 		}
 		return false;
 	}
-	
+
 	public static synchronized int getRandomDiceNumber() {
 		return (int) (Math.random() * 6) + 1;
 	}
@@ -177,7 +190,8 @@ public abstract class GameController {
 		}
 		// TODO checking for cards that are turned in
 		troops = troops < 3 ? 3 : troops;
-		player.setSumOfAllTroops(player.getOwnedCountries().values().stream().mapToInt(Territory::getNumberOfTroops).sum() + troops);
+		player.setSumOfAllTroops(
+				player.getOwnedCountries().values().stream().mapToInt(Territory::getNumberOfTroops).sum() + troops);
 		return troops;
 	}
 
@@ -258,7 +272,7 @@ public abstract class GameController {
 	private void incrementNumberOfCardsTurnedIn() {
 		this.numberOfCardsTurnedIn += 1;
 	}
-	
+
 	public void addPlayer(Player player) {
 		players.add(player);
 	}
@@ -266,16 +280,26 @@ public abstract class GameController {
 	public ArrayList<Player> getPlayers() {
 		return this.players;
 	}
-	
+
 	protected void setCurrentPlayer(Player player) {
 		this.currentPlayer = player;
 	}
-	
+
 	protected Player getCurrentPlayer() {
 		return this.currentPlayer;
 	}
-	
+
 	public static HashMap<Continent, ArrayList<Territory>> getContinents() {
 		return continents;
+	}
+
+	public Player setNextActivePlayerAsCurrentPlayer() {
+		Player nextPlayer;
+		do {
+			nextPlayer = players.get((players.indexOf(getCurrentPlayer()) + 1) % players.size());
+		} while (!nextPlayer.isCanContinuePlaying());
+		currentPlayer = nextPlayer;
+		return currentPlayer;
+
 	}
 }
