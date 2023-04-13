@@ -27,10 +27,13 @@ public class Client {
 		this.userName = profile.getUserName();
 		this.socket = socket;
 		try {
+			
 			this.outputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
+			//this.sendMessage(new MessageConnect(profile));
+			//newlineofCode
 		} catch (IOException e) {
 			closeEverything(socket, inputStream, outputStream);
 			e.printStackTrace();
@@ -87,67 +90,8 @@ public class Client {
 		}
 	}
 
-	public void listenForMessage(VBox vBoxMessages) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Message message;
-				while (socket.isConnected()) {
-					try {
-						message = (Message) inputStream.readObject();
-						switch (message.getMessageType()) {
-						case MessageSend:
-							HostServerMessengerController.addLabel(((MessageSend) message).getMessage(), vBoxMessages);
-							break;
-						default:
-							break;
 
-						}
-					} catch (Exception e) {
-						closeEverything(socket, inputStream, outputStream);
-						e.printStackTrace();
-						break;
-					}
-				}
-			}
 
-		}).start();
-	}
-
-	public void listenForMessage() {
-
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				Message msg;
-				while (socket.isConnected()) {
-					try {
-						msg = (Message) inputStream.readObject();
-						switch (msg.getMessageType()) {
-						case MessageSend:
-							System.out.println(((MessageSend) msg).getMessage());
-							break;
-						case Connect:
-							System.out.println(
-									"Player " + (((MessageConnect) msg).getPlayername()) + "has been connected ");
-							break;
-
-						default:
-							break;
-
-						}
-					} catch (Exception e) {
-						closeEverything(socket, inputStream, outputStream);
-						e.printStackTrace();
-						break;
-					}
-
-				}
-
-			}
-		}).start();
-	}
 
 	public static Client createClient(String host, int port) throws IOException {
 		AppController.getInstance();
@@ -158,7 +102,50 @@ public class Client {
 		client = new Client(socket, profile);
 		return client;
 	}
+	public void sendMessage(Message message) {
+		try {
+			outputStream.writeObject(new MessageSend(userName + ": " + message));
+			outputStream.flush();
+		} catch (IOException e) {
+			closeEverything(socket, inputStream, outputStream);
+			e.printStackTrace();
+		}
+	}
+	public void listenForMessage(VBox vBoxMessages) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Message message;
+				while (socket.isConnected()) {
+					try {
+						message = (Message) inputStream.readObject();
+						switch (message.getMessageType()) {
+						case MessageSend:
+							System.out.println("case MessageSend in Clinet Success 0 ");
+							HostServerMessengerController.addLabel(((MessageSend) message).getMessage(), vBoxMessages);
+							//System.out.println(((MessageSend) message).getMessage());
+							
+							break;
+						case Connect:
+							System.out.println("case MessageConnect Success 1 ");
+							//System.out.println(
+								//	"Player " + (((MessageConnect) message).getPlayername()) + " has been connected ");
+							HostServerMessengerController.addLabel("Player " + ((MessageConnect) message).getPlayername() + " has been connected", vBoxMessages);
+						
+						default:
+							break;
 
+						}
+					} catch (Exception e) {
+						closeEverything(socket, inputStream, outputStream);
+						e.printStackTrace();
+						break;
+					}
+				}
+			}
+
+		}).start();
+	}
 	/**
 	 * main for explicit testing public static void main(String[] args) { Scanner sc
 	 * = new Scanner(System.in); System.out.println(" Enter your user name for the
@@ -170,5 +157,9 @@ public class Client {
 	 * 
 	 * }
 	 */
+
+	public Profile getProfile() {
+		return profile;
+	}
 
 }

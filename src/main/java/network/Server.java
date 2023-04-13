@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import game.gui.HostServerMessengerController;
+import network.messages.Message;
+import network.messages.MessageConnect;
+
 public class Server {
 
 	private ServerSocket serverSocket;
@@ -13,19 +17,23 @@ public class Server {
 	}
 
 	public void startServer() {
-
+		System.out.println("The Server has been started ");
+		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
 					while (!serverSocket.isClosed()) {
 						Socket socket = serverSocket.accept();
-						System.out.println("A new Client has connected ");
+						
+						// connect Case somehow 
+						
+						
 						ClientHandler clientHandler = new ClientHandler(socket);
 
 						Thread player = new Thread(clientHandler);
 						player.start();
-
+						
 					}
 
 				} catch (Exception e) {
@@ -52,6 +60,7 @@ public class Server {
 		ServerSocket serverSocket = new ServerSocket(port);
 		Server server = new Server(serverSocket);
 		server.startServer();
+		
 		System.out.println(serverSocket.getLocalSocketAddress());
 		return server;
 

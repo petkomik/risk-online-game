@@ -31,7 +31,7 @@ public class ClientHandler implements Runnable {
 			this.profile = ((MessageProfile) clientIdentifierMessage).getProfile();
 			this.clientUsername = profile.getUserName();
 			clientHandlers.add(this);
-			broadcastMessage(new MessageSend("SERVER: " + clientUsername + " has entered the chat"));
+			broadcastMessage(new MessageConnect(profile) );
 		} catch (IOException | ClassNotFoundException e) {
 			closeEverything(socket, objectInputStream, objectOutputStream);
 			e.printStackTrace();
@@ -51,7 +51,7 @@ public class ClientHandler implements Runnable {
 				e.printStackTrace();
 			}
 		}
-
+// methode for one to one  player
 	}
 
 	public void removeClientHandler() {
@@ -72,9 +72,12 @@ public class ClientHandler implements Runnable {
 				switch (messageFromClient.getMessageType()) {
 				case MessageSend:
 					broadcastMessage(messageFromClient);
+					System.out.println("case MessageSend in Handler Success 0");
 					break;
 				case Connect:
 					MessageConnect connectionConfirmed = new MessageConnect(profile);
+					broadcastMessage(connectionConfirmed);
+					System.out.println("case MessageConnect in Handler Succes 1 ");
 					break;
 				case Disconnect:
 					// Handle the disconnect message
@@ -93,6 +96,7 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageDiceThrow:
 					// Handle the message dice throw message
+					// Zahlen zusenden von Würfeln 
 					break;
 				case MessagePlayerTurn:
 					// Handle the message player turn message

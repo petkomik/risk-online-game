@@ -66,9 +66,14 @@ public class HostServerMessengerController implements Initializable {
 			client = Client.createClient(host, port);
 			client.listenForMessage(vBoxMessages);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
+		String namePlayer = AppController.getProfile().getUserName();
+		Text hostMessage = new Text(namePlayer + " hosts the server");
+		hostMessage.setFill(Color.GREEN);
+		vBoxMessages.getChildren().add(hostMessage);
+	
 		
 		vBoxMessages.heightProperty().addListener(new ChangeListener<Number>() {
 			@Override
