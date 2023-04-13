@@ -460,8 +460,4 @@ public abstract class GameController {
 
 	}
 	
-	public static void main(String[] args) {
-		GameSingleplayerController game = new GameSingleplayerController(null);
-		game.territories.values().stream().filter(o -> o.getNeighboringTerritories().size() == 0).collect(Collectors.toList()).stream().map(Territory::getCountryName).forEach(System.out::println);
-	}
 }
