@@ -84,17 +84,13 @@ public class MainMenuPaneController implements Initializable{
 		stage.show();
 	}
 	
-	public void showBattleScene(ActionEvent e) throws IOException {
+	public void showBattleScene(ActionEvent e) throws Exception {
 		(new GameSound()).buttonClickForwardSound();
 		Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage)node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("battleWindowFrame");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
+		BattleFrameController battle = new BattleFrameController();
+		stage.getScene().setRoot(battle.root);
 		// Showing the Stage
 		stage.show();
 		
