@@ -26,6 +26,10 @@ public class MultplayerHostJoinController implements Initializable {
 	private Button hostGameButton;
 	@FXML
 	private Button joinGameButton;
+	@FXML
+	private Button backButton;
+	
+	GameSound gameSoundButton = new GameSound();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -40,8 +44,13 @@ public class MultplayerHostJoinController implements Initializable {
 
 		hostGameButton.setLayoutY(h * 0.301);
 		joinGameButton.setLayoutY(h * 0.382);
+		backButton.setPrefSize(w * 0.091, h * 0.058);
+		
+		backButton.setLayoutX(w * 0.026);
+		backButton.setLayoutY(h * 0.046);
 
 		double fontSize = 0.078 * Math.sqrt(Math.pow(btnW, 2.0) + Math.pow(btnH, 2.0));
+		backButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		hostGameButton.setStyle("-fx-font-size: " + fontSize + "px;");
 		joinGameButton.setStyle("-fx-font-size: " + fontSize + "px;");
 
@@ -62,7 +71,7 @@ public class MultplayerHostJoinController implements Initializable {
 		// Showing the Stage
 		stage.show();
 		
-		(new GameSound()).buttonClickForwardSound();
+		gameSoundButton.buttonClickForwardSound();
 
 	}
 	
@@ -79,8 +88,31 @@ public class MultplayerHostJoinController implements Initializable {
 		// Showing the Stage
 		stage.show();
 		
-		(new GameSound()).buttonClickForwardSound();
+		gameSoundButton.buttonClickForwardSound();
 
+	}
+	
+	/**
+	 * The method handles the event, when the player clicks on the button 'back'
+	 * 
+	 * @param e
+	 * @throws IOException
+	 */
+	public void clickBack(ActionEvent e) throws IOException {
+
+		gameSoundButton.buttonClickBackwardSound();
+
+		Node node = (Node) e.getSource();
+		// Getting the Stage where the event is happened
+		stage = (Stage) node.getScene().getWindow();
+		// changing the AnchorPane from the main file
+		anchorPane = (AnchorPane) loadFXML("mainMenu");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
+		// Setting the AnchorPane as a root of the main scene
+		stage.getScene().setRoot(anchorPane);
+		// Showing the Stage
+		stage.show();
 	}
 	
 	private static Parent loadFXML(String fxml) throws IOException {

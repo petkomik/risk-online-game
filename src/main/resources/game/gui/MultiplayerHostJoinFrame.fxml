@@ -5,6 +5,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="mapBackground" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.gui.MultplayerHostJoinController">
    <children>
+      <Button fx:id="backButton" mnemonicParsing="false" onAction="#clickBack" text="BACK" />
       <Button fx:id="hostGameButton" mnemonicParsing="false" onAction="#startServer" text="HOST SERVER" />
       <Button fx:id="joinGameButton" mnemonicParsing="false" onAction="#joinServer" text="JOIN SERVER" />
    </children>
