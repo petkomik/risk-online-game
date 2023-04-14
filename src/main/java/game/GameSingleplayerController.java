@@ -159,6 +159,7 @@ public class GameSingleplayerController extends GameController {
 		}
 	}
 	
+	// endAttackPhase
 	public void endAttackPhase(Player player) throws WrongPhaseException {
 		if (getCurrentPlayer() != player) {
 			throw new WrongPhaseException("It is not your turn");
