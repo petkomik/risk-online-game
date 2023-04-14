@@ -17,57 +17,57 @@ import javafx.stage.Stage;
 
 /**
  * 
- * @author majda
- * This class handles the events on the main
+ * @author jorohr
+ * This class handles the profile updating
  */
-public class MainMenuPaneController implements Initializable{
+public class UpdateSettingsController implements Initializable{
 	private Stage stage;
 	private AnchorPane anchorPane;
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
 	
 	@FXML
-	private Button playTutorialButton;
+	private Button uploadPhotoButton;
 	@FXML
-	private Button profileSettingsButton;
+	private Button updateFirstNameButton;
 	@FXML
-	private Button singleplayerButton;
+	private Button updateLastNameButton;
 	@FXML
-	private Button multiplayerButton;
+	private Button updatePasswordButton;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		double btnW = w * 0.163;
 		double btnH = h * 0.058;
 		double btnX = w * 0.419;
-		playTutorialButton.setPrefSize(btnW, btnH);
-		profileSettingsButton.setPrefSize(btnW, btnH);
-		singleplayerButton.setPrefSize(btnW, btnH);
-		multiplayerButton.setPrefSize(btnW, btnH);
+		uploadPhotoButton.setPrefSize(btnW, btnH);
+		updateFirstNameButton.setPrefSize(btnW, btnH);
+		updateLastNameButton.setPrefSize(btnW, btnH);
+		updatePasswordButton.setPrefSize(btnW, btnH);
 		
-		playTutorialButton.setLayoutX(btnX);
-		profileSettingsButton.setLayoutX(btnX);
-		singleplayerButton.setLayoutX(btnX);
-		multiplayerButton.setLayoutX(btnX);
+		uploadPhotoButton.setLayoutX(btnX);
+		updateFirstNameButton.setLayoutX(btnX);
+		updateLastNameButton.setLayoutX(btnX);
+		updatePasswordButton.setLayoutX(btnX);
 
-		playTutorialButton.setLayoutY(h*0.301);
-		profileSettingsButton.setLayoutY(h*0.382);
-		singleplayerButton.setLayoutY(h*0.463);
-		multiplayerButton.setLayoutY(h*0.544);
+		uploadPhotoButton.setLayoutY(h*0.301);
+		updateFirstNameButton.setLayoutY(h*0.382);
+		updateLastNameButton.setLayoutY(h*0.463);
+		updatePasswordButton.setLayoutY(h*0.544);
 		
 		double fontSize = 0.078 * Math.sqrt(Math.pow(btnW, 2.0)+Math.pow(btnH, 2.0));
-		playTutorialButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		profileSettingsButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		singleplayerButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		multiplayerButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		uploadPhotoButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		updateFirstNameButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		updateLastNameButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		updatePasswordButton.setStyle("-fx-font-size: "+fontSize+"px;");
 	}
 	
 	/**
-	 * The method handles the event, when the player clicks on the button 'Multiplayer'
+	 * The method handles the event, when the player clicks on the button 'UploadPhotoButton'
 	 * @param e
 	 * @throws IOException
 	 */
-	public void showMultiplayerScene(ActionEvent e) throws IOException {
+	public void showUploadPhotoFrame(ActionEvent e) throws IOException {
 		
 		(new GameSound()).buttonClickForwardSound();
 		
@@ -84,7 +84,7 @@ public class MainMenuPaneController implements Initializable{
 		stage.show();
 	}
 	
-	public void showBattleScene(ActionEvent e) throws IOException {
+	public void showUpdateFirstNameFrame(ActionEvent e) throws IOException {
 		(new GameSound()).buttonClickForwardSound();
 		Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
@@ -100,7 +100,7 @@ public class MainMenuPaneController implements Initializable{
 		
 	}
 	
-	public void showSingleplayerScene(ActionEvent e) throws IOException {
+	public void showUpdateLastNameFrame(ActionEvent e) throws IOException {
 		(new GameSound()).buttonClickForwardSound();
 		Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
@@ -116,13 +116,13 @@ public class MainMenuPaneController implements Initializable{
 		
 	}
 	
-	public void showUpdateSettingsScene(ActionEvent e) throws IOException {
+	public void showUpdatePasswordFrame(ActionEvent e) throws IOException {
 		(new GameSound()).buttonClickForwardSound();
 		Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage)node.getScene().getWindow();
 		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("updateSettingsFrame");
+		anchorPane = (AnchorPane) loadFXML("gameFrame");
 		// Setting the size of the anchorPane
 		anchorPane.setPrefSize(w, h);
 		// Setting the AnchorPane as a root of the main scene
@@ -130,19 +130,7 @@ public class MainMenuPaneController implements Initializable{
 		// Showing the Stage
 		stage.show();
 		
-	}
-//	public void clickDisplayStatistics(ActionEvent e) throws IOException {
-//		Node node = (Node)e.getSource();
-//		// Getting the Stage where the event is happened
-//		stage = (Stage)node.getScene().getWindow();
-//		// changing the AnchorPane from the main file
-//		anchorPane = (AnchorPane) loadFXML("displayStatistics");
-//		// Setting the AnchorPane as a root of the main scene
-//		stage.getScene().setRoot(anchorPane);
-//		// Showing the Stage
-//		stage.show();
-//	}
-	
+	}	
 	/**
      * 
      * @param fxml, file name without the ending .fxml
