@@ -2,7 +2,7 @@ package general;
 
 
 import database.PlayerProfileHandler;
-import game.GameMultiplayerController;
+//import game.GameMultiplayerController;
 import game.Profile;
 import game.WrongTextFieldInputException;
 import network.Client;
@@ -18,7 +18,7 @@ public class AppController {
 	private static Profile profile;
 	private static AppController appController = new AppController();
 	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
-	private static GameMultiplayerController multiplayerGameController;
+	//private static GameMultiplayerController multiplayerGameController;
 	private static int portNumber = Parameter.portDefault;
 	private static String host = Parameter.hostDefault;
 	private static Client client;

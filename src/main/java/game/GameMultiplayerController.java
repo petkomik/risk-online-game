@@ -13,7 +13,7 @@ import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerMP;
 import game.models.Territory;
-import network.messages.MessagePossessCountry;
+//import network.messages.MessagePossessCountry;
 import network.messages.MessageType;
 
 /**
@@ -21,14 +21,14 @@ import network.messages.MessageType;
  * 
  * @author srogalsk
  *
- */
+ 
 
 public class GameMultiplayerController extends GameController {
 	private volatile int interactionCount;
 
 	/**
 	 * Constructor for the class
-	 */
+	
 	public GameMultiplayerController(ArrayList <Player> players) {
 		super(players);
 	}
@@ -75,7 +75,7 @@ public class GameMultiplayerController extends GameController {
 		boolean countryPossessionSucces;
 		MessagePossessCountryRequest messagePossessCountryRequest;
 		MessageChooseCountry messageChooseCountry;
-		/** set available troopsize */
+		/** set available troopsize 
 		switch (players.size()) {
 		case 2:
 			troopsSize = 40;
@@ -97,7 +97,7 @@ public class GameMultiplayerController extends GameController {
 			p.setTroopsAvailable(troopsSize);
 			p.setSumOfAllTroops(troopsSize);
 		}
-		/** *********** */
+		/** *********** 
 
 		PlayerMP p;
 		while (countryLeftToPick) {
@@ -215,3 +215,4 @@ public class GameMultiplayerController extends GameController {
 
 
 }
+*/
