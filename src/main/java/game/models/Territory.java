@@ -3,6 +3,8 @@ package game.models;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import general.Parameter;
+
 /**
  * Territory class handles the territories in the game as an object
  * @author srogalsk
@@ -16,16 +18,23 @@ public class Territory {
 	private int numberOfTroops;
 	private final CountryName countryName;
 	private ArrayList<Territory> neighboringTerritories;
+	private String addressToPNG;
 	
 	public Territory(CountryName countryName, Continent continent) {
 		this.countryName = countryName;
 		this.continent = continent;
 		neighboringTerritories = new ArrayList<>();
+		addressToPNG = Parameter.territoryPNGdir + continent.toString().toLowerCase() + "-" + 
+						countryName.toString().toLowerCase() + ".png";
 	}
 	
 	
-	
 	/**Getters*/
+
+	public String getAddressToPNG() {
+		return addressToPNG;
+	}
+
 	public Player getOwnedByPlayer() {
 		return ownedByPlayer;
 	}
