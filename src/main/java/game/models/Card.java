@@ -5,7 +5,7 @@ package game.models;
  *
  */
 public class Card {
-	private int cardValue; // e.g. infantry = 1, cavalry = 5, or artillery = 10
+	private int cardValue; // e.g. infantry = 1, cavalry = 5, artillery = 10 or joker = -1
 	private Player ownedBy;
 	private String name;
 	

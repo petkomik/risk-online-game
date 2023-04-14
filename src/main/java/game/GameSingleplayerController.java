@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class GameSingleplayerController extends GameController {
 	// Konstruktor
 	public GameSingleplayerController(ArrayList<Player> players) {
 		super(players);
-		this.players = players;
+		diceThrowToDetermineTheBeginner();
 	}
 
 	@Override
@@ -39,6 +40,8 @@ public class GameSingleplayerController extends GameController {
 	public PlayerMP gameRound() {
 		return null;
 	}
+	
+	
 
 	@Override
 	public boolean countryPossession(Player player, CountryName country)
@@ -66,6 +69,17 @@ public class GameSingleplayerController extends GameController {
 			player.setInitialPlacementPhase(false);
 			player.setPreparationPhase(true);
 			player.setCardsTurningInPhase(true);
+			setNextActivePlayerAsCurrentPlayer();
+			if(getCurrentPlayer().getTroopsAvailable() > 0) {
+				getCurrentPlayer().setInitialPlacementPhase(true);
+				
+			} else {
+				getCurrentPlayer().setPreparationPhase(true);
+				getCurrentPlayer().setCardsTurningInPhase(true);
+				super.getNewTroopsCountForPlayer(getCurrentPlayer());
+				
+			}
+			return false;
 		}
 		setNextActivePlayerAsCurrentPlayer();
 		getCurrentPlayer().setInitialPlacementPhase(true);
@@ -86,6 +100,8 @@ public class GameSingleplayerController extends GameController {
 			throw new WrongCountryException("The country you are attacking from does not belong to you", countryTo);
 		} else if (territories.get(countryFrom).getNumberOfTroops() - 1 < troops) {
 			throw new WrongTroopsCountException("You do not have enough troops", troops);
+		} else if (!territories.get(countryFrom).getNeighboringTerritories().stream().anyMatch(o -> o.equals(territories.get(countryTo)))) {
+			throw new WrongCountryException("The Countrys you have choosen are not neighbors", countryTo);
 		}
 
 		int[] diceNumberAttacker = new int[troops];
@@ -108,8 +124,13 @@ public class GameSingleplayerController extends GameController {
 			if (diceNumberAttacker[i] > diceNumberDefender[i]) {
 				territories.get(countryTo).removeNumberOfTroops(1);
 				defender.setSumOfAllTroops(defender.getSumOfAllTroops() - 1);
+				if(getCard) {
+				player.addCards(getRandomCard(1));
+				setCard(false);
+				}
 			} else {
 				territories.get(countryFrom).removeNumberOfTroops(1);
+				player.setTroopsAvailable(player.getTroopsAvailable() - 1);
 				player.setSumOfAllTroops(player.getSumOfAllTroops() - 1);
 			}
 		}
@@ -118,6 +139,10 @@ public class GameSingleplayerController extends GameController {
 			player.addAndUpdateOwnedCountries(territories.get(countryTo));
 			if(defender.getOwnedCountries().size() < 1) {
 				defender.setCanContinuePlaying(false);
+				if(players.stream().filter(o -> o.isCanContinuePlaying()).collect(Collectors.toList()).size() <=1) {
+					setGameIsOver(true);
+				}
+				player.addCards(getRandomCards(6));
 			}
 		}
 
@@ -126,6 +151,16 @@ public class GameSingleplayerController extends GameController {
 		} else {
 			return false;
 		}
+	}
+	
+	public void endAttackPhase(Player player) throws WrongPhaseException {
+		if (getCurrentPlayer() != player) {
+			throw new WrongPhaseException("It is not your turn");
+		} else if (!player.isAttackPhase()) {
+			throw new WrongPhaseException("You are not in your Attack Phase");
+		} 
+		player.setAttackPhase(false);
+		player.setFortificationPhase(true);
 	}
 
 	@Override
@@ -142,8 +177,8 @@ public class GameSingleplayerController extends GameController {
 		} else if (territories.get(countryFrom).getNumberOfTroops() - 1 < troops) {
 			throw new WrongTroopsCountException(
 					"You dont have enough troops available and one soldier has to stay in your country", troops);
-		} else if (!territories.get(countryFrom).getNeighboringTerritories().stream().anyMatch(o -> o.equals(territories.get(countryTo)))) {
-			throw new WrongCountryException("The Countrys you have choosen are not neighbors", countryTo);
+		} else if (!super.isConnectionOwnedByPlayer(territories.get(countryFrom), territories.get(countryTo), player)) {
+			throw new WrongCountryException("The Countrys you have choosen are not connected by your countries", countryTo);
 		}
 		territories.get(countryFrom).removeNumberOfTroops(troops);
 		territories.get(countryTo).addNumberOfTroops(troops);
@@ -151,8 +186,8 @@ public class GameSingleplayerController extends GameController {
 		setNextActivePlayerAsCurrentPlayer();
 		getCurrentPlayer().setPreparationPhase(true);
 		getCurrentPlayer().setCardsTurningInPhase(true);
-		super.getNewTroopsCountForPlayer(getCurrentPlayer());
-		return true;
+		 
+		return false;
 	}
 
 	@Override
@@ -164,12 +199,14 @@ public class GameSingleplayerController extends GameController {
 		} else if (player.getTroopsAvailable() - troops < 0) {
 			throw new WrongTroopsCountException("You dont have enough troops available", troops);
 		}
+		
 		player.removeTroopsAvailable(troops);
 		territories.get(country).addNumberOfTroops(troops);
 		if (player.getTroopsAvailable() < 1) {
 			player.setPreparationPhase(false);
 			player.setCardsTurningInPhase(false);
 			player.setAttackPhase(true);
+			return false;
 		}
 		return true;
 	}

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ public abstract class GameController {
 	protected ArrayList<Player> players;
 	protected int numberOfCardsTurnedIn;
 	protected boolean gameIsOver;
+
 	protected LocalDateTime gameTimer;
 	private volatile Player currentPlayer;
 
@@ -100,18 +102,18 @@ public abstract class GameController {
 	}
 
 	public boolean turnInCards(ArrayList<Card> cards, Player player)
-			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException {
+			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException, WrongCardsException {
 		if (player == null || currentPlayer != player) {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (cards == null || cards.size() != 3) {
-			return false;
+			throw new WrongCardsException("You have to choose 3 cards", cards);
 		} else if (!player.isCardsTurningInPhase()) {
 			throw new WrongPhaseException("You cant turn in Cards right now");
 		} else if (!player.getCards().containsAll(cards)) {
-			return false;
+			throw new WrongCardsException("You have to own these cards", cards);
 		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
 				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)))) {
-			return false;
+			throw new WrongCardsException("You have to own these cards", cards);
 		}
 		player.setCardsTurningInPhase(false);
 		player.getCards().removeAll(cards);
@@ -120,26 +122,32 @@ public abstract class GameController {
 		case 1:
 			player.addTroopsAvailable(4);
 			player.setSumOfAllTroops(player.getSumOfAllTroops() + 4);
+			break;
 		case 2:
 			player.addTroopsAvailable(6);
 			player.setSumOfAllTroops(player.getSumOfAllTroops() + 6);
+			break;
 		case 3:
 			player.addTroopsAvailable(8);
 			player.setSumOfAllTroops(player.getSumOfAllTroops() + 8);
+			break;
 		case 4:
 			player.addTroopsAvailable(10);
 			player.setSumOfAllTroops(player.getSumOfAllTroops() + 10);
+			break;
 		case 5:
 			player.addTroopsAvailable(12);
 			player.setSumOfAllTroops(player.getSumOfAllTroops() + 12);
+			break;
 		case 6:
 			player.addTroopsAvailable(15);
 			player.setSumOfAllTroops(player.getSumOfAllTroops() + 15);
+			break;
 		default:
 			player.addTroopsAvailable((getNumberOfCardsTurnedIn() - 6) * 5 + 15);
 			player.setSumOfAllTroops(player.getSumOfAllTroops() + (getNumberOfCardsTurnedIn() - 6) * 5 + 15);
+			break;
 		}
-
 		return true;
 	}
 
@@ -459,5 +467,34 @@ public abstract class GameController {
 		return currentPlayer;
 
 	}
+	
+	public boolean isConnectionOwnedByPlayer(Territory countryFrom, Territory countryTo, Player player) {
+	    Set<Territory> visited = new HashSet<>();
+	    return dfs(countryFrom, countryTo, visited, player);
+	}
+
+	private boolean dfs(Territory current, Territory target, Set<Territory> visited, Player player) {
+	    if (current == target) {
+	        return true;
+	    }
+	    visited.add(current);
+	    for (Territory neighbor : current.getNeighboringTerritories()) {
+	        if (!visited.contains(neighbor) && neighbor.getOwnedByPlayer() == player) {
+	            if (dfs(neighbor, target, visited, player)) {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}
+	
+	public boolean isGameIsOver() {
+		return gameIsOver;
+	}
+
+	public void setGameIsOver(boolean gameIsOver) {
+		this.gameIsOver = gameIsOver;
+	}
+
 	
 }
