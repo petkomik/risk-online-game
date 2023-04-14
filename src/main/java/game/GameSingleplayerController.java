@@ -124,10 +124,10 @@ public class GameSingleplayerController extends GameController {
 			if (diceNumberAttacker[i] > diceNumberDefender[i]) {
 				territories.get(countryTo).removeNumberOfTroops(1);
 				defender.setSumOfAllTroops(defender.getSumOfAllTroops() - 1);
-				if(getCard) {
-				player.addCards(getRandomCard(1));
-				setCard(false);
-				}
+//				if(getCard) {
+//				player.addCards(getRandomCard(1));
+//				setCard(false);
+//				}
 			} else {
 				territories.get(countryFrom).removeNumberOfTroops(1);
 				player.setTroopsAvailable(player.getTroopsAvailable() - 1);
@@ -142,7 +142,7 @@ public class GameSingleplayerController extends GameController {
 				if(players.stream().filter(o -> o.isCanContinuePlaying()).collect(Collectors.toList()).size() <=1) {
 					setGameIsOver(true);
 				}
-				player.addCards(getRandomCards(6));
+//				player.addCards(getRandomCards(6));
 			}
 		}
 
