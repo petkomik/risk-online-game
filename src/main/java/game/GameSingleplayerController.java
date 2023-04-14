@@ -124,10 +124,12 @@ public class GameSingleplayerController extends GameController {
 			if (diceNumberAttacker[i] > diceNumberDefender[i]) {
 				territories.get(countryTo).removeNumberOfTroops(1);
 				defender.setSumOfAllTroops(defender.getSumOfAllTroops() - 1);
-//				if(getCard) {
-//				player.addCards(getRandomCard(1));
-//				setCard(false);
-//				}
+				if(!player.isCardThisRound()) {
+				Card card = getRandomCard();
+				card.setOwnedBy(player);
+				player.addCard(card);
+				player.setCardThisRound(true);
+				}
 			} else {
 				territories.get(countryFrom).removeNumberOfTroops(1);
 				player.setTroopsAvailable(player.getTroopsAvailable() - 1);
@@ -142,7 +144,11 @@ public class GameSingleplayerController extends GameController {
 				if(players.stream().filter(o -> o.isCanContinuePlaying()).collect(Collectors.toList()).size() <=1) {
 					setGameIsOver(true);
 				}
-//				player.addCards(getRandomCards(6));
+				for(Card card : defender.getCards()) {
+					card.setOwnedBy(player);
+					player.addCard(card);
+				}
+				defender.removeCards(cards);
 			}
 		}
 
@@ -158,8 +164,9 @@ public class GameSingleplayerController extends GameController {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (!player.isAttackPhase()) {
 			throw new WrongPhaseException("You are not in your Attack Phase");
-		} 
+		}
 		player.setAttackPhase(false);
+		player.setCardThisRound(true);
 		player.setFortificationPhase(true);
 	}
 
@@ -205,6 +212,7 @@ public class GameSingleplayerController extends GameController {
 		if (player.getTroopsAvailable() < 1) {
 			player.setPreparationPhase(false);
 			player.setCardsTurningInPhase(false);
+			player.setCardThisRound(false);
 			player.setAttackPhase(true);
 			return false;
 		}

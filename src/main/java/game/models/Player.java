@@ -27,6 +27,7 @@ public class Player {
 	private volatile boolean initialPlacementPhase;
 	private volatile boolean preparationPhase;
 	private volatile boolean attackPhase;
+	private volatile boolean cardThisRound;
 	private volatile boolean fortificationPhase;
 	
 	public Player(String name, int id) {
@@ -124,12 +125,6 @@ public class Player {
 		return cards;
 	}
 
-
-	public void setCards(ArrayList<Card> cards) {
-		this.cards = cards;
-	}
-
-
 	public boolean isCanContinuePlaying() {
 		return canContinuePlaying;
 	}
@@ -187,6 +182,25 @@ public class Player {
 
 	public void setFortificationPhase(boolean fortificationPhase) {
 		this.fortificationPhase = fortificationPhase;
+	}
+
+
+	public void addCard(Card card) {
+		this.cards.add(card);
+	}
+	
+	public void removeCards(ArrayList<Card> cards) {
+		this.cards.removeAll(cards);
+	}
+
+
+	public boolean isCardThisRound() {
+		return cardThisRound;
+	}
+
+
+	public void setCardThisRound(boolean cardThisRound) {
+		this.cardThisRound = cardThisRound;
 	}
 	
 }

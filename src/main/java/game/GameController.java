@@ -26,6 +26,7 @@ public abstract class GameController {
 	protected HashMap<CountryName, Territory> territories;
 	protected static HashMap<Continent, ArrayList<Territory>> continents;
 	protected ArrayList<Player> players;
+	protected ArrayList<Card> cards;
 	protected int numberOfCardsTurnedIn;
 	protected boolean gameIsOver;
 
@@ -36,9 +37,11 @@ public abstract class GameController {
 	public GameController(ArrayList<Player> players) {
 		territories = new HashMap<>();
 		continents = new HashMap<>();
+		cards = new ArrayList<>();
 		this.players = players;
 		createTerritories();
 		createContinents();
+		createCardDeck();
 	}
 
 	public abstract void startGame();
@@ -117,6 +120,9 @@ public abstract class GameController {
 		}
 		player.setCardsTurningInPhase(false);
 		player.getCards().removeAll(cards);
+		for(Card card : cards) {
+			card.setOwnedBy(null);
+		}
 		incrementNumberOfCardsTurnedIn();
 		switch (getNumberOfCardsTurnedIn()) {
 		case 1:
@@ -167,6 +173,11 @@ public abstract class GameController {
 
 	public static synchronized int getRandomDiceNumber() {
 		return (int) (Math.random() * 6) + 1;
+	}
+	
+	public Card getRandomCard() {
+		int random = (int) (Math.random() * cards.size());
+		return cards.get(random);
 	}
 
 	public int getNewTroopsCountForPlayer(Player player) {
@@ -424,6 +435,51 @@ public abstract class GameController {
 				.filter(o -> o.getContinent().equals(Continent.SouthAmerica)).collect(Collectors.toList()));
 		continents.put(Continent.Europe, (ArrayList<Territory>) territories.values().stream()
 				.filter(o -> o.getContinent().equals(Continent.Europe)).collect(Collectors.toList()));
+	}
+	
+	private void createCardDeck() {
+		cards.add(new Card(CountryName.Alaska, 1));
+		cards.add(new Card(CountryName.NorthwestTerritory, 10));
+		cards.add(new Card(CountryName.Alberta, 1));
+		cards.add(new Card(CountryName.WesternUnitedStates, 1));
+		cards.add(new Card(CountryName.CentralAmerica, 5));
+		cards.add(new Card(CountryName.Greenland, 5));
+		cards.add(new Card(CountryName.Ontario, 5));
+		cards.add(new Card(CountryName.Quebec, 10));
+		cards.add(new Card(CountryName.EasternUnitedStates, 10));
+		cards.add(new Card(CountryName.Venezuela, 10));
+		cards.add(new Card(CountryName.Peru, 5));
+		cards.add(new Card(CountryName.Brazil, 10));
+		cards.add(new Card(CountryName.Argentina, 1));
+		cards.add(new Card(CountryName.Iceland, 1));
+		cards.add(new Card(CountryName.Scandinavia, 10));
+		cards.add(new Card(CountryName.GreatBritain, 5));
+		cards.add(new Card(CountryName.NorthernEurope, 5));
+		cards.add(new Card(CountryName.WesternEurope, 1));
+		cards.add(new Card(CountryName.SouthernEurope, 5));
+		cards.add(new Card(CountryName.NorthAfrica, 1));
+		cards.add(new Card(CountryName.Egypt, 1));
+		cards.add(new Card(CountryName.Congo, 5));
+		cards.add(new Card(CountryName.EastAfrica, 10));
+		cards.add(new Card(CountryName.SouthAfrica, 10));
+		cards.add(new Card(CountryName.Madagascar, 1));
+		cards.add(new Card(CountryName.Siberia, 10));
+		cards.add(new Card(CountryName.Ural, 5));
+		cards.add(new Card(CountryName.China, 5));
+		cards.add(new Card(CountryName.Afghanistan, 1));
+		cards.add(new Card(CountryName.MiddleEast, 10));
+		cards.add(new Card(CountryName.India, 1));
+		cards.add(new Card(CountryName.Siam, 10));
+		cards.add(new Card(CountryName.Yakutsk, 5));
+		cards.add(new Card(CountryName.Irkutsk, 1));
+		cards.add(new Card(CountryName.Mongolia, 10));
+		cards.add(new Card(CountryName.Japan, 1));
+		cards.add(new Card(CountryName.Kamchatka, 5));
+		cards.add(new Card(CountryName.Indonesia, 5));
+		cards.add(new Card(CountryName.NewGuinea, 5));
+		cards.add(new Card(CountryName.WesternAustralia, 10));
+		cards.add(new Card(CountryName.EasternAustralia, 1));
+;
 	}
 
 	private int getNumberOfCardsTurnedIn() {

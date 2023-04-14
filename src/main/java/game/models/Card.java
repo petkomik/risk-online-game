@@ -7,9 +7,9 @@ package game.models;
 public class Card {
 	private int cardValue; // e.g. infantry = 1, cavalry = 5, artillery = 10 or joker = -1
 	private Player ownedBy;
-	private String name;
+	private CountryName name;
 	
-	public Card(String name, int cardValue) {
+	public Card(CountryName name, int cardValue) {
 		this.name = name;
 		this.cardValue = cardValue;
 	}
@@ -26,10 +26,10 @@ public class Card {
 	public void setOwnedBy(Player ownedBy) {
 		this.ownedBy = ownedBy;
 	}
-	public String getName() {
+	public CountryName getName() {
 		return name;
 	}
-	public void setName(String name) {
+	public void setName(CountryName name) {
 		this.name = name;
 	}
 }
