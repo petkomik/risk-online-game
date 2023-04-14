@@ -1,161 +1,423 @@
 package game.gui;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import game.gui.GUISupportClasses.DiceFactory;
+import game.models.Continent;
+import game.models.CountryName;
+import game.models.Territory;
 
-import general.AppController;
-import general.Parameter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import general.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.util.Duration;
 
-public class BattleFrameController implements Initializable{
-	private Stage stage;
-	private AnchorPane anchorPane;
+/*
+ * Class for the Battle Frame
+ * 
+ * @author pmikov
+ * 
+ */
 
-	private double w = MainApp.screenWidth;
-	private double h = MainApp.screenHeight;
+public class BattleFrameController {
 	
-	private GameSound gameSound = new GameSound();
+	// TODO
+	// controll the ints
+	int maxDiceToThrow;
+	public int chosenNumberOfDice;
+	Territory attacking;
+	Territory defending;
+	VBox root;
+	int[] dicesAttacker = new int[3];
+	int[] dicesDefender = new int[2];
 
-	@FXML
-	private Button backButton;
-	@FXML
-	private Label usernameLabel;
-	@FXML
-	private Label passwordLabel;
-	
-	@FXML
-	private TextField usernameTF;
-	@FXML
-	private PasswordField passwordField;
 
-	@FXML
-	private Button logInButton;
-	
-	private void setXYof(double relativeX, double relativeY, Node node) {
-		node.setLayoutX(w * relativeX);
-		node.setLayoutY(h * relativeY);
+	public BattleFrameController() throws Exception {
+		this.maxDiceToThrow = 3;
+		this.chosenNumberOfDice = maxDiceToThrow;
+		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
+		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
+		this.root = this.setup();
+		System.out.print("Constructor runs");
 	}
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		/* Setting the size of each element */
-		backButton.setPrefSize(w * 0.091, h * 0.058);
-		
-		usernameLabel.setPrefSize(w * 0.163, h * 0.058);
-		passwordLabel.setPrefSize(w * 0.163, h * 0.058);
-		
-		usernameTF.setPrefSize(w * 0.156, h * 0.035);
-		passwordField.setPrefSize(w * 0.156, h * 0.035);
+	public BattleFrameController(Territory at, Territory df) throws Exception {
+		// TODO set correct max dice
+		this.maxDiceToThrow = 3;
+		this.chosenNumberOfDice = maxDiceToThrow;
+		this.attacking = at;
+		this.defending = df;
+		this.root = this.setup();
+	}
 
-		logInButton.setPrefSize(w * 0.091, h * 0.058);
 
-		/* Setting the x and y coordinates of each element */
-		this.setXYof(0.026, 0.046, backButton);
-		this.setXYof(0.234, 0.359, usernameLabel);
-		this.setXYof(0.234, 0.428, passwordLabel);
-		this.setXYof(0.439, 0.37, usernameTF);
-		this.setXYof(0.439, 0.44, passwordField);
-		this.setXYof(0.505, 0.521, logInButton );
+	public VBox setup() throws Exception {
+
+		/* 
+		 * setting up root panel vBox
+		 */
 		
-		/* Setting the font size */
-		double fontSize = 0.135 * Math.sqrt(Math.pow(backButton.getPrefWidth(), 2.0)+Math.pow(backButton.getPrefHeight(), 2.0));
-		backButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		logInButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		fontSize = 0.137 * Math.sqrt(Math.pow(usernameLabel.getPrefWidth(), 2.0)+Math.pow(usernameLabel.getPrefHeight(), 2.0));
-		usernameLabel.setStyle("-fx-font-size: "+fontSize+"px;");
-		passwordLabel.setStyle("-fx-font-size: "+fontSize+"px;");
+		VBox vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setFillWidth(true);
+		vBox.setStyle("-fx-background-color: rgb(225, 211, 184);");
+		
+		/*
+		 * Setting up imTerritories pane
+		 * Includes imgAttacking, spacingImg, imgDefending
+		 * ImageView are wrapped in ImageViewPane which delivers responsiveness
+		 */
+		
+		HBox imgTerritories = new HBox();
+		
+		ImageView imgAttacking = new ImageView();
+		imgAttacking.setImage(new Image(new FileInputStream(attacking.getAddressToPNG())));
+		imgAttacking.setPreserveRatio(true);
+		imgAttacking.setSmooth(true);
+		imgAttacking.setCache(true);
+		
+		ImageViewPane imgAttackingPane = new ImageViewPane(imgAttacking);
+		HBox.setHgrow(imgAttackingPane, Priority.ALWAYS);
+
+		
+		ImageView imgDefending = new ImageView();
+		imgDefending.setImage(new Image(new FileInputStream(defending.getAddressToPNG())));
+		imgDefending.setPreserveRatio(true);
+		imgDefending.setSmooth(true);
+		imgDefending.setCache(true);
+		
+		ImageViewPane imgDefendingPane = new ImageViewPane(imgDefending);
+		HBox.setHgrow(imgDefendingPane, Priority.ALWAYS);
+
+		GUISupportClasses.Spacing spacingImg = new GUISupportClasses.Spacing();
+		HBox.setHgrow(spacingImg, Priority.SOMETIMES);
+
+		imgTerritories.getChildren().addAll(imgAttackingPane, spacingImg, imgDefendingPane);
+		imgTerritories.setPadding(new Insets(100, 50, 0, 50));
+		imgTerritories.setAlignment(Pos.TOP_CENTER);
+		
+		/*
+		 * Add spacingRoot 
+		 * Add both imgTerritories, spacingRoot to the root vBox
+		 */
+		
+		GUISupportClasses.Spacing spacingRoot = new GUISupportClasses.Spacing();
+		vBox.getChildren().addAll(imgTerritories, spacingRoot);
+		VBox.setVgrow(spacingRoot, Priority.SOMETIMES);
+		VBox.setVgrow(imgTerritories, Priority.ALWAYS);
+		
+		/*
+		 * Setting up bottom portion of window
+		 * Includes playerAt, playerDf - players avatar, color, number of troops
+		 * Includes diceSection - dice controls, dice images 
+		 */
+		
+		HBox diceAndProfile = new HBox();
+		
+		StackPane playerAt = new StackPane();
+		StackPane playerDf = new StackPane();
+		HBox diceSection = new HBox();
+				
+		/*
+		 * Setting up playerAt
+		 * Includes Circle with player color (circleAt)
+		 * 			Player avatar (avatarAt)
+		 * 			Top circle with number of troops left in attack - circleTroopsAt, troopsTextAt, stackTroopsAt
+		 */
+		
+		Circle circleAt = new Circle(80);
+		// TODO change to correct collor
+		circleAt.setFill(Parameter.blueColor);
+		circleAt.setStroke(Parameter.white);
+		circleAt.setStrokeWidth(6);
+		
+		playerAt.getChildren().add(circleAt);
+		
+		ImageView avatarAt = new ImageView();
+		// TODO change to correct avatar
+		avatarAt.setImage(new Image(new FileInputStream(Parameter.avatarsdir + "blonde-boy.png")));
+		avatarAt.setFitWidth(140);
+		avatarAt.setFitHeight(140);
+		avatarAt.setPreserveRatio(true);
+		avatarAt.setSmooth(true);
+		avatarAt.setCache(true);
+		
+		playerAt.getChildren().add(avatarAt);
+		
+		Circle circleTroopsAt = new Circle(40);
+		circleTroopsAt.setFill(Parameter.white);
+		circleTroopsAt.setStroke(Parameter.white);
+		circleTroopsAt.setStrokeWidth(0);
+		
+		Label troopsTextAt = new Label(String.valueOf(attacking.getNumberOfTroops()));
+		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34));
+		troopsTextAt.setTextFill(Color.web("#303030"));
+		troopsTextAt.setMinWidth(80);
+		troopsTextAt.setMinHeight(80);
+		troopsTextAt.setAlignment(Pos.CENTER);
+		
+		StackPane stackTroopsAt = new StackPane();
+		stackTroopsAt.getChildren().addAll(circleTroopsAt, troopsTextAt);
+		stackTroopsAt.setAlignment(Pos.TOP_RIGHT);
+		
+		playerAt.getChildren().add(stackTroopsAt);
+		
+		/*
+		 * Setting up playerDf
+		 * Includes Circle with player color (circleDf)
+		 * 			Player avatar (avatarDf)
+		 * 			Top circle with number of troops left in attack - circleTroopsDf, troopsTextDf, stackTroopsDf
+		 */
+		
+		Circle circleDf = new Circle(80);
+		// TODO change to correct collor
+		circleDf.setFill(Parameter.greenColor);
+		circleDf.setStroke(Parameter.white);
+		circleDf.setStrokeWidth(6);
+
+		playerDf.getChildren().add(circleDf);
+		
+		ImageView avatarDf = new ImageView();
+		// TODO change to correct avatar
+
+		avatarDf.setImage(new Image(new FileInputStream(Parameter.avatarsdir + "ginger-girl.png")));
+		avatarDf.setFitWidth(140);
+		avatarDf.setFitHeight(140);
+		avatarDf.setPreserveRatio(true);
+		avatarDf.setSmooth(true);
+		avatarDf.setCache(true);
+		
+		playerDf.getChildren().add(avatarDf);
+		
+		Circle circleTroopsDf = new Circle(40);
+		circleTroopsDf.setFill(Parameter.white);
+		circleTroopsDf.setStroke(Parameter.white);
+		circleTroopsDf.setStrokeWidth(0);
+		
+		Label troopsTextDf = new Label(String.valueOf(defending.getNumberOfTroops()));
+		troopsTextDf.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34));
+		troopsTextDf.setTextFill(Color.web("#303030"));
+		troopsTextDf.setMinWidth(80);
+		troopsTextDf.setMinHeight(80);
+		troopsTextDf.setAlignment(Pos.CENTER);
+		
+		StackPane stackTroopsDf = new StackPane();
+		stackTroopsDf.getChildren().addAll(circleTroopsDf, troopsTextDf);
+		stackTroopsDf.setAlignment(Pos.TOP_LEFT);
+		
+		playerDf.getChildren().add(stackTroopsDf);
+		
+		/*
+		 * Setting up numberOfdiceControls
+		 * Includes More, Less Dice Buttons
+		 * 		 	Dice numberLabel
+		 * 			Throw Dice Button
+		 * 			Event Handlers for all Buttons
+		 */
+		
+		VBox diceControls = new VBox();
+
+		HBox numberOfDiceControls = new HBox();
+		GUISupportClasses.DesignButton lessBtn = new GUISupportClasses.DesignButton();
+		Label numberLabel = new Label("3");
+		GUISupportClasses.DesignButton moreBtn = new GUISupportClasses.DesignButton();
+		
+		HBox diceButtonPane = new HBox();
+		GUISupportClasses.DesignButton throwBtn = new GUISupportClasses.DesignButton();
+
+		lessBtn.setText("<");
+		moreBtn.setText(">");
+		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 34));
+		numberLabel.setTextFill(Color.web("#b87331"));
+		numberLabel.textOverrunProperty().set(OverrunStyle.CLIP);
+		numberLabel.setMinWidth(50);
+		numberLabel.setAlignment(Pos.CENTER);
+		
+		numberOfDiceControls.setSpacing(25);
+		numberOfDiceControls.getChildren().addAll(lessBtn, numberLabel, moreBtn);
+		numberOfDiceControls.setAlignment(Pos.CENTER);
+		
+		throwBtn.setText("Throw Dice");
+		throwBtn.setPadding(new Insets(10, 40, 10, 40));
+		throwBtn.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24));
+		diceButtonPane.getChildren().add(throwBtn);
+		diceButtonPane.setAlignment(Pos.CENTER);
+		diceButtonPane.setMinWidth(250);
+		
+		
+		diceControls.setSpacing(20);
+		diceControls.getChildren().addAll(numberOfDiceControls, diceButtonPane);
+		diceControls.setAlignment(Pos.CENTER);
+		diceControls.setMinWidth(250);
+		
+		/*
+		 * Setting up Images of Dices	
+		 * 			  both Attacker + Defender
+		 */
+
+		// TODO set correct number of dice
+		FlowPane diceImagesAt = diceImageFactory(maxDiceToThrow);
+		FlowPane diceImagesDf = diceImageFactory(2);
+		
+		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	if (Integer.parseInt(numberLabel.getText()) > 1) {
+		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
+			    	numberLabel.setText(String.valueOf(i));
+			    	chosenNumberOfDice = i;
+			    	diceImagesAt.getChildren().remove(0);
+			    	
+		    	}
+
+		    }
+		});
+		
+		moreBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	if (Integer.parseInt(numberLabel.getText()) < maxDiceToThrow) {
+		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
+			    	numberLabel.setText(String.valueOf(i));
+			    	chosenNumberOfDice = i;
+			    	GUISupportClasses.DiceFactory newDice;
+					try {
+						newDice = new GUISupportClasses.DiceFactory((i*29)%6 + 1);
+				    	diceImagesAt.getChildren().add(newDice);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+
+					}
+		    	}
+		});
+
+		throwBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+		    	throwBtn.setDisable(true);
+		    	
+		    	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(80.0), e -> {
+		    		
+		    		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
+		    			Random random = new Random();
+		        		int n = random.nextInt(6)+1;
+		                DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
+		                try {
+							dice.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
+		                final int m = k;
+		                Platform.runLater(new Runnable() {
+		                    @Override public void run() {
+		                    	diceImagesAt.getChildren().set(m, dice);                 
+		                    	}
+		                });  
+		                dicesAttacker[k] = n;
+		    		}
+		    		
+		    		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
+		    			Random random = new Random();
+		        		int n = random.nextInt(6)+1;
+		                DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
+		                try {
+							dice.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
+		                final int m = k;
+		                Platform.runLater(new Runnable() {
+		                    @Override public void run() {
+		                    	diceImagesDf.getChildren().set(m, dice);                 
+		                    	}
+		                }); 
+		                dicesDefender[k] = n;
+		    		}
+		    		
+		    		})
+    			);
+    			timeline.setCycleCount(12);
+    			timeline.play();
+                throwBtn.setDisable(false);
+                
+                
+                
+            }
+		       
+	    });
+	    	   
+		
+		diceSection.setSpacing(50);
+		diceSection.getChildren().addAll(diceImagesAt, diceControls, diceImagesDf);
+		diceSection.setAlignment(Pos.CENTER);
+		
+
+		/*
+		 * Setting up spacing between DiceImages and DieceControls
+		 * Packing children into parent containers
+		 */
+		
+		GUISupportClasses.Spacing spacingControls1 = new GUISupportClasses.Spacing();
+		GUISupportClasses.Spacing spacingControls2 = new GUISupportClasses.Spacing();
+
+		diceAndProfile.getChildren().addAll(playerAt, spacingControls1, diceSection, spacingControls2, playerDf);
+		diceAndProfile.setPadding(new Insets(0, 120, 50, 120));
+		diceAndProfile.setAlignment(Pos.BOTTOM_CENTER);
+		HBox.setHgrow(spacingControls1, Priority.ALWAYS);
+		HBox.setHgrow(spacingControls2, Priority.ALWAYS);
+
+		vBox.getChildren().add(diceAndProfile);
+		return vBox;
 		
 	}
 	
-	/**
-	 * The method handles the event, when the player clicks on the button 'log in'
-	 * 
-	 * @param e
-	 * @throws IOException
-	 */
-	public void clickLogIn(ActionEvent e) throws IOException {
-
-		gameSound.buttonClickForwardSound();
-
-		boolean loginSuccess = AppController.logIntoProfile(usernameTF.getText().trim(), passwordField.getText().trim());
-
-		if(loginSuccess) {
-			Node node = (Node) e.getSource();
-			// Getting the Stage where the event is happened
-			stage = (Stage) node.getScene().getWindow();
-			// changing the AnchorPane from the main file
-			anchorPane = loginSuccess ? (AnchorPane) loadFXML("mainMenu"):(AnchorPane) loadFXML("logIn");
-			// Setting the size of the anchorPane
-			anchorPane.setPrefSize(w, h);
-			// Setting the AnchorPane as a root of the main scene
-			stage.getScene().setRoot(anchorPane);
-			// Showing the Stage
-			stage.show();
+	public FlowPane diceImageFactory (int k) throws FileNotFoundException {
+		FlowPane diceImages = new FlowPane();
+		
+		diceImages.minHeightProperty().bind(diceImages.maxHeightProperty());
+		diceImages.maxHeightProperty().bind(diceImages.prefHeightProperty());
+		diceImages.setPrefHeight(200);
+		
+		diceImages.minWidthProperty().bind(diceImages.maxWidthProperty());
+		diceImages.maxWidthProperty().bind(diceImages.prefWidthProperty());
+		diceImages.setPrefWidth(200);
+		
+		diceImages.setHgap(20);
+		diceImages.setVgap(20);
+		
+		// TODO
+		GUISupportClasses.DiceFactory[] dices = new GUISupportClasses.DiceFactory[k];
+		for(int i = 0; i < dices.length; i++) {
+			dices[i] = new GUISupportClasses.DiceFactory((i*29)%6 + 1);
+			diceImages.getChildren().add(dices[i]);
 		}
-		else {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Username or password is incorrect!");
-			alert.setHeaderText("ERROR");
-			alert.setTitle("");
-			Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
-			tmp.getIcons().add(new Image(Parameter.errorIcon));
-			alert.showAndWait();
-		}
-
-
 	
-
-	}
-
-	/**
-	 * The method handles the event, when the player clicks on the button 'back'
-	 * 
-	 * @param e
-	 * @throws IOException
-	 */
-	public void clickBack(ActionEvent e) throws IOException {
-
-		gameSound.buttonClickBackwardSound();
-
-		Node node = (Node) e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage) node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("userAccess");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
-		stage.show();
+		diceImages.setAlignment(Pos.CENTER);
+		
+		return diceImages;
 	}
 	
-	/**
-	 * 
-	 * @param fxml, file name without the ending .fxml
-	 * @return Parent object, to be set as a root in a Secene object
-	 * @throws IOException
-	 * 
-	 *                     This method is responsible for loading a fxml file
-	 */
-	private static Parent loadFXML(String fxml) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
-		return fxmlLoader.load();
-	}
 }
