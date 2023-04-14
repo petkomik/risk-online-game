@@ -34,7 +34,7 @@ public class Parameter {
 	//player color codes
 	public static final Color redColor = Color.web("#c1272d");
 	public static final Color blueColor = Color.web("#0071bc");
-	public static final Color greenColor = Color.web("#59f23a");
+	public static final Color greenColor = Color.web("#26d124");
 	public static final Color yellowColor = Color.web("#d9e021");
 	public static final Color orangeColor = Color.web("#f28a3a");
 	public static final Color purpleColor = Color.web("#c73af2");
