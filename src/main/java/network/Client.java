@@ -131,7 +131,7 @@ public class Client {
 							//System.out.println(
 								//	"Player " + (((MessageConnect) message).getPlayername()) + " has been connected ");
 							HostServerMessengerController.addLabel("Player " + ((MessageConnect) message).getPlayername() + " has been connected", vBoxMessages);
-						
+						break;
 						default:
 							break;
 
