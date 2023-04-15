@@ -1,8 +1,6 @@
-package game;
+package game.exceptions;
 
-import game.models.CountryName;
-
-public class WrongCountryException extends Exception {
+public class WrongTroopsCountException extends Exception {
 
 	/**
 	 * 
@@ -10,7 +8,7 @@ public class WrongCountryException extends Exception {
 	private static final long serialVersionUID = 1L;
 	private String message;
 
-	public WrongCountryException(String message, CountryName country) {
+	public WrongTroopsCountException(String message, int troops) {
 		this.message = message;
 	}
 

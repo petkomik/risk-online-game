@@ -1,14 +1,11 @@
-package game;
+package game.exceptions;
 
-public class WrongTroopsCountException extends Exception {
+public class WrongPhaseException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String message;
 
-	public WrongTroopsCountException(String message, int troops) {
+	public WrongPhaseException(String message) {
 		this.message = message;
 	}
 

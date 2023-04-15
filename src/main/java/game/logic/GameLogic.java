@@ -1,4 +1,4 @@
-package game;
+package game.logic;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import game.exceptions.WrongCardsException;
+import game.exceptions.WrongCountryException;
+import game.exceptions.WrongPhaseException;
+import game.exceptions.WrongTroopsCountException;
 import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
@@ -22,7 +26,7 @@ import game.models.Territory;
  *
  */
 
-public abstract class GameController {
+public abstract class GameLogic {
 	protected HashMap<CountryName, Territory> territories;
 	protected static HashMap<Continent, ArrayList<Territory>> continents;
 	protected ArrayList<Player> players;
@@ -34,7 +38,7 @@ public abstract class GameController {
 	private volatile Player currentPlayer;
 
 	// Konstruktor
-	public GameController(ArrayList<Player> players) {
+	public GameLogic(ArrayList<Player> players) {
 		territories = new HashMap<>();
 		continents = new HashMap<>();
 		cards = new ArrayList<>();
@@ -157,20 +161,6 @@ public abstract class GameController {
 		return true;
 	}
 
-	public boolean possessCountry(CountryName countryName, Player player) {
-		if (player == null || !player.isInitialPlacementPhase()) {
-			return false;
-		}
-		if ((territories.get(countryName).getOwnedByPlayer() == null) && (player.getTroopsAvailable() > 0)) {
-			territories.get(countryName).setOwnedByPlayer(player);
-			player.addAndUpdateOwnedCountries(territories.get(countryName));
-			territories.get(countryName).addNumberOfTroops(1);
-			player.removeTroopsAvailable(1);
-			return true;
-		}
-		return false;
-	}
-
 	public static synchronized int getRandomDiceNumber() {
 		return (int) (Math.random() * 6) + 1;
 	}
@@ -214,6 +204,36 @@ public abstract class GameController {
 		player.setSumOfAllTroops(
 				player.getOwnedCountries().values().stream().mapToInt(Territory::getNumberOfTroops).sum() + troops);
 		return troops;
+	}
+	
+	public Player setNextActivePlayerAsCurrentPlayer() {
+		Player nextPlayer;
+		do {
+			nextPlayer = players.get((players.indexOf(getCurrentPlayer()) + 1) % players.size());
+		} while (!nextPlayer.isCanContinuePlaying());
+		currentPlayer = nextPlayer;
+		return currentPlayer;
+
+	}
+	
+	public boolean isConnectionOwnedByPlayer(Territory countryFrom, Territory countryTo, Player player) {
+	    Set<Territory> visited = new HashSet<>();
+	    return dfs(countryFrom, countryTo, visited, player);
+	}
+
+	private boolean dfs(Territory current, Territory target, Set<Territory> visited, Player player) {
+	    if (current == target) {
+	        return true;
+	    }
+	    visited.add(current);
+	    for (Territory neighbor : current.getNeighboringTerritories()) {
+	        if (!visited.contains(neighbor) && neighbor.getOwnedByPlayer() == player) {
+	            if (dfs(neighbor, target, visited, player)) {
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
 	}
 
 	private void createTerritories() {
@@ -514,36 +534,6 @@ public abstract class GameController {
 		return continents;
 	}
 
-	public Player setNextActivePlayerAsCurrentPlayer() {
-		Player nextPlayer;
-		do {
-			nextPlayer = players.get((players.indexOf(getCurrentPlayer()) + 1) % players.size());
-		} while (!nextPlayer.isCanContinuePlaying());
-		currentPlayer = nextPlayer;
-		return currentPlayer;
-
-	}
-	
-	public boolean isConnectionOwnedByPlayer(Territory countryFrom, Territory countryTo, Player player) {
-	    Set<Territory> visited = new HashSet<>();
-	    return dfs(countryFrom, countryTo, visited, player);
-	}
-
-	private boolean dfs(Territory current, Territory target, Set<Territory> visited, Player player) {
-	    if (current == target) {
-	        return true;
-	    }
-	    visited.add(current);
-	    for (Territory neighbor : current.getNeighboringTerritories()) {
-	        if (!visited.contains(neighbor) && neighbor.getOwnedByPlayer() == player) {
-	            if (dfs(neighbor, target, visited, player)) {
-	                return true;
-	            }
-	        }
-	    }
-	    return false;
-	}
-	
 	public boolean isGameIsOver() {
 		return gameIsOver;
 	}

@@ -1,4 +1,4 @@
-package game;
+package game.exceptions;
 
 /**
  * Exception class for wrong text input

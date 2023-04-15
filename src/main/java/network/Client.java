@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-import game.Profile;
+import database.Profile;
 import game.gui.HostServerMessengerController;
 import general.AppController;
 import javafx.scene.layout.VBox;

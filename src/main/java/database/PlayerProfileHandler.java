@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import game.Profile;
-
 /**
  * contains methods to get the Profile data from the database and store it on the database.
  *

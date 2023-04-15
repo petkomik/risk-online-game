@@ -1,4 +1,4 @@
-package game;
+package game.logic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import game.exceptions.WrongCountryException;
+import game.exceptions.WrongPhaseException;
+import game.exceptions.WrongTroopsCountException;
 import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
@@ -23,10 +26,10 @@ import game.models.Territory;
  *
  */
 
-public class GameSingleplayerController extends GameController {
+public class GameSingleplayerLogic extends GameLogic {
 
 	// Konstruktor
-	public GameSingleplayerController(ArrayList<Player> players) {
+	public GameSingleplayerLogic(ArrayList<Player> players) {
 		super(players);
 		diceThrowToDetermineTheBeginner();
 	}

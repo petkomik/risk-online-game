@@ -3,7 +3,7 @@ package game.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import game.GameController;
+import game.logic.GameLogic;
 
 /**
  * Player class to model the player entity
@@ -81,11 +81,11 @@ public class Player {
 	public void addAndUpdateOwnedCountries(Territory territory) {
 		if(territory.getOwnedByPlayer() != null && territory.getOwnedByPlayer() != this) {
 			territory.getOwnedByPlayer().getOwnedCountries().remove(territory.getCountryName(), territory);
-			territory.getOwnedByPlayer().updateOwnedContinents(GameController.getContinents());
+			territory.getOwnedByPlayer().updateOwnedContinents(GameLogic.getContinents());
 		}
 		territory.setOwnedByPlayer(this);
  		this.ownedCountries.put(territory.getCountryName(),territory);
-		updateOwnedContinents(GameController.getContinents());
+		updateOwnedContinents(GameLogic.getContinents());
 	}
 	
 	public ArrayList<Continent> getOwnedContinents() {

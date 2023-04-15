@@ -1,7 +1,5 @@
 package database;
 
-import game.Profile;
-
 /**
  * class to test the database.
  *

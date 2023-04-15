@@ -1,6 +1,6 @@
 package network.messages;
 
-import game.Profile;
+import database.Profile;
 
 public class MessageProfile extends Message {
 

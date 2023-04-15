@@ -1,6 +1,6 @@
 package game.models;
 
-import game.Profile;
+import database.Profile;
 import network.ClientHandler;
 import network.messages.Message;
 import network.messages.MessageType;

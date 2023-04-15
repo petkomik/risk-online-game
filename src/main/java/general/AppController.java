@@ -2,9 +2,8 @@ package general;
 
 
 import database.PlayerProfileHandler;
-//import game.GameMultiplayerController;
-import game.Profile;
-import game.WrongTextFieldInputException;
+import database.Profile;
+import game.exceptions.WrongTextFieldInputException;
 import network.Client;
 
 /**

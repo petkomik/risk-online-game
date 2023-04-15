@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import game.Profile;
+import database.Profile;
 import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageProfile;
