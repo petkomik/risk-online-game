@@ -39,6 +39,8 @@ public class Parameter {
 	public static final Color orangeColor = Color.web("#f28a3a");
 	public static final Color purpleColor = Color.web("#c73af2");
 	public static final Color white = Color.web("#ffffff");
+	public static final Color darkGrey = Color.web("#303030");
+
 
 
 
