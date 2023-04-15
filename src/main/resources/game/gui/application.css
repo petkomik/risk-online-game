@@ -37,7 +37,7 @@
 	
 }
 .mapBackground {
-	-fx-background-image:url("world-map6.png");
+	-fx-background-image:url("world-map.png");
 	-fx-background-size:cover;
 }
 .countries{
