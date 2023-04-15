@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -35,7 +36,7 @@ public class GUISupportClasses {
 			this();
 			this.setMinWidth(i);
 			this.setMinHeight(i);
-	
+			HBox.setHgrow(this, Priority.ALWAYS);
 		}
 	}
 	
@@ -60,7 +61,7 @@ public class GUISupportClasses {
 			super();
 			this.setPadding(new Insets(10, 20, 10, 20));
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
-			this.setTextFill(Parameter.white);
+			this.setTextFill(Color.WHITE);
 			this.setStyle("-fx-background-color: #b87331;"
 						+ "-fx-background-radius: 15;"
 						+ "-fx-border-radius: 12;"
@@ -83,6 +84,81 @@ public class GUISupportClasses {
 	            }
 	        });
 		}
+		
+		public DesignButton(Insets inst) {
+			this();
+			this.setPadding(inst);
+			this.setStyle("-fx-background-color: #b87331;"
+					+ "-fx-background-radius: 21;"
+					+ "-fx-border-radius: 18;"
+        			+ "-fx-border-color: #b87331;"
+        			+ "-fx-border-width: 3px;");
+		
+		this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+            if (newValue) {
+            	this.setStyle("-fx-background-color: #64441f;"
+							+ "-fx-background-radius: 21;"
+							+ "-fx-border-radius: 18;"
+	            			+ "-fx-border-color: #ffff;"
+	            			+ "-fx-border-width: 3px;");
+            } else {
+            	this.setStyle("-fx-background-color: #b87331;"
+							+ "-fx-background-radius: 21;"
+							+ "-fx-border-radius: 18;"
+	            			+ "-fx-border-color: #b87331;"
+	            			+ "-fx-border-width: 3px;");
+            }
+	        });
+
+		}
+	}
+	
+	static class ArrowButton extends Button {
+		public ArrowButton() {
+			super();
+			this.setText("<");
+			this.setAlignment(Pos.CENTER_LEFT);
+			this.setFont(Font.font("Consolas", FontWeight.BLACK, 60));
+			this.setMaxSize(60, 60);
+			this.setMinSize(60, 60);
+			this.setPrefSize(60, 60);
+			this.setAlignment(Pos.CENTER);
+			this.setPadding(new Insets(-12, 0, 0, 0));
+
+			this.setTextFill(Color.WHITE);
+			this.setStyle("-fx-background-color: #b87331;"
+					+ "-fx-background-radius: 15;"
+					+ "-fx-border-radius: 15;"
+	       			+ "-fx-border-color: #b87331;"
+	    			+ "-fx-border-width: 3px;");
+			
+			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+	            if (newValue) {
+	            	this.setStyle("-fx-background-color: #b87331;"
+	        				+ "-fx-background-radius: 15;"
+	        				+ "-fx-border-radius: 15;"
+	            			+ "-fx-border-color: #ffffff;"
+	            			+ "-fx-border-width: 3px;");
+	            } else {
+	            	this.setStyle("-fx-background-color: #b87331;"
+	        				+ "-fx-background-radius: 15;"
+	        				+ "-fx-border-radius: 15;"
+	            			+ "-fx-border-color: #b87331;"
+	            			+ "-fx-border-width: 3px;");
+	            }
+	        });
+		}
+		
+		public ArrowButton(int i) {
+			this();
+			this.setFont(Font.font("Consolas", FontWeight.BLACK, 26));
+			this.setMaxSize(30, 30);
+			this.setMinSize(30, 30);
+			this.setPrefSize(30, 30);
+			this.setPadding(new Insets(-5, 0, 0, 0));
+
+			
+		}
 	}
 	
 	static class PlayerCard extends VBox {
@@ -101,7 +177,7 @@ public class GUISupportClasses {
 		public PlayerCard(int i, String avatar, Color color) throws FileNotFoundException {
 			super();
 			this.name = this.aiNames[i % aiNames.length] + "(AI)";
-			this.avatar.setImage(new Image(new FileInputStream(Parameter.avatarsdir + avatar)));
+			this.avatar.setImage(new Image(new FileInputStream(avatar)));
 			this.color = color;
 			buildCard();
 
@@ -135,19 +211,19 @@ public class GUISupportClasses {
 			cardBanner.setAlignment(Pos.TOP_CENTER);
 			cardBanner.setPadding(new Insets(10, 20, 10, 20));
 		
-			playerName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
+			playerName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 22));
 			playerName.setTextFill(Color.WHITE);
 			playerName.setAlignment(Pos.CENTER);
 			
 			cardBanner.getChildren().add(playerName);
 			
-			Circle circlePl = new Circle(60);
+			Circle circlePl = new Circle(50);
 			circlePl.setFill(color);
 			circlePl.setStroke(color);
 			circlePl.setStrokeWidth(6);
 						
-			this.avatar.setFitWidth(120);
-			this.avatar.setFitHeight(140);
+			this.avatar.setFitWidth(100);
+			this.avatar.setFitHeight(100);
 			this.avatar.setPreserveRatio(true);
 			this.avatar.setSmooth(true);
 			this.avatar.setCache(true);
@@ -166,7 +242,7 @@ public class GUISupportClasses {
 			this.setStyle("-fx-background-color: rgba(225, 225, 225, 0.8);");
 			this.minHeightProperty().bind(this.maxHeightProperty());
 			this.maxHeightProperty().bind(this.prefHeightProperty());
-			this.setPrefHeight(250);
+			this.setPrefHeight(215);
 			
 			this.minWidthProperty().bind(this.maxWidthProperty());
 			this.maxWidthProperty().bind(this.prefWidthProperty());
@@ -174,8 +250,8 @@ public class GUISupportClasses {
 			
 			this.setStyle("-fx-background-color: rgba(225, 225, 225, 0.7);"
 					+ "-fx-background-radius: 7;");
-			
-			this.setSpacing(15);
+
+			this.setSpacing(10);
 			this.getChildren().addAll(cardBanner, playerImage, readyBanner);
 
 			

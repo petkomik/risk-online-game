@@ -146,7 +146,7 @@ public class BattleFrameController {
 		Circle circleAt = new Circle(80);
 		// TODO change to correct collor
 		circleAt.setFill(Parameter.blueColor);
-		circleAt.setStroke(Parameter.white);
+		circleAt.setStroke(Color.WHITE);
 		circleAt.setStrokeWidth(6);
 		
 		playerAt.getChildren().add(circleAt);
@@ -163,8 +163,8 @@ public class BattleFrameController {
 		playerAt.getChildren().add(avatarAt);
 		
 		Circle circleTroopsAt = new Circle(40);
-		circleTroopsAt.setFill(Parameter.white);
-		circleTroopsAt.setStroke(Parameter.white);
+		circleTroopsAt.setFill(Color.WHITE);
+		circleTroopsAt.setStroke(Color.WHITE);
 		circleTroopsAt.setStrokeWidth(0);
 		
 		Label troopsTextAt = new Label(String.valueOf(attacking.getNumberOfTroops()));
@@ -190,7 +190,7 @@ public class BattleFrameController {
 		Circle circleDf = new Circle(80);
 		// TODO change to correct collor
 		circleDf.setFill(Parameter.greenColor);
-		circleDf.setStroke(Parameter.white);
+		circleDf.setStroke(Color.WHITE);
 		circleDf.setStrokeWidth(6);
 
 		playerDf.getChildren().add(circleDf);
@@ -208,8 +208,8 @@ public class BattleFrameController {
 		playerDf.getChildren().add(avatarDf);
 		
 		Circle circleTroopsDf = new Circle(40);
-		circleTroopsDf.setFill(Parameter.white);
-		circleTroopsDf.setStroke(Parameter.white);
+		circleTroopsDf.setFill(Color.WHITE);
+		circleTroopsDf.setStroke(Color.WHITE);
 		circleTroopsDf.setStrokeWidth(0);
 		
 		Label troopsTextDf = new Label(String.valueOf(defending.getNumberOfTroops()));

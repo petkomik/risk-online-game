@@ -38,8 +38,21 @@ public class Parameter {
 	public static final Color yellowColor = Color.web("#d9e021");
 	public static final Color orangeColor = Color.web("#f28a3a");
 	public static final Color purpleColor = Color.web("#c73af2");
-	public static final Color white = Color.web("#ffffff");
+	
 	public static final Color darkGrey = Color.web("#303030");
+	
+	//player avatars dirs
+	public static final String blondBoy = avatarsdir + "blonde-boy.png";
+	public static final String bruntetteBoy = avatarsdir + "bruntette-boy.png";
+	public static final String earringsGirl = avatarsdir + "earrings-girl.png";
+	public static final String gingerGirl = avatarsdir + "ginger-girl.png";
+	public static final String hatBoy = avatarsdir + "hat-boy.png";
+	public static final String mustacheMan = avatarsdir + "mustache-man.png";
+
+
+	
+	
+	
 
 
 
