@@ -69,10 +69,15 @@ public class AppController {
 		return false;
 	}
 	
-	public void updateProfile(String value,String attribute) {
+	public static void updateProfile(String value,String attribute) {
 		PlayerProfileHandler pph = new PlayerProfileHandler();
 		pph.updateProfileInfo(value, attribute, AppController.profile);
 		AppController.profile.setAttribute(attribute, value);
+	}
+	
+	public static void deleteProfile() {
+		PlayerProfileHandler pph = new PlayerProfileHandler();
+		pph.deleteProfile(AppController.profile.getId());
 	}
 	
 	public static AppController getInstance() {
