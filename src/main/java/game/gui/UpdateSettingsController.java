@@ -34,6 +34,12 @@ public class UpdateSettingsController implements Initializable{
 	private Button updateLastNameButton;
 	@FXML
 	private Button updatePasswordButton;
+	@FXML
+	private Button backButton;
+	@FXML
+	private Button deleteProfileButton;
+	
+	GameSound gameSoundButton = new GameSound();
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -60,6 +66,18 @@ public class UpdateSettingsController implements Initializable{
 		updateFirstNameButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		updateLastNameButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		updatePasswordButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		
+		backButton.setPrefSize(w * 0.091, h * 0.058);
+		backButton.setLayoutX(w * 0.026);
+		backButton.setLayoutY(h * 0.046);
+		backButton.setStyle("-fx-font-size: " + fontSize + "px;");
+		
+		deleteProfileButton.setPrefSize(btnW, btnH);
+		deleteProfileButton.setLayoutX(w * 0.7);
+		deleteProfileButton.setLayoutY(h * 0.7);
+		deleteProfileButton.setStyle("-fx-font-size: " + fontSize + "px;");
+
+
 	}
 	
 	/**
@@ -130,7 +148,41 @@ public class UpdateSettingsController implements Initializable{
 		// Showing the Stage
 		stage.show();
 		
-	}	
+	}
+	
+	public void clickBack(ActionEvent e) throws IOException {
+
+		gameSoundButton.buttonClickBackwardSound();
+
+		Node node = (Node) e.getSource();
+		// Getting the Stage where the event is happened
+		stage = (Stage) node.getScene().getWindow();
+		// changing the AnchorPane from the main file
+		anchorPane = (AnchorPane) loadFXML("mainMenu");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
+		// Setting the AnchorPane as a root of the main scene
+		stage.getScene().setRoot(anchorPane);
+		// Showing the Stage
+		stage.show();
+	}
+	
+	public void clickDeleteProfileButton(ActionEvent e) throws IOException {
+
+		gameSoundButton.buttonClickBackwardSound();
+
+		Node node = (Node) e.getSource();
+		// Getting the Stage where the event is happened
+		stage = (Stage) node.getScene().getWindow();
+		// changing the AnchorPane from the main file
+		anchorPane = (AnchorPane) loadFXML("mainMenu");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
+		// Setting the AnchorPane as a root of the main scene
+		stage.getScene().setRoot(anchorPane);
+		// Showing the Stage
+		stage.show();
+	}
 	/**
      * 
      * @param fxml, file name without the ending .fxml
@@ -143,6 +195,4 @@ public class UpdateSettingsController implements Initializable{
 		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
 		return fxmlLoader.load();
 	}
-
-
 }

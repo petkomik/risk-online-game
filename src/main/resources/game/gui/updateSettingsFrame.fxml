@@ -9,5 +9,7 @@
       <Button fx:id="updateFirstNameButton" mnemonicParsing="false" text="UPDATE FIRST NAME" />
       <Button fx:id="updateLastNameButton" mnemonicParsing="false" text="UPDATE LAST NAME" />
       <Button fx:id="updatePasswordButton" mnemonicParsing="false" text="CHANGE PASSWORD" />
+      <Button fx:id="backButton" mnemonicParsing="false" onAction="#clickBack" text="BACK" />
+      <Button fx:id="deleteProfileButton" mnemonicParsing="false" onAction="#clickDeleteProfileButton" text="DELETE PROFILE" />
    </children>
 </AnchorPane>
