@@ -83,6 +83,7 @@ public class BattleFrameController extends VBox {
 		dicesAttacker = new int[this.maxDiceToThrow];
 		dicesDefender = new int[this.defendingDice];
 		setup();
+	
 	}
 	
 	public BattleFrameController(Territory at, Territory df) throws Exception {
@@ -128,7 +129,6 @@ public class BattleFrameController extends VBox {
 		HBox.setHgrow(attackingStack, Priority.ALWAYS);
 
 		armiesFlowAt = new FlowPane();
-		setCorrectTroops(armiesFlowAt, true);
 		armiesFlowAt.setAlignment(Pos.CENTER);
 		armiesFlowAt.setHgap(30);
 		armiesFlowAt.setVgap(30);
@@ -150,7 +150,6 @@ public class BattleFrameController extends VBox {
 		HBox.setHgrow(defendingStack, Priority.ALWAYS);
 
 		armiesFlowDf = new FlowPane();
-		setCorrectTroops(armiesFlowDf, false);
 		armiesFlowDf.setAlignment(Pos.CENTER);
 		armiesFlowDf.setHgap(30);
 		armiesFlowDf.setVgap(30);
@@ -512,7 +511,15 @@ public class BattleFrameController extends VBox {
 		Territory territ;
 		int numberTroops;
 		int leftOverSoldier = attacking ? 1 : 0;
-			
+		double heightFrame =  this.getHeight();
+		double multiplier = 1;
+		
+		if (heightFrame < 900) {
+			multiplier = 0.7;
+		} else if (heightFrame < 700) {
+			multiplier = 0.5;
+		}
+		
 		if(attacking) {
 			territ = this.attacking;
 		} else {
@@ -546,7 +553,7 @@ public class BattleFrameController extends VBox {
 			iv.setPreserveRatio(true);
 			iv.setSmooth(true);
 			iv.setCache(true);
-			iv.setFitHeight(220);
+			iv.setFitHeight(220  *multiplier);
 			flow.getChildren().add(iv);		
 
 		}
@@ -557,7 +564,7 @@ public class BattleFrameController extends VBox {
 			iv.setPreserveRatio(true);
 			iv.setSmooth(true);
 			iv.setCache(true);
-			iv.setFitHeight(200);
+			iv.setFitHeight(200 * multiplier);
 			flow.getChildren().add(iv);		
 
 		}
@@ -568,7 +575,7 @@ public class BattleFrameController extends VBox {
 			iv.setPreserveRatio(true);
 			iv.setSmooth(true);
 			iv.setCache(true);
-			iv.setFitHeight(150);
+			iv.setFitHeight(150 * multiplier);
 			flow.getChildren().add(iv);	
 			
 		}

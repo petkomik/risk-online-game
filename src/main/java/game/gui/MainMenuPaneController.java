@@ -91,6 +91,8 @@ public class MainMenuPaneController implements Initializable{
 		stage = (Stage)node.getScene().getWindow();
 		BattleFrameController battle = new BattleFrameController();
 		stage.getScene().setRoot(battle);
+		battle.setCorrectTroops(battle.armiesFlowAt, true);
+		battle.setCorrectTroops(battle.armiesFlowDf, false);
 		// Showing the Stage
 		stage.show();
 		
