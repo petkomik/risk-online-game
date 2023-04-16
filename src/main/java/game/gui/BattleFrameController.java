@@ -82,6 +82,7 @@ public class BattleFrameController extends VBox {
 		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
 		dicesAttacker = new int[this.maxDiceToThrow];
 		dicesDefender = new int[this.defendingDice];
+		setup();
 	}
 	
 	public BattleFrameController(Territory at, Territory df) throws Exception {
@@ -90,6 +91,8 @@ public class BattleFrameController extends VBox {
 		this.maxDiceToThrow = 3;
 		this.attacking = at;
 		this.defending = df;
+		setup();
+
 	}
 
 
