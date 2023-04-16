@@ -7,7 +7,6 @@ import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
 import general.Parameter;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

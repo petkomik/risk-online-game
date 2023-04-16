@@ -8,6 +8,7 @@ import game.models.Territory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -55,8 +56,10 @@ public class BattleFrameController {
 		this.chosenNumberOfDice = maxDiceToThrow;
 		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
 		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
+		// TODO remove
+		attacking.addNumberOfTroops(48);
+		defending.addNumberOfTroops(27);
 		this.root = this.setup();
-		System.out.print("Constructor runs");
 	}
 	
 	public BattleFrameController(Territory at, Territory df) throws Exception {
@@ -96,7 +99,26 @@ public class BattleFrameController {
 		
 		ImageViewPane imgAttackingPane = new ImageViewPane(imgAttacking);
 		HBox.setHgrow(imgAttackingPane, Priority.ALWAYS);
+		
+		StackPane attackingStack = new StackPane();
+		attackingStack.setAlignment(Pos.CENTER);
+		HBox.setHgrow(attackingStack, Priority.ALWAYS);
 
+		FlowPane armiesFlowAt = new FlowPane();
+		armiesFlowAt.minHeightProperty().bind(imgAttackingPane.minHeightProperty());
+		armiesFlowAt.maxHeightProperty().bind(imgAttackingPane.maxHeightProperty());
+		armiesFlowAt.prefHeightProperty().bind(imgAttackingPane.prefHeightProperty());
+		
+		armiesFlowAt.minWidthProperty().bind(imgAttackingPane.minWidthProperty());
+		armiesFlowAt.maxWidthProperty().bind(imgAttackingPane.maxWidthProperty());
+		armiesFlowAt.prefWidthProperty().bind(imgAttackingPane.prefWidthProperty());
+		
+		setCorrectTroops(armiesFlowAt, true);
+		armiesFlowAt.setAlignment(Pos.CENTER);
+		armiesFlowAt.setHgap(20);
+		armiesFlowAt.setVgap(30);
+
+		attackingStack.getChildren().addAll(imgAttackingPane, armiesFlowAt);
 		
 		ImageView imgDefending = new ImageView();
 		imgDefending.setImage(new Image(new FileInputStream(defending.getAddressToPNG())));
@@ -106,11 +128,31 @@ public class BattleFrameController {
 		
 		ImageViewPane imgDefendingPane = new ImageViewPane(imgDefending);
 		HBox.setHgrow(imgDefendingPane, Priority.ALWAYS);
+		
+		StackPane defendingStack = new StackPane();
+		defendingStack.setAlignment(Pos.CENTER);
+		HBox.setHgrow(defendingStack, Priority.ALWAYS);
+
+		FlowPane armiesFlowDf = new FlowPane();
+		armiesFlowDf.minHeightProperty().bind(imgDefendingPane.minHeightProperty());
+		armiesFlowDf.maxHeightProperty().bind(imgDefendingPane.maxHeightProperty());
+		armiesFlowDf.prefHeightProperty().bind(imgDefendingPane.prefHeightProperty());
+		
+		armiesFlowDf.minWidthProperty().bind(imgDefendingPane.minWidthProperty());
+		armiesFlowDf.maxWidthProperty().bind(imgDefendingPane.maxWidthProperty());
+		armiesFlowDf.prefWidthProperty().bind(imgDefendingPane.prefWidthProperty());
+		
+		setCorrectTroops(armiesFlowDf, false);
+		armiesFlowDf.setAlignment(Pos.CENTER);
+		armiesFlowDf.setHgap(20);
+		armiesFlowDf.setVgap(30);
+		
+		defendingStack.getChildren().addAll(imgDefendingPane, armiesFlowDf);
 
 		GUISupportClasses.Spacing spacingImg = new GUISupportClasses.Spacing();
 		HBox.setHgrow(spacingImg, Priority.SOMETIMES);
 
-		imgTerritories.getChildren().addAll(imgAttackingPane, spacingImg, imgDefendingPane);
+		imgTerritories.getChildren().addAll(attackingStack, spacingImg, defendingStack);
 		imgTerritories.setPadding(new Insets(100, 50, 0, 50));
 		imgTerritories.setAlignment(Pos.TOP_CENTER);
 		
@@ -420,4 +462,68 @@ public class BattleFrameController {
 		return diceImages;
 	}
 	
+	public void setCorrectTroops(FlowPane flow, boolean attacking) throws FileNotFoundException {
+		
+		int inf = 0;
+		int cav = 0;
+		int art = 0;
+		Territory territ;
+		int numberTroops;
+	
+		if(attacking) {
+			territ = this.attacking;
+		} else {
+			territ = this.defending;
+		}
+		
+		numberTroops = territ.getNumberOfTroops();
+		
+		while (numberTroops > 0) {
+			if (numberTroops > 10) {
+				numberTroops -= 10;
+				art++;
+			} else if (numberTroops > 4) {
+				numberTroops -= 5;
+				cav++;
+			} else {
+				numberTroops --;
+				inf++;
+			}
+		}
+		
+		ImageView[] artAr = new ImageView[art];
+		ImageView[] cavAr = new ImageView[cav];
+		ImageView[] infAr = new ImageView[inf];
+				
+		for(ImageView iv : artAr) {
+			iv = new ImageView();
+			iv.setImage(new Image(new FileInputStream(Parameter.artillery)));
+			iv.setPreserveRatio(true);
+			iv.setSmooth(true);
+			iv.setCache(true);
+			iv.setFitHeight(220);
+			flow.getChildren().add(iv);		
+		}
+		
+		for(ImageView iv : cavAr) {
+			iv = new ImageView();
+			iv.setImage(new Image(new FileInputStream(Parameter.cavalry)));
+			iv.setPreserveRatio(true);
+			iv.setSmooth(true);
+			iv.setCache(true);
+			iv.setFitHeight(200);
+			flow.getChildren().add(iv);		
+		}
+		
+		for(ImageView iv : infAr) {
+			iv = new ImageView();
+			iv.setImage(new Image(new FileInputStream(Parameter.infantry)));
+			iv.setPreserveRatio(true);
+			iv.setSmooth(true);
+			iv.setCache(true);
+			iv.setFitHeight(150);
+			flow.getChildren().add(iv);		
+			
+		}
+	}	
 }
