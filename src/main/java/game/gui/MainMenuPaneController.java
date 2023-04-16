@@ -90,7 +90,7 @@ public class MainMenuPaneController implements Initializable{
 		// Getting the Stage where the event is happened
 		stage = (Stage)node.getScene().getWindow();
 		BattleFrameController battle = new BattleFrameController();
-		stage.getScene().setRoot(battle.root);
+		stage.getScene().setRoot(battle);
 		// Showing the Stage
 		stage.show();
 		

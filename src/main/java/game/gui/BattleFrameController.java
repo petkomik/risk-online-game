@@ -42,7 +42,7 @@ import javafx.util.Duration;
  * 
  */
 
-public class BattleFrameController {
+public class BattleFrameController extends VBox {
 	
 	// TODO
 	// controll the ints
@@ -55,7 +55,6 @@ public class BattleFrameController {
 	
 	Territory attacking;
 	Territory defending;
-	VBox root;
 
 	ImageViewPane imgAttackingPane;
 	ImageViewPane imgDefendingPane;
@@ -73,6 +72,7 @@ public class BattleFrameController {
 	
 
 	public BattleFrameController() throws Exception {
+		super();
 		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
 		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
 		// TODO remove
@@ -82,28 +82,26 @@ public class BattleFrameController {
 		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
 		dicesAttacker = new int[this.maxDiceToThrow];
 		dicesDefender = new int[this.defendingDice];
-		this.root = this.setup();
 	}
 	
 	public BattleFrameController(Territory at, Territory df) throws Exception {
+		super();
 		// TODO set correct max dice
 		this.maxDiceToThrow = 3;
 		this.attacking = at;
 		this.defending = df;
-		this.root = this.setup();
 	}
 
 
-	public VBox setup() throws Exception {
+	public void setup() throws Exception {
 
 		/* 
-		 * setting up root panel vBox
+		 * setting up root panel root
 		 */
 		
-		VBox vBox = new VBox();
-		vBox.setAlignment(Pos.CENTER);
-		vBox.setFillWidth(true);
-		vBox.setStyle("-fx-background-color: rgb(225, 211, 184);");
+		this.setAlignment(Pos.CENTER);
+		this.setFillWidth(true);
+		this.setStyle("-fx-background-color: rgb(225, 211, 184);");
 		
 		/*
 		 * Setting up imTerritories pane
@@ -167,11 +165,11 @@ public class BattleFrameController {
 		
 		/*
 		 * Add spacingRoot 
-		 * Add both imgTerritories, spacingRoot to the root vBox
+		 * Add both imgTerritories, spacingRoot to the root root
 		 */
 		
 		Spacing spacingRoot = new Spacing();
-		vBox.getChildren().addAll(imgTerritories, spacingRoot);
+		this.getChildren().addAll(imgTerritories, spacingRoot);
 		VBox.setVgrow(spacingRoot, Priority.SOMETIMES);
 		VBox.setVgrow(imgTerritories, Priority.ALWAYS);
 		
@@ -459,7 +457,6 @@ public class BattleFrameController {
 		diceSection.getChildren().addAll(diceImagesAt, diceControls, diceImagesDf);
 		diceSection.setAlignment(Pos.CENTER);
 		
-
 		/*
 		 * Setting up spacing between DiceImages and DieceControls
 		 * Packing children into parent containers
@@ -474,9 +471,7 @@ public class BattleFrameController {
 		HBox.setHgrow(spacingControls1, Priority.ALWAYS);
 		HBox.setHgrow(spacingControls2, Priority.ALWAYS);
 
-		vBox.getChildren().add(diceAndProfile);
-		return vBox;
-		
+		this.getChildren().add(diceAndProfile);		
 	}
 	
 	public FlowPane diceImageFactory (int k, boolean at) throws FileNotFoundException {

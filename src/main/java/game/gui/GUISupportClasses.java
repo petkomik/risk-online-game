@@ -261,10 +261,7 @@ public class GUISupportClasses {
 		}
 		
 		public void setReady(boolean status) {
-			this.playerReady.setText(status ? "Ready" : "Not Ready");		}
+			this.playerReady.setText(status ? "Ready" : "Not Ready");		
+		}
 	}
 }
-
-
-
-
