@@ -2,6 +2,7 @@ package game.gui;
 
 import java.io.FileInputStream;
 
+import game.gui.GUISupportClasses.ArrowButton;
 import general.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -28,29 +29,37 @@ public class EndGamePodiumController extends Application {
 	
 	public int players = 3;
 	//public int players = game.Lobby.getPlayerList().size();
-	StackPane root;
+	
+	StackPane container;	
+	HBox backgroundH;
+	HBox backgroundColor;
+	HBox hBoxIcons;
+	HBox hBoxButton;
+	ArrowButton backbutton;
 	
 	public EndGamePodiumController() throws Exception {
-		this.root = this.setup();
+		this.container = this.setup();
 	}
 	
 	
 	public StackPane setup() throws Exception {
 		
 	/*
-	 * to be returned HBox
-	 * HBox is the main frame 
-	 * consists 2 VBoxes
-	 * each VBox has 3 
+	 * to be returned Stackpane
+	 * background->shade->Icons->Button
+	 * Icons consists of 2 VBoxes
+	 * each VBox has 2-3 Parts 
 	 */
 	StackPane container = new StackPane();	
 	HBox backgroundH = new HBox();
 	HBox backgroundColor = new HBox();
-	HBox hBox = new HBox();
-	hBox.setAlignment(Pos.CENTER);
-	hBox.setFillHeight(true);
-	//hBox.setPadding(new Insets(20,20,20,20));
-
+	HBox hBoxIcons = new HBox();
+	HBox hBoxButton = new HBox();
+	
+	hBoxIcons.setAlignment(Pos.CENTER);
+	hBoxButton.setAlignment(Pos.TOP_LEFT);
+	
+	
 	VBox avatars = new VBox(50);
 	VBox place = new VBox(55);
 	
@@ -148,7 +157,7 @@ public class EndGamePodiumController extends Application {
 
 	thirdP.getChildren().add(circleThirdI);
 
-	avatars.getChildren().addAll(firstP,secondP,thirdP);
+	avatars.getChildren().addAll(firstP, secondP, thirdP);
 	avatars.setPadding(new Insets(300,50,300,50));
 	 
 	/*
@@ -183,24 +192,44 @@ public class EndGamePodiumController extends Application {
 	 * adding the cups to their vBox
 	 */
 	
-	place.getChildren().addAll(firstPlaceCup,secondPlaceCup,thirdPlaceCup);
+	place.getChildren().addAll(firstPlaceCup, secondPlaceCup, thirdPlaceCup);
 	place.setPadding(new Insets(300,50,300,50));
 	
 	/*
 	 * adding the cups and avatars to the hBox
 	 */
 	
-	hBox.getChildren().addAll(place,avatars);
+	hBoxIcons.getChildren().addAll(place,avatars);
+	
+	/*
+	 * setting up back button
+	 */
+	
+	ArrowButton backButton = new ArrowButton();
+	hBoxButton.getChildren().add(backButton);
+	hBoxButton.setPadding(new Insets(20,20,20,20));
+	
+	/*
+	 * Action handler for the button
+	 */
+	
+	backButton.setOnAction(new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent event) {
+		(new GameSound()).buttonClickForwardSound();
+		//TODO has to return the player to the ServerMainWindow
+		}
+	});
 	
 	/*
 	 * adding everything to the top container
 	 */
 	
-	container.getChildren().addAll(backgroundH, backgroundColor,hBox);	
+	container.getChildren().addAll(backgroundH, backgroundColor, hBoxIcons, hBoxButton);	
 	
 	return container;
 	}
-
+		
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
