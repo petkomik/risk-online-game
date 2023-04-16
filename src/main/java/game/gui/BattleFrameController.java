@@ -1,5 +1,6 @@
 package game.gui;
 
+import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.DiceFactory;
 import game.models.Continent;
 import game.models.CountryName;
@@ -64,6 +65,9 @@ public class BattleFrameController {
 	Label troopsTextAt;
 	Label troopsTextDf;
 
+	DesignButton lessBtn;
+	DesignButton moreBtn;
+	Label numberLabel;
 	FlowPane diceImagesAt;
 	FlowPane diceImagesDf;
 	
@@ -72,8 +76,8 @@ public class BattleFrameController {
 		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
 		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
 		// TODO remove
-		attacking.addNumberOfTroops(40);
-		defending.addNumberOfTroops(40);
+		attacking.addNumberOfTroops(4);
+		defending.addNumberOfTroops(2);
 		this.maxDiceToThrow = Math.min(3, attacking.getNumberOfTroops() - 1);
 		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
 		dicesAttacker = new int[this.maxDiceToThrow];
@@ -281,9 +285,9 @@ public class BattleFrameController {
 		VBox diceControls = new VBox();
 
 		HBox numberOfDiceControls = new HBox();
-		GUISupportClasses.DesignButton lessBtn = new GUISupportClasses.DesignButton();
-		Label numberLabel = new Label(String.valueOf(this.maxDiceToThrow));
-		GUISupportClasses.DesignButton moreBtn = new GUISupportClasses.DesignButton();
+		lessBtn = new DesignButton();
+		numberLabel = new Label(String.valueOf(this.maxDiceToThrow));
+		moreBtn = new DesignButton();
 		
 		HBox diceButtonPane = new HBox();
 		GUISupportClasses.DesignButton throwBtn = new GUISupportClasses.DesignButton();
@@ -319,8 +323,8 @@ public class BattleFrameController {
 		 */
 
 		// TODO set correct number of dice
-		diceImagesAt = diceImageFactory(maxDiceToThrow);
-		diceImagesDf = diceImageFactory(defendingDice);
+		diceImagesAt = diceImageFactory(maxDiceToThrow, true);
+		diceImagesDf = diceImageFactory(defendingDice, false);
 		
 		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
@@ -347,7 +351,7 @@ public class BattleFrameController {
 			    	dicesAttacker = new int[dicesAttacker.length + 1];
 			    	GUISupportClasses.DiceFactory newDice;
 					try {
-						newDice = new GUISupportClasses.DiceFactory((i*29)%6 + 1);
+						newDice = new GUISupportClasses.DiceFactory((i*29)%6 + 1, true);
 				    	diceImagesAt.getChildren().add(newDice);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -381,11 +385,7 @@ public class BattleFrameController {
 							e1.printStackTrace();
 						}
 		                final int m = k;
-		                Platform.runLater(new Runnable() {
-		                    @Override public void run() {
-		                    	diceImagesAt.getChildren().set(m, dice);                 
-		                    	}
-		                });  
+                    	diceImagesAt.getChildren().set(m, dice);      
 		                dicesAttacker[k] = n;
 		    		}
 		    		
@@ -394,16 +394,12 @@ public class BattleFrameController {
 		        		int n = random.nextInt(6)+1;
 		                DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
 		                try {
-							dice.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
+							dice.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(n) + "b.png")));
 						} catch (FileNotFoundException e1) {
 							e1.printStackTrace();
 						}
 		                final int m = k;
-		                Platform.runLater(new Runnable() {
-		                    @Override public void run() {
-		                    	diceImagesDf.getChildren().set(m, dice);                 
-		                    	}
-		                }); 
+                    	diceImagesDf.getChildren().set(m, dice);                 
 		                dicesDefender[k] = n;
 		    		}
 		    		
@@ -481,7 +477,7 @@ public class BattleFrameController {
 		
 	}
 	
-	public FlowPane diceImageFactory (int k) throws FileNotFoundException {
+	public FlowPane diceImageFactory (int k, boolean at) throws FileNotFoundException {
 		FlowPane diceImages = new FlowPane();
 		
 		diceImages.minHeightProperty().bind(diceImages.maxHeightProperty());
@@ -498,7 +494,7 @@ public class BattleFrameController {
 		// TODO
 		GUISupportClasses.DiceFactory[] dices = new GUISupportClasses.DiceFactory[k];
 		for(int i = 0; i < dices.length; i++) {
-			dices[i] = new GUISupportClasses.DiceFactory((i*29)%6 + 1);
+			dices[i] = new GUISupportClasses.DiceFactory((i*29)%6 + 1, at);
 			diceImages.getChildren().add(dices[i]);
 		}
 	
@@ -600,22 +596,51 @@ public class BattleFrameController {
 
 		}
 		
-		if(this.defending.getNumberOfTroops() == 1) {
-			this.defendingDice = 1;
-			diceImagesDf = diceImageFactory(defendingDice); 
-		}
-		
-		if(this.defending.getNumberOfTroops() == 0) {
-			// TODO stop
-		} else if(this.attacking.getNumberOfTroops() == 0) {
-			// TODO stop
-		}
-		
 		this.setCorrectTroops(armiesFlowAt, true);
 		this.setCorrectTroops(armiesFlowDf, false);
 		
 		troopsTextAt.setText(String.valueOf(attacking.getNumberOfTroops() - 1));
 		troopsTextDf.setText(String.valueOf(defending.getNumberOfTroops()));
+		
+		if(this.defending.getNumberOfTroops() == 1 && defendingDice != 1) {
+			this.defendingDice = 1;
+			diceImagesDf.getChildren().remove(1); 
+		}
+		
+		
+		if(this.attacking.getNumberOfTroops() == 2) {
+			this.maxDiceToThrow = 1;
+			if (Integer.parseInt(numberLabel.getText()) > 1) {
+	    		int i = Integer.parseInt(numberLabel.getText()) - 1;
+		    	numberLabel.setText("1");
+		    	dicesAttacker = new int[1];
+		    	
+		    	if(diceImagesAt.getChildren().size() == 3) {
+		    		diceImagesAt.getChildren().remove(1);
+		    		diceImagesAt.getChildren().remove(1);
+		    	} else {
+		    		diceImagesAt.getChildren().remove(1);
+		    	}
+			
+			} 
+
+		} else if (this.attacking.getNumberOfTroops() == 3) {
+			this.maxDiceToThrow = 2;
+			if (Integer.parseInt(numberLabel.getText()) > 2) {
+	    		int i = Integer.parseInt(numberLabel.getText()) - 1;
+		    	numberLabel.setText(String.valueOf(i));
+		    	dicesAttacker = new int[dicesAttacker.length - 1];
+		    	diceImagesAt.getChildren().remove(0);
+		    	
+	    	}
+		}
+		
+		if(this.defending.getNumberOfTroops() == 0) {
+			// TODO stop decide win
+		} else if(this.attacking.getNumberOfTroops() == 0) {
+			// TODO stop decide win
+
+		}
 
 	}
 }

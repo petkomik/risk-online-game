@@ -45,15 +45,18 @@ public class GUISupportClasses {
 			super();
 		}
 		
-		public DiceFactory(int i) throws FileNotFoundException {
+		public DiceFactory(int i, boolean at) throws FileNotFoundException {
 			super();
-			this.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + ".png")));
+			String bDice = at ? "" : "b";
+			this.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bDice + ".png")));
 			this.setFitWidth(70);
 			this.setFitHeight(70);
 			this.setPreserveRatio(true);
 			this.setSmooth(true);
 			this.setCache(true);
 		}
+		
+		
 	}
 
 	static class DesignButton extends Button {
