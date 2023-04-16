@@ -15,6 +15,7 @@ public class Parameter {
 	public static final String userdir = System.getProperty("user.dir");
 	public static final String resourcesdir = userdir + sep + "src" + sep + "main" + sep + "resources" + sep;
 	public static final String imagesdir = resourcesdir + "images" + sep;
+	public static final String podiumdir = resourcesdir + "podium" +sep;
 	public static final String avatarsdir = resourcesdir + "avatars" + sep;
 	public static final String dicedir = resourcesdir + "dice" + sep;
 	public static final String territoryPNGdir = resourcesdir + "territories" + sep;

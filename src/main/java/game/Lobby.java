@@ -34,6 +34,10 @@ public class Lobby {
 		
 	}
 	
+	public List<Player> getPlayerList(){
+		return playersInLobby;
+	};
+	
 	public int getLobbyRank() {
 		return this.lobbyRank;
 	}
