@@ -75,8 +75,8 @@ public class AppController {
 	}
 	
 	public static void deleteProfile() {
-		PlayerProfileHandler pph = new PlayerProfileHandler();
-		pph.deleteProfile(AppController.profile.getId());
+		// PlayerProfileHandler pph = new PlayerProfileHandler();
+		dbH.deleteProfile(AppController.profile.getId());
 	}
 	
 	public static AppController getInstance() {

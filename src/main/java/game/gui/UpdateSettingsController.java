@@ -2,16 +2,21 @@ package game.gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import general.Parameter;
+import general.AppController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -168,22 +173,30 @@ public class UpdateSettingsController implements Initializable{
 	}
 	
 	public void clickDeleteProfileButton(ActionEvent e) throws IOException {
+        gameSoundButton.buttonClickBackwardSound();
 
-		gameSoundButton.buttonClickBackwardSound();
-		
-		MainApp.getAppController().deleteProfile();
-
-		Node node = (Node) e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage) node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("userAccess");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
-		stage.show();
+		 // Display confirmation dialog
+	    Alert alert = new Alert(AlertType.CONFIRMATION);
+	    alert.setTitle("Confirm Delete");
+	    alert.setHeaderText("Are you sure you want to delete your profile?");
+	    alert.setContentText("This includes deleting all the statistics \nconnected with this profile. \nThis action cannot be undone.");
+	    // Set the focus to the cancel button
+	    Platform.runLater(() -> alert.getDialogPane().lookupButton(ButtonType.CANCEL).requestFocus());
+	    
+	    Optional<ButtonType> result = alert.showAndWait();
+	    if (result.isPresent() && result.get() == ButtonType.OK) {
+	        // User clicked OK, proceed with delete
+	        MainApp.getAppController();
+	        AppController.deleteProfile();
+	        Node node = (Node) e.getSource();
+	        stage = (Stage) node.getScene().getWindow();
+	        anchorPane = (AnchorPane) loadFXML("userAccess");
+	        anchorPane.setPrefSize(w, h);
+	        stage.getScene().setRoot(anchorPane);
+	        stage.show();
+	    } else {
+	        // User clicked Cancel, do nothing
+	    }
 	}
 	/**
      * 
