@@ -553,7 +553,7 @@ public class BattleFrameController extends VBox {
 			iv.setPreserveRatio(true);
 			iv.setSmooth(true);
 			iv.setCache(true);
-			iv.setFitHeight(220  *multiplier);
+			iv.setFitHeight(220 * multiplier);
 			flow.getChildren().add(iv);		
 
 		}
@@ -581,13 +581,13 @@ public class BattleFrameController extends VBox {
 		}
 		
 		if(flow.getChildren().size() > 8 || art > 2) {
-			flow.maxWidth(1200);
+			flow.maxWidth(1200 * multiplier);
 		} else if (art == 2) {
-			flow.setMaxWidth(700);
+			flow.setMaxWidth(700 * multiplier);
 		} else if (art == 1 && cav == 1) {
-			flow.setMaxWidth(600);
+			flow.setMaxWidth(600 * multiplier);
 		} else {
-			flow.setMaxWidth(400);
+			flow.setMaxWidth(400 * multiplier);
 		}	
 	}	
 	
