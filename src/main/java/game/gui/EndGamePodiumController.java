@@ -15,6 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -31,9 +34,9 @@ public class EndGamePodiumController extends Application {
 	//public int players = game.Lobby.getPlayerList().size();
 	
 	StackPane container;	
-	HBox backgroundH;
+	HBox backgroundPic;
 	HBox backgroundColor;
-	HBox hBoxIcons;
+	HBox vBoxIcons;
 	HBox hBoxButton;
 	ArrowButton backbutton;
 	
@@ -51,17 +54,17 @@ public class EndGamePodiumController extends Application {
 	 * each VBox has 2-3 Parts 
 	 */
 	StackPane container = new StackPane();	
-	HBox backgroundH = new HBox();
+	HBox backgroundPic = new HBox();
 	HBox backgroundColor = new HBox();
-	HBox hBoxIcons = new HBox();
+	VBox vBoxIcons = new VBox();
 	HBox hBoxButton = new HBox();
 	
-	hBoxIcons.setAlignment(Pos.CENTER);
+	vBoxIcons.setAlignment(Pos.CENTER);
 	hBoxButton.setAlignment(Pos.TOP_LEFT);
 	
 	
-	VBox avatars = new VBox(50);
-	VBox place = new VBox(55);
+	HBox avatars = new HBox(50);
+	HBox place = new HBox(60);
 	
 	/*
 	 * setting background Image and color
@@ -73,7 +76,7 @@ public class EndGamePodiumController extends Application {
 	imgBackground.setSmooth(true);
 	imgBackground.setCache(true);
 	
-	backgroundH.getChildren().add(imgBackground);
+	backgroundPic.getChildren().add(imgBackground);
 	
 	backgroundColor.setAlignment(Pos.CENTER);
 	backgroundColor.setFillHeight(true);
@@ -93,7 +96,7 @@ public class EndGamePodiumController extends Application {
 	 * image and shape for the first avatar
 	 */
 	
-	Circle circleFirstP = new Circle(70);
+	Circle circleFirstP = new Circle(90);
 	ImageView circleFirstI = new ImageView();
 	//TODO set up the right color
 	circleFirstP.setFill(Parameter.blueColor);
@@ -103,8 +106,8 @@ public class EndGamePodiumController extends Application {
 	firstP.getChildren().add(circleFirstP);
 	
 	circleFirstI.setImage(new Image(new FileInputStream(Parameter.blondBoy)));
-	circleFirstI.setFitWidth(140);
-	circleFirstI.setFitHeight(140);
+	circleFirstI.setFitWidth(200);
+	circleFirstI.setFitHeight(200);
 	circleFirstI.setPreserveRatio(true);
 	circleFirstI.setSmooth(true);
 	circleFirstI.setCache(true);	
@@ -116,7 +119,7 @@ public class EndGamePodiumController extends Application {
 	 * image and shape for the second avatar
 	 */
 	
-	Circle circleSecondP = new Circle(70);
+	Circle circleSecondP = new Circle(80);
 	ImageView circleSecondI = new ImageView();
 	//TODO set up the right color
 	circleSecondP.setFill(Parameter.greenColor);
@@ -126,8 +129,8 @@ public class EndGamePodiumController extends Application {
 	secondP.getChildren().add(circleSecondP);
 	
 	circleSecondI.setImage(new Image(new FileInputStream(Parameter.hatBoy)));
-	circleSecondI.setFitWidth(140);
-	circleSecondI.setFitHeight(140);
+	circleSecondI.setFitWidth(170);
+	circleSecondI.setFitHeight(170);
 	circleSecondI.setPreserveRatio(true);
 	circleSecondI.setSmooth(true);
 	circleSecondI.setCache(true);
@@ -163,11 +166,11 @@ public class EndGamePodiumController extends Application {
 	 * adding the avatars to their box
 	 */
 	if (players>2) {
-	avatars.getChildren().addAll(firstP, secondP, thirdP);
+	avatars.getChildren().addAll(secondP,firstP, thirdP);
 	}else {
 		avatars.getChildren().addAll(firstP,secondP);
 	}
-	avatars.setPadding(new Insets(300,50,300,50));
+	avatars.setPadding(new Insets(20,500,20,500));
 	 
 	/*
 	 * setting up the images for the cups 
@@ -175,16 +178,16 @@ public class EndGamePodiumController extends Application {
 	
 	ImageView firstPlaceCup = new ImageView();
 	firstPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "PodiumPlace1.png")));
-	firstPlaceCup.setFitWidth(140);
-	firstPlaceCup.setFitHeight(140);
+	firstPlaceCup.setFitWidth(200);
+	firstPlaceCup.setFitHeight(200);
 	firstPlaceCup.setPreserveRatio(true);
 	firstPlaceCup.setSmooth(true);
 	firstPlaceCup.setCache(true);
 	
 	ImageView secondPlaceCup = new ImageView();
 	secondPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "PodiumPlace2.png")));
-	secondPlaceCup.setFitWidth(140);
-	secondPlaceCup.setFitHeight(140);
+	secondPlaceCup.setFitWidth(170);
+	secondPlaceCup.setFitHeight(170);
 	secondPlaceCup.setPreserveRatio(true);
 	secondPlaceCup.setSmooth(true);
 	secondPlaceCup.setCache(true);
@@ -205,17 +208,26 @@ public class EndGamePodiumController extends Application {
 	 */
 	
 	if(players>2) {
-	place.getChildren().addAll(firstPlaceCup, secondPlaceCup, thirdPlaceCup);
+	place.getChildren().addAll(secondPlaceCup, firstPlaceCup, thirdPlaceCup);
 	}else {
 		place.getChildren().addAll(firstPlaceCup, secondPlaceCup);
 	}
-	place.setPadding(new Insets(300,50,300,50));
+	place.setPadding(new Insets(20,500,20,500));
 	
+	/*
+	 * adding endgame text
+	 */
+	Text text = new Text("WINNER");
+	text.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 80));
+	text.setFill(Color.GOLD);
+	text.setStroke(Color.WHITE);
+	text.setStrokeWidth(2.0);
+
 	/*
 	 * adding the cups and avatars to the hBox
 	 */
 	
-	hBoxIcons.getChildren().addAll(place,avatars);
+	vBoxIcons.getChildren().addAll(text,avatars, place);
 	
 	/*
 	 * setting up back button
@@ -241,7 +253,7 @@ public class EndGamePodiumController extends Application {
 	 * adding everything to the top container
 	 */
 	
-	container.getChildren().addAll(backgroundH, backgroundColor, hBoxIcons, hBoxButton);	
+	container.getChildren().addAll(backgroundPic, backgroundColor, vBoxIcons, hBoxButton);	
 	
 	return container;
 	}
