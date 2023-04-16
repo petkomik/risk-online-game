@@ -49,6 +49,12 @@ public class Parameter {
 	public static final String hatBoy = avatarsdir + "hat-boy.png";
 	public static final String mustacheMan = avatarsdir + "mustache-man.png";
 
+	//army pngs 
+	public static final String armiesDir = resourcesdir + "armies-icons" + sep;
+	public static final String artillery = armiesDir + "artillery.png";
+	public static final String cavalry = armiesDir + "cavalry.png";
+	public static final String infantry = armiesDir + "infantry.png";
+
 
 	
 	
