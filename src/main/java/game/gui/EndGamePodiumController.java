@@ -179,9 +179,22 @@ public class EndGamePodiumController extends Application {
 	thirdPlaceCup.setSmooth(true);
 	thirdPlaceCup.setCache(true);
 	
+	/*
+	 * adding the cups to their vBox
+	 */
+	
 	place.getChildren().addAll(firstPlaceCup,secondPlaceCup,thirdPlaceCup);
 	place.setPadding(new Insets(300,50,300,50));
+	
+	/*
+	 * adding the cups and avatars to the hBox
+	 */
+	
 	hBox.getChildren().addAll(place,avatars);
+	
+	/*
+	 * adding everything to the top container
+	 */
 	
 	container.getChildren().addAll(backgroundH, backgroundColor,hBox);	
 	
