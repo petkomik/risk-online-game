@@ -9,17 +9,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import general.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
@@ -43,29 +46,44 @@ public class BattleFrameController {
 	// TODO
 	// controll the ints
 	int maxDiceToThrow;
-	public int chosenNumberOfDice;
+	int defendingDice;
+	int[] dicesAttacker;
+	int[] dicesDefender;
+	// negative attacker loses n troops, positive defender loses n, 0 both lose 1 {-2, -1, 0, 1, 2}
+	int lastThrow;
+	
 	Territory attacking;
 	Territory defending;
 	VBox root;
-	int[] dicesAttacker = new int[3];
-	int[] dicesDefender = new int[2];
 
+	ImageViewPane imgAttackingPane;
+	ImageViewPane imgDefendingPane;
+	FlowPane armiesFlowDf;
+	FlowPane armiesFlowAt;
+	
+	Label troopsTextAt;
+	Label troopsTextDf;
+
+	FlowPane diceImagesAt;
+	FlowPane diceImagesDf;
+	
 
 	public BattleFrameController() throws Exception {
-		this.maxDiceToThrow = 3;
-		this.chosenNumberOfDice = maxDiceToThrow;
 		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
 		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
 		// TODO remove
-		attacking.addNumberOfTroops(48);
-		defending.addNumberOfTroops(27);
+		attacking.addNumberOfTroops(40);
+		defending.addNumberOfTroops(40);
+		this.maxDiceToThrow = Math.min(3, attacking.getNumberOfTroops() - 1);
+		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
+		dicesAttacker = new int[this.maxDiceToThrow];
+		dicesDefender = new int[this.defendingDice];
 		this.root = this.setup();
 	}
 	
 	public BattleFrameController(Territory at, Territory df) throws Exception {
 		// TODO set correct max dice
 		this.maxDiceToThrow = 3;
-		this.chosenNumberOfDice = maxDiceToThrow;
 		this.attacking = at;
 		this.defending = df;
 		this.root = this.setup();
@@ -104,20 +122,13 @@ public class BattleFrameController {
 		attackingStack.setAlignment(Pos.CENTER);
 		HBox.setHgrow(attackingStack, Priority.ALWAYS);
 
-		FlowPane armiesFlowAt = new FlowPane();
-		armiesFlowAt.minHeightProperty().bind(imgAttackingPane.minHeightProperty());
-		armiesFlowAt.maxHeightProperty().bind(imgAttackingPane.maxHeightProperty());
-		armiesFlowAt.prefHeightProperty().bind(imgAttackingPane.prefHeightProperty());
-		
-		armiesFlowAt.minWidthProperty().bind(imgAttackingPane.minWidthProperty());
-		armiesFlowAt.maxWidthProperty().bind(imgAttackingPane.maxWidthProperty());
-		armiesFlowAt.prefWidthProperty().bind(imgAttackingPane.prefWidthProperty());
-		
+		armiesFlowAt = new FlowPane();
 		setCorrectTroops(armiesFlowAt, true);
 		armiesFlowAt.setAlignment(Pos.CENTER);
-		armiesFlowAt.setHgap(20);
+		armiesFlowAt.setHgap(30);
 		armiesFlowAt.setVgap(30);
-
+		
+		
 		attackingStack.getChildren().addAll(imgAttackingPane, armiesFlowAt);
 		
 		ImageView imgDefending = new ImageView();
@@ -126,27 +137,19 @@ public class BattleFrameController {
 		imgDefending.setSmooth(true);
 		imgDefending.setCache(true);
 		
-		ImageViewPane imgDefendingPane = new ImageViewPane(imgDefending);
+		imgDefendingPane = new ImageViewPane(imgDefending);
 		HBox.setHgrow(imgDefendingPane, Priority.ALWAYS);
 		
 		StackPane defendingStack = new StackPane();
 		defendingStack.setAlignment(Pos.CENTER);
 		HBox.setHgrow(defendingStack, Priority.ALWAYS);
 
-		FlowPane armiesFlowDf = new FlowPane();
-		armiesFlowDf.minHeightProperty().bind(imgDefendingPane.minHeightProperty());
-		armiesFlowDf.maxHeightProperty().bind(imgDefendingPane.maxHeightProperty());
-		armiesFlowDf.prefHeightProperty().bind(imgDefendingPane.prefHeightProperty());
-		
-		armiesFlowDf.minWidthProperty().bind(imgDefendingPane.minWidthProperty());
-		armiesFlowDf.maxWidthProperty().bind(imgDefendingPane.maxWidthProperty());
-		armiesFlowDf.prefWidthProperty().bind(imgDefendingPane.prefWidthProperty());
-		
+		armiesFlowDf = new FlowPane();
 		setCorrectTroops(armiesFlowDf, false);
 		armiesFlowDf.setAlignment(Pos.CENTER);
-		armiesFlowDf.setHgap(20);
+		armiesFlowDf.setHgap(30);
 		armiesFlowDf.setVgap(30);
-		
+	
 		defendingStack.getChildren().addAll(imgDefendingPane, armiesFlowDf);
 
 		GUISupportClasses.Spacing spacingImg = new GUISupportClasses.Spacing();
@@ -170,7 +173,7 @@ public class BattleFrameController {
 		 * Setting up bottom portion of window
 		 * Includes playerAt, playerDf - players avatar, color, number of troops
 		 * Includes diceSection - dice controls, dice images 
-		 */
+		 */	
 		
 		HBox diceAndProfile = new HBox();
 		
@@ -209,7 +212,7 @@ public class BattleFrameController {
 		circleTroopsAt.setStroke(Color.WHITE);
 		circleTroopsAt.setStrokeWidth(0);
 		
-		Label troopsTextAt = new Label(String.valueOf(attacking.getNumberOfTroops()));
+		troopsTextAt = new Label(String.valueOf(attacking.getNumberOfTroops() - 1));
 		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34));
 		troopsTextAt.setTextFill(Color.web("#303030"));
 		troopsTextAt.setMinWidth(80);
@@ -254,7 +257,7 @@ public class BattleFrameController {
 		circleTroopsDf.setStroke(Color.WHITE);
 		circleTroopsDf.setStrokeWidth(0);
 		
-		Label troopsTextDf = new Label(String.valueOf(defending.getNumberOfTroops()));
+		troopsTextDf = new Label(String.valueOf(defending.getNumberOfTroops()));
 		troopsTextDf.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34));
 		troopsTextDf.setTextFill(Color.web("#303030"));
 		troopsTextDf.setMinWidth(80);
@@ -279,7 +282,7 @@ public class BattleFrameController {
 
 		HBox numberOfDiceControls = new HBox();
 		GUISupportClasses.DesignButton lessBtn = new GUISupportClasses.DesignButton();
-		Label numberLabel = new Label("3");
+		Label numberLabel = new Label(String.valueOf(this.maxDiceToThrow));
 		GUISupportClasses.DesignButton moreBtn = new GUISupportClasses.DesignButton();
 		
 		HBox diceButtonPane = new HBox();
@@ -316,8 +319,8 @@ public class BattleFrameController {
 		 */
 
 		// TODO set correct number of dice
-		FlowPane diceImagesAt = diceImageFactory(maxDiceToThrow);
-		FlowPane diceImagesDf = diceImageFactory(2);
+		diceImagesAt = diceImageFactory(maxDiceToThrow);
+		diceImagesDf = diceImageFactory(defendingDice);
 		
 		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
@@ -326,7 +329,7 @@ public class BattleFrameController {
 		    	if (Integer.parseInt(numberLabel.getText()) > 1) {
 		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
 			    	numberLabel.setText(String.valueOf(i));
-			    	chosenNumberOfDice = i;
+			    	dicesAttacker = new int[dicesAttacker.length - 1];
 			    	diceImagesAt.getChildren().remove(0);
 			    	
 		    	}
@@ -341,7 +344,7 @@ public class BattleFrameController {
 		    	if (Integer.parseInt(numberLabel.getText()) < maxDiceToThrow) {
 		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
 			    	numberLabel.setText(String.valueOf(i));
-			    	chosenNumberOfDice = i;
+			    	dicesAttacker = new int[dicesAttacker.length + 1];
 			    	GUISupportClasses.DiceFactory newDice;
 					try {
 						newDice = new GUISupportClasses.DiceFactory((i*29)%6 + 1);
@@ -359,8 +362,13 @@ public class BattleFrameController {
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	
+				dicesAttacker = new int[dicesAttacker.length];
+				dicesDefender = new int[defendingDice];
+				
 		    	throwBtn.setDisable(true);
-		    	
+                lessBtn.setDisable(true);
+                moreBtn.setDisable(true);
+		    		    	
 		    	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(80.0), e -> {
 		    		
 		    		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
@@ -403,10 +411,47 @@ public class BattleFrameController {
     			);
     			timeline.setCycleCount(12);
     			timeline.play();
-                throwBtn.setDisable(false);
-                
-                
-                
+    			
+    			lastThrow--;
+    			
+    			timeline.setOnFinished(new EventHandler<ActionEvent>() {
+    			      @Override
+    			      public void handle(ActionEvent evt) {
+    			    	  
+    			    	  lastThrow = 0;
+    			    	  int maxDf = Arrays.stream(dicesDefender).max().getAsInt();
+    			    	  int maxAt = Arrays.stream(dicesAttacker).max().getAsInt();
+    			    	  
+    			    	  if (maxAt > maxDf) {
+    			    		  lastThrow++;  
+    			    	  } else {
+    			    		  lastThrow--;  
+    			    	  }
+    			    	  
+    			    	  if(dicesDefender.length == 2 && dicesAttacker.length > 1) {
+        			    	  int nextDf = Arrays.stream(dicesDefender).min().getAsInt();
+        			    	  
+        			    	  int minAt = Arrays.stream(dicesAttacker).min().getAsInt();
+        			    	  int nextAt = Arrays.stream(dicesAttacker).sum() - minAt - maxAt ;
+
+        			    	  if (nextAt > nextDf) {
+        			    		  lastThrow++;  
+        			    	  } else {
+        			    		  lastThrow--;  
+        			    	  }
+    			    	  }
+    			    	     			    	  
+    			    	try {
+							updateTroops();
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						} 
+
+		                throwBtn.setDisable(false);
+		                lessBtn.setDisable(false);
+		                moreBtn.setDisable(false);
+		                    			      }
+    			    });            
             }
 		       
 	    });
@@ -467,22 +512,24 @@ public class BattleFrameController {
 		int inf = 0;
 		int cav = 0;
 		int art = 0;
+		
 		Territory territ;
 		int numberTroops;
-	
+		int leftOverSoldier = attacking ? 1 : 0;
+			
 		if(attacking) {
 			territ = this.attacking;
 		} else {
 			territ = this.defending;
 		}
 		
-		numberTroops = territ.getNumberOfTroops();
-		
+		numberTroops = Math.min(40 + (territ.getNumberOfTroops() - leftOverSoldier) % 10, territ.getNumberOfTroops() - leftOverSoldier);
+
 		while (numberTroops > 0) {
-			if (numberTroops > 10) {
+			if (numberTroops >= 10) {
 				numberTroops -= 10;
 				art++;
-			} else if (numberTroops > 4) {
+			} else if (numberTroops >= 5) {
 				numberTroops -= 5;
 				cav++;
 			} else {
@@ -494,6 +541,8 @@ public class BattleFrameController {
 		ImageView[] artAr = new ImageView[art];
 		ImageView[] cavAr = new ImageView[cav];
 		ImageView[] infAr = new ImageView[inf];
+		
+		flow.getChildren().removeAll(flow.getChildren());
 				
 		for(ImageView iv : artAr) {
 			iv = new ImageView();
@@ -503,6 +552,7 @@ public class BattleFrameController {
 			iv.setCache(true);
 			iv.setFitHeight(220);
 			flow.getChildren().add(iv);		
+
 		}
 		
 		for(ImageView iv : cavAr) {
@@ -513,6 +563,7 @@ public class BattleFrameController {
 			iv.setCache(true);
 			iv.setFitHeight(200);
 			flow.getChildren().add(iv);		
+
 		}
 		
 		for(ImageView iv : infAr) {
@@ -522,8 +573,49 @@ public class BattleFrameController {
 			iv.setSmooth(true);
 			iv.setCache(true);
 			iv.setFitHeight(150);
-			flow.getChildren().add(iv);		
+			flow.getChildren().add(iv);	
 			
 		}
+		
+		if(flow.getChildren().size() > 8 || art > 2) {
+			flow.maxWidth(1200);
+		} else if (art == 2) {
+			flow.setMaxWidth(700);
+		} else if (art == 1 && cav == 1) {
+			flow.setMaxWidth(600);
+		} else {
+			flow.setMaxWidth(400);
+		}	
 	}	
+	
+	public void updateTroops() throws FileNotFoundException {
+		
+		if(this.lastThrow < 0) {
+			this.attacking.removeNumberOfTroops(-1 * this.lastThrow);
+		} else if (this.lastThrow > 0) {
+			this.defending.removeNumberOfTroops(this.lastThrow);
+		} else {
+			this.attacking.removeNumberOfTroops(1);
+			this.defending.removeNumberOfTroops(1);
+
+		}
+		
+		if(this.defending.getNumberOfTroops() == 1) {
+			this.defendingDice = 1;
+			diceImagesDf = diceImageFactory(defendingDice); 
+		}
+		
+		if(this.defending.getNumberOfTroops() == 0) {
+			// TODO stop
+		} else if(this.attacking.getNumberOfTroops() == 0) {
+			// TODO stop
+		}
+		
+		this.setCorrectTroops(armiesFlowAt, true);
+		this.setCorrectTroops(armiesFlowDf, false);
+		
+		troopsTextAt.setText(String.valueOf(attacking.getNumberOfTroops() - 1));
+		troopsTextDf.setText(String.valueOf(defending.getNumberOfTroops()));
+
+	}
 }
