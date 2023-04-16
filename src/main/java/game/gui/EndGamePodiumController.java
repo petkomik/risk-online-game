@@ -142,6 +142,7 @@ public class EndGamePodiumController extends Application {
 	Circle circleThirdP = new Circle(70);
 	ImageView circleThirdI = new ImageView();
 	//TODO set up the right color
+	if(players>2) {
 	circleThirdP.setFill(Parameter.yellowColor);
 	circleThirdP.setStroke(Color.WHITE);
 	circleThirdP.setStrokeWidth(6);
@@ -156,8 +157,16 @@ public class EndGamePodiumController extends Application {
 	circleThirdI.setCache(true);
 
 	thirdP.getChildren().add(circleThirdI);
-
+	}
+	
+	/*
+	 * adding the avatars to their box
+	 */
+	if (players>2) {
 	avatars.getChildren().addAll(firstP, secondP, thirdP);
+	}else {
+		avatars.getChildren().addAll(firstP,secondP);
+	}
 	avatars.setPadding(new Insets(300,50,300,50));
 	 
 	/*
@@ -181,18 +190,25 @@ public class EndGamePodiumController extends Application {
 	secondPlaceCup.setCache(true);
 	
 	ImageView thirdPlaceCup = new ImageView();
+	
+	if(players>2) {
 	thirdPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "PodiumPlace3.png")));
 	thirdPlaceCup.setFitWidth(140);
 	thirdPlaceCup.setFitHeight(140);
 	thirdPlaceCup.setPreserveRatio(true);
 	thirdPlaceCup.setSmooth(true);
 	thirdPlaceCup.setCache(true);
+	}
 	
 	/*
 	 * adding the cups to their vBox
 	 */
 	
+	if(players>2) {
 	place.getChildren().addAll(firstPlaceCup, secondPlaceCup, thirdPlaceCup);
+	}else {
+		place.getChildren().addAll(firstPlaceCup, secondPlaceCup);
+	}
 	place.setPadding(new Insets(300,50,300,50));
 	
 	/*
