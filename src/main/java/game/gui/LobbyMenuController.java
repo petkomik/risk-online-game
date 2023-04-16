@@ -27,6 +27,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+/*
+ * Class for the Battle Frame
+ * 
+ * @author pmikov
+ * 
+ */
+
 public class LobbyMenuController extends Application {
 
 	@Override

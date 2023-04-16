@@ -53,20 +53,12 @@ public class StartPaneController implements Initializable{
 		
 		(new GameSound()).buttonClickForwardSound();
 		Node node = (Node)e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage)node.getScene().getWindow();
-		BattleFrameController battle = new BattleFrameController();
-		stage.getScene().setRoot(battle.root);
-		// Showing the Stage
-		stage.show();
-		/*
-		Node node = (Node)e.getSource();
 		stage = (Stage)node.getScene().getWindow();
 		anchorPane = (AnchorPane) loadFXML("userAccess");
 		anchorPane.setPrefSize(w, h);
 		stage.getScene().setRoot(anchorPane);
 		stage.show();
-		 */
+		 
 	}
 	/**
      * 

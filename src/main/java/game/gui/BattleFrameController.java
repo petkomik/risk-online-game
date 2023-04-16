@@ -1,7 +1,6 @@
 package game.gui;
 
-import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.DiceFactory;
+import game.gui.GUISupportClasses.*;
 import game.models.Continent;
 import game.models.CountryName;
 import game.models.Territory;
@@ -33,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 
 /*
@@ -76,8 +76,8 @@ public class BattleFrameController {
 		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
 		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
 		// TODO remove
-		attacking.addNumberOfTroops(4);
-		defending.addNumberOfTroops(2);
+		attacking.addNumberOfTroops(24);
+		defending.addNumberOfTroops(20);
 		this.maxDiceToThrow = Math.min(3, attacking.getNumberOfTroops() - 1);
 		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
 		dicesAttacker = new int[this.maxDiceToThrow];
@@ -153,10 +153,12 @@ public class BattleFrameController {
 		armiesFlowDf.setAlignment(Pos.CENTER);
 		armiesFlowDf.setHgap(30);
 		armiesFlowDf.setVgap(30);
+		armiesFlowDf.setRotationAxis(Rotate.Y_AXIS);
+		armiesFlowDf.setRotate(180);
 	
 		defendingStack.getChildren().addAll(imgDefendingPane, armiesFlowDf);
 
-		GUISupportClasses.Spacing spacingImg = new GUISupportClasses.Spacing();
+		Spacing spacingImg = new Spacing();
 		HBox.setHgrow(spacingImg, Priority.SOMETIMES);
 
 		imgTerritories.getChildren().addAll(attackingStack, spacingImg, defendingStack);
@@ -168,7 +170,7 @@ public class BattleFrameController {
 		 * Add both imgTerritories, spacingRoot to the root vBox
 		 */
 		
-		GUISupportClasses.Spacing spacingRoot = new GUISupportClasses.Spacing();
+		Spacing spacingRoot = new Spacing();
 		vBox.getChildren().addAll(imgTerritories, spacingRoot);
 		VBox.setVgrow(spacingRoot, Priority.SOMETIMES);
 		VBox.setVgrow(imgTerritories, Priority.ALWAYS);
@@ -290,7 +292,7 @@ public class BattleFrameController {
 		moreBtn = new DesignButton();
 		
 		HBox diceButtonPane = new HBox();
-		GUISupportClasses.DesignButton throwBtn = new GUISupportClasses.DesignButton();
+		DesignButton throwBtn = new DesignButton();
 
 		lessBtn.setText("<");
 		moreBtn.setText(">");
@@ -349,9 +351,9 @@ public class BattleFrameController {
 		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
 			    	numberLabel.setText(String.valueOf(i));
 			    	dicesAttacker = new int[dicesAttacker.length + 1];
-			    	GUISupportClasses.DiceFactory newDice;
+			    	DiceFactory newDice;
 					try {
-						newDice = new GUISupportClasses.DiceFactory((i*29)%6 + 1, true);
+						newDice = new DiceFactory((i*29)%6 + 1, true);
 				    	diceImagesAt.getChildren().add(newDice);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -463,8 +465,8 @@ public class BattleFrameController {
 		 * Packing children into parent containers
 		 */
 		
-		GUISupportClasses.Spacing spacingControls1 = new GUISupportClasses.Spacing();
-		GUISupportClasses.Spacing spacingControls2 = new GUISupportClasses.Spacing();
+		Spacing spacingControls1 = new Spacing();
+		Spacing spacingControls2 = new Spacing();
 
 		diceAndProfile.getChildren().addAll(playerAt, spacingControls1, diceSection, spacingControls2, playerDf);
 		diceAndProfile.setPadding(new Insets(0, 120, 50, 120));
@@ -492,9 +494,9 @@ public class BattleFrameController {
 		diceImages.setVgap(20);
 		
 		// TODO
-		GUISupportClasses.DiceFactory[] dices = new GUISupportClasses.DiceFactory[k];
+		DiceFactory[] dices = new DiceFactory[k];
 		for(int i = 0; i < dices.length; i++) {
-			dices[i] = new GUISupportClasses.DiceFactory((i*29)%6 + 1, at);
+			dices[i] = new DiceFactory((i*29)%6 + 1, at);
 			diceImages.getChildren().add(dices[i]);
 		}
 	
