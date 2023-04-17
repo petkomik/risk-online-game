@@ -43,6 +43,7 @@ public class ServerMainWindowController extends Application {
 	StackPane container;
 	HBox backgroundPic;
 	VBox scrollAndMenu;
+	static int counter = 0;
 	
 	ScrollPane lobbyListContainer;
 	
@@ -246,7 +247,8 @@ public class ServerMainWindowController extends Application {
 			(new GameSound()).buttonClickForwardSound();
 			
 			try {
-				lobbies.put("avatars_name",createLobby());
+				lobbies.put("avatars_name " + counter,createLobby());
+				counter++;
 			} 
 			catch (Exception e) {
 				e.printStackTrace();
@@ -337,7 +339,7 @@ public class ServerMainWindowController extends Application {
             if (newValue) {
             	joinButton.setStyle("-fx-background-color: #b87331;"
         				+ "-fx-background-radius: 15;"
-        				+ "-fx-border-radius: 15;"
+        				+ "-fx-border-radius: 10;"
             			+ "-fx-border-color: #ffffff;"
             			+ "-fx-border-width: 3px;");
             } else {
