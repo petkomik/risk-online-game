@@ -1,10 +1,13 @@
 package game.gui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import general.Parameter;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -93,6 +96,18 @@ public class MainMenuPaneController implements Initializable{
 		stage.getScene().setRoot(battle);
 		battle.setCorrectTroops(battle.armiesFlowAt, true);
 		battle.setCorrectTroops(battle.armiesFlowDf, false);
+		stage.getScene().heightProperty().addListener(new ChangeListener<Number>() {
+		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+		    	if(newSceneHeight.doubleValue() != oldSceneHeight.doubleValue()) {
+		    		try {
+						battle.setCorrectTroops(battle.armiesFlowAt, true);
+						battle.setCorrectTroops(battle.armiesFlowDf, false);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+		    	}
+		    }
+		});
 		// Showing the Stage
 		stage.show();
 		
