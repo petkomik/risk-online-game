@@ -31,7 +31,7 @@ public class HostServerMessengerController implements Initializable {
 
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
-
+//sda
 	@FXML
 	private Button sendButton;
 	@FXML
