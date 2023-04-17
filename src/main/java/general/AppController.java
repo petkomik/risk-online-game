@@ -4,6 +4,7 @@ package general;
 import database.PlayerProfileHandler;
 import database.Profile;
 import game.exceptions.WrongTextFieldInputException;
+import game.stateClient.GameStateClient;
 import network.Client;
 
 /**
@@ -17,6 +18,7 @@ public class AppController {
 	private static Profile profile;
 	private static AppController appController = new AppController();
 	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
+	private static GameStateClient gameStateClient;
 	//private static GameMultiplayerController multiplayerGameController;
 	private static int portNumber = Parameter.portDefault;
 	private static String host = Parameter.hostDefault;
@@ -69,14 +71,18 @@ public class AppController {
 	}
 	
 	public static void updateProfile(String value,String attribute) {
-		PlayerProfileHandler pph = new PlayerProfileHandler();
-		pph.updateProfileInfo(value, attribute, AppController.profile);
+		dbH.updateProfileInfo(value, attribute, AppController.profile);
 		AppController.profile.setAttribute(attribute, value);
 	}
 	
 	public static void deleteProfile() {
-		// PlayerProfileHandler pph = new PlayerProfileHandler();
 		dbH.deleteProfile(AppController.profile.getId());
+	}
+	
+	public static void logoutAndSetValuesToNull() {
+		profile = null;
+		client = null;
+		gameStateClient = null;
 	}
 	
 	public static AppController getInstance() {

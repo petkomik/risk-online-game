@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import general.AppController;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,7 +15,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -155,6 +159,9 @@ public class MainMenuPaneController implements Initializable{
 	
 	public void logoutProfile(ActionEvent e) throws IOException {
 		(new GameSound()).buttonClickForwardSound();
+		
+		AppController.logoutAndSetValuesToNull();
+		
 		Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
 		stage = (Stage)node.getScene().getWindow();
@@ -166,6 +173,7 @@ public class MainMenuPaneController implements Initializable{
 		stage.getScene().setRoot(anchorPane);
 		// Showing the Stage
 		stage.show();
+		
 	}
 
 //	public void clickDisplayStatistics(ActionEvent e) throws IOException {
