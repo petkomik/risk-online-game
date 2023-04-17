@@ -37,6 +37,8 @@ public class MainMenuPaneController implements Initializable{
 	private Button singleplayerButton;
 	@FXML
 	private Button multiplayerButton;
+	@FXML
+	private Button logoutButton;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -63,6 +65,12 @@ public class MainMenuPaneController implements Initializable{
 		profileSettingsButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		singleplayerButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		multiplayerButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		
+		logoutButton.setPrefSize(btnW, btnH);
+		logoutButton.setLayoutX(w * 0.7);
+		logoutButton.setLayoutY(h * 0.7);
+		logoutButton.setStyle("-fx-font-size: " + fontSize + "px;");
+
 	}
 	
 	/**
@@ -144,6 +152,22 @@ public class MainMenuPaneController implements Initializable{
 		stage.show();
 		
 	}
+	
+	public void logoutProfile(ActionEvent e) throws IOException {
+		(new GameSound()).buttonClickForwardSound();
+		Node node = (Node)e.getSource();
+		// Getting the Stage where the event is happened
+		stage = (Stage)node.getScene().getWindow();
+		// changing the AnchorPane from the main file
+		anchorPane = (AnchorPane) loadFXML("userAccess");
+		// Setting the size of the anchorPane
+		anchorPane.setPrefSize(w, h);
+		// Setting the AnchorPane as a root of the main scene
+		stage.getScene().setRoot(anchorPane);
+		// Showing the Stage
+		stage.show();
+	}
+
 //	public void clickDisplayStatistics(ActionEvent e) throws IOException {
 //		Node node = (Node)e.getSource();
 //		// Getting the Stage where the event is happened

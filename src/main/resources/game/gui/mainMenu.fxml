@@ -9,5 +9,6 @@
       <Button fx:id="profileSettingsButton" mnemonicParsing="false" onAction="#showUpdateSettingsScene" text="PROFILE SETTINGS" />
       <Button fx:id="singleplayerButton" mnemonicParsing="false" onAction="#showSingleplayerScene" text="SINGLEPLAYER" />
       <Button fx:id="multiplayerButton" mnemonicParsing="false" onAction="#showMultiplayerScene" text="MULTIPLAYER" />
+      <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logoutProfile" text="LOGOUT" />
    </children>
 </AnchorPane>
