@@ -154,12 +154,19 @@ public class GUISupportClasses {
 		
 		public ArrowButton(int i) {
 			this();
+			if(i!=45) {
 			this.setFont(Font.font("Consolas", FontWeight.BLACK, 26));
 			this.setMaxSize(30, 30);
 			this.setMinSize(30, 30);
 			this.setPrefSize(30, 30);
 			this.setPadding(new Insets(-5, 0, 0, 0));
-
+			}
+			else {
+			this.setFont(Font.font("Consolas", FontWeight.BLACK, 26));
+			this.setMaxSize(45, 45);
+			this.setMinSize(45, 45);
+			this.setPrefSize(45, 45);
+			this.setPadding(new Insets(0, 0, 0, 0));			}
 			
 		}
 	}
