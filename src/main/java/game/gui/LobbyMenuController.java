@@ -1,24 +1,20 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
 import general.Parameter;
-import javafx.application.Application;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
@@ -31,7 +27,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 
 /*
  * Class for the Battle Frame
@@ -44,7 +39,6 @@ import javafx.stage.Stage;
 
 public class LobbyMenuController extends StackPane {
 	
-	FlowPane playerCardsPane;
 	Lobby lobby;
 	
 	//
@@ -54,6 +48,50 @@ public class LobbyMenuController extends StackPane {
 	int maxNumberOfPlayers = 6;
 	int difficultyOfAI = 0;
 	String[] aiDifficultyLevels = {"easy", "hard", "jojo"};
+	
+	VBox vBox;
+	ImageView imgBackground;
+	ImageViewPane imgBackgroundPane;
+	VBox vBoxColor;
+	VBox contentVBox;
+	
+	HBox topBannerParent;
+	HBox topBannerContent;
+	ArrowButton backButton;
+	Label lobbyTextBanner;
+
+	HBox mainContent;
+	FlowPane playerCardsPane;
+
+	VBox settingsReadyPane;		
+	VBox settingsPane;
+	HBox settingsBanner;
+	Label settingsName;
+	VBox settingsControlPane;
+		
+	VBox numberPlayersDiv;
+	Label numberPlayersLabel;
+	HBox numberPlayersControls;
+	ArrowButton lessBtnPlayers;
+	Label labelBtnPlayers;
+	ArrowButton moreBtnPlayers;
+			
+	VBox numberOfAiDiv;
+	Label numberOfAiLabel;
+	HBox numberOfAiControls;
+	ArrowButton lessBtnAI;
+	Label labelBtnAI;
+	ArrowButton moreBtnAI;
+
+	VBox AIDifficultyDiv;
+	Label AIDifficultyLabel;
+	HBox AIDifficultyControls;
+	ArrowButton lessBtnDiff;
+	Label labelBtnDiff;
+	ArrowButton moreBtnDiff;
+			
+	HBox readyButtonPane;
+	DesignButton readyBtn;
 		
 	public LobbyMenuController() throws Exception {
 		this.setup();		
@@ -82,17 +120,17 @@ public class LobbyMenuController extends StackPane {
 		 * Background map image
 		 */
 		
-		VBox vBox = new VBox();
+		vBox = new VBox();
 		vBox.setAlignment(Pos.CENTER);
 		vBox.setFillWidth(true);
 
-		ImageView imgBackground = new ImageView();
+		imgBackground = new ImageView();
 		imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
 		imgBackground.setPreserveRatio(false);
 		imgBackground.setSmooth(true);
 		imgBackground.setCache(true);
 		
-		ImageViewPane imgBackgroundPane = new ImageViewPane(imgBackground);
+		imgBackgroundPane = new ImageViewPane(imgBackground);
 		VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
 		
 		vBox.getChildren().add(imgBackgroundPane);
@@ -102,14 +140,14 @@ public class LobbyMenuController extends StackPane {
 		 * Color mask
 		 */
 		
-		VBox vBoxColor = new VBox();
+		vBoxColor = new VBox();
 		vBoxColor.setAlignment(Pos.CENTER);
 		vBoxColor.setFillWidth(true);
 		vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
 		
 		this.getChildren().addAll(vBox, vBoxColor);
 		
-		VBox contentVBox = new VBox();
+		contentVBox = new VBox();
 		contentVBox.setAlignment(Pos.CENTER);
 
 		/*
@@ -118,12 +156,12 @@ public class LobbyMenuController extends StackPane {
 		 * topBannerContent has a back Button, Label and a spacing inbetween
 		 */
 		
-		HBox topBannerParent = new HBox(); 
+		topBannerParent = new HBox(); 
 		topBannerParent.setAlignment(Pos.TOP_LEFT);
 		StackPane.setMargin(topBannerParent, new Insets(50,0,0,0));
 		topBannerParent.setPickOnBounds(false);
 
-		HBox topBannerContent = new HBox();
+		topBannerContent = new HBox();
 		topBannerContent.setAlignment(Pos.CENTER);
 		topBannerContent.setStyle("-fx-background-color: "
 				+ "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
@@ -136,12 +174,12 @@ public class LobbyMenuController extends StackPane {
 		topBannerContent.setPrefHeight(100);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 		
-		ArrowButton backButton = new ArrowButton();
+		backButton = new ArrowButton();
 		
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
 		
-		Label lobbyTextBanner = new Label("LOBBY");
+		lobbyTextBanner = new Label("LOBBY");
 		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60));
 		lobbyTextBanner.setTextFill(Color.WHITE);
 		
@@ -159,7 +197,7 @@ public class LobbyMenuController extends StackPane {
 		 * settingsReadyPane includes settings controlls and ready button
 		 */
 
-		HBox mainContent = new HBox();
+		mainContent = new HBox();
 		mainContent.setAlignment(Pos.CENTER);
 		mainContent.setSpacing(50);
 		mainContent.setFillHeight(true);
@@ -179,35 +217,35 @@ public class LobbyMenuController extends StackPane {
 		
 		setUpPlayerCards();
 		
-		VBox settingsReadyPane = new VBox();		
-		VBox settingsPane = new VBox();
-		HBox settingsBanner = new HBox();
-		VBox settingsControlPane = new VBox();
-		Label settingsName = new Label("SETTINGS");
+		settingsReadyPane = new VBox();		
+		settingsPane = new VBox();
+		settingsBanner = new HBox();
+		settingsControlPane = new VBox();
+		settingsName = new Label("SETTINGS");
 		
-		VBox numberPlayersDiv = new VBox();
-		Label numberPlayersLabel = new Label("Number of Players");
-		HBox numberPlayersControls = new HBox();
-		ArrowButton lessBtnPlayers = new ArrowButton(1);
-		Label labelBtnPlayers = new Label();
-		ArrowButton moreBtnPlayers = new ArrowButton(1);
+		numberPlayersDiv = new VBox();
+		numberPlayersLabel = new Label("Number of Players");
+		numberPlayersControls = new HBox();
+		lessBtnPlayers = new ArrowButton(1);
+		labelBtnPlayers = new Label();
+		moreBtnPlayers = new ArrowButton(1);
 		
-		VBox numberOfAiDiv = new VBox();
-		Label numberOfAiLabel = new Label("Number of AI Players");
-		HBox numberOfAiControls = new HBox();
-		ArrowButton lessBtnAI = new ArrowButton(1);
-		Label labelBtnAI= new Label("0");
-		ArrowButton moreBtnAI = new ArrowButton(1);
+		numberOfAiDiv = new VBox();
+		numberOfAiLabel = new Label("Number of AI Players");
+		numberOfAiControls = new HBox();
+		lessBtnAI = new ArrowButton(1);
+		labelBtnAI= new Label("0");
+		moreBtnAI = new ArrowButton(1);
 		
-		VBox AIDifficultyDiv = new VBox();
-		Label AIDifficultyLabel = new Label("AI Player Difficulty");
-		HBox AIDifficultyControls = new HBox();
-		ArrowButton lessBtnDiff= new ArrowButton(1);
-		Label labelBtnDiff= new Label();
-		ArrowButton moreBtnDiff = new ArrowButton(1);
+		AIDifficultyDiv = new VBox();
+		AIDifficultyLabel = new Label("AI Player Difficulty");
+		AIDifficultyControls = new HBox();
+		lessBtnDiff = new ArrowButton(1);
+		labelBtnDiff = new Label();
+		moreBtnDiff = new ArrowButton(1);
 		
-		HBox readyButtonPane = new HBox();
-		DesignButton readyBtn = new DesignButton(new Insets(5, 80, 5, 80));
+		readyButtonPane = new HBox();
+		readyBtn = new DesignButton(new Insets(5, 80, 5, 80));
 		
 		/*
 		 * Settings Pane
@@ -463,6 +501,5 @@ public class LobbyMenuController extends StackPane {
 		 
 		}
 
-		
 	}
 }
