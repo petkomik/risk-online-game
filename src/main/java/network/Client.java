@@ -8,12 +8,16 @@ import java.util.Scanner;
 
 import database.Profile;
 import game.gui.HostServerMessengerController;
+import game.gui.JoinClientMessengerController;
 import general.AppController;
 import javafx.scene.layout.VBox;
 import network.messages.Message;
 import network.messages.MessageConnect;
+import network.messages.MessageDisconnect;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
+import network.messages.MessageServerCloseConnection;
+import network.messages.MessageToPerson;
 
 public class Client {
 	private Socket socket;
@@ -35,14 +39,24 @@ public class Client {
 			//this.sendMessage(new MessageConnect(profile));
 			//newlineofCode
 		} catch (IOException e) {
+			System.out.println("DSICONNECT");
+			// System.out.println(
+			// "Player " + (((MessageConnect) message).getPlayername()) + " has been
+			// connected ");
+			MessageDisconnect disconnectMessage = new MessageDisconnect(profile);
+			sendMessage(disconnectMessage);
 			closeEverything(socket, inputStream, outputStream);
 			e.printStackTrace();
 		}
 
 	}
+	public void closeEverything() {
 
+		closeEverything(socket, inputStream, outputStream);
+		System.out.println("Closing  works");
+	}
 	private void closeEverything(Socket socket2, ObjectInputStream inputStream2, ObjectOutputStream outputStream2) {
-
+		System.out.println("Close everything 2");
 		try {
 			if (socket2 != null) {
 				socket2.close();
@@ -104,7 +118,7 @@ public class Client {
 	}
 	public void sendMessage(Message message) {
 		try {
-			outputStream.writeObject(new MessageSend(userName + ": " + message));
+			outputStream.writeObject( message);
 			outputStream.flush();
 		} catch (IOException e) {
 			closeEverything(socket, inputStream, outputStream);
@@ -128,10 +142,33 @@ public class Client {
 							break;
 						case Connect:
 							System.out.println("case MessageConnect Success 1 ");
-							//System.out.println(
-								//	"Player " + (((MessageConnect) message).getPlayername()) + " has been connected ");
-							HostServerMessengerController.addLabel("Player " + ((MessageConnect) message).getPlayername() + " has been connected", vBoxMessages);
-						break;
+							// System.out.println(
+							// "Player " + (((MessageConnect) message).getPlayername()) + " has been
+							// connected ");
+							HostServerMessengerController.addLabel(
+									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
+									vBoxMessages);
+							break;
+						case Disconnect:
+							System.out.println("case MessageConnect Success 2 ");
+							HostServerMessengerController.addLabel(
+									"Player " + ((MessageDisconnect) message).getPlayername() + " has disconnected",
+									vBoxMessages);
+							break;
+						case MessageServerCloseConnection:
+							System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
+//							JoinClientMessengerController
+//									.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);	
+							JoinClientMessengerController
+							.addLabel("Host has disconnected, please reconnect", vBoxMessages);
+							closeEverything(socket, inputStream, outputStream);
+							Server.closeServerSocket();
+							break;
+						case MessageToPerson:
+							System.out.println("case 4 in Handler");
+							JoinClientMessengerController
+							.addLabel("Message From " + ((MessageToPerson) message).getTo() + ":" + ((MessageSend) message).getMessage() , vBoxMessages);
+							break;
 						default:
 							break;
 
@@ -162,4 +199,8 @@ public class Client {
 		return profile;
 	}
 
+
+	
+	
+	
 }

@@ -14,6 +14,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="mapBackground" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="game.gui.HostServerMessengerController">
    <children>
 	  <Button fx:id="sendButton" mnemonicParsing="false" text="SEND" />
+	  <Button fx:id="disconnectButton" mnemonicParsing="false" onAction="#disconnectB" text="DISCONNECT" />
 	  <TextField fx:id="textFieldMessage"/>
 	  <ScrollPane fx:id="scrollPaneMain">
 		  <content>

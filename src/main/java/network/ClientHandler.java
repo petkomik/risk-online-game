@@ -7,10 +7,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import database.Profile;
+import game.gui.HostServerMessengerController;
+import game.gui.MainApp;
 import network.messages.Message;
 import network.messages.MessageConnect;
+import network.messages.MessageDisconnect;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
+import network.messages.MessageToPerson;
 
 public class ClientHandler implements Runnable {
 
@@ -20,7 +24,8 @@ public class ClientHandler implements Runnable {
 	private ObjectOutputStream objectOutputStream;
 	private Profile profile;
 	private String clientUsername;
-
+	
+	
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
 
@@ -32,14 +37,18 @@ public class ClientHandler implements Runnable {
 			this.clientUsername = profile.getUserName();
 			clientHandlers.add(this);
 			broadcastMessage(new MessageConnect(profile) );
+			
 		} catch (IOException | ClassNotFoundException e) {
+			MessageDisconnect disconnect = new MessageDisconnect(profile);
+			broadcastMessage(disconnect);
+			System.out.println("case CLientHandler Ecxeptions ");
 			closeEverything(socket, objectInputStream, objectOutputStream);
 			e.printStackTrace();
 		}
 
 	}
 
-	private void broadcastMessage(Message message) {
+	public void broadcastMessage(Message message) {
 		for (ClientHandler clientHandler : clientHandlers) {
 			try {
 				if (!clientHandler.clientUsername.equals(clientUsername)) {
@@ -51,13 +60,33 @@ public class ClientHandler implements Runnable {
 				e.printStackTrace();
 			}
 		}
-// methode for one to one  player
 	}
+		public void personalMessage(Message message,Client from, String to) {
+			for (ClientHandler clientHandler : clientHandlers) {
+				try {
+					if (clientHandler.clientUsername.contentEquals(to)) {
+						System.out.println("that is what TO is: ");
+					
+						clientHandler.objectOutputStream.writeObject(message);
+						clientHandler.objectOutputStream.flush();
+						
+					}
+				}
+				 catch (IOException e) {
+					closeEverything(socket, objectInputStream, objectOutputStream);
+					e.printStackTrace();
+					
+				}
+			}
+			
+		}
+// methode for one to one  player
+	
 
 	public void removeClientHandler() {
 
 		clientHandlers.remove(this);
-		broadcastMessage(new MessageSend("Server:  " + this.clientUsername + " has left the chat"));
+		
 
 	}
 
@@ -80,7 +109,21 @@ public class ClientHandler implements Runnable {
 					System.out.println("case MessageConnect in Handler Succes 1 ");
 					break;
 				case Disconnect:
-					// Handle the disconnect message
+					System.out.println("case MessageDisconnect Server Success 3 ");
+					broadcastMessage(messageFromClient);
+					break;
+				case MessageServerCloseConnection:
+					System.out.println("case MessageDisconnect Server Success 3 ");
+					broadcastMessage(messageFromClient);
+					closeEverything(socket, objectInputStream, objectOutputStream);
+					
+//					JoinClientMessengerController
+//							.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);
+					break;
+				case MessageToPerson:
+					System.out.println("case 4 in Handler");
+					personalMessage(messageFromClient, ((MessageToPerson) messageFromClient).getFrom(), ((MessageToPerson) messageFromClient).getTo());
+					
 					break;
 				case MessageProfile:
 					// Handle the message profile message
@@ -124,8 +167,11 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
-
-	private void closeEverything(Socket socket2, ObjectInputStream objectInputStream2,
+	public void closeEverything(){
+		closeEverything(socket, objectInputStream, objectOutputStream);
+		
+	}
+	public void closeEverything(Socket socket2, ObjectInputStream objectInputStream2,
 			ObjectOutputStream objectOutputStream2) {
 		removeClientHandler();
 		try {
@@ -142,6 +188,8 @@ public class ClientHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	
+		
 
 	}
 }
