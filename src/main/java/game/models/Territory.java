@@ -11,7 +11,7 @@ import general.Parameter;
  *
  */
 
-public class Territory {
+public class Territory implements Cloneable {
 	
 	private Player ownedByPlayer;
 	private final Continent continent;
@@ -26,6 +26,20 @@ public class Territory {
 		neighboringTerritories = new ArrayList<>();
 		addressToPNG = Parameter.territoryPNGdir + continent.toString().toLowerCase() + "-" + 
 						countryName.toString().toLowerCase() + ".png";
+	}
+	
+	/**constructor for defensive copying*/
+	public Territory(Territory territory) {
+		this.ownedByPlayer = territory.getOwnedByPlayer() != null ? new Player(territory.getOwnedByPlayer()) : null;
+		this.continent = territory.getContinent();
+		this.numberOfTroops = territory.getNumberOfTroops();
+		this.countryName = territory.getCountryName();
+		// Defensive copy of neighboringTerritories
+		this.neighboringTerritories = new ArrayList<>(territory.getNeighboringTerritories());
+//		this.neighboringTerritories = territory.getNeighboringTerritories().stream()
+//                .map(Territory::new)
+//                .collect(Collectors.toCollection(ArrayList::new));
+		this.addressToPNG = territory.getAddressToPNG();
 	}
 	
 	
@@ -66,6 +80,11 @@ public class Territory {
 	}
 	public void setNeighboringTerritories(ArrayList<Territory> territoryNeighbours) {
 		this.neighboringTerritories = territoryNeighbours;
+	}
+	
+	@Override
+	public Territory clone() {
+		return new Territory(this);
 	}
 	
 }

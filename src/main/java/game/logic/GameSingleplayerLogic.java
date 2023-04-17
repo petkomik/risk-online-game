@@ -107,12 +107,14 @@ public class GameSingleplayerLogic extends GameLogic {
 			throw new WrongCountryException("The Countrys you have choosen are not neighbors", countryTo);
 		}
 
+		// dice throws are generated random
 		int[] diceNumberAttacker = new int[troops];
 		for (int i = 0; i < troops; i++) {
 			diceNumberAttacker[i] = getRandomDiceNumber();
 		}
 		diceNumberAttacker = Arrays.stream(diceNumberAttacker).boxed().sorted(Comparator.reverseOrder())
 				.mapToInt(Integer::intValue).toArray();
+		 // set Dices Accordingly
 
 		int[] diceNumberDefender = new int[territories.get(countryTo).getNumberOfTroops() > 1 ? 2 : 1];
 		for (int i = 0; i < diceNumberDefender.length; i++) {
@@ -122,6 +124,7 @@ public class GameSingleplayerLogic extends GameLogic {
 		diceNumberDefender = Arrays.stream(diceNumberAttacker).boxed().sorted(Comparator.reverseOrder())
 				.mapToInt(Integer::intValue).toArray();
 		
+		// dice throws are compared
 		Player defender = territories.get(countryTo).getOwnedByPlayer();
 		for (int i = 0; i < diceNumberDefender.length; i++) {
 			if (diceNumberAttacker[i] > diceNumberDefender[i]) {
@@ -145,6 +148,7 @@ public class GameSingleplayerLogic extends GameLogic {
 			if(defender.getOwnedCountries().size() < 1) {
 				defender.setCanContinuePlaying(false);
 				if(players.stream().filter(o -> o.isCanContinuePlaying()).collect(Collectors.toList()).size() <=1) {
+					player.setCanContinuePlaying(false);
 					setGameIsOver(true);
 				}
 				for(Card card : defender.getCards()) {

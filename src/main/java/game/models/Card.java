@@ -4,7 +4,7 @@ package game.models;
  * @author srogalsk
  *
  */
-public class Card {
+public class Card implements Cloneable{
 	private int cardValue; // e.g. infantry = 1, cavalry = 5, artillery = 10 or joker = -1
 	private Player ownedBy;
 	private CountryName name;
@@ -12,6 +12,13 @@ public class Card {
 	public Card(CountryName name, int cardValue) {
 		this.name = name;
 		this.cardValue = cardValue;
+	}
+	
+	/**constructor for defensive copying*/
+	public Card(Card card) {
+		this.name = card.getName();
+		this.cardValue = card.getCardSymbol();
+		this.ownedBy = card.getOwnedBy() != null ? new Player(card.getOwnedBy()) : null;
 	}
 	
 	public int getCardSymbol() {
@@ -32,4 +39,9 @@ public class Card {
 	public void setName(CountryName name) {
 		this.name = name;
 	}
+	
+	@Override
+    public Card clone() {
+        return new Card(this);
+    }
 }

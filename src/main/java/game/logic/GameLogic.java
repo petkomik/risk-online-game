@@ -216,6 +216,8 @@ public abstract class GameLogic {
 
 	}
 	
+	// public ArrayList<> countrys isConnectionOwnedByPlayer(Territory countryFrom, Player player);
+	
 	public boolean isConnectionOwnedByPlayer(Territory countryFrom, Territory countryTo, Player player) {
 	    Set<Territory> visited = new HashSet<>();
 	    return dfs(countryFrom, countryTo, visited, player);
