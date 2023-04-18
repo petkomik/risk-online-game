@@ -59,8 +59,7 @@ public class JoinClientMessengerController implements Initializable {
 	private static Socket socket;
 	private int port = AppController.getPortNumber();
 	private String host = AppController.getHost();
-	
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		sendButton.setPrefSize(w * 0.091, h * 0.058);
@@ -75,11 +74,8 @@ public class JoinClientMessengerController implements Initializable {
 		this.setXYof(0.439, 0.800, textFieldMessage);
 		this.setXYof(0.430, 0.301, scrollPaneMain);
 
-		
-		
-		
 		client.listenForMessage(vBoxMessages);
-		
+
 		vBoxMessages.heightProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -109,8 +105,19 @@ public class JoinClientMessengerController implements Initializable {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							client.sendMessage(messageToSend);
+							System.out.println("Run of join sworks, this is what it starts with ");
+							if (messageToSend.contains(":")) {
 
+								System.out.println(messageToSend.substring(0, messageToSend.indexOf(":")));
+								String username = messageToSend.substring(0, messageToSend.indexOf(":")).toLowerCase();
+								// send the message to the specified user
+								client.sendMessage(new MessageToPerson(messageToSend, username));
+
+							} else if (!messageToSend.equals(null)) {
+								// send the message to the general chat
+								client.sendMessage(messageToSend);
+
+							}
 						}
 					});
 
@@ -119,12 +126,12 @@ public class JoinClientMessengerController implements Initializable {
 				}
 			}
 		});
-		
-		
+
 	}
+
 	public void disconnectB(ActionEvent e) throws IOException {
 		Node node = (Node) e.getSource();
-		// Getting the Stage where the event is happened	
+		// Getting the Stage where the event is happened
 		Stage stage = (Stage) node.getScene().getWindow();
 		// changing the AnchorPane from the main file
 		AnchorPane anchorPane = (AnchorPane) loadFXML("main");
@@ -142,6 +149,7 @@ public class JoinClientMessengerController implements Initializable {
 		FXMLLoader fxmlLoader = new FXMLLoader(StartPaneController.class.getResource(fxml + ".fxml"));
 		return fxmlLoader.load();
 	}
+
 	public static void addLabel(String messageFromCLient, VBox vBox) {
 		HBox hBox = new HBox();
 		hBox.setAlignment(Pos.CENTER_LEFT);
@@ -161,10 +169,6 @@ public class JoinClientMessengerController implements Initializable {
 			}
 		});
 
-		
-		
-		
-		
 	}
 
 	private void setXYof(double relativeX, double relativeY, Node node) {

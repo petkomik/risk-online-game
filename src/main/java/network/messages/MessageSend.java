@@ -14,12 +14,19 @@ public class MessageSend extends Message {
 	private String message;
 	private Player playerFrom;
 	private Player playerTo;
+	private String playerToS;
 
 	public MessageSend(String message, Player playerFrom, Player playerTo) {
 		super(MessageType.MessageSend);
 		this.message = message;
 		this.playerFrom = playerFrom;
 		this.playerTo = playerTo;
+	}
+	public MessageSend(String message,  String playerToS) {
+		super(MessageType.MessageSend);
+		this.message = message;
+		
+		this.playerToS = playerToS;
 	}
 	
 	public MessageSend(String message) {

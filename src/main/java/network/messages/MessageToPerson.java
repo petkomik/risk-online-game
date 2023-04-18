@@ -11,17 +11,24 @@ public class MessageToPerson extends Message {
 	Client from;
 	String to;
 	Message message;
+	String msg;
 	public Message getMessage() {
 		return message;
 	}
 	public void setMessage(Message message) {
 		this.message = message;
 	}
-	public MessageToPerson(Message message ,Client from,String to) {
+	public MessageToPerson(Message message ,String to) {
 		super(MessageType.MessageToPerson);
 		this.from = from;
 		this.to = to;
 		this.message = message;
+	}
+	
+	public MessageToPerson(String msg, String username) {
+		super(MessageType.MessageToPerson);
+		this.msg=msg;
+		to=username;
 	}
 	public String getTo() {
 		return to;
@@ -31,6 +38,9 @@ public class MessageToPerson extends Message {
 	}
 	public void setTo(String to) {
 		this.to = to;
+	}
+	public String getMsg() {
+		return msg;
 	}
 
 }

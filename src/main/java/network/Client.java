@@ -31,13 +31,13 @@ public class Client {
 		this.userName = profile.getUserName();
 		this.socket = socket;
 		try {
-			
+
 			this.outputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
-			//this.sendMessage(new MessageConnect(profile));
-			//newlineofCode
+			// this.sendMessage(new MessageConnect(profile));
+			// newlineofCode
 		} catch (IOException e) {
 			System.out.println("DSICONNECT");
 			// System.out.println(
@@ -50,11 +50,13 @@ public class Client {
 		}
 
 	}
+
 	public void closeEverything() {
 
 		closeEverything(socket, inputStream, outputStream);
 		System.out.println("Closing  works");
 	}
+
 	private void closeEverything(Socket socket2, ObjectInputStream inputStream2, ObjectOutputStream outputStream2) {
 		System.out.println("Close everything 2");
 		try {
@@ -104,9 +106,6 @@ public class Client {
 		}
 	}
 
-
-
-
 	public static Client createClient(String host, int port) throws IOException {
 		AppController.getInstance();
 		Profile profile = AppController.getProfile();
@@ -116,15 +115,17 @@ public class Client {
 		client = new Client(socket, profile);
 		return client;
 	}
+
 	public void sendMessage(Message message) {
 		try {
-			outputStream.writeObject( message);
+			outputStream.writeObject(message);
 			outputStream.flush();
 		} catch (IOException e) {
 			closeEverything(socket, inputStream, outputStream);
 			e.printStackTrace();
 		}
 	}
+
 	public void listenForMessage(VBox vBoxMessages) {
 		new Thread(new Runnable() {
 			@Override
@@ -137,14 +138,12 @@ public class Client {
 						case MessageSend:
 							System.out.println("case MessageSend in Clinet Success 0 ");
 							HostServerMessengerController.addLabel(((MessageSend) message).getMessage(), vBoxMessages);
-							//System.out.println(((MessageSend) message).getMessage());
-							
+							// System.out.println(((MessageSend) message).getMessage());
+
 							break;
 						case Connect:
 							System.out.println("case MessageConnect Success 1 ");
-							// System.out.println(
-							// "Player " + (((MessageConnect) message).getPlayername()) + " has been
-							// connected ");
+							
 							HostServerMessengerController.addLabel(
 									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
 									vBoxMessages);
@@ -154,20 +153,20 @@ public class Client {
 							HostServerMessengerController.addLabel(
 									"Player " + ((MessageDisconnect) message).getPlayername() + " has disconnected",
 									vBoxMessages);
+							closeEverything();
 							break;
 						case MessageServerCloseConnection:
 							System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
 //							JoinClientMessengerController
 //									.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);	
-							JoinClientMessengerController
-							.addLabel("Host has disconnected, please reconnect", vBoxMessages);
+							JoinClientMessengerController.addLabel("Host has disconnected, please reconnect",
+									vBoxMessages);
 							closeEverything(socket, inputStream, outputStream);
 							Server.closeServerSocket();
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
-							JoinClientMessengerController
-							.addLabel("Message From " + ((MessageToPerson) message).getTo() + ":" + ((MessageSend) message).getMessage() , vBoxMessages);
+							JoinClientMessengerController.addLabel(((MessageToPerson) message).getMsg(), vBoxMessages);
 							break;
 						default:
 							break;
@@ -183,6 +182,7 @@ public class Client {
 
 		}).start();
 	}
+
 	/**
 	 * main for explicit testing public static void main(String[] args) { Scanner sc
 	 * = new Scanner(System.in); System.out.println(" Enter your user name for the
@@ -199,8 +199,4 @@ public class Client {
 		return profile;
 	}
 
-
-	
-	
-	
 }

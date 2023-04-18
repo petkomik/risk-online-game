@@ -39,6 +39,7 @@ import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
 import network.messages.MessageToPerson;
 import javafx.application.Application;
+
 public class HostServerMessengerController implements Initializable {
 
 	private double w = MainApp.screenWidth;
@@ -63,7 +64,6 @@ public class HostServerMessengerController implements Initializable {
 	private String host = AppController.getHost();
 	Node node;
 
-	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -73,7 +73,7 @@ public class HostServerMessengerController implements Initializable {
 		textFieldMessage.setPrefSize(w * 0.400, h * 0.100);
 		vBoxMessages.setPrefSize(w * 0.391, h * 0.358);
 		scrollPaneMain.setPrefSize(w * 0.400, h * 0.370);
-		
+
 		this.setXYof(0.430, 0.200, sendButton);
 		this.setXYof(0.026, 0.046, disconnectButton);
 		this.setXYof(0.439, 0.800, textFieldMessage);
@@ -82,10 +82,11 @@ public class HostServerMessengerController implements Initializable {
 		/******/
 
 		try {
+
 			server = Server.createServer(port);
 			client = Client.createClient(host, port);
 			client.listenForMessage(vBoxMessages);
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -125,7 +126,19 @@ public class HostServerMessengerController implements Initializable {
 					Platform.runLater(new Runnable() {
 						@Override
 						public void run() {
-							client.sendMessage(messageToSend);
+							System.out.println("Run of Host sworks, this is what it starts with ");
+							if (messageToSend.contains(":")) {
+							
+									System.out.println(messageToSend.substring(0, messageToSend.indexOf(":")));
+									String username = messageToSend.substring(0, messageToSend.indexOf(":")).toLowerCase();
+									// send the message to the specified user
+									client.sendMessage(new MessageToPerson(messageToSend,username));
+								
+
+							} else if (!messageToSend.equals(null)) {
+								// send the message to the general chat
+								client.sendMessage(messageToSend);
+							}
 						}
 					});
 
@@ -148,10 +161,9 @@ public class HostServerMessengerController implements Initializable {
 		stage.getScene().setRoot(anchorPane);
 		// Showing the Stage
 		stage.show();
-		
+
 		client.sendMessage(new MessageServerCloseConnection());
-	
-		
+
 	}
 
 	private static Parent loadFXML(String fxml) throws IOException {
