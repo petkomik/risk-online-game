@@ -17,6 +17,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -43,6 +45,8 @@ public class UpdateSettingsController implements Initializable{
 	private Button backButton;
 	@FXML
 	private Button deleteProfileButton;
+	@FXML
+	private TextArea profileInfo;
 	
 	GameSound gameSoundButton = new GameSound();
 	
@@ -81,6 +85,19 @@ public class UpdateSettingsController implements Initializable{
 		deleteProfileButton.setLayoutX(w * 0.7);
 		deleteProfileButton.setLayoutY(h * 0.7);
 		deleteProfileButton.setStyle("-fx-font-size: " + fontSize + "px;");
+		
+		this.updateTextField();
+		profileInfo.setLayoutX(w * 0.1);
+		profileInfo.setLayoutY(h * 0.3);
+		profileInfo.setStyle("-fx-font-size: " + fontSize + "px;");
+		profileInfo.setEditable(false);
+//		profileInfo.setPrefHeight(200);
+		profileInfo.setPrefWidth(300);
+		//profileInfo.setStyle("-fx-border-color: black; -fx-text-alignment: justify;");
+		
+		
+
+
 
 
 	}
@@ -197,6 +214,11 @@ public class UpdateSettingsController implements Initializable{
 	    } else {
 	        // User clicked Cancel, do nothing
 	    }
+	}
+	
+	public void updateTextField() {
+		MainApp.getAppController();
+		profileInfo.setText(AppController.getProfile().toString());
 	}
 	/**
      * 

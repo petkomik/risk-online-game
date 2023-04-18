@@ -103,7 +103,12 @@ public class Profile implements Serializable {
 	}
 	
 	public String toString() {
-		return "This is the Player : " + this.userName + " with ID: " + this.id + ". His preffered Color is  " + this.color + " and he has collected  " + this.wins + " wins in total.\n" + this.photo;
+		return "Profile Data: \n"
+				+ "Username: " + this.userName + " \n"
+				+ "Firstname: " + this.firstName + " \n"
+				+ "Lastname: " + this.lastName + " \n"
+				+ "Wins: " + this.wins + " \n"
+				+ "Loses: " + this.loses + " \n";
 	}
 
 	public String getUserName() {
