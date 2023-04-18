@@ -49,3 +49,17 @@
 #gameBoard{
 	-fx-background-color: #ecd9c6;
 }
+#leaveGameButton{
+	-fx-background-color: #64441f;
+	-fx-background-radius: 15;
+	-fx-border-radius: 12;
+	-fx-border-color: #ffff;
+	-fx-border-width: 3px;
+}
+#leaveGameButton:hover{
+	-fx-background-color: #b87331;
+	-fx-background-radius: 15;
+	-fx-border-radius: 12;
+	-fx-border-color: #b87331;
+	-fx-border-width: 3px;
+}
