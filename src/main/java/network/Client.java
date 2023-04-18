@@ -118,6 +118,7 @@ public class Client {
 
 	public void sendMessage(Message message) {
 		try {
+			outputStream.flush();
 			outputStream.writeObject(message);
 			outputStream.flush();
 		} catch (IOException e) {
@@ -166,7 +167,7 @@ public class Client {
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
-							JoinClientMessengerController.addLabel(((MessageToPerson) message).getMsg(), vBoxMessages);
+							JoinClientMessengerController.addLabel(((MessageToPerson) message).getMsg() , vBoxMessages);
 							break;
 						default:
 							break;

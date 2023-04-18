@@ -130,7 +130,7 @@ public class HostServerMessengerController implements Initializable {
 							if (messageToSend.contains(":")) {
 							
 									System.out.println(messageToSend.substring(0, messageToSend.indexOf(":")));
-									String username = messageToSend.substring(0, messageToSend.indexOf(":")).toLowerCase();
+									String username = messageToSend.substring(0, messageToSend.indexOf(":"));
 									// send the message to the specified user
 									client.sendMessage(new MessageToPerson(messageToSend,username));
 								
