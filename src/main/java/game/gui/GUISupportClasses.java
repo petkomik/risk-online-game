@@ -59,6 +59,17 @@ public class GUISupportClasses {
 		
 	}
 
+	static class MenuButton extends Button {
+		public MenuButton(String text) {
+			super();
+			this.setText(text);
+			this.getStyleClass().add("menuButton");
+			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 68));
+			
+		}
+	}
+
+	
 	static class DesignButton extends Button {
 		public DesignButton() {
 			super();
@@ -112,7 +123,39 @@ public class GUISupportClasses {
 	            			+ "-fx-border-width: 3px;");
             }
 	        });
-
+		}
+		
+		public DesignButton(Insets inst, int radius) {
+			super();
+			this.setPadding(inst);
+			this.setPrefWidth(300);
+			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 45));
+			this.setTextFill(Color.WHITE);
+			this.setStyle("-fx-background-color: "
+					+ "radial-gradient(focus-distance 0% , center 50% 50% , "
+					+ "radius 75% , #b87331, #64441f);"
+					+ "-fx-background-radius: " + radius + 3 + ";"
+					+ "-fx-border-radius: " + radius + ";"
+        			+ "-fx-border-color: transparent;"
+        			+ "-fx-border-width: 4px;");
+		
+		this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+            if (newValue) {
+            	this.setStyle("-fx-background-color: #64441f;"
+							+ "-fx-background-radius: " + radius + 3 + ";"
+							+ "-fx-border-radius: " + radius + ";"
+	            			+ "-fx-border-color: #ffff;"
+	            			+ "-fx-border-width: 4px;");
+            } else {
+            	this.setStyle("-fx-background-color: "
+            				+ "radial-gradient(focus-distance 0% , center 50% 50% , "
+            				+ "radius 75% , #b87331, #64441f);"
+							+ "-fx-background-radius: " + radius + 3 + ";"
+							+ "-fx-border-radius: " + radius + ";"
+	            			+ "-fx-border-color: transparent;"
+	            			+ "-fx-border-width: 4px;");
+            }
+	        });
 		}
 	}
 	
@@ -174,9 +217,7 @@ public class GUISupportClasses {
 	static class PlayerCard extends VBox {
 		String name;
 		ImageView avatar = new ImageView();
-		Color color;
-		String[] aiNames = {"Jasper", "Andrea", "Mick", "Tosho", "Maria"};
-		
+		Color color;		
 		
 		Label playerReady = new Label("Not Ready");
 		
@@ -184,23 +225,13 @@ public class GUISupportClasses {
 			super();
 		}
 		
-		public PlayerCard(int i, String avatar, Color color) throws FileNotFoundException {
-			super();
-			this.name = this.aiNames[i % aiNames.length] + "(AI)";
-			this.avatar.setImage(new Image(new FileInputStream(avatar)));
-			this.color = color;
-			buildCard();
-
-		}
 		
 		public PlayerCard(String name, String avatar, Color color) throws FileNotFoundException {
 			super();
 			this.name = name;
-			this.avatar.setImage(new Image(new FileInputStream(Parameter.avatarsdir + avatar)));
+			this.avatar.setImage(new Image(new FileInputStream(avatar)));
 			this.color = color;
-			buildCard();
-			
-			
+			buildCard();	
 		}
 		
 		private void buildCard() {

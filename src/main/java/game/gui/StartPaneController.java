@@ -1,76 +1,155 @@
 package game.gui;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import game.Lobby;
+import game.gui.GUISupportClasses.DesignButton;
+import game.gui.GUISupportClasses.MenuButton;
+import game.gui.GUISupportClasses.Spacing;
 import general.Parameter;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 /**
  * 
  * @author majda
  * this class handles the events on the very first frame
  */
-public class StartPaneController implements Initializable{
-	private Stage stage;
-	private AnchorPane anchorPane;
-	private double w = MainApp.screenWidth;
-	private double h = MainApp.screenHeight;
+public class StartPaneController extends StackPane {
+	private Stage stage;	
+	private VBox vBox;
+	private ImageView imgBackground;
+	private ImageViewPane imgBackgroundPane;
+	private VBox vBoxColor;
+	private VBox contentVBox;
+	private ImageView riskLogo;
+	private DesignButton playButton;
 	
-	@FXML
-	private ImageView imageView;
-	@FXML
-	private Button playButton;
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		imageView.setFitWidth(w*0.391);
-		imageView.setFitHeight(h*0.347);
-		imageView.setLayoutX(w*0.305);
-		imageView.setLayoutY(h*0.076);
-		playButton.setPrefSize(w*0.13, h*0.058);
-		playButton.setLayoutX(w*0.435);
-		playButton.setLayoutY(h*0.471);
-		double fontSize = 0.097 * Math.sqrt(Math.pow(playButton.getPrefWidth(), 2.0)+Math.pow(playButton.getPrefHeight(), 2.0));
-		playButton.setStyle("-fx-font-size: "+fontSize+"px;");
+	public StartPaneController() throws FileNotFoundException {
+		super();
+		setup();
 	}
-	
-	/**
-	 * this method shows the create profile frame after the player has clicked the button 'play'
-	 * @param e
-	 * @throws IOException
-	 */
-	public void clickPlay(ActionEvent e) throws Exception {
+
+	public void setup() throws FileNotFoundException {
 		
-		(new GameSound()).buttonClickForwardSound();
-		Node node = (Node)e.getSource();
-		stage = (Stage)node.getScene().getWindow();
-		anchorPane = (AnchorPane) loadFXML("userAccess");
-		anchorPane.setPrefSize(w, h);
-		stage.getScene().setRoot(anchorPane);
-		stage.show();
-		 
+		this.setAlignment(Pos.CENTER);
+		
+		/*
+		 * First layer of stack
+		 * Background map image
+		 */
+		
+		vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setFillWidth(true);
+
+		imgBackground = new ImageView();
+		imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
+		imgBackground.setPreserveRatio(false);
+		imgBackground.setSmooth(true);
+		imgBackground.setCache(true);
+		
+		imgBackgroundPane = new ImageViewPane(imgBackground);
+		VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
+		
+		vBox.getChildren().add(imgBackgroundPane);
+		
+		/* 
+		 * Second layer of stack
+		 * Color mask
+		 */
+		
+		vBoxColor = new VBox();
+		vBoxColor.setAlignment(Pos.CENTER);
+		vBoxColor.setFillWidth(true);
+		vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
+		
+		
+		contentVBox = new VBox();
+		contentVBox.setAlignment(Pos.CENTER);
+		
+		riskLogo = new ImageView();
+		riskLogo.setImage(new Image(new FileInputStream(Parameter.logoImage)));
+		riskLogo.setFitWidth(650);
+		riskLogo.setPreserveRatio(true);
+		riskLogo.setSmooth(true);
+		riskLogo.setCache(true);
+		
+		playButton = new DesignButton(new Insets(5, 70, 5, 70), 30);
+		playButton.setText("Play");
+
+		contentVBox.setSpacing(30);
+		
+		contentVBox.getChildren().addAll(riskLogo, playButton, new Spacing(50));
+		
+		
+		// maybe add vBoxColor
+		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
+	
+		playButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+				
+				Node node = (Node)event.getSource();
+				stage = (Stage)node.getScene().getWindow();
+				double w = MainApp.screenWidth;
+				double h = MainApp.screenHeight;
+
+				AnchorPane anchorPane;
+				try {
+					anchorPane = (AnchorPane) loadFXML("userAccess");
+					anchorPane.setPrefSize(w, h);
+					stage.getScene().setRoot(anchorPane);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//				
+//				Lobby lo = new Lobby();
+//				lo.addAI();
+//				lo.addAI();
+//				lo.addAI();
+//				lo.addAI();
+//	
+//				LobbyMenuController lobby;
+//				try {
+//					lobby = new LobbyMenuController(lo);
+//					stage.getScene().setRoot(lobby);
+//
+//				} catch (FileNotFoundException e) {
+//					e.printStackTrace();
+//				}
+	
+				stage.show();
+	    	}
+		});
 	}
-	/**
-     * 
-     * @param fxml, file name without the ending .fxml
-     * @return Parent object, to be set as a root in a Secene object
-     * @throws IOException
-     * 
-     * This method is responsible for loading a fxml file
-     */
+	
 	private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StartPaneController.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
 	}
-    
+
+	
 }

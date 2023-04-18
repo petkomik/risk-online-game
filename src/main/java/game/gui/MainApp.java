@@ -42,23 +42,16 @@ public class MainApp extends Application{
     public void start(Stage stage) throws IOException {
     	screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
     	screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
-    	// Getting the anchor pane from the file main.fxml
-    	anchorPane = (AnchorPane) loadFXML("main");
-    	// Setting the size of the pane
-        anchorPane.setPrefSize(MainApp.screenWidth, MainApp.screenHeight);
-    	// Setting the anchor pane as a root into the scene
-        scene = new Scene(anchorPane);
-        // Getting the pic transparent-risk.png
-        Image image = new Image(Parameter.logoImage);
-        // Setting the pic transparent-risk.png as logo of the stage
+        StartPaneController start = new StartPaneController();
+        start.setPrefSize(MainApp.screenWidth, MainApp.screenHeight);
+        scene = new Scene(start);
+        Image image = new Image(Parameter.dicesIcon);
         stage.getIcons().add(image);
-        // Setting the scene into the stage
         stage.setScene(scene);
-        // Setting the stage on the maximized mode
         stage.setMaximized(true);
-        // Setting the resizability of the stage on false
-        stage.setResizable(false);
-        // Showing the stage
+        stage.setResizable(true);
+        stage.setMinHeight(800);
+		stage.setMinWidth(1300);
         stage.show();
         
         /**************** Sound *************************//**
@@ -72,18 +65,7 @@ public class MainApp extends Application{
         themeSound.startThemeSong(); 
 		
     }
-    /**
-     * 
-     * @param fxml, file name without the ending .fxml
-     * @return Parent object, to be set as a root in a Secene object
-     * @throws IOException
-     * 
-     * This method is responsible for loading a fxml file
-     */
-    private Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
+
     /**
      * this class method enables the launching of the App outside the class
      * @param args
