@@ -100,8 +100,10 @@ public class UpdateSettingsController implements Initializable{
 		profileInfo.setPrefWidth(300);
 		//profileInfo.setStyle("-fx-border-color: black; -fx-text-alignment: justify;");
 		
-		changeField.setLayoutX(w * 0.7);
-		changeField.setLayoutY(h*0.463);
+		changeField.setLayoutX(btnX);
+		changeField.setLayoutY(h*0.22);
+		changeField.setStyle("-fx-font-size: "+fontSize+"px;");
+		changeField.setPrefSize(btnW, btnH);
 		
 		
 
