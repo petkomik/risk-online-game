@@ -106,10 +106,12 @@ public class BattleFrameController extends VBox {
 	
 	public BattleFrameController(Territory at, Territory df, Lobby lobby) throws Exception {
 		super();
-		// TODO set correct max dice
-		this.maxDiceToThrow = 3;
 		this.attacking = at;
 		this.defending = df;
+		this.maxDiceToThrow = Math.min(3, attacking.getNumberOfTroops() - 1);
+		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
+		dicesAttacker = new int[this.maxDiceToThrow];
+		dicesDefender = new int[this.defendingDice];
 		setup();
 
 	}
@@ -235,6 +237,7 @@ public class BattleFrameController extends VBox {
 		circleTroopsAt.setStroke(Color.WHITE);
 		circleTroopsAt.setStrokeWidth(0);
 		
+		// TODO is this correct troops
 		troopsTextAt = new Label(String.valueOf(attacking.getNumberOfTroops() - 1));
 		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34));
 		troopsTextAt.setTextFill(Color.web("#303030"));
@@ -265,7 +268,6 @@ public class BattleFrameController extends VBox {
 		
 		avatarDf = new ImageView();
 		// TODO change to correct avatar
-
 		avatarDf.setImage(new Image(new FileInputStream(Parameter.avatarsdir + "ginger-girl.png")));
 		avatarDf.setFitWidth(140);
 		avatarDf.setFitHeight(140);
@@ -280,6 +282,7 @@ public class BattleFrameController extends VBox {
 		circleTroopsDf.setStroke(Color.WHITE);
 		circleTroopsDf.setStrokeWidth(0);
 		
+		// TODO is this correct troops
 		troopsTextDf = new Label(String.valueOf(defending.getNumberOfTroops()));
 		troopsTextDf.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34));
 		troopsTextDf.setTextFill(Color.web("#303030"));
@@ -305,6 +308,7 @@ public class BattleFrameController extends VBox {
 
 		numberOfDiceControls = new HBox();
 		lessBtn = new DesignButton();
+		// TODO connect from gamestate
 		numberLabel = new Label(String.valueOf(this.maxDiceToThrow));
 		moreBtn = new DesignButton();
 		
@@ -341,6 +345,7 @@ public class BattleFrameController extends VBox {
 		 * 			  both Attacker + Defender
 		 */
 
+		// TODO get number of dice from gamestate
 		diceImagesAt = diceImageFactory(maxDiceToThrow, true);
 		diceImagesDf = diceImageFactory(defendingDice, false);
 		
@@ -348,14 +353,12 @@ public class BattleFrameController extends VBox {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
+		    	// TODO get info logic from gamestate
 		    	if (Integer.parseInt(numberLabel.getText()) > 1) {
 		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
 			    	numberLabel.setText(String.valueOf(i));
 			    	dicesAttacker = new int[dicesAttacker.length - 1];
-			    	diceImagesAt.getChildren().remove(0);
-			    	
-			    	System.out.println(armiesFlowAt.getWidth() + " " + armiesFlowDf.getWidth());
-			    	
+			    	diceImagesAt.getChildren().remove(0);			    	
 		    	}
 
 		    }
@@ -365,6 +368,7 @@ public class BattleFrameController extends VBox {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
+		    	// TODO get info logic from gamestate
 		    	if (Integer.parseInt(numberLabel.getText()) < maxDiceToThrow) {
 		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
 			    	numberLabel.setText(String.valueOf(i));
@@ -405,7 +409,8 @@ public class BattleFrameController extends VBox {
 							e1.printStackTrace();
 						}
 		                final int m = k;
-                    	diceImagesAt.getChildren().set(m, dice);      
+                    	diceImagesAt.getChildren().set(m, dice);
+                    	// TODO remove
 		                dicesAttacker[k] = n;
 		    		}
 		    		
@@ -419,7 +424,9 @@ public class BattleFrameController extends VBox {
 							e1.printStackTrace();
 						}
 		                final int m = k;
-                    	diceImagesDf.getChildren().set(m, dice);                 
+                    	diceImagesDf.getChildren().set(m, dice);       
+                    	// TODO remove
+
 		                dicesDefender[k] = n;
 		    		}
 		    		
@@ -428,12 +435,13 @@ public class BattleFrameController extends VBox {
     			timeline.setCycleCount(12);
     			timeline.play();
     			
-    			lastThrow--;
-    			
     			timeline.setOnFinished(new EventHandler<ActionEvent>() {
     			      @Override
     			      public void handle(ActionEvent evt) {
     			    	  
+    			    	  // TODO get logic from game state
+    			    	  // update dice images based on dices array from gamestate (dicesfactory)
+    			    	  // update troops
     			    	  lastThrow = 0;
     			    	  int maxDf = Arrays.stream(dicesDefender).max().getAsInt();
     			    	  int maxAt = Arrays.stream(dicesAttacker).max().getAsInt();
@@ -509,7 +517,6 @@ public class BattleFrameController extends VBox {
 		diceImages.setHgap(20);
 		diceImages.setVgap(20);
 		
-		// TODO
 		DiceFactory[] dices = new DiceFactory[k];
 		for(int i = 0; i < dices.length; i++) {
 			dices[i] = new DiceFactory((i*29)%6 + 1, at);
@@ -527,9 +534,13 @@ public class BattleFrameController extends VBox {
 		int cav = 0;
 		int art = 0;
 		
+		// TODO get correct data from gamestate
+		// number of troops (in battle) atta + deff
+		
 		Territory territ;
 		int numberTroops;
 		int leftOverSoldier = attacking ? 1 : 0;
+		
 		double heightFrame =  this.getHeight();
 		double multiplier = Math.min(1, heightFrame / 1000);
 		multiplier *= 0.8;
@@ -590,10 +601,8 @@ public class BattleFrameController extends VBox {
 			iv.setSmooth(true);
 			iv.setCache(true);
 			iv.setFitHeight(160 * multiplier);
-			flow.getChildren().add(iv);	
-			
+			flow.getChildren().add(iv);		
 		}
-		
 		
 		flow.minWidthProperty().bind(flow.prefWidthProperty());
 		flow.prefWidthProperty().bind(flow.maxWidthProperty());
@@ -611,6 +620,7 @@ public class BattleFrameController extends VBox {
 	
 	public void updateTroops() throws FileNotFoundException {
 		
+		// TODO remove lastthrow logik, add troops lost for at and df, get from gamestate
 		if(this.lastThrow < 0) {
 			this.attacking.removeNumberOfTroops(-1 * this.lastThrow);
 		} else if (this.lastThrow > 0) {
@@ -618,7 +628,6 @@ public class BattleFrameController extends VBox {
 		} else {
 			this.attacking.removeNumberOfTroops(1);
 			this.defending.removeNumberOfTroops(1);
-
 		}
 		
 		this.setCorrectTroops(armiesFlowAt, true);

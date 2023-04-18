@@ -5,11 +5,15 @@ import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Player;
 import general.Parameter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -40,14 +44,7 @@ import javafx.scene.text.FontWeight;
 public class LobbyMenuController extends StackPane {
 	
 	Lobby lobby;
-	
-	//
-	int joinedPlayersAll = 1;
-	int joinedPlayersHuman = 1;
-	int joinedPlayersAI = 0;
-	int maxNumberOfPlayers = 6;
-	int difficultyOfAI = 0;
-	String[] aiDifficultyLevels = {"easy", "hard", "jojo"};
+	String[] aiDifficultyLevels = {"easy", "casual", "hard"};
 	
 	VBox vBox;
 	ImageView imgBackground;
@@ -93,12 +90,11 @@ public class LobbyMenuController extends StackPane {
 	HBox readyButtonPane;
 	DesignButton readyBtn;
 		
-	public LobbyMenuController() throws Exception {
-		this.setup();		
-	}
 	
-	public LobbyMenuController(Lobby lobby) {
-		
+	public LobbyMenuController(Lobby lobby) throws FileNotFoundException {
+		this.lobby = lobby;
+		this.setup();
+		setUpPlayerCards();
 	}
 	
 	/**
@@ -301,15 +297,15 @@ public class LobbyMenuController extends StackPane {
 		
 		lessBtnPlayers.setText("<");
 		moreBtnPlayers.setText(">");
-		labelBtnPlayers.setText(String.valueOf(this.maxNumberOfPlayers));
+		labelBtnPlayers.setText(String.valueOf(this.lobby.maxNumberOfPlayers));
 
 		lessBtnAI.setText("<");
 		moreBtnAI.setText(">");
-		labelBtnAI.setText(String.valueOf(this.joinedPlayersAI));
+		labelBtnAI.setText(String.valueOf(this.lobby.getAIPlayerList().size()));
 
 		lessBtnDiff.setText("<");
 		moreBtnDiff.setText(">");
-		labelBtnDiff.setText(String.valueOf(this.aiDifficultyLevels[this.difficultyOfAI]));
+		labelBtnDiff.setText(String.valueOf(this.aiDifficultyLevels[this.lobby.difficultyOfAI]));
 
 		labelBtnPlayers.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30));
 		labelBtnPlayers.textOverrunProperty().set(OverrunStyle.CLIP);
@@ -401,7 +397,7 @@ public class LobbyMenuController extends StackPane {
 		    		labelBtnDiff.setText(aiDifficultyLevels[2]);
 		    	} else {}
 		    	
-		    	difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());
+		    	lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());
 
 	    	}
 		});
@@ -417,7 +413,7 @@ public class LobbyMenuController extends StackPane {
 		    		labelBtnDiff.setText(aiDifficultyLevels[0]);
 		    	} else {}
 		    	
-		    	difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());; 	    	
+		    	lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());; 	    	
 
 	    	}
 		});
@@ -428,11 +424,13 @@ public class LobbyMenuController extends StackPane {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	// TODO
 		    	int labelBefore = Integer.parseInt(labelBtnAI.getText());
-		    	if(joinedPlayersAI < 5 && maxNumberOfPlayers > joinedPlayersAll) {
+		    	if(lobby.getAIPlayerList().size() < 5 &&  lobby.maxNumberOfPlayers > lobby.getHumanPlayerList().size()) {
+		    		System.out.println("Btn click");
+		    		lobby.addAI();
 		    		labelBtnAI.setText(String.valueOf(labelBefore + 1));
-		    		joinedPlayersAI++;
-		    		joinedPlayersAll++;
 		    	}
+		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
+
 		    	// TODO add remove ai players
 
 	    	}
@@ -442,9 +440,9 @@ public class LobbyMenuController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	if(joinedPlayersAI > 0) {
-		    		labelBtnAI.setText(String.valueOf(--joinedPlayersAI));
-		    		--joinedPlayersAll;
+		    	if(lobby.getAIPlayerList().size() > 0) {
+		    		lobby.removeAI();
+		    		labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size()));
 		    	}
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 
@@ -455,8 +453,8 @@ public class LobbyMenuController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	if(maxNumberOfPlayers < 6) {
-		    		labelBtnPlayers.setText(String.valueOf(++maxNumberOfPlayers));
+		    	if(lobby.maxNumberOfPlayers < 6) {
+		    		labelBtnPlayers.setText(String.valueOf(++lobby.maxNumberOfPlayers));
 		    	}
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 
@@ -468,9 +466,11 @@ public class LobbyMenuController extends StackPane {
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	// TODO number of players joined lobby
-		    	if(maxNumberOfPlayers > 2 && maxNumberOfPlayers > joinedPlayersAll) {
-		    		labelBtnPlayers.setText(String.valueOf(--maxNumberOfPlayers));
+		    	if(lobby.maxNumberOfPlayers > 2 && lobby.maxNumberOfPlayers > lobby.getPlayerList().size()) {
+		    		labelBtnPlayers.setText(String.valueOf(--lobby.maxNumberOfPlayers));
 		    	}
+		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
+
 
 		    }
 		});
@@ -492,14 +492,17 @@ public class LobbyMenuController extends StackPane {
 	}
 	
 	public void setUpPlayerCards() throws FileNotFoundException {
-		if(playerCardsPane.getChildren().size() == 0 ) {
-			PlayerCard blonde = new PlayerCard(2, Parameter.blondBoy, Parameter.blueColor);
-			PlayerCard blonde2 = new PlayerCard(3, Parameter.gingerGirl, Parameter.orangeColor);
-			PlayerCard blonde3 = new PlayerCard(4, Parameter.mustacheMan, Parameter.redColor);
-			PlayerCard blonde4 = new PlayerCard(6, Parameter.bruntetteBoy, Parameter.purpleColor);
-			playerCardsPane.getChildren().addAll(blonde, blonde2, blonde3, blonde4);
-		 
+		playerCardsPane.getChildren().removeAll(playerCardsPane.getChildren());
+		ArrayList<Player> players = new ArrayList<>(lobby.getPlayerList());
+		Iterator<Player> itt = players.iterator();
+		while(itt.hasNext()) {
+			Player ply = itt.next();
+			PlayerCard plyc = new PlayerCard(ply.getName(), Parameter.blondBoy, Parameter.blueColor);
+			playerCardsPane.getChildren().add(plyc);
 		}
+		
+		
+	 
 
 	}
 }

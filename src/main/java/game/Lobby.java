@@ -6,7 +6,9 @@ import java.util.List;
 import javafx.scene.paint.Color;
 
 import game.models.*;
+import game.models.PlayerAI;
 import general.Parameter;
+
 
 /*
  * Class to model a lobby - both singleplayer and multiplayer
@@ -25,39 +27,42 @@ public class Lobby {
 	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
 			Parameter.bruntetteBoy, Parameter.mustacheMan,
 			Parameter.earringsGirl, Parameter.hatBoy};
+	static String[] aiNames = new String[] {"Jasper (AI)", "Andrea (AI)", "Mick (AI)", 
+			"Tosho (AI)", "Maria (AI)"};
+	
+
 	
 	
 	ArrayList<PlayerInLobby> playersInLobby;
 	ArrayList<Player> playersJoined;
 	ArrayList<Color> avaiableColors;
 	ArrayList<String> avaiableAvatars;
-	int lobbyRank;
+	ArrayList<String> avaiableAINames;
+
+	public int lobbyRank;
+	public int difficultyOfAI;
+	public int maxNumberOfPlayers;
 
 	public Lobby() {
 		this.playersInLobby = new ArrayList<PlayerInLobby>();
 		this.playersJoined = new ArrayList<Player>();
 		this.lobbyRank = 0;
+		this.difficultyOfAI = 0;
+		this.maxNumberOfPlayers = 6;
 		this.avaiableColors = new ArrayList<Color>();
 		for (Color k : colors) {
 			this.avaiableColors.add(k);
 		}
 		this.avaiableAvatars = new ArrayList<String>();
-		for(String m : avatars) {
-			this.avaiableAvatars.add(m);
+		for(String k : avatars) {
+			this.avaiableAvatars.add(k);
+		}
+		this.avaiableAINames = new ArrayList<String>();
+		for(String k : aiNames) {
+			this.avaiableAINames.add(k);
 		}
 	}
 	
-	class PlayerInLobby {
-		Player player;
-		Color color;
-		String avatar;
-		
-		public PlayerInLobby(Player pl, Color c, String ava) {
-			this.player = pl;
-			this.color = c;
-			this.avatar = ava;
-		}
-	}
 	
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
@@ -126,7 +131,8 @@ public class Lobby {
 		return players;
 	}
 	
-	public PlayerInLobby addColorAvatar(Player ply) {
+	private PlayerInLobby addColorAvatar(Player ply) {
+		// TODO
 		Color prefC = Parameter.blueColor; 						//= ply.getPrefColor();
 		String prefAv = Parameter.blondBoy;						//= ply.getPrefAvatar();
 		Color realC;
@@ -151,8 +157,9 @@ public class Lobby {
 		return new PlayerInLobby(ply, realC, realAv);
 	}
 	
-	public void removeColorAvatar(PlayerInLobby ply) {
-		
+	private void removeColorAvatar(PlayerInLobby ply) {
+		this.avaiableAvatars.add(ply.avatar);
+		this.avaiableColors.add(ply.color);
 	}
 
 	
@@ -160,4 +167,30 @@ public class Lobby {
 		return this.lobbyRank;
 	}
 	
+	public void addAI() {
+		System.out.println(this.avaiableAINames.size());
+
+		String aiN = aiNames[this.avaiableAINames.size() - 1];
+		this.avaiableAINames.remove(aiN);
+		Color aiC = colors[this.avaiableColors.size() - 1];
+		this.avaiableColors.remove(aiN);
+		String aiA = avatars[this.avaiableAvatars.size() - 1];
+		this.avaiableAvatars.remove(aiN);
+	
+		PlayerAI aiP = new PlayerAI(aiN, 3000, this.difficultyOfAI);
+		this.getPlayerList().add(aiP);
+		
+		PlayerInLobby plyC = new PlayerInLobby(aiP, aiC, aiA);
+		this.playersInLobby.add(plyC);
+		
+	}
+	
+	public void removeAI() {
+		
+		
+	}
+	
+	public void updateAILevel() {
+		// update the PlayerAI instances difficulty
+	}
 }
