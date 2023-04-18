@@ -28,6 +28,11 @@ public class PlayerAI extends Player {
 		this.level = setLevel;
 	}
 	
+	public PlayerAI(String name, int id, int setLevel) {
+		super(name, id);
+		this.level = Difficulty.values()[setLevel];
+	}
+	
 	public int getRank() {
 		switch(this.level) {
 		case CASUAL:
