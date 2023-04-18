@@ -74,7 +74,17 @@ public class AppController {
 		return false;
 	}
 	
-	public static void updateProfile(String value,String attribute) {
+	public static void updateProfile(String value,String attribute) throws WrongTextFieldInputException {
+		if(value.isBlank()) {
+			throw new WrongTextFieldInputException(attribute + " must not be blank.");
+		}
+		if(attribute.equals("UserName")) {
+			for(Profile p : dbH.getAllProfiles()) {
+				if(p.getUserName().equals(value)) {
+					throw new WrongTextFieldInputException("This username is used already.");
+				}
+			}
+		}
 		dbH.updateProfileInfo(value, attribute, AppController.profile);
 		AppController.profile.setAttribute(attribute, value);
 	}

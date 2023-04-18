@@ -153,12 +153,12 @@ public class Profile implements Serializable {
 	
 	public void setAttribute(String attribute, String value) {
 		switch(attribute) {
-		case "userName": this.setUserName(value);
-		case "firstName": this.setFirstName(value);
-		case "lastName": this.setLastName(value);
-		case "color": this.setColor(value);
-		case "photo": this.setPhoto(value);
-		case "password": this.setPassword(value);
+		case "UserName": this.setUserName(value); break;
+		case "FirstName": this.setFirstName(value); break;
+		case "LastName": this.setLastName(value); break;
+		case "Color": this.setColor(value); break;
+		case "Photo": this.setPhoto(value); break;
+		case "Password": this.setPassword(value); break;
 		}
 	}
 }
