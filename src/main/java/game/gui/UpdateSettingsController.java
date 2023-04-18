@@ -92,7 +92,7 @@ public class UpdateSettingsController implements Initializable{
 		deleteProfileButton.setStyle("-fx-font-size: " + fontSize + "px;");
 		
 		this.updateProfileInfo();
-		profileInfo.setLayoutX(w * 0.1);
+		profileInfo.setLayoutX(w * 0.7);
 		profileInfo.setLayoutY(h * 0.3);
 		profileInfo.setStyle("-fx-font-size: " + fontSize + "px;");
 		profileInfo.setEditable(false);
