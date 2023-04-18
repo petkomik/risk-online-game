@@ -4,6 +4,7 @@ package general;
 import database.PlayerProfileHandler;
 import database.Profile;
 import game.exceptions.WrongTextFieldInputException;
+import game.logic.GameLogic;
 import game.stateClient.GameStateClient;
 import network.Client;
 
@@ -18,11 +19,14 @@ public class AppController {
 	private static Profile profile;
 	private static AppController appController = new AppController();
 	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
-	private static GameStateClient gameStateClient;
-	//private static GameMultiplayerController multiplayerGameController;
 	private static int portNumber = Parameter.portDefault;
 	private static String host = Parameter.hostDefault;
 	private static Client client;
+	
+	private static GameStateClient gameStateClient;
+	private static GameLogic gameLogic;
+	// private static GameMultiplayerLogic multiplayerGameLogic;
+
 
 	
 	/**
@@ -83,6 +87,7 @@ public class AppController {
 		profile = null;
 		client = null;
 		gameStateClient = null;
+		gameLogic = null;
 	}
 	
 	public static AppController getInstance() {
@@ -115,5 +120,21 @@ public class AppController {
 
 	public static void setClient(Client client) {
 		AppController.client = client;
+	}
+	
+	public static GameStateClient getGameStateClient() {
+		return gameStateClient;
+	}
+
+	public static void setGameStateClient(GameStateClient gameStateClient) {
+		AppController.gameStateClient = gameStateClient;
+	}
+
+	public static GameLogic getGameLogic() {
+		return gameLogic;
+	}
+
+	public static void setGameLogic(GameLogic gameLogic) {
+		AppController.gameLogic = gameLogic;
 	}
 }

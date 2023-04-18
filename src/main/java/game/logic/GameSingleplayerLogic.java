@@ -31,7 +31,6 @@ public class GameSingleplayerLogic extends GameLogic {
 	// Konstruktor
 	public GameSingleplayerLogic(ArrayList<Player> players) {
 		super(players);
-		diceThrowToDetermineTheBeginner();
 	}
 
 	@Override
@@ -47,8 +46,9 @@ public class GameSingleplayerLogic extends GameLogic {
 	
 
 	@Override
-	public boolean countryPossession(Player player, CountryName country)
+	public boolean countryPossession(int id, CountryName country)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException {
+		Player player = players.get(id);
 		if (getCurrentPlayer() != player) {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (!player.isInitialPlacementPhase()) {
@@ -79,7 +79,7 @@ public class GameSingleplayerLogic extends GameLogic {
 			} else {
 				getCurrentPlayer().setPreparationPhase(true);
 				getCurrentPlayer().setCardsTurningInPhase(true);
-				super.getNewTroopsCountForPlayer(getCurrentPlayer());
+				super.getNewTroopsCountForPlayer(getCurrentPlayer().getID());
 				
 			}
 			return false;
@@ -90,8 +90,9 @@ public class GameSingleplayerLogic extends GameLogic {
 	}
 
 	@Override
-	public boolean attackCountry(Player player, CountryName countryFrom, CountryName countryTo, int troops)
+	public boolean attackCountry(int playerId, CountryName countryFrom, CountryName countryTo, int troops)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException {
+		Player player = players.get(playerId);
 		// Assertion: values are not null
 		if (getCurrentPlayer() != player) {
 			throw new WrongPhaseException("It is not your turn");
@@ -179,8 +180,9 @@ public class GameSingleplayerLogic extends GameLogic {
 	}
 
 	@Override
-	public boolean fortifyTroops(Player player, CountryName countryFrom, CountryName countryTo, int troops)
+	public boolean fortifyTroops(int playerId, CountryName countryFrom, CountryName countryTo, int troops)
 			throws WrongPhaseException, WrongCountryException, WrongTroopsCountException {
+		Player player = players.get(playerId);
 		// Assertion: no values are null
 		if (getCurrentPlayer() != player) {
 			throw new WrongPhaseException("It is not your turn");
@@ -192,7 +194,7 @@ public class GameSingleplayerLogic extends GameLogic {
 		} else if (territories.get(countryFrom).getNumberOfTroops() - 1 < troops) {
 			throw new WrongTroopsCountException(
 					"You dont have enough troops available and one soldier has to stay in your country", troops);
-		} else if (!super.isConnectionOwnedByPlayer(territories.get(countryFrom), territories.get(countryTo), player)) {
+		} else if (!super.isConnectionOwnedByPlayer(territories.get(countryFrom), territories.get(countryTo), playerId)) {
 			throw new WrongCountryException("The Countrys you have choosen are not connected by your countries", countryTo);
 		}
 		territories.get(countryFrom).removeNumberOfTroops(troops);
@@ -206,8 +208,9 @@ public class GameSingleplayerLogic extends GameLogic {
 	}
 
 	@Override
-	public boolean placeTroops(Player player, CountryName country, int troops)
+	public boolean placeTroops(int playerId, CountryName country, int troops)
 			throws WrongPhaseException, WrongCountryException, WrongTroopsCountException {
+		Player player = players.get(playerId);
 		// Assertion: no values are null
 		if (player != getCurrentPlayer() || !player.isPreparationPhase()) {
 			throw new WrongPhaseException("It is not your turn or you are not in your Preparation Phase");
@@ -228,7 +231,7 @@ public class GameSingleplayerLogic extends GameLogic {
 	}
 
 	@Override
-	public Player diceThrowToDetermineTheBeginner() {
+	public int diceThrowToDetermineTheBeginner() {
 		Player firstPlayer = null;
 		int highestDiceNumber = 0;
 		for (Player p : players) {
@@ -242,7 +245,7 @@ public class GameSingleplayerLogic extends GameLogic {
 		setInitialTroopsSize();
 		setCurrentPlayer(firstPlayer);
 		firstPlayer.setInitialPlacementPhase(true);
-		return firstPlayer;
+		return firstPlayer.getID();
 	}
 
 }

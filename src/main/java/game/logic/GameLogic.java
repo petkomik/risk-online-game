@@ -43,27 +43,27 @@ public abstract class GameLogic {
 		continents = new HashMap<>();
 		cards = new ArrayList<>();
 		this.players = players;
-		createTerritories();
-		createContinents();
-		createCardDeck();
+		createTerritories(territories);
+		createContinents(continents, territories);
+		createCardDeck(cards);
 	}
 
 	public abstract void startGame();
 
 	public abstract Player gameRound();
 
-	public abstract boolean countryPossession(Player player, CountryName country)
+	public abstract boolean countryPossession(int playerId, CountryName country)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException;
 
-	public abstract Player diceThrowToDetermineTheBeginner();
+	public abstract int diceThrowToDetermineTheBeginner();
 
-	public abstract boolean attackCountry(Player player, CountryName countryFrom, CountryName countryTo, int troops)
+	public abstract boolean attackCountry(int playerId, CountryName countryFrom, CountryName countryTo, int troops)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException;
 
-	public abstract boolean fortifyTroops(Player player, CountryName countryFrom, CountryName countryTo, int troops)
+	public abstract boolean fortifyTroops(int playerId, CountryName countryFrom, CountryName countryTo, int troops)
 			throws WrongPhaseException, WrongCountryException, WrongTroopsCountException;
 
-	public abstract boolean placeTroops(Player player, CountryName country, int troops)
+	public abstract boolean placeTroops(int playerId, CountryName country, int troops)
 			throws WrongPhaseException, WrongCountryException, WrongTroopsCountException;
 
 	public void setInitialTroopsSize() {
@@ -108,8 +108,9 @@ public abstract class GameLogic {
 		return firstSublist;
 	}
 
-	public boolean turnInCards(ArrayList<Card> cards, Player player)
+	public boolean turnInCards(int playerId, ArrayList<Card> cards)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException, WrongCardsException {
+		Player player = players.get(playerId);
 		if (player == null || currentPlayer != player) {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (cards == null || cards.size() != 3) {
@@ -170,7 +171,8 @@ public abstract class GameLogic {
 		return cards.get(random);
 	}
 
-	public int getNewTroopsCountForPlayer(Player player) {
+	public int getNewTroopsCountForPlayer(int playerId) {
+		Player player = players.get(playerId);
 		int troops = 0;
 		ArrayList<Continent> ownedContinents = player.getOwnedContinents();
 
@@ -218,7 +220,8 @@ public abstract class GameLogic {
 	
 	// public ArrayList<> countrys isConnectionOwnedByPlayer(Territory countryFrom, Player player);
 	
-	public boolean isConnectionOwnedByPlayer(Territory countryFrom, Territory countryTo, Player player) {
+	public boolean isConnectionOwnedByPlayer(Territory countryFrom, Territory countryTo, int playerId) {
+		Player player = players.get(playerId);
 	    Set<Territory> visited = new HashSet<>();
 	    return dfs(countryFrom, countryTo, visited, player);
 	}
@@ -238,7 +241,7 @@ public abstract class GameLogic {
 	    return false;
 	}
 
-	private void createTerritories() {
+	public static void createTerritories(HashMap<CountryName, Territory> territories) {
 		// add territories for each country name
 		territories.put(CountryName.Alaska, new Territory(CountryName.Alaska, Continent.NorthAmerica));
 		territories.put(CountryName.Greenland, new Territory(CountryName.Greenland, Continent.NorthAmerica));
@@ -286,10 +289,10 @@ public abstract class GameLogic {
 		territories.put(CountryName.Madagascar, new Territory(CountryName.Madagascar, Continent.Africa));
 		territories.put(CountryName.SouthAfrica, new Territory(CountryName.SouthAfrica, Continent.Africa));
 
-		setNeighboringCountrys();
+		setNeighboringCountrys(territories);
 	}
 
-	private void setNeighboringCountrys() {
+	private static void setNeighboringCountrys(HashMap<CountryName, Territory> territories) {
 		territories.get(CountryName.Alaska)
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Kamchatka),
 						territories.get(CountryName.NorthwestTerritory), territories.get(CountryName.Alberta))));
@@ -441,7 +444,7 @@ public abstract class GameLogic {
 
 	}
 
-	private void createContinents() {
+	public static void createContinents(HashMap<Continent, ArrayList<Territory>> continents, HashMap<CountryName, Territory> territories) {
 		continents.put(Continent.Australia,
 				new ArrayList<Territory>(Arrays.asList(territories.get(CountryName.Indonesia),
 						territories.get(CountryName.NewGuinea), territories.get(CountryName.EasternAustralia),
@@ -459,7 +462,7 @@ public abstract class GameLogic {
 				.filter(o -> o.getContinent().equals(Continent.Europe)).collect(Collectors.toList()));
 	}
 	
-	private void createCardDeck() {
+	public static void createCardDeck(ArrayList<Card> cards) {
 		cards.add(new Card(CountryName.Alaska, 1));
 		cards.add(new Card(CountryName.NorthwestTerritory, 10));
 		cards.add(new Card(CountryName.Alberta, 1));

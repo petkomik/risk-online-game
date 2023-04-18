@@ -44,7 +44,7 @@ public class Player {
 	/**constructor for defensive copying*/
 	public Player(Player player) {
 	    this.name = new String(player.getName());
-	    this.setColor(new String(player.getColor()));
+	    this.color = (new String(player.getColor()));
 	    this.id = player.getID();
 	    this.rank = player.getRank();
 	    this.ownedCountries = new HashMap<CountryName, Territory>(player.getOwnedCountries());

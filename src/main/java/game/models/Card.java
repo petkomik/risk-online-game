@@ -18,7 +18,7 @@ public class Card implements Cloneable{
 	public Card(Card card) {
 		this.name = card.getName();
 		this.cardValue = card.getCardSymbol();
-		this.ownedBy = card.getOwnedBy() != null ? new Player(card.getOwnedBy()) : null;
+		this.ownedBy = card.getOwnedBy() != null ? card.getOwnedBy() : null;
 	}
 	
 	public int getCardSymbol() {
