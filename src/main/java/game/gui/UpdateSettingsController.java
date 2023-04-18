@@ -5,7 +5,9 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import game.exceptions.WrongTextFieldInputException;
 import general.AppController;
+import general.Parameter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
@@ -34,7 +37,7 @@ public class UpdateSettingsController implements Initializable{
 	private double h = MainApp.screenHeight;
 	
 	@FXML
-	private Button uploadPhotoButton;
+	private Button updateUserNameButton;
 	@FXML
 	private Button updateFirstNameButton;
 	@FXML
@@ -47,6 +50,8 @@ public class UpdateSettingsController implements Initializable{
 	private Button deleteProfileButton;
 	@FXML
 	private TextArea profileInfo;
+	@FXML
+	private TextField changeField;
 	
 	GameSound gameSoundButton = new GameSound();
 	
@@ -55,23 +60,23 @@ public class UpdateSettingsController implements Initializable{
 		double btnW = w * 0.163;
 		double btnH = h * 0.058;
 		double btnX = w * 0.419;
-		uploadPhotoButton.setPrefSize(btnW, btnH);
+		updateUserNameButton.setPrefSize(btnW, btnH);
 		updateFirstNameButton.setPrefSize(btnW, btnH);
 		updateLastNameButton.setPrefSize(btnW, btnH);
 		updatePasswordButton.setPrefSize(btnW, btnH);
 		
-		uploadPhotoButton.setLayoutX(btnX);
+		updateUserNameButton.setLayoutX(btnX);
 		updateFirstNameButton.setLayoutX(btnX);
 		updateLastNameButton.setLayoutX(btnX);
 		updatePasswordButton.setLayoutX(btnX);
 
-		uploadPhotoButton.setLayoutY(h*0.301);
+		updateUserNameButton.setLayoutY(h*0.301);
 		updateFirstNameButton.setLayoutY(h*0.382);
 		updateLastNameButton.setLayoutY(h*0.463);
 		updatePasswordButton.setLayoutY(h*0.544);
 		
 		double fontSize = 0.078 * Math.sqrt(Math.pow(btnW, 2.0)+Math.pow(btnH, 2.0));
-		uploadPhotoButton.setStyle("-fx-font-size: "+fontSize+"px;");
+		updateUserNameButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		updateFirstNameButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		updateLastNameButton.setStyle("-fx-font-size: "+fontSize+"px;");
 		updatePasswordButton.setStyle("-fx-font-size: "+fontSize+"px;");
@@ -86,7 +91,7 @@ public class UpdateSettingsController implements Initializable{
 		deleteProfileButton.setLayoutY(h * 0.7);
 		deleteProfileButton.setStyle("-fx-font-size: " + fontSize + "px;");
 		
-		this.updateTextField();
+		this.updateProfileInfo();
 		profileInfo.setLayoutX(w * 0.1);
 		profileInfo.setLayoutY(h * 0.3);
 		profileInfo.setStyle("-fx-font-size: " + fontSize + "px;");
@@ -94,6 +99,9 @@ public class UpdateSettingsController implements Initializable{
 //		profileInfo.setPrefHeight(200);
 		profileInfo.setPrefWidth(300);
 		//profileInfo.setStyle("-fx-border-color: black; -fx-text-alignment: justify;");
+		
+		changeField.setLayoutX(w * 0.7);
+		changeField.setLayoutY(h*0.463);
 		
 		
 
@@ -107,56 +115,69 @@ public class UpdateSettingsController implements Initializable{
 	 * @param e
 	 * @throws IOException
 	 */
-	public void showUploadPhotoFrame(ActionEvent e) throws IOException {
+	public void updateUserName(ActionEvent e) throws IOException {
 		
 		(new GameSound()).buttonClickForwardSound();
-		
-		Node node = (Node)e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage)node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("MultiplayerHostJoinFrame");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
-		stage.show();
-	}
-	
-	public void showUpdateFirstNameFrame(ActionEvent e) throws IOException {
 		(new GameSound()).buttonClickForwardSound();
-		Node node = (Node)e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage)node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("battleWindowFrame");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
-		stage.show();
-		
+		String text = changeField.getText();
+		try {
+			MainApp.getAppController();
+			AppController.updateProfile(changeField.getText(), "UserName");
+			changeField.setText("");
+			this.updateProfileInfo();
+			
+		} catch (WrongTextFieldInputException e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText(e1.getMessage());
+			alert.setHeaderText("ERROR");
+			alert.setTitle("");
+			Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
+			tmp.getIcons().add(new Image(Parameter.errorIcon));
+			alert.showAndWait();
+		}	
 	}
 	
-	public void showUpdateLastNameFrame(ActionEvent e) throws IOException {
+	public void updateFirstName(ActionEvent e) throws IOException, WrongTextFieldInputException {
 		(new GameSound()).buttonClickForwardSound();
-		Node node = (Node)e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage)node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("gameFrame");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
-		stage.show();
-		
+		String text = changeField.getText();
+		try {
+			MainApp.getAppController();
+			AppController.updateProfile(changeField.getText(), "FirstName");
+			changeField.setText("");
+			this.updateProfileInfo();
+			
+		} catch (WrongTextFieldInputException e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText(e1.getMessage());
+			alert.setHeaderText("ERROR");
+			alert.setTitle("");
+			Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
+			tmp.getIcons().add(new Image(Parameter.errorIcon));
+			alert.showAndWait();
+		}	
 	}
 	
-	public void showUpdatePasswordFrame(ActionEvent e) throws IOException {
+	public void updateLastName(ActionEvent e) throws IOException {
+		(new GameSound()).buttonClickForwardSound();
+		String text = changeField.getText();
+		try {
+			MainApp.getAppController();
+			AppController.updateProfile(changeField.getText(), "LastName");
+			changeField.setText("");
+			this.updateProfileInfo();
+			
+		} catch (WrongTextFieldInputException e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setContentText(e1.getMessage());
+			alert.setHeaderText("ERROR");
+			alert.setTitle("");
+			Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
+			tmp.getIcons().add(new Image(Parameter.errorIcon));
+			alert.showAndWait();
+		}	
+	}
+	
+	public void updatePassword(ActionEvent e) throws IOException {
 		(new GameSound()).buttonClickForwardSound();
 		Node node = (Node)e.getSource();
 		// Getting the Stage where the event is happened
@@ -216,7 +237,7 @@ public class UpdateSettingsController implements Initializable{
 	    }
 	}
 	
-	public void updateTextField() {
+	public void updateProfileInfo() {
 		MainApp.getAppController();
 		profileInfo.setText(AppController.getProfile().toString());
 	}
