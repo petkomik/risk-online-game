@@ -129,7 +129,7 @@ public class GUISupportClasses {
 			super();
 			this.setPadding(inst);
 			this.setPrefWidth(300);
-			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 45));
+			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 40));
 			this.setTextFill(Color.WHITE);
 			this.setStyle("-fx-background-color: "
 					+ "radial-gradient(focus-distance 0% , center 50% 50% , "

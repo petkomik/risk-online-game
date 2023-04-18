@@ -20,8 +20,10 @@ public class Parameter {
 	public static final String dicedir = resourcesdir + "dice" + sep;
 	public static final String territoryPNGdir = resourcesdir + "territories" + sep;
 	public static final String logoImage = imagesdir + "transparent-risk.png";
+	public static final String dicesIcon = imagesdir + "dices-icon.png";
 	public static final String errorIcon = imagesdir + "error_icon.png";
 	public static final String coord = resourcesdir + sep + "game" + sep + "gui" + sep + "coord.txt";
+	public static final String css = resourcesdir + "game" + sep + "gui" + sep + "application.css";
 	public static final String dbName = "risk-database.db";
 	public static final String soundsdir = resourcesdir + "sounds" + sep;
 	public static final String themeSong = soundsdir + "Now-We-Ride.mp3";

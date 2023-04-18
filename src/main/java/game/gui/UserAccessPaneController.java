@@ -1,72 +1,152 @@
 package game.gui;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import game.gui.GUISupportClasses.DesignButton;
+import game.gui.GUISupportClasses.Spacing;
+import general.Parameter;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class UserAccessPaneController implements Initializable{
+public class UserAccessPaneController extends StackPane {
 	
-	private Stage stage;
-	private AnchorPane anchorPane;
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
 	private GameSound gameSound = new GameSound();
+	private Stage stage;	
+	private VBox vBox;
+	private ImageView imgBackground;
+	private ImageViewPane imgBackgroundPane;
+	private VBox vBoxColor;
+	private VBox contentVBox;
+	private ImageView riskLogo;
+	private DesignButton logIn;
+	private DesignButton signUp;
+	private AnchorPane anchorPane;
+
 	
-	@FXML
-	private Button logInButton;
-	@FXML
-	private Button signUpButton;
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		double btnW = w * 0.163;
-		double btnH = h * 0.058;
-		double btnX = w * 0.419;
-		
-		logInButton.setPrefSize(btnW, btnH);
-		signUpButton.setPrefSize(btnW, btnH);
-		logInButton.setLayoutX(btnX);
-		signUpButton.setLayoutX(btnX);
-		logInButton.setLayoutY(h*0.382);
-		signUpButton.setLayoutY(h*0.463);
-		double fontSize = 0.078 * Math.sqrt(Math.pow(btnW, 2.0)+Math.pow(btnH, 2.0));
-		logInButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		signUpButton.setStyle("-fx-font-size: "+fontSize+"px;");
+	public UserAccessPaneController() throws FileNotFoundException {
+		super();
+		setup();
 	}
+
+	public void setup() throws FileNotFoundException {
+		
+		this.setAlignment(Pos.CENTER);
+		
+		/*
+		 * First layer of stack
+		 * Background map image
+		 */
+		
+		vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setFillWidth(true);
+
+		imgBackground = new ImageView();
+		imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
+		imgBackground.setPreserveRatio(false);
+		imgBackground.setSmooth(true);
+		imgBackground.setCache(true);
+		
+		imgBackgroundPane = new ImageViewPane(imgBackground);
+		VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
+		
+		vBox.getChildren().add(imgBackgroundPane);
+		
+		/* 
+		 * Second layer of stack
+		 * Color mask
+		 */
+		
+		vBoxColor = new VBox();
+		vBoxColor.setAlignment(Pos.CENTER);
+		vBoxColor.setFillWidth(true);
+		vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
+		
+		
+		contentVBox = new VBox();
+		contentVBox.setAlignment(Pos.CENTER);
+		
+		riskLogo = new ImageView();
+		riskLogo.setImage(new Image(new FileInputStream(Parameter.logoImage)));
+		riskLogo.setFitWidth(650);
+		riskLogo.setPreserveRatio(true);
+		riskLogo.setSmooth(true);
+		riskLogo.setCache(true);
+		
+		logIn = new DesignButton(new Insets(10, 20, 10, 20), 30);
+		logIn.setText("Log In");
+
+		signUp = new DesignButton(new Insets(10, 20, 10, 20), 30);
+		signUp.setText("Sign Up");
+		
+		contentVBox.setSpacing(30);
+		
+		contentVBox.getChildren().addAll(riskLogo, logIn, signUp, new Spacing(50));
+		
+		
+		// maybe add vBoxColor
+		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	
-	public void clickLogIn(ActionEvent e) throws IOException {
+		logIn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	gameSound.buttonClickForwardSound();
+				
+				Node node = (Node) event.getSource();
+				stage = (Stage)node.getScene().getWindow();
+				try {
+					anchorPane = (AnchorPane) loadFXML("logIn");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				anchorPane.setPrefSize(w, h);
+				stage.getScene().setRoot(anchorPane);
+				stage.show();
+	    	}
+		});
 		
-		gameSound.buttonClickForwardSound();
-		
-		Node node = (Node)e.getSource();
-		stage = (Stage)node.getScene().getWindow();
-		anchorPane = (AnchorPane) loadFXML("logIn");
-		anchorPane.setPrefSize(w, h);
-		stage.getScene().setRoot(anchorPane);
-		stage.show();
+		signUp.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	gameSound.buttonClickForwardSound();
+				
+				Node node = (Node) event.getSource();
+				stage = (Stage)node.getScene().getWindow();
+				try {
+					anchorPane = (AnchorPane) loadFXML("createProfile");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				anchorPane.setPrefSize(w, h);
+				stage.getScene().setRoot(anchorPane);
+				stage.show();
+	    	}
+		});
 	}
-	public void clickSignUp(ActionEvent e) throws IOException {
 		
-		gameSound.buttonClickForwardSound();
-		
-		Node node = (Node)e.getSource();
-		stage = (Stage)node.getScene().getWindow();
-		anchorPane = (AnchorPane) loadFXML("createProfile");
-		anchorPane.setPrefSize(w, h);
-		stage.getScene().setRoot(anchorPane);
-		stage.show();
-	}
+	
 	/**
      * 
      * @param fxml, file name without the ending .fxml

@@ -95,7 +95,7 @@ public class StartPaneController extends StackPane {
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		playButton = new DesignButton(new Insets(5, 70, 5, 70), 30);
+		playButton = new DesignButton(new Insets(10, 20, 10, 20), 30);
 		playButton.setText("Play");
 
 		contentVBox.setSpacing(30);
@@ -116,15 +116,14 @@ public class StartPaneController extends StackPane {
 				double w = MainApp.screenWidth;
 				double h = MainApp.screenHeight;
 
-				AnchorPane anchorPane;
 				try {
-					anchorPane = (AnchorPane) loadFXML("userAccess");
-					anchorPane.setPrefSize(w, h);
-					stage.getScene().setRoot(anchorPane);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					UserAccessPaneController stp = new UserAccessPaneController();
+					stage.getScene().setRoot(stp);
+
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
 				}
+				
 //				
 //				Lobby lo = new Lobby();
 //				lo.addAI();
