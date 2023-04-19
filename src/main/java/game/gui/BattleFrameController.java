@@ -90,12 +90,13 @@ public class BattleFrameController extends VBox {
 	FlowPane diceImagesDf;
 	
 	private double ratio;
+	private double menuRatio;
 
 
 	public BattleFrameController() throws Exception {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-
+		this.menuRatio = Math.min(ratio + 0.3, 1);
 		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
 		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
 		// TODO remove
@@ -218,36 +219,36 @@ public class BattleFrameController extends VBox {
 		 * 			Top circle with number of troops left in attack - circleTroopsAt, troopsTextAt, stackTroopsAt
 		 */
 		
-		circleAt = new Circle(80 * ratio);
+		circleAt = new Circle(80 * menuRatio);
 		// TODO change to correct collor
 		circleAt.setFill(Parameter.blueColor);
 		circleAt.setStroke(Color.WHITE);
-		circleAt.setStrokeWidth(6);
+		circleAt.setStrokeWidth(6 * menuRatio);
 		
 		playerAt.getChildren().add(circleAt);
 		
 		avatarAt = new ImageView();
 		// TODO change to correct avatar
 		avatarAt.setImage(new Image(new FileInputStream(Parameter.avatarsdir + "blonde-boy.png")));
-		avatarAt.setFitWidth(140 * ratio);
-		avatarAt.setFitHeight(140 * ratio);
+		avatarAt.setFitWidth(140 * menuRatio);
+		avatarAt.setFitHeight(140 * menuRatio);
 		avatarAt.setPreserveRatio(true);
 		avatarAt.setSmooth(true);
 		avatarAt.setCache(true);
 		
 		playerAt.getChildren().add(avatarAt);
 		
-		circleTroopsAt = new Circle(40 * ratio);
+		circleTroopsAt = new Circle(40 * menuRatio);
 		circleTroopsAt.setFill(Color.WHITE);
 		circleTroopsAt.setStroke(Color.WHITE);
 		circleTroopsAt.setStrokeWidth(0);
 		
 		// TODO is this correct troops
 		troopsTextAt = new Label(String.valueOf(attacking.getNumberOfTroops() - 1));
-		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * ratio));
+		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * menuRatio));
 		troopsTextAt.setTextFill(Color.web("#303030"));
-		troopsTextAt.setMinWidth(80 * ratio);
-		troopsTextAt.setMinHeight(80 * ratio);
+		troopsTextAt.setMinWidth(80 * menuRatio);
+		troopsTextAt.setMinHeight(80 * menuRatio);
 		troopsTextAt.setAlignment(Pos.CENTER);
 		
 		stackTroopsAt = new StackPane();
@@ -263,7 +264,7 @@ public class BattleFrameController extends VBox {
 		 * 			Top circle with number of troops left in attack - circleTroopsDf, troopsTextDf, stackTroopsDf
 		 */
 		
-		circleDf = new Circle(80 * ratio);
+		circleDf = new Circle(80 * menuRatio);
 		// TODO change to correct collor
 		circleDf.setFill(Parameter.greenColor);
 		circleDf.setStroke(Color.WHITE);
@@ -274,25 +275,25 @@ public class BattleFrameController extends VBox {
 		avatarDf = new ImageView();
 		// TODO change to correct avatar
 		avatarDf.setImage(new Image(new FileInputStream(Parameter.avatarsdir + "ginger-girl.png")));
-		avatarDf.setFitWidth(140 * ratio);
-		avatarDf.setFitHeight(140 * ratio);
+		avatarDf.setFitWidth(140 * menuRatio);
+		avatarDf.setFitHeight(140 * menuRatio);
 		avatarDf.setPreserveRatio(true);
 		avatarDf.setSmooth(true);
 		avatarDf.setCache(true);
 		
 		playerDf.getChildren().add(avatarDf);
 		
-		circleTroopsDf = new Circle(40 * ratio);
+		circleTroopsDf = new Circle(40 * menuRatio);
 		circleTroopsDf.setFill(Color.WHITE);
 		circleTroopsDf.setStroke(Color.WHITE);
 		circleTroopsDf.setStrokeWidth(0);
 		
 		// TODO is this correct troops
 		troopsTextDf = new Label(String.valueOf(defending.getNumberOfTroops()));
-		troopsTextDf.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * ratio));
+		troopsTextDf.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * menuRatio));
 		troopsTextDf.setTextFill(Color.web("#303030"));
-		troopsTextDf.setMinWidth(80 * ratio);
-		troopsTextDf.setMinHeight(80 * ratio);
+		troopsTextDf.setMinWidth(80 * menuRatio);
+		troopsTextDf.setMinHeight(80 * menuRatio);
 		troopsTextDf.setAlignment(Pos.CENTER);
 		
 		stackTroopsDf = new StackPane();
@@ -322,28 +323,28 @@ public class BattleFrameController extends VBox {
 
 		lessBtn.setText("<");
 		moreBtn.setText(">");
-		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 34 * ratio));
+		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 34 * menuRatio));
 		numberLabel.setTextFill(Color.web("#b87331"));
 		numberLabel.textOverrunProperty().set(OverrunStyle.CLIP);
-		numberLabel.setMinWidth(50 * ratio);
+		numberLabel.setMinWidth(50 * menuRatio);
 		numberLabel.setAlignment(Pos.CENTER);
 		
-		numberOfDiceControls.setSpacing(25 * ratio);
+		numberOfDiceControls.setSpacing(25 * menuRatio);
 		numberOfDiceControls.getChildren().addAll(lessBtn, numberLabel, moreBtn);
 		numberOfDiceControls.setAlignment(Pos.CENTER);
 		
 		throwBtn.setText("Throw Dice");
-		throwBtn.setPadding(new Insets(10 * ratio, 40 * ratio, 10 * ratio, 40 * ratio));
-		throwBtn.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24 * ratio));
+		throwBtn.setPadding(new Insets(10 * menuRatio, 40 * menuRatio, 10 * menuRatio, 40 * menuRatio));
+		throwBtn.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24 * menuRatio));
 		diceButtonPane.getChildren().add(throwBtn);
 		diceButtonPane.setAlignment(Pos.CENTER);
-		diceButtonPane.setMinWidth(250 * ratio);
+		diceButtonPane.setMinWidth(250 * menuRatio);
 		
 		
-		diceControls.setSpacing(20 * ratio);
+		diceControls.setSpacing(20 * menuRatio);
 		diceControls.getChildren().addAll(numberOfDiceControls, diceButtonPane);
 		diceControls.setAlignment(Pos.CENTER);
-		diceControls.setMinWidth(250 * ratio);
+		diceControls.setMinWidth(250 * menuRatio);
 		
 		/*
 		 * Setting up Images of Dices	
@@ -380,7 +381,9 @@ public class BattleFrameController extends VBox {
 			    	dicesAttacker = new int[dicesAttacker.length + 1];
 			    	DiceFactory newDice;
 					try {
-						newDice = new DiceFactory((i*29)%6 + 1, true);
+						double k = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+						double kMin = Math.min(ratio + 0.3, 1);
+						newDice = new DiceFactory((i*29)%6 + 1, true, kMin);
 				    	diceImagesAt.getChildren().add(newDice);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -487,7 +490,7 @@ public class BattleFrameController extends VBox {
 	    });
 	    	   
 		
-		diceSection.setSpacing(50 * ratio);
+		diceSection.setSpacing(50 * menuRatio);
 		diceSection.getChildren().addAll(diceImagesAt, diceControls, diceImagesDf);
 		diceSection.setAlignment(Pos.CENTER);
 		
@@ -513,18 +516,18 @@ public class BattleFrameController extends VBox {
 		
 		diceImages.minHeightProperty().bind(diceImages.maxHeightProperty());
 		diceImages.maxHeightProperty().bind(diceImages.prefHeightProperty());
-		diceImages.setPrefHeight(200 * ratio);
+		diceImages.setPrefHeight(200 * menuRatio);
 		
 		diceImages.minWidthProperty().bind(diceImages.maxWidthProperty());
 		diceImages.maxWidthProperty().bind(diceImages.prefWidthProperty());
-		diceImages.setPrefWidth(200 * ratio);
+		diceImages.setPrefWidth(200 * menuRatio);
 		
-		diceImages.setHgap(20 * ratio);
-		diceImages.setVgap(20 * ratio);
+		diceImages.setHgap(20 * menuRatio);
+		diceImages.setVgap(20 * menuRatio);
 		
 		DiceFactory[] dices = new DiceFactory[k];
 		for(int i = 0; i < dices.length; i++) {
-			dices[i] = new DiceFactory((i*29)%6 + 1, at);
+			dices[i] = new DiceFactory((i*29)%6 + 1, at, menuRatio);
 			diceImages.getChildren().add(dices[i]);
 		}
 	

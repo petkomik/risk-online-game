@@ -51,12 +51,12 @@ public class GUISupportClasses {
 			super();
 		}
 		
-		public DiceFactory(int i, boolean at) throws FileNotFoundException {
+		public DiceFactory(int i, boolean at, double ratio) throws FileNotFoundException {
 			super();
 			String bDice = at ? "" : "b";
 			this.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bDice + ".png")));
-			this.setFitWidth(70);
-			this.setFitHeight(70);
+			this.setFitWidth(70 * ratio);
+			this.setFitHeight(70 * ratio);
 			this.setPreserveRatio(true);
 			this.setSmooth(true);
 			this.setCache(true);
