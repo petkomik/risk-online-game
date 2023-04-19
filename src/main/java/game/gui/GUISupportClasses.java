@@ -37,7 +37,7 @@ public class GUISupportClasses {
 			this.setMaxHeight(Double.MAX_VALUE);
 		}
 		
-		public Spacing(int i) {
+		public Spacing(double i) {
 			this();
 			this.setMinWidth(i);
 			this.setMinHeight(i);

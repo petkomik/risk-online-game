@@ -26,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class UserAccessPaneController extends StackPane {
@@ -42,9 +43,11 @@ public class UserAccessPaneController extends StackPane {
 	private ImageView riskLogo;
 	private DesignButton logIn;
 	private DesignButton signUp;
-	
+	private double ratio;
+
 	public UserAccessPaneController() throws FileNotFoundException {
 		super();
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		setup();
 	}
 
@@ -88,21 +91,21 @@ public class UserAccessPaneController extends StackPane {
 		
 		riskLogo = new ImageView();
 		riskLogo.setImage(new Image(new FileInputStream(Parameter.logoImage)));
-		riskLogo.setFitWidth(650);
+		riskLogo.setFitWidth(650 * ratio);
 		riskLogo.setPreserveRatio(true);
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		logIn = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 300);
+		logIn = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 300 * ratio);
 		logIn.setText("Log In");
 
-		signUp = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 300);
+		signUp = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 300 * ratio);
 		signUp.setText("Sign Up");
 		
-		contentVBox.setSpacing(30);
+		contentVBox.setSpacing(30 * ratio);
 		
 		contentVBox.getChildren().addAll(riskLogo, logIn, signUp);
-		contentVBox.setPadding(new Insets(0, 0, 50, 0));
+		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 		
 		
 		// maybe add vBoxColor

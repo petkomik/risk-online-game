@@ -51,7 +51,6 @@ public class StartPaneController extends StackPane {
 	public StartPaneController() throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-		System.out.println(ratio);
 		setup();
 	}
 
@@ -101,13 +100,13 @@ public class StartPaneController extends StackPane {
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		playButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40 * ratio, 300 * ratio);
+		playButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 300 * ratio);
 		playButton.setText("Play");
 
 		contentVBox.setSpacing(30 * ratio);
 		
 		contentVBox.getChildren().addAll(riskLogo, playButton);
-		contentVBox.setPadding(new Insets(0, 0, 50, 0));
+		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 
 		
 		

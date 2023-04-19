@@ -39,6 +39,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -67,12 +68,14 @@ public class MainMenuPaneController extends StackPane {
 	private DesignButton singleplayerButton;
 	private DesignButton multiplayerButton;
 	private DesignButton logoutButton;
+	private double ratio;
 	
 	private AnchorPane anchorPane;
 
 	
 	public MainMenuPaneController() throws FileNotFoundException {
 		super();
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		setup();
 		buttonEvents();
 	}
@@ -124,9 +127,9 @@ public class MainMenuPaneController extends StackPane {
 		topBannerContent.setStyle("-fx-background-color: "
 				+ "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
 				+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
-		topBannerContent.setMaxWidth(800);
-		topBannerContent.setMinWidth(500);
-		topBannerContent.setPadding(new Insets(10, 150, 10, 30));
+		topBannerContent.setMaxWidth(800 * ratio);
+		topBannerContent.setMinWidth(500 * ratio);
+		topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
 		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
 		topBannerContent.setPrefHeight(100);
@@ -136,7 +139,7 @@ public class MainMenuPaneController extends StackPane {
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
 		
 		lobbyTextBanner = new Label("MAIN MENU");
-		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60));
+		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
 		lobbyTextBanner.setTextFill(Color.WHITE);
 		
 		Spacing bannerSpacing = new Spacing();
@@ -148,23 +151,25 @@ public class MainMenuPaneController extends StackPane {
 		
 		mainContent = new VBox();
 		mainContent.setAlignment(Pos.CENTER);
-		mainContent.setSpacing(30);
-		mainContent.setMaxWidth(600);
+		mainContent.setSpacing(30 * ratio);
+		mainContent.setMaxWidth(600 * ratio);
 
-		playTutorialButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 450);
+		playTutorialButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
 		playTutorialButton.setText("Play Tutorial");
 		
-		profileSettingsButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 450);
+		profileSettingsButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
 		profileSettingsButton.setText("Profile Settings");
 		
-		singleplayerButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 450);
+		singleplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
 		singleplayerButton.setText("Singleplayer");
 		
-		multiplayerButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 450);
+		multiplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
 		multiplayerButton.setText("Multiplayer");
 		
-		logoutButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 450);
+		logoutButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
 		logoutButton.setText("Log Out");
+		
+		mainContent.setPadding(new Insets(0, 0, 100 * ratio, 0));
 		
 		mainContent.getChildren().addAll(playTutorialButton, profileSettingsButton, singleplayerButton, multiplayerButton, logoutButton);
 		contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
