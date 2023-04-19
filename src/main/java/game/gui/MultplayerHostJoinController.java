@@ -123,7 +123,7 @@ public class MultplayerHostJoinController extends StackPane {
 		topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
 		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
-		topBannerContent.setPrefHeight(100);
+		topBannerContent.setPrefHeight(100 * ratio);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 				
 		Spacing bannerContentSpacing = new Spacing();
