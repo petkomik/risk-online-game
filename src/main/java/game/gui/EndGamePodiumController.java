@@ -233,7 +233,7 @@ public class EndGamePodiumController extends Application {
 	 * setting up back button
 	 */
 	
-	ArrowButton backButton = new ArrowButton();
+	ArrowButton backButton = new ArrowButton(60);
 	hBoxButton.getChildren().add(backButton);
 	hBoxButton.setPadding(new Insets(20,20,20,20));
 	

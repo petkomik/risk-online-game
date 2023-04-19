@@ -61,7 +61,6 @@ public class MainMenuPaneController extends StackPane {
 	private HBox banner;
 	private HBox topBannerContent;
 	private Label lobbyTextBanner;
-	private ArrowButton backButton;
 	private VBox mainContent;
 	private DesignButton playTutorialButton;
 	private DesignButton profileSettingsButton;
@@ -132,7 +131,7 @@ public class MainMenuPaneController extends StackPane {
 		topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
 		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
-		topBannerContent.setPrefHeight(100);
+		topBannerContent.setPrefHeight(100 * ratio);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 				
 		Spacing bannerContentSpacing = new Spacing();

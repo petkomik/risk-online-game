@@ -111,7 +111,7 @@ public class MultplayerHostJoinController extends StackPane {
 		VBox.setMargin(banner, new Insets(50,0,0,0));
 		banner.setPickOnBounds(false);
 		
-		backButton = new ArrowButton();
+		backButton = new ArrowButton(60 * ratio);
 
 		topBannerContent = new HBox();
 		topBannerContent.setAlignment(Pos.CENTER);

@@ -130,7 +130,8 @@ public class LogInPaneController extends StackPane {
 		topBannerContent.setPrefHeight(100 * ratio);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 		
-		backButton = new ArrowButton();
+		backButton = new ArrowButton(60 * ratio);
+		System.out.println(ratio);
 		
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);

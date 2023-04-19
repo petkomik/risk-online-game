@@ -32,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 
 /*
  * Class for the Battle Frame
@@ -90,10 +91,13 @@ public class LobbyMenuController extends StackPane {
 			
 	HBox readyButtonPane;
 	DesignButton readyBtn;
+	
+	double ratio;
 		
 	
 	public LobbyMenuController(Lobby lobby) throws FileNotFoundException {
 		this.lobby = lobby;
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.setup();
 		setUpPlayerCards();
 	}
@@ -223,23 +227,23 @@ public class LobbyMenuController extends StackPane {
 		numberPlayersDiv = new VBox();
 		numberPlayersLabel = new Label("Number of Players");
 		numberPlayersControls = new HBox();
-		lessBtnPlayers = new ArrowButton(1);
+		lessBtnPlayers = new ArrowButton(30);
 		labelBtnPlayers = new Label();
-		moreBtnPlayers = new ArrowButton(1);
+		moreBtnPlayers = new ArrowButton(30);
 		
 		numberOfAiDiv = new VBox();
 		numberOfAiLabel = new Label("Number of AI Players");
 		numberOfAiControls = new HBox();
-		lessBtnAI = new ArrowButton(1);
+		lessBtnAI = new ArrowButton(30);
 		labelBtnAI= new Label("0");
-		moreBtnAI = new ArrowButton(1);
+		moreBtnAI = new ArrowButton(30);
 		
 		AIDifficultyDiv = new VBox();
 		AIDifficultyLabel = new Label("AI Player Difficulty");
 		AIDifficultyControls = new HBox();
-		lessBtnDiff = new ArrowButton(1);
+		lessBtnDiff = new ArrowButton(30);
 		labelBtnDiff = new Label();
-		moreBtnDiff = new ArrowButton(1);
+		moreBtnDiff = new ArrowButton(30);
 		
 		readyButtonPane = new HBox();
 		readyBtn = new DesignButton(new Insets(5, 80, 5, 80));

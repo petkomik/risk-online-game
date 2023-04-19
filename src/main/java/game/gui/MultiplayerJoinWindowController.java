@@ -139,7 +139,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 		topBannerContent.setPrefHeight(100 * ratio);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 		
-		backButton = new ArrowButton();
+		backButton = new ArrowButton(60 * ratio);
 		
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
@@ -271,7 +271,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	(new GameSound()).buttonClickBackwardSound();
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {
