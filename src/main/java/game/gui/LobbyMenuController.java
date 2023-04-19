@@ -3,6 +3,7 @@ package game.gui;
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
+import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Player;
