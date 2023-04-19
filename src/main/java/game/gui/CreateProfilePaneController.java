@@ -257,12 +257,8 @@ public class CreateProfilePaneController extends StackPane {
 					Node node = (Node) event.getSource();
 					// Getting the Stage where the event is happened
 					stage = (Stage) node.getScene().getWindow();
-					// changing the AnchorPane from the main file
-					anchorPane = (AnchorPane) loadFXML("mainMenu");
-					// Setting the size of the anchorPane
-					anchorPane.setPrefSize(w, h);
-					// Setting the AnchorPane as a root of the main scene
-					stage.getScene().setRoot(anchorPane);
+					MainMenuPaneController mainMenu = new MainMenuPaneController();
+					stage.getScene().setRoot(mainMenu);
 					// Showing the Stage
 					stage.show();
 				} catch (WrongTextFieldInputException e1) {
@@ -298,18 +294,5 @@ public class CreateProfilePaneController extends StackPane {
 				stage.show();
 		    }
 	   });
-	}
-
-	/**
-	 * 
-	 * @param fxml, file name without the ending .fxml
-	 * @return Parent object, to be set as a root in a Secene object
-	 * @throws IOException
-	 * 
-	 *                     This method is responsible for loading a fxml file
-	 */
-	private static Parent loadFXML(String fxml) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
-		return fxmlLoader.load();
 	}
 }
