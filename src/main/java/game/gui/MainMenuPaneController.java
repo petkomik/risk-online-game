@@ -158,20 +158,19 @@ public class MainMenuPaneController implements Initializable{
 	}
 	
 	public void logoutProfile(ActionEvent e) throws IOException {
-		(new GameSound()).buttonClickForwardSound();
+		(new GameSound()).buttonClickBackwardSound();
 		
 		AppController.logoutAndSetValuesToNull();
-		
-		Node node = (Node)e.getSource();
-		// Getting the Stage where the event is happened
+		Node node = (Node) e.getSource();
 		stage = (Stage)node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("userAccess");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
+
+		try {
+			UserAccessPaneController stp = new UserAccessPaneController();
+			stage.getScene().setRoot(stp);
+
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		stage.show();
 		
 	}

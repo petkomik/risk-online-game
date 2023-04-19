@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
+import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.MenuButton;
 import game.gui.GUISupportClasses.Spacing;
 import general.Parameter;
@@ -95,12 +96,14 @@ public class StartPaneController extends StackPane {
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		playButton = new DesignButton(new Insets(10, 20, 10, 20), 30);
+		playButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 300);
 		playButton.setText("Play");
 
 		contentVBox.setSpacing(30);
 		
-		contentVBox.getChildren().addAll(riskLogo, playButton, new Spacing(50));
+		contentVBox.getChildren().addAll(riskLogo, playButton);
+		contentVBox.setPadding(new Insets(0, 0, 50, 0));
+
 		
 		
 		// maybe add vBoxColor
@@ -113,8 +116,6 @@ public class StartPaneController extends StackPane {
 				
 				Node node = (Node)event.getSource();
 				stage = (Stage)node.getScene().getWindow();
-				double w = MainApp.screenWidth;
-				double h = MainApp.screenHeight;
 
 				try {
 					UserAccessPaneController stp = new UserAccessPaneController();
@@ -143,12 +144,5 @@ public class StartPaneController extends StackPane {
 				stage.show();
 	    	}
 		});
-	}
-	
-	private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartPaneController.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-	}
-
-	
+	}	
 }

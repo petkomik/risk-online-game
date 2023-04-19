@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import game.gui.GUISupportClasses.DesignButton;
+import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import general.Parameter;
 import javafx.event.ActionEvent;
@@ -41,9 +42,6 @@ public class UserAccessPaneController extends StackPane {
 	private ImageView riskLogo;
 	private DesignButton logIn;
 	private DesignButton signUp;
-	private AnchorPane anchorPane;
-
-	
 	
 	public UserAccessPaneController() throws FileNotFoundException {
 		super();
@@ -95,15 +93,16 @@ public class UserAccessPaneController extends StackPane {
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		logIn = new DesignButton(new Insets(10, 20, 10, 20), 30);
+		logIn = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 300);
 		logIn.setText("Log In");
 
-		signUp = new DesignButton(new Insets(10, 20, 10, 20), 30);
+		signUp = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 300);
 		signUp.setText("Sign Up");
 		
 		contentVBox.setSpacing(30);
 		
-		contentVBox.getChildren().addAll(riskLogo, logIn, signUp, new Spacing(50));
+		contentVBox.getChildren().addAll(riskLogo, logIn, signUp);
+		contentVBox.setPadding(new Insets(0, 0, 50, 0));
 		
 		
 		// maybe add vBoxColor
@@ -116,13 +115,14 @@ public class UserAccessPaneController extends StackPane {
 				
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
+				
 				try {
-					anchorPane = (AnchorPane) loadFXML("logIn");
-				} catch (IOException e) {
+					LogInPaneController logIn = new LogInPaneController();
+					stage.getScene().setRoot(logIn);			
+					} catch (IOException e) {
 					e.printStackTrace();
 				}
-				anchorPane.setPrefSize(w, h);
-				stage.getScene().setRoot(anchorPane);
+
 				stage.show();
 	    	}
 		});
@@ -135,29 +135,15 @@ public class UserAccessPaneController extends StackPane {
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {
-					anchorPane = (AnchorPane) loadFXML("createProfile");
+					CreateProfilePaneController signUp = new CreateProfilePaneController();
+					stage.getScene().setRoot(signUp);				
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				anchorPane.setPrefSize(w, h);
-				stage.getScene().setRoot(anchorPane);
+
 				stage.show();
 	    	}
 		});
-	}
-		
-	
-	/**
-     * 
-     * @param fxml, file name without the ending .fxml
-     * @return Parent object, to be set as a root in a Secene object
-     * @throws IOException
-     * 
-     * This method is responsible for loading a fxml file
-     */
-	private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(StartPaneController.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
 	}
 }
 

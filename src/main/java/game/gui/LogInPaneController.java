@@ -1,15 +1,24 @@
 package game.gui;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import game.gui.GUISupportClasses.ArrowButton;
+import game.gui.GUISupportClasses.DesignButton;
+import game.gui.GUISupportClasses.ImageViewPane;
+import game.gui.GUISupportClasses.Spacing;
 import general.AppController;
 import general.Parameter;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
@@ -21,131 +30,229 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-public class LogInPaneController implements Initializable{
-	private Stage stage;
-	private AnchorPane anchorPane;
-
+public class LogInPaneController extends StackPane {
+	
+	
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
-	
 	private GameSound gameSound = new GameSound();
-
-	@FXML
-	private Button backButton;
-	@FXML
+	private Stage stage;	
+	private VBox vBox;
+	private ImageView imgBackground;
+	private ImageViewPane imgBackgroundPane;
+	private VBox vBoxColor;
+	private VBox contentVBox;
+	private HBox banner;
+	private HBox topBannerContent;
+	private Label lobbyTextBanner;
+	private ArrowButton backButton;
+	private VBox mainContent;
+	private HBox usernameRow;
 	private Label usernameLabel;
-	@FXML
+	private TextField usernameField;
+	private HBox passwordRow;
 	private Label passwordLabel;
-	
-	@FXML
-	private TextField usernameTF;
-	@FXML
 	private PasswordField passwordField;
-
-	@FXML
-	private Button logInButton;
+	private HBox buttonRow;
+	private DesignButton logInButton;
 	
-	private void setXYof(double relativeX, double relativeY, Node node) {
-		node.setLayoutX(w * relativeX);
-		node.setLayoutY(h * relativeY);
-	}
-	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		/* Setting the size of each element */
-		backButton.setPrefSize(w * 0.091, h * 0.058);
-		
-		usernameLabel.setPrefSize(w * 0.163, h * 0.058);
-		passwordLabel.setPrefSize(w * 0.163, h * 0.058);
-		
-		usernameTF.setPrefSize(w * 0.156, h * 0.035);
-		passwordField.setPrefSize(w * 0.156, h * 0.035);
-
-		logInButton.setPrefSize(w * 0.091, h * 0.058);
-
-		/* Setting the x and y coordinates of each element */
-		this.setXYof(0.026, 0.046, backButton);
-		this.setXYof(0.234, 0.359, usernameLabel);
-		this.setXYof(0.234, 0.428, passwordLabel);
-		this.setXYof(0.439, 0.37, usernameTF);
-		this.setXYof(0.439, 0.44, passwordField);
-		this.setXYof(0.505, 0.521, logInButton );
-		
-		/* Setting the font size */
-		double fontSize = 0.135 * Math.sqrt(Math.pow(backButton.getPrefWidth(), 2.0)+Math.pow(backButton.getPrefHeight(), 2.0));
-		backButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		logInButton.setStyle("-fx-font-size: "+fontSize+"px;");
-		fontSize = 0.137 * Math.sqrt(Math.pow(usernameLabel.getPrefWidth(), 2.0)+Math.pow(usernameLabel.getPrefHeight(), 2.0));
-		usernameLabel.setStyle("-fx-font-size: "+fontSize+"px;");
-		passwordLabel.setStyle("-fx-font-size: "+fontSize+"px;");
-		
-	}
-	
-	/**
-	 * The method handles the event, when the player clicks on the button 'log in'
-	 * 
-	 * @param e
-	 * @throws IOException
-	 */
-	public void clickLogIn(ActionEvent e) throws IOException {
-
-		gameSound.buttonClickForwardSound();
-
-		boolean loginSuccess = AppController.logIntoProfile(usernameTF.getText().trim(), passwordField.getText().trim());
-
-		if(loginSuccess) {
-			Node node = (Node) e.getSource();
-			// Getting the Stage where the event is happened
-			stage = (Stage) node.getScene().getWindow();
-			// changing the AnchorPane from the main file
-			anchorPane = loginSuccess ? (AnchorPane) loadFXML("mainMenu"):(AnchorPane) loadFXML("logIn");
-			// Setting the size of the anchorPane
-			anchorPane.setPrefSize(w, h);
-			// Setting the AnchorPane as a root of the main scene
-			stage.getScene().setRoot(anchorPane);
-			// Showing the Stage
-			stage.show();
-		}
-		else {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setContentText("Username or password is incorrect!");
-			alert.setHeaderText("ERROR");
-			alert.setTitle("");
-			Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
-			tmp.getIcons().add(new Image(Parameter.errorIcon));
-			alert.showAndWait();
-		}
-
+	private AnchorPane anchorPane;
 
 	
-
+	public LogInPaneController() throws FileNotFoundException {
+		super();
+		setup();
+		buttonEvents();
 	}
 
-	/**
-	 * The method handles the event, when the player clicks on the button 'back'
-	 * 
-	 * @param e
-	 * @throws IOException
-	 */
-	public void clickBack(ActionEvent e) throws IOException {
+	public void setup() throws FileNotFoundException {
+		
+		this.setAlignment(Pos.CENTER);
+		
+		/*
+		 * First layer of stack
+		 * Background map image
+		 */
+		
+		vBox = new VBox();
+		vBox.setAlignment(Pos.CENTER);
+		vBox.setFillWidth(true);
 
-		gameSound.buttonClickBackwardSound();
+		imgBackground = new ImageView();
+		imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
+		imgBackground.setPreserveRatio(false);
+		imgBackground.setSmooth(true);
+		imgBackground.setCache(true);
+		
+		imgBackgroundPane = new ImageViewPane(imgBackground);
+		VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
+		
+		vBox.getChildren().add(imgBackgroundPane);
+		
+		/* 
+		 * Second layer of stack
+		 * Color mask
+		 */
+		
+		vBoxColor = new VBox();
+		vBoxColor.setAlignment(Pos.CENTER);
+		vBoxColor.setFillWidth(true);
+		vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
+		
+		contentVBox = new VBox();
+		contentVBox.setAlignment(Pos.CENTER);
+		
+		banner = new HBox(); 
+		banner.setAlignment(Pos.TOP_LEFT);
+		VBox.setMargin(banner, new Insets(50,0,0,0));
+		banner.setPickOnBounds(false);
 
-		Node node = (Node) e.getSource();
-		// Getting the Stage where the event is happened
-		stage = (Stage) node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		anchorPane = (AnchorPane) loadFXML("userAccess");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
-		stage.show();
+		topBannerContent = new HBox();
+		topBannerContent.setAlignment(Pos.CENTER);
+		topBannerContent.setStyle("-fx-background-color: "
+				+ "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
+				+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
+		topBannerContent.setMaxWidth(800);
+		topBannerContent.setMinWidth(500);
+		topBannerContent.setPadding(new Insets(10, 150, 10, 30));
+		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
+		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
+		topBannerContent.setPrefHeight(100);
+		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
+		
+		backButton = new ArrowButton();
+		
+		Spacing bannerContentSpacing = new Spacing();
+		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
+		
+		lobbyTextBanner = new Label("LOG IN");
+		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60));
+		lobbyTextBanner.setTextFill(Color.WHITE);
+		
+		Spacing bannerSpacing = new Spacing();
+		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
+		bannerSpacing.setVisible(false);
+		
+		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
+		banner.getChildren().addAll(topBannerContent, bannerSpacing);
+		
+		mainContent = new VBox();
+		mainContent.setAlignment(Pos.CENTER);
+		mainContent.setSpacing(30);
+		mainContent.setMaxWidth(600);
+
+		
+		usernameRow = new HBox();
+		usernameLabel = new Label();
+		usernameField = new TextField();
+		
+		usernameRow.setAlignment(Pos.CENTER);
+		usernameLabel.setText("Username:");
+		usernameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 40));
+		usernameLabel.setTextFill(Color.web("#64441f"));
+		usernameLabel.setAlignment(Pos.CENTER_LEFT);
+		usernameField.setAlignment(Pos.CENTER_LEFT);
+		usernameField.setPrefWidth(300);
+		usernameField.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+		usernameField.setStyle("-fx-background-color: rgba(100, 68, 31, 1), rgba(225, 211, 184, 0.9);" 
+							+  "-fx-background-insets: -1 -1 -1 -1, 1 1 1 1;"
+							+  "-fx-text-fill: #303030");
+		
+		passwordRow = new HBox();
+		passwordLabel = new Label();
+		passwordField = new PasswordField();
+		
+		passwordRow.setAlignment(Pos.CENTER);
+		passwordLabel.setText("Password:");
+		passwordLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 40));
+		passwordLabel.setTextFill(Color.web("#64441f"));
+		passwordLabel.setAlignment(Pos.CENTER_LEFT);
+		passwordField.setAlignment(Pos.CENTER_LEFT);
+		passwordField.setPrefWidth(300);
+		passwordField.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
+		passwordField.setStyle("-fx-background-color: rgba(100, 68, 31, 1), rgba(225, 211, 184, 0.9);" 
+							+  "-fx-background-insets: -1 -1 -1 -1, 1 1 1 1;"
+							+  "-fx-text-fill: #303030");
+		
+		buttonRow = new HBox();
+		logInButton = new DesignButton(new Insets(7, 20, 7, 20), 30, 30, 200);
+		logInButton.setText("Log In");
+		
+		buttonRow.setAlignment(Pos.CENTER_RIGHT);
+
+		usernameRow.getChildren().addAll(usernameLabel, new Spacing(20), usernameField);
+		passwordRow.getChildren().addAll(passwordLabel, new Spacing(20), passwordField);
+		buttonRow.getChildren().addAll(logInButton);
+		
+		mainContent.getChildren().addAll(usernameRow, passwordRow, buttonRow);
+		contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
+		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	}
 	
+	public void buttonEvents() {
+		logInButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	gameSound.buttonClickForwardSound();
+
+				boolean loginSuccess = AppController.logIntoProfile(usernameField.getText().trim(), passwordField.getText().trim());
+
+				if(loginSuccess) {
+					Node node = (Node) event.getSource();
+					// Getting the Stage where the event is happened
+					stage = (Stage) node.getScene().getWindow();
+					// changing the AnchorPane from the main file
+					try {
+						anchorPane = loginSuccess ? (AnchorPane) loadFXML("mainMenu"):(AnchorPane) loadFXML("logIn");
+					} catch (IOException e) {}
+					// Setting the size of the anchorPane
+					anchorPane.setPrefSize(w, h);
+					// Setting the AnchorPane as a root of the main scene
+					stage.getScene().setRoot(anchorPane);
+					// Showing the Stage
+					stage.show();
+				}
+				else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setContentText("Username or password is incorrect!");
+					alert.setHeaderText("ERROR");
+					alert.setTitle("");
+					Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
+					tmp.getIcons().add(new Image(Parameter.errorIcon));
+					alert.showAndWait();
+				}
+	    	}
+		});
+		
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+				
+				Node node = (Node)event.getSource();
+				stage = (Stage)node.getScene().getWindow();
+
+				try {
+					UserAccessPaneController stp = new UserAccessPaneController();
+					stage.getScene().setRoot(stp);
+
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				stage.show();
+		    }
+	   });
+	}
+
 	/**
 	 * 
 	 * @param fxml, file name without the ending .fxml
