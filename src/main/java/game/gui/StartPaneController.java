@@ -29,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 /**
  * 
@@ -44,15 +45,19 @@ public class StartPaneController extends StackPane {
 	private VBox contentVBox;
 	private ImageView riskLogo;
 	private DesignButton playButton;
+	private double ratio;
 	
 	
 	public StartPaneController() throws FileNotFoundException {
 		super();
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		System.out.println(ratio);
 		setup();
 	}
 
 	public void setup() throws FileNotFoundException {
 		
+
 		this.setAlignment(Pos.CENTER);
 		
 		/*
@@ -91,15 +96,15 @@ public class StartPaneController extends StackPane {
 		
 		riskLogo = new ImageView();
 		riskLogo.setImage(new Image(new FileInputStream(Parameter.logoImage)));
-		riskLogo.setFitWidth(650);
+		riskLogo.setFitWidth(650 * ratio);
 		riskLogo.setPreserveRatio(true);
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		playButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40, 300);
+		playButton = new DesignButton(new Insets(10, 20, 10, 20), 30, 40 * ratio, 300 * ratio);
 		playButton.setText("Play");
 
-		contentVBox.setSpacing(30);
+		contentVBox.setSpacing(30 * ratio);
 		
 		contentVBox.getChildren().addAll(riskLogo, playButton);
 		contentVBox.setPadding(new Insets(0, 0, 50, 0));
@@ -113,7 +118,6 @@ public class StartPaneController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-				
 				Node node = (Node)event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 

@@ -131,7 +131,7 @@ public class GUISupportClasses {
 	        });
 		}
 		
-		public DesignButton(Insets inst, int radius, int fontSize, int width) {
+		public DesignButton(Insets inst, int radius, double fontSize, double width) {
 			super();
 			this.setPadding(inst);
 			this.setPrefWidth(width);
