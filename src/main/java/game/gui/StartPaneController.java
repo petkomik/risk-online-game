@@ -127,7 +127,8 @@ public class StartPaneController extends StackPane {
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
-				
+				stage.show();
+
 //				
 //				Lobby lo = new Lobby();
 //				lo.addAI();
@@ -144,7 +145,6 @@ public class StartPaneController extends StackPane {
 //					e.printStackTrace();
 //				}
 	
-				stage.show();
 	    	}
 		});
 	}	

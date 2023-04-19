@@ -259,23 +259,16 @@ public class MainMenuPaneController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-				
 				Node node = (Node) event.getSource();
-				// Getting the Stage where the event is happened
 				stage = (Stage)node.getScene().getWindow();
-				// changing the AnchorPane from the main file
 				try {
-					anchorPane = (AnchorPane) loadFXML("MultiplayerHostJoinFrame");
+					MultplayerHostJoinController mlt = new MultplayerHostJoinController();
+					stage.getScene().setRoot(mlt);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				// Setting the size of the anchorPane
-				anchorPane.setPrefSize(w, h);
-				// Setting the AnchorPane as a root of the main scene
-				stage.getScene().setRoot(anchorPane);
-				// Showing the Stage
+				
 				stage.show();
-		    	
 		    }
 	   });
 		

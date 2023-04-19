@@ -1,5 +1,6 @@
 package game.gui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
@@ -129,17 +130,18 @@ public class JoinClientMessengerController implements Initializable {
 
 	}
 
-	public void disconnectB(ActionEvent e) throws IOException {
-		Node node = (Node) e.getSource();
-		// Getting the Stage where the event is happened
-		Stage stage = (Stage) node.getScene().getWindow();
-		// changing the AnchorPane from the main file
-		AnchorPane anchorPane = (AnchorPane) loadFXML("main");
-		// Setting the size of the anchorPane
-		anchorPane.setPrefSize(w, h);
-		// Setting the AnchorPane as a root of the main scene
-		stage.getScene().setRoot(anchorPane);
-		// Showing the Stage
+	public void disconnectB(ActionEvent event) throws IOException {
+    	(new GameSound()).buttonClickForwardSound();
+		Node node = (Node)event.getSource();
+		Stage stage = (Stage)node.getScene().getWindow();
+
+		try {
+			UserAccessPaneController stp = new UserAccessPaneController();
+			stage.getScene().setRoot(stp);
+
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		stage.show();
 		this.client.sendMessage(new MessageDisconnect(client.getProfile()));
 		client.closeEverything();
