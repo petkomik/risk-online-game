@@ -67,7 +67,7 @@
 						<!-- Usage: mvn clean javafx:run -->
 						<id>default-cli</id>
 						<configuration>
-							<mainClass>general.Main</mainClass>
+							<mainClass>risk5openjfx.openjfx/general.Main</mainClass>
 						</configuration>
 					</execution>
 				</executions>
