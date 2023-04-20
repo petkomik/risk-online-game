@@ -64,6 +64,36 @@ public class AppController {
 		dbH.createProfileData(profile);
 	}
 	
+	public static Profile createFirstSecondaryProfile(String firstName, String lastName, String userName, String password)
+			throws WrongTextFieldInputException {
+		/*checking for inputs*/
+		if (userName.isBlank()) {
+			throw new WrongTextFieldInputException("Username must not be blank.");
+		} else if (!userName.matches("[a-zA-Z0-9]+")) {
+			throw new WrongTextFieldInputException("Username must only contains characters or numbers.");
+		}
+		if (firstName.isBlank()) {
+			throw new WrongTextFieldInputException("Firstname must not be blank.");
+		} else if (!firstName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
+			throw new WrongTextFieldInputException(
+					"Firstname must only contains characters or hyphens and must start and end with a character.");
+		}
+		if (lastName.isBlank()) {
+			throw new WrongTextFieldInputException("Lastname must not be blank.");
+		} else if (!lastName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
+			throw new WrongTextFieldInputException(
+					"Lastname must only contains characters or hyphens and must start and end with a character.");
+		}
+		if (password.isBlank()) {
+			throw new WrongTextFieldInputException("Password must not be blank.");
+		}
+		/*Profile creating*/
+		Profile profile = new Profile(firstName, lastName, userName, password);
+		dbH.createProfileData(profile);
+		
+		return profile;
+	}
+	
 	public static boolean logIntoProfile(String username, String password) {
 		for(Profile profile : dbH.getAllProfiles()) {
 			if(profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
@@ -72,6 +102,15 @@ public class AppController {
 			}
 		}
 		return false;
+	}
+	
+	public static Profile logIntoSecondProfile(String username, String password) {
+		for(Profile profile : dbH.getAllProfiles()) {
+			if(profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
+				return profile;
+			}
+		}
+		return null;
 	}
 	
 	public static void updateProfile(String value,String attribute) throws WrongTextFieldInputException {

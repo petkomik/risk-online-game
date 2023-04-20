@@ -109,6 +109,7 @@ public class Lobby {
 		Iterator<Player> itt = playersJoined.iterator();
 		while(itt.hasNext()) {
 			Player k = itt.next();
+			// add multiplayer ai
 			if(k instanceof PlayerAI) {
 				AIplayersInLobby.add(k);
 			}
@@ -122,7 +123,8 @@ public class Lobby {
 		Iterator<Player> itt = playersJoined.iterator();
 		while(itt.hasNext()) {
 			Player k = itt.next();
-			if(k instanceof PlayerMP) {
+			// add multiplayer ai
+			if(!(k instanceof PlayerAI)) {
 				players.add(k);
 			}
 		}

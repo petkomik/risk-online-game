@@ -2,13 +2,17 @@ package game.gui;
 
 import game.Lobby;
 import game.PlayerInLobby;
+import game.exceptions.WrongTextFieldInputException;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Player;
+import game.models.PlayerSingle;
 import general.Parameter;
+import general.AppController;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,21 +20,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Optional;
 
+import database.Profile;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -40,6 +56,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 /*
  * Class for the Battle Frame
@@ -100,12 +117,13 @@ public class LobbyMenuController extends StackPane {
 	DesignButton readyBtn;
 	
 	double ratio;
-		
+	boolean singleplayerLobby;
 	
-	public LobbyMenuController(Lobby lobby) throws FileNotFoundException {
+	public LobbyMenuController(Lobby lobby, boolean singleplayerLobby) throws FileNotFoundException {
 		this.lobby = lobby;
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
+		this.singleplayerLobby = singleplayerLobby;
 		this.setup();
 		setUpPlayerCards();
 	}
@@ -233,7 +251,7 @@ public class LobbyMenuController extends StackPane {
 		settingsName = new Label("SETTINGS");
 		
 		numberPlayersDiv = new VBox();
-		numberPlayersLabel = new Label("Number of Players");
+		numberPlayersLabel = new Label(this.singleplayerLobby ? "Number of Players" : " Maximum Players");
 		numberPlayersControls = new HBox();
 		lessBtnPlayers = new ArrowButton(30 * ratio);
 		labelBtnPlayers = new Label();
@@ -310,7 +328,9 @@ public class LobbyMenuController extends StackPane {
 		
 		lessBtnPlayers.setText("<");
 		moreBtnPlayers.setText(">");
-		labelBtnPlayers.setText(String.valueOf(this.lobby.maxNumberOfPlayers));
+		labelBtnPlayers.setText(String.valueOf(this.singleplayerLobby ? 
+				this.lobby.getHumanPlayerList().size() : 
+				this.lobby.maxNumberOfPlayers));
 
 		lessBtnAI.setText("<");
 		moreBtnAI.setText(">");
@@ -352,9 +372,6 @@ public class LobbyMenuController extends StackPane {
 		Spacing spacing4 = new Spacing(1);
 		Spacing spacing5 = new Spacing(1);
 		Spacing spacing6 = new Spacing(1);
-		Spacing spacing7 = new Spacing(100 * ratio);
-		Spacing spacing8 = new Spacing(1);
-		spacing8.setPrefSize(250 * ratio, 100 * ratio);
 		
 		readyBtn.setText("Ready");
 		settingsReadyPane.setSpacing(30 * ratio);
@@ -463,12 +480,12 @@ public class LobbyMenuController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	if(lobby.getAIPlayerList().size() > 0) {
+	    		if(lobby.getAIPlayerList().size() > 0) {
 		    		lobby.removeAI();
 		    		labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size()));
 		    	}
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
-
+	    	
 	    	}
 		});
 		
@@ -476,10 +493,23 @@ public class LobbyMenuController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	if(lobby.maxNumberOfPlayers < 6) {
-		    		labelBtnPlayers.setText(String.valueOf(++lobby.maxNumberOfPlayers));
+		    	if(singleplayerLobby) {
+		    		if(lobby.getHumanPlayerList().size() < 6) {
+				    	Profile newProfile = new SecondaryPlayerDialog().addPlayerDialog();
+				    	if(newProfile != null ) {
+					    	PlayerSingle playerSingle = new PlayerSingle(newProfile.getUserName(), newProfile.getId());
+					    	lobby.joinLobby(playerSingle);
+				    		labelBtnPlayers.setText(String.valueOf(lobby.getHumanPlayerList().size()));
+				    	}
+			    	}
+			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
+		    		
+		    	} else {
+		    		if(lobby.maxNumberOfPlayers < 6) {
+			    		labelBtnPlayers.setText(String.valueOf(++lobby.maxNumberOfPlayers));
+			    	}
+			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 		    	}
-		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 
 	    	}
 		});
@@ -488,12 +518,21 @@ public class LobbyMenuController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	// TODO number of players joined lobby
-		    	if(lobby.maxNumberOfPlayers > 2 && lobby.maxNumberOfPlayers > lobby.getPlayerList().size()) {
-		    		labelBtnPlayers.setText(String.valueOf(--lobby.maxNumberOfPlayers));
+		
+		    	if(singleplayerLobby) {
+		    		if(lobby.getHumanPlayerList().size() > 1) {
+		    			lobby.leaveLobby(lobby.getHumanPlayerList().get(lobby.getHumanPlayerList().size() - 1));
+			    		labelBtnPlayers.setText(String.valueOf(lobby.getHumanPlayerList().size()));
+			    	}
+			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
+		    		
+		    	} else {
+		        	// TODO number of players joined lobby
+			    	if(lobby.maxNumberOfPlayers > 2 && lobby.maxNumberOfPlayers > lobby.getPlayerList().size()) {
+			    		labelBtnPlayers.setText(String.valueOf(--lobby.maxNumberOfPlayers));
+			    	}
+			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 		    	}
-		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
-
 
 		    }
 		});
@@ -523,9 +562,6 @@ public class LobbyMenuController extends StackPane {
 			PlayerCard plyc = new PlayerCard(ply.getPlayer().getName(), ply.getAvatar(), ply.getColor(), ratio);
 			playerCardsPane.getChildren().add(plyc);
 		}
-		
-		
-	 
-
 	}
+	
 }

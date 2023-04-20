@@ -245,7 +245,7 @@ public class MainMenuPaneController extends StackPane {
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {
-					LobbyMenuController lobbyPane = new LobbyMenuController(lobby);
+					LobbyMenuController lobbyPane = new LobbyMenuController(lobby, true);
 					stage.getScene().setRoot(lobbyPane);
 
 				} catch (FileNotFoundException e) {
