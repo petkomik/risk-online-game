@@ -5,21 +5,33 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import game.gui.GUISupportClasses.DesignButton;
+import game.gui.GUISupportClasses.DiceFactory;
 import general.Parameter;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.Effect;
+import javafx.scene.effect.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +40,7 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -36,10 +49,16 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import javafx.util.Duration;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.ColorAdjust;
+import javafx.beans.value.ChangeListener;
 
 /**
  * @author majda
@@ -55,6 +74,10 @@ public class GamePaneController implements Initializable{
 	@FXML
 	private Pane map;
 	
+	private ArrayList<SVGPath> countries;
+	private ArrayList<StackPane> spTroopsDisplay;
+	private HashMap<String, Circle> circleTroopsDisplay;
+	private HashMap<String, Label> labelTroopsDisplay;	
 	private int numOfPlayer;
 	private int turn = 0;
 	private String[] avatars = {"blonde-boy", "bruntette-boy", "earrings-girl", "ginger-girl", "hat-boy", "mustache-man"};
@@ -65,6 +88,8 @@ public class GamePaneController implements Initializable{
 	private VBox vb;
 	private Pane[] panes;
 	private Rectangle[] rectangles;
+	private ImageView[] ivTimer;
+	private Label[] labTimer;
 	private StackPane[] stackPanes;
 	private Circle[] circles;
 	private ImageView[] imageviews;
@@ -81,6 +106,20 @@ public class GamePaneController implements Initializable{
 	private Label labNum;
 	private Label labPhase;
 	private ImageView logo;
+	private Button nextPhaseButton;
+	private Rectangle rectCards;
+	private ImageView cardsImageView;
+	private Pane cardsPane;
+	private Label nextPhaseLabel;
+	private Label numCardsLabel;
+	
+	private Pane reinforcePane;
+	private DesignButton lessBtn;
+	private DesignButton moreBtn;
+	private Label numberLabel;
+	private Button trueButtonReinf;
+	private Button falseButtonReinf;
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -106,6 +145,7 @@ public class GamePaneController implements Initializable{
 		}
 		
 		/*  */
+		getComponents();
 		setUpPlayerList();
 		
 		Button leaveGameButton = new Button("LEAVE GAME");
@@ -120,7 +160,30 @@ public class GamePaneController implements Initializable{
 		
 		setUpPhaseBoard();
 	}
-	
+	private void getComponents() {
+		countries = new ArrayList<>();
+		spTroopsDisplay = new ArrayList<>();
+		circleTroopsDisplay = new HashMap<>();
+		labelTroopsDisplay = new HashMap<>();
+		
+		for(Node n : map.getChildren()) {
+			if(n instanceof SVGPath) {
+				countries.add((SVGPath) n);
+			}
+			if(n instanceof StackPane) {
+				StackPane tmp = (StackPane) n;
+				spTroopsDisplay.add(tmp);
+				for(Node node : tmp.getChildren()) {
+					if(node instanceof Circle) {
+						circleTroopsDisplay.put(tmp.getId().substring(2), (Circle) node);
+					}
+					if(node instanceof Label) {
+						labelTroopsDisplay.put(tmp.getId().substring(2), (Label) node);
+					}
+				}
+			}
+		}
+	}
 	public void setUpPlayerList() {
 		numOfPlayer = 3; // we need a method to get the number of the playing players
 		vb = new VBox();
@@ -157,7 +220,24 @@ public class GamePaneController implements Initializable{
 			boxBlur.setHeight(0.0);
 			boxBlur.setWidth(38.25);
 			rectangles[i].setEffect(boxBlur);
-			panes[i] = new Pane(rectangles[i], stackPanes[i]);
+			
+			labTimer[i] = new Label("Timer");
+			labTimer[i].setLayoutX(16.0);
+			labTimer[i].setLayoutY(42.0);
+			labTimer[i].setPrefHeight(34.0);
+			labTimer[i].setPrefWidth(80.0);
+
+			// ImageView
+			ivTimer[i] = new ImageView(Parameter.phaseLogosdir + "timer.png");
+			ivTimer[i].setFitHeight(27.0);
+			ivTimer[i].setFitWidth(32.0);
+			ivTimer[i].setLayoutX(40.0);
+			ivTimer[i].setLayoutY(9.0);
+			ivTimer[i].setPickOnBounds(true);
+			ivTimer[i].setPreserveRatio(true);
+			
+			panes[i] = new Pane(rectangles[i], stackPanes[i], labTimer[i], ivTimer[i]);
+			panes[i].setId(""); // method for getting player ID
 		}
 		vb.getChildren().addAll(panes);
 		vb.setScaleX(w / 1536.0);
@@ -173,11 +253,11 @@ public class GamePaneController implements Initializable{
 	
 	public void setUpPhaseBoard() {
 		phaseBoard = new Pane();
-		phaseBoard.setPrefSize(474, 130);
+		phaseBoard.setPrefSize(800, 130);
 		
 		vbPhase = new VBox();
 		vbPhase.setPrefSize(250, 130);
-		vbPhase.setLayoutX(87);
+		vbPhase.setLayoutX(341);
 		
 		rectPhase = new Rectangle(300, 70);
 		rectPhase.setArcWidth(5.0);
@@ -209,7 +289,7 @@ public class GamePaneController implements Initializable{
         
         // Füge den Kreis und das ImageView in ein StackPane
         spPhase = new StackPane();
-        spPhase.setLayoutX(28.0);
+        spPhase.setLayoutX(282.0);
         spPhase.setLayoutY(23.0);
         spPhase.getChildren().addAll(cirPhase, ivPhase);
         
@@ -225,26 +305,111 @@ public class GamePaneController implements Initializable{
 
         // Füge den Kreis und das Label in ein StackPane
         spNum = new StackPane();
-        spNum.setLayoutX(86.0);
+        spNum.setLayoutX(340.0);
         spNum.setLayoutY(11.0);
         spNum.setPrefHeight(20.0);
         spNum.setPrefWidth(20.0);
         spNum.getChildren().addAll(cirNum, labNum);
         
         labPhase = new Label("CLAIM");
-        labPhase.setLayoutX(211.0);
+        labPhase.setLayoutX(469.0);
         labPhase.setLayoutY(91.0);
 
         // Erstelle ein ImageView mit einem Bild
         logo = new ImageView(); // we need enum for phases
         logo.setFitHeight(27.0);
         logo.setFitWidth(32.0);
-        logo.setLayoutX(218.0);
+        logo.setLayoutX(474.0);
         logo.setLayoutY(27.0);
         logo.setPickOnBounds(true);
         logo.setPreserveRatio(true);
         
-        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo);
+        nextPhaseButton = new Button("✓");
+        nextPhaseButton.setId("nextPhaseButton");
+        nextPhaseButton.setLayoutX(676.0);
+        nextPhaseButton.setLayoutY(52.0);
+        nextPhaseButton.setMnemonicParsing(false);
+        nextPhaseButton.setPrefHeight(72.0);
+        nextPhaseButton.setPrefWidth(72.0);
+        String color = String.format("#%02X%02X%02X",
+                (int)( colors[turn].getRed() * 255 ),
+                (int)( colors[turn].getGreen() * 255 ),
+                (int)( colors[turn].getBlue() * 255 ));;
+        nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ color +";");
+        nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+            String colorHex;
+        	if (newValue) {
+        		colorHex = String.format("#%02X%02X%02X",
+                        (int)( colors[turn].getRed() * 255 ),
+                        (int)( colors[turn].getGreen() * 255 ),
+                        (int)( colors[turn].getBlue() * 255 ));
+            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ colorHex +";");
+            } else {
+            	colorHex = String.format("#%02X%02X%02X",
+                        (int)( colors[turn].getRed() * 255 - 20),
+                        (int)( colors[turn].getGreen() * 255 - 20),
+                        (int)( colors[turn].getBlue() * 255 - 20));
+            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ colorHex +";");
+            }
+	        });
+//        nextPhaseButton.setVisible(false);
+
+        rectCards = new Rectangle();
+        rectCards.setArcHeight(5.0);
+        rectCards.setArcWidth(5.0);
+        rectCards.setFill(colors[turn]);
+		rectCards.setOpacity(0.44);
+        rectCards.setHeight(84.0);
+        rectCards.setLayoutX(99.0);
+        rectCards.setLayoutY(23.0);
+        rectCards.setStrokeType(StrokeType.INSIDE);
+        rectCards.setStrokeWidth(0.0);
+        rectCards.setWidth(150.0);
+        BoxBlur boxBlur = new BoxBlur();
+        boxBlur.setHeight(0.0);
+        boxBlur.setWidth(38.25);
+        rectCards.setEffect(boxBlur);
+        rectCards.setVisible(false);
+
+        cardsPane = new Pane();
+        cardsPane.setId("cardsPane");
+        cardsPane.setLayoutX(10.0);
+        cardsPane.setLayoutY(7.0);
+        cardsPane.setPrefHeight(115.0);
+        cardsPane.setPrefWidth(110.0);
+        cardsImageView = new ImageView(new Image(Parameter.phaseLogosdir + "cards.png"));
+        cardsImageView.setFitHeight(115.0);
+        cardsImageView.setFitWidth(110.0);
+        cardsImageView.setPickOnBounds(true);
+        cardsImageView.setPreserveRatio(true);
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(0.25);
+        colorAdjust.setContrast(0.1);
+        colorAdjust.setSaturation(-0.18);
+        cardsPane.getChildren().add(cardsImageView);
+        cardsPane.setEffect(colorAdjust);
+        cardsPane.setVisible(false);
+        
+        numCardsLabel = new Label("Label");
+        numCardsLabel.setLayoutX(138.0);
+        numCardsLabel.setLayoutY(45.0);
+        numCardsLabel.setPrefHeight(50.0);
+        numCardsLabel.setPrefWidth(92.0);
+
+        // Second label
+        nextPhaseLabel = new Label("Label");
+        nextPhaseLabel.setLayoutX(682.0);
+        nextPhaseLabel.setLayoutY(6.0);
+        nextPhaseLabel.setPrefHeight(34.0);
+        nextPhaseLabel.setPrefWidth(60.0);
+        
+        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseButton);
         phaseBoard.setScaleX(0.8 * w / 1536.0);
         phaseBoard.setScaleY(0.8 * h / 864.0);
         
@@ -254,18 +419,21 @@ public class GamePaneController implements Initializable{
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
-	public void changeTurnColor(int playerTurn) {
-		cirPhase.setFill(colors[playerTurn]);
-		ivPhase.setImage(new Image(Parameter.avatarsdir + avatars[playerTurn] + ".png"));
-		cirNum.setFill(colors[playerTurn]);
-		pB.setStyle("-fx-accent: "+colors[playerTurn].toString()+";");
+	public void changeTurnColor(Color c, String avatar, String currentPlayer) {
+		cirPhase.setFill(c);
+		ivPhase.setImage(new Image(avatar));
+		cirNum.setFill(c);
+		String tmpColor = String.format("#%02X%02X%02X",
+                (int)( c.getRed() * 255 ),
+                (int)( c.getGreen() * 255 ),
+                (int)( c.getBlue() * 255 ));
+		pB.setStyle("-fx-accent: " + tmpColor + ";");
 		
 		for(int i = 0; i < numOfPlayer; i++) {
-			if(i == playerTurn) {
-				rectangles[i].setVisible(true);
-			}
-			else {
-				rectangles[i].setVisible(false);
+			for(Node n : panes[i].getChildren()) {
+				if(n instanceof Rectangle) {
+					n.setVisible(panes[i].equals(currentPlayer));
+				}
 			}
 		}
 	}
@@ -277,29 +445,261 @@ public class GamePaneController implements Initializable{
 	public void clickCountry(MouseEvent e) {
 		String countryName = ((SVGPath)e.getSource()).getId();
 		// method to set the countryName from GameStateClientController
-		claimCountry(countryName);
+//		turnCountryGrey(countryName);
+//		pointUpCountry(countryName);
+//		deactivateCountry(countryName);
+		claimCountry(countryName, 2, Color.RED);
 	}
 	
-	public void claimCountry(String countryName) {
-		for(Node n : map.getChildren()) {
-			if(n instanceof StackPane) {
-				if(n.getId().equals("sp"+countryName)) {
-					n.setVisible(true);
-					for(Node node : ((StackPane) n).getChildren()) {
-						if(node instanceof Label) {
-							((Label) node).setText("");
-						}
-					}
-				}
+	
+	public void claimCountry(String countryName, int numOfTroops, Color c) {
+		for(StackPane sp : spTroopsDisplay) {
+			if(sp.getId().equals("sp"+countryName)) {
+				sp.setVisible(true);
+			}
+		}
+		labelTroopsDisplay.get(countryName).setText("" + numOfTroops);
+		circleTroopsDisplay.get(countryName).setFill(c);
+		for(SVGPath s : countries) {
+			if(s.getId().equals(countryName)) {
+				s.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+		            String tmpColor;
+		        	if (newValue) {
+		        		tmpColor = String.format("#%02X%02X%02X",
+				                (int)( c.getRed() * 255 ),
+				                (int)( c.getGreen() * 255 ),
+				                (int)( c.getBlue() * 255 )); 
+		            	s.setStyle("-fx-fill: "+ tmpColor +";");
+		            } else {
+		            	tmpColor = String.format("#%02X%02X%02X",
+				                (int)( (c.getRed() * 255) != 0 ? c.getRed() * 255 -20:0),
+				                (int)( (c.getGreen() * 255) != 0 ? c.getGreen() * 255 -20:0),
+				                (int)( (c.getBlue() * 255) != 0 ? c.getBlue() * 255 -20:0)); 
+		            	s.setStyle("-fx-fill: "+ tmpColor +";");
+		            }
+			        });
 			}
 		}
 	}
 	
 	public void changePhase(String phase) {
 		labPhase.setText(phase);
-//		logo.setImage(new Image(Parameter.resourcesdir));
+		logo.setImage(new Image(Parameter.phaseLogosdir + phase + ".png"));
 	}
+	
+	public void showNextPhaseButton() {
+		nextPhaseButton.setVisible(true);
+	}
+	
+	public void showCards() {
+		rectCards.setVisible(true);
+		cardsPane.setVisible(true);
+	}
+	
+	public void turnCountryGrey(String countryName) {
+		for(SVGPath s : countries) {
+			if(s.getId().equals(countryName)) {
+				ColorAdjust colorAdjust = new ColorAdjust();
+		        colorAdjust.setBrightness(-0.2);
 
+		        s.setEffect(colorAdjust);
+			}
+		}
+	}
+	
+	public void pointUpCountry(String countryName) {
+		for(SVGPath s : countries) {
+			if(s.getId().equals(countryName)) {
+				Lighting lighting = new Lighting();
+				lighting.setBumpInput(null);
+				lighting.setDiffuseConstant(1.68);
+				lighting.setSpecularConstant(2.0);
+				lighting.setSpecularExponent(40.0);
+				lighting.setSurfaceScale(10.0);
+
+				Light.Distant light = new Light.Distant();
+				light.setColor((Color) s.getFill());
+
+				lighting.setLight(light);
+
+				s.setEffect(lighting);
+			}
+		}
+	}
+	
+	public void activateCountry(String countryName) {
+		for(SVGPath s : countries) {
+			if(s.getId().equals(countryName)) {
+				s.setDisable(false);
+			}
+		}
+	}
+	
+	public void deactivateCountry(String countryName) {
+		for(SVGPath s : countries) {
+			if(s.getId().equals(countryName)) {
+				s.setDisable(true);
+			}
+		}
+	}
+	public void setNumTroops(String countryName, int numOfTroops) {
+		labelTroopsDisplay.get(countryName).setText(""+numOfTroops);
+	}
+	
+	public void setUpReinforce() {
+		reinforcePane = new Pane();
+		reinforcePane.setPrefSize(1536.0, 864.0);
+		reinforcePane.setScaleX(w / 1536.0);
+		reinforcePane.setScaleY(h / 864.0);
+		reinforcePane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+
+		Rectangle rectangle = new Rectangle();
+		rectangle.setArcHeight(5.0);
+		rectangle.setArcWidth(5.0);
+		rectangle.setFill(Color.web("#ecd9c6"));
+		rectangle.setHeight(61.0);
+		rectangle.setLayoutX(622.0);
+		rectangle.setLayoutY(613.0);
+		rectangle.setStrokeWidth(0.0);
+		rectangle.setWidth(284.0);
+
+		falseButtonReinf = new Button("x");
+		falseButtonReinf.setLayoutX(586.0);
+		falseButtonReinf.setLayoutY(608.0);
+		falseButtonReinf.setMnemonicParsing(false);
+		falseButtonReinf.setPrefSize(72.0, 72.0);
+		falseButtonReinf.setOnAction(e -> reinforcePane.setVisible(false));		
+
+		trueButtonReinf = new Button("✓");
+		trueButtonReinf.setLayoutX(879.0);
+		trueButtonReinf.setLayoutY(608.0);
+		trueButtonReinf.setMnemonicParsing(false);
+		trueButtonReinf.setPrefSize(72.0, 72.0);
+		trueButtonReinf.setOnAction(e -> {
+			reinforcePane.setVisible(false);
+			// num
+		});
+
+		Label label = new Label("Label");
+		label.setLayoutX(661.0);
+		label.setLayoutY(614.0);
+		label.setPrefSize(206.0, 60.0);
+		
+		lessBtn = new DesignButton();
+		moreBtn = new DesignButton();
+		numberLabel = new Label();
+		
+		lessBtn.setText("<");
+		moreBtn.setText(">");
+		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 34));
+		numberLabel.setTextFill(Color.web("#b87331"));
+		numberLabel.textOverrunProperty().set(OverrunStyle.CLIP);
+		numberLabel.setMinWidth(50);
+		numberLabel.setAlignment(Pos.CENTER);
+		
+		HBox numOfTroopsHBox = new HBox();
+		
+		numOfTroopsHBox.setSpacing(25);
+		numOfTroopsHBox.getChildren().addAll(lessBtn, numberLabel, moreBtn);
+		numOfTroopsHBox.setLayoutX((w - numOfTroopsHBox.getHeight()) / 2.0);
+		numOfTroopsHBox.setLayoutY(514.0);
+		
+
+		reinforcePane.getChildren().addAll(rectangle, falseButtonReinf, trueButtonReinf, label, numOfTroopsHBox);
+		reinforcePane.setVisible(false);
+	}
+	public void showReinforce(Color c, int maxTroops) {
+		reinforcePane.setVisible(true);
+		falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ Color.WHITE +";");
+		falseButtonReinf.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+            String colorHex;
+        	if (newValue) {
+        		colorHex = String.format("#%02X%02X%02X",
+                        (int)( c.getRed() * 255 ),
+                        (int)( c.getGreen() * 255 ),
+                        (int)( c.getBlue() * 255 ));
+        		falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ colorHex +";");
+            } else {
+            	colorHex = String.format("#%02X%02X%02X",
+                        (int)( c.getRed() * 255 - 20),
+                        (int)( c.getGreen() * 255 - 20),
+                        (int)( c.getBlue() * 255 - 20));
+            	falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ colorHex +";");
+            }
+	        });
+		String colorTmp = String.format("#%02X%02X%02X",
+                (int)( colors[turn].getRed() * 255 ),
+                (int)( colors[turn].getGreen() * 255 ),
+                (int)( colors[turn].getBlue() * 255 ));
+		trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ colorTmp +";");
+        trueButtonReinf.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+            String colorHex;
+        	if (newValue) {
+        		colorHex = String.format("#%02X%02X%02X",
+                        (int)( colors[turn].getRed() * 255 ),
+                        (int)( colors[turn].getGreen() * 255 ),
+                        (int)( colors[turn].getBlue() * 255 ));
+            	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ colorHex +";");
+            } else {
+            	colorHex = String.format("#%02X%02X%02X",
+                        (int)( colors[turn].getRed() * 255 - 20),
+                        (int)( colors[turn].getGreen() * 255 - 20),
+                        (int)( colors[turn].getBlue() * 255 - 20));
+            	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ colorHex +";");
+            }
+	        });
+		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+		    	if (Integer.parseInt(numberLabel.getText()) > 1) {
+		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
+			    	numberLabel.setText(String.valueOf(i));		    	
+		    	}
+
+		    }
+		});
+		
+		moreBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+		    	if (Integer.parseInt(numberLabel.getText()) < maxTroops) {
+		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
+		    		numberLabel.setText(String.valueOf(i));
+		    	}
+		    }
+		});
+	}
+	public void unshowReinforce(Color c) {
+		reinforcePane.setVisible(false);
+	}
+	public void showMoveTroops() {
+		
+	}
+	public void unshowMoveTroops() {
+		
+	}
+	public void showFortify() {
+		
+	}
+	public void unshowFortify() {
+		
+	}
 	private void clickLeaveGameButton(ActionEvent e) {
 		
 	}
