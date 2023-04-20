@@ -103,7 +103,7 @@ public class HostServerMessengerController implements Initializable {
 				scrollPaneMain.setVvalue((Double) newValue);
 			}
 		});
-
+//sss
 		sendButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
