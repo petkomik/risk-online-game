@@ -50,8 +50,8 @@ public class MainApp extends Application{
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.setResizable(true);
-        stage.setMinHeight(800);
-		stage.setMinWidth(1300);
+        stage.setMinHeight(600);
+		stage.setMinWidth(900);
         stage.show();
         
         /**************** Sound *************************//**

@@ -1,6 +1,7 @@
 package game.gui;
 
 import game.Lobby;
+import game.PlayerInLobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
@@ -11,6 +12,7 @@ import general.Parameter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -20,10 +22,14 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -33,6 +39,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 /*
  * Class for the Battle Frame
@@ -98,6 +105,7 @@ public class LobbyMenuController extends StackPane {
 	public LobbyMenuController(Lobby lobby) throws FileNotFoundException {
 		this.lobby = lobby;
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Math.min(ratio + 0.3, 1);
 		this.setup();
 		setUpPlayerCards();
 	}
@@ -159,7 +167,7 @@ public class LobbyMenuController extends StackPane {
 		
 		topBannerParent = new HBox(); 
 		topBannerParent.setAlignment(Pos.TOP_LEFT);
-		StackPane.setMargin(topBannerParent, new Insets(50,0,0,0));
+		StackPane.setMargin(topBannerParent, new Insets(50 * ratio,0,0,0));
 		topBannerParent.setPickOnBounds(false);
 
 		topBannerContent = new HBox();
@@ -167,21 +175,21 @@ public class LobbyMenuController extends StackPane {
 		topBannerContent.setStyle("-fx-background-color: "
 				+ "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
 				+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
-		topBannerContent.setMaxWidth(800);
-		topBannerContent.setMinWidth(500);
-		topBannerContent.setPadding(new Insets(10, 150, 10, 30));
+		topBannerContent.setMaxWidth(800 * ratio);
+		topBannerContent.setMinWidth(500 * ratio);
+		topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
 		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
-		topBannerContent.setPrefHeight(100);
+		topBannerContent.setPrefHeight(100 * ratio);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 		
-		backButton = new ArrowButton();
-		
+		backButton = new ArrowButton(60 * ratio);
+
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
 		
 		lobbyTextBanner = new Label("LOBBY");
-		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60));
+		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
 		lobbyTextBanner.setTextFill(Color.WHITE);
 		
 		Spacing bannerSpacing = new Spacing();
@@ -200,21 +208,21 @@ public class LobbyMenuController extends StackPane {
 
 		mainContent = new HBox();
 		mainContent.setAlignment(Pos.CENTER);
-		mainContent.setSpacing(50);
+		mainContent.setSpacing(50 * ratio);
 		mainContent.setFillHeight(true);
-		mainContent.setPadding(new Insets(50, 150, 50, 150));
+		mainContent.setPadding(new Insets(50 * ratio, 150 * ratio, 50 * ratio, 150 * ratio));
 
 		playerCardsPane = new FlowPane();
 		playerCardsPane.setOrientation(Orientation.HORIZONTAL);
 		playerCardsPane.minHeightProperty().bind(playerCardsPane.maxHeightProperty());
 		playerCardsPane.maxHeightProperty().bind(playerCardsPane.prefHeightProperty());
-		playerCardsPane.setPrefHeight(530);
+		playerCardsPane.setPrefHeight(450 * ratio);
 		playerCardsPane.minWidthProperty().bind(playerCardsPane.maxWidthProperty());
 		playerCardsPane.maxWidthProperty().bind(playerCardsPane.prefWidthProperty());
-		playerCardsPane.setPrefWidth(650);
-		playerCardsPane.setHgap(20);
-		playerCardsPane.setVgap(20);
-		playerCardsPane.setAlignment(Pos.CENTER_LEFT);
+		playerCardsPane.setPrefWidth(640 * ratio);
+		playerCardsPane.setHgap(20 * ratio);
+		playerCardsPane.setVgap(20 * ratio);
+		playerCardsPane.setAlignment(Pos.TOP_LEFT);
 		
 		setUpPlayerCards();
 		
@@ -227,26 +235,26 @@ public class LobbyMenuController extends StackPane {
 		numberPlayersDiv = new VBox();
 		numberPlayersLabel = new Label("Number of Players");
 		numberPlayersControls = new HBox();
-		lessBtnPlayers = new ArrowButton(30);
+		lessBtnPlayers = new ArrowButton(30 * ratio);
 		labelBtnPlayers = new Label();
-		moreBtnPlayers = new ArrowButton(30);
+		moreBtnPlayers = new ArrowButton(30 * ratio);
 		
 		numberOfAiDiv = new VBox();
 		numberOfAiLabel = new Label("Number of AI Players");
 		numberOfAiControls = new HBox();
-		lessBtnAI = new ArrowButton(30);
+		lessBtnAI = new ArrowButton(30 * ratio);
 		labelBtnAI= new Label("0");
-		moreBtnAI = new ArrowButton(30);
+		moreBtnAI = new ArrowButton(30 * ratio);
 		
 		AIDifficultyDiv = new VBox();
 		AIDifficultyLabel = new Label("AI Player Difficulty");
 		AIDifficultyControls = new HBox();
-		lessBtnDiff = new ArrowButton(30);
+		lessBtnDiff = new ArrowButton(30 * ratio);
 		labelBtnDiff = new Label();
-		moreBtnDiff = new ArrowButton(30);
+		moreBtnDiff = new ArrowButton(30 * ratio);
 		
 		readyButtonPane = new HBox();
-		readyBtn = new DesignButton(new Insets(5, 80, 5, 80));
+		readyBtn = new DesignButton(new Insets(5 * ratio, 80 * ratio, 5 * ratio, 80 * ratio), 18, 28 * ratio, 300 * ratio);
 		
 		/*
 		 * Settings Pane
@@ -254,11 +262,11 @@ public class LobbyMenuController extends StackPane {
 		
 		settingsPane.minHeightProperty().bind(settingsPane.maxHeightProperty());
 		settingsPane.maxHeightProperty().bind(settingsPane.prefHeightProperty());
-		settingsPane.setPrefHeight(370);
+		settingsPane.setPrefHeight(370 * ratio);
 		
 		settingsPane.minWidthProperty().bind(settingsPane.maxWidthProperty());
 		settingsPane.maxWidthProperty().bind(settingsPane.prefWidthProperty());
-		settingsPane.setPrefWidth(320);
+		settingsPane.setPrefWidth(320 * ratio);
 		
 		settingsPane.setStyle("-fx-background-color: rgba(100, 68, 31, 0.7);");
 		settingsPane.setFillWidth(true);
@@ -269,9 +277,9 @@ public class LobbyMenuController extends StackPane {
 		
 		settingsBanner.setStyle("-fx-background-color: #64441f;");
 		settingsBanner.setAlignment(Pos.TOP_CENTER);
-		settingsBanner.setPadding(new Insets(10, 20, 10, 20));
+		settingsBanner.setPadding(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio));
 	
-		settingsName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 32));
+		settingsName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 32 * ratio));
 		settingsName.setTextFill(Color.WHITE);
 		settingsName.setAlignment(Pos.CENTER);
 		
@@ -279,24 +287,24 @@ public class LobbyMenuController extends StackPane {
 		 * Settings Controlls
 		 */
 		
-		settingsControlPane.setSpacing(20);
+		settingsControlPane.setSpacing(20 * ratio);
 		settingsControlPane.setFillWidth(true);
-		settingsControlPane.setPadding(new Insets(30, 50, 30, 50));
+		settingsControlPane.setPadding(new Insets(30 * ratio, 50 * ratio, 30 * ratio, 50 * ratio));
 		settingsControlPane.setAlignment(Pos.CENTER);
 		
 		numberPlayersDiv.setAlignment(Pos.CENTER);
 		numberOfAiDiv.setAlignment(Pos.CENTER);
 		AIDifficultyDiv.setAlignment(Pos.CENTER);
 		
-		numberPlayersLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20));
+		numberPlayersLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20 * ratio));
 		numberPlayersLabel.setTextFill(Color.WHITE);
 		numberPlayersLabel.setAlignment(Pos.CENTER);
 		
-		numberOfAiLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20));
+		numberOfAiLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20 * ratio));
 		numberOfAiLabel.setTextFill(Color.WHITE);
 		numberOfAiLabel.setAlignment(Pos.CENTER);
 		
-		AIDifficultyLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20));
+		AIDifficultyLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20 * ratio));
 		AIDifficultyLabel.setTextFill(Color.WHITE);
 		AIDifficultyLabel.setAlignment(Pos.CENTER);
 		
@@ -312,21 +320,21 @@ public class LobbyMenuController extends StackPane {
 		moreBtnDiff.setText(">");
 		labelBtnDiff.setText(String.valueOf(this.aiDifficultyLevels[this.lobby.difficultyOfAI]));
 
-		labelBtnPlayers.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30));
+		labelBtnPlayers.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
 		labelBtnPlayers.textOverrunProperty().set(OverrunStyle.CLIP);
-		labelBtnPlayers.setMinWidth(50);
+		labelBtnPlayers.setMinWidth(50 * ratio);
 		labelBtnPlayers.setAlignment(Pos.CENTER);
 		labelBtnPlayers.setTextFill(Color.WHITE);
 		
-		labelBtnAI.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30));
+		labelBtnAI.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
 		labelBtnAI.textOverrunProperty().set(OverrunStyle.CLIP);
-		labelBtnAI.setMinWidth(50);
+		labelBtnAI.setMinWidth(50 * ratio);
 		labelBtnAI.setAlignment(Pos.CENTER);
 		labelBtnAI.setTextFill(Color.WHITE);
 
-		labelBtnDiff.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30));
+		labelBtnDiff.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
 		labelBtnDiff.textOverrunProperty().set(OverrunStyle.CLIP);
-		labelBtnDiff.setMinWidth(50);
+		labelBtnDiff.setMinWidth(50 * ratio);
 		labelBtnDiff.setAlignment(Pos.CENTER);
 		labelBtnDiff.setTextFill(Color.WHITE);
 		
@@ -344,13 +352,13 @@ public class LobbyMenuController extends StackPane {
 		Spacing spacing4 = new Spacing(1);
 		Spacing spacing5 = new Spacing(1);
 		Spacing spacing6 = new Spacing(1);
-		Spacing spacing7 = new Spacing(150);
+		Spacing spacing7 = new Spacing(100 * ratio);
 		Spacing spacing8 = new Spacing(1);
-		spacing8.setPrefSize(250, 100);
+		spacing8.setPrefSize(250 * ratio, 100 * ratio);
 		
 		readyBtn.setText("Ready");
-		settingsReadyPane.setSpacing(30);
-		settingsReadyPane.setAlignment(Pos.CENTER);
+		settingsReadyPane.setSpacing(30 * ratio);
+		settingsReadyPane.setAlignment(Pos.TOP_CENTER);
 		readyButtonPane.setAlignment(Pos.CENTER);
 		
 		settingsBanner.getChildren().add(settingsName);
@@ -367,17 +375,17 @@ public class LobbyMenuController extends StackPane {
 		numberOfAiDiv.getChildren().addAll(numberOfAiLabel, numberOfAiControls);
 		AIDifficultyDiv.getChildren().addAll(AIDifficultyLabel, AIDifficultyControls);
 		
-		numberPlayersDiv.setSpacing(7);
-		numberOfAiDiv.setSpacing(7); 
-		AIDifficultyDiv.setSpacing(7);
+		numberPlayersDiv.setSpacing(7 * ratio * ratio);
+		numberOfAiDiv.setSpacing(7 * ratio); 
+		AIDifficultyDiv.setSpacing(7 * ratio);
 		
 		settingsControlPane.getChildren().addAll(numberPlayersDiv, numberOfAiDiv, AIDifficultyDiv);
 		settingsPane.getChildren().addAll(settingsBanner, settingsControlPane);
 		
 		settingsReadyPane.getChildren().addAll(settingsPane, readyButtonPane);
-		
+
 		mainContent.getChildren().addAll(playerCardsPane, settingsReadyPane);
-		contentVBox.getChildren().addAll(spacing7, mainContent, spacing8);
+		contentVBox.getChildren().addAll(mainContent);
 
 		/*
 		 * Action Handlers for all the buttons
@@ -386,8 +394,18 @@ public class LobbyMenuController extends StackPane {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-		    	// TODO back button
+		    	(new GameSound()).buttonClickBackwardSound();
+				Node node = (Node) event.getSource();
+				Stage stage = (Stage) node.getScene().getWindow();
+				try {
+			    	MainMenuPaneController mainMenu = new MainMenuPaneController();
+					stage.getScene().setRoot(mainMenu);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				stage.show();
+	
 		    	}
 		});
 		
@@ -429,7 +447,7 @@ public class LobbyMenuController extends StackPane {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	// TODO
 		    	int labelBefore = Integer.parseInt(labelBtnAI.getText());
-		    	if(lobby.getAIPlayerList().size() < 5 &&  lobby.maxNumberOfPlayers > lobby.getHumanPlayerList().size()) {
+		    	if(lobby.getAIPlayerList().size() < 5 &&  lobby.maxNumberOfPlayers > lobby.getPlayerList().size()) {
 		    		System.out.println("Btn click");
 		    		lobby.addAI();
 		    		labelBtnAI.setText(String.valueOf(labelBefore + 1));
@@ -498,11 +516,11 @@ public class LobbyMenuController extends StackPane {
 	
 	public void setUpPlayerCards() throws FileNotFoundException {
 		playerCardsPane.getChildren().removeAll(playerCardsPane.getChildren());
-		ArrayList<Player> players = new ArrayList<>(lobby.getPlayerList());
-		Iterator<Player> itt = players.iterator();
+		ArrayList<PlayerInLobby> players = new ArrayList<>(lobby.getPlayersInLobby());
+		Iterator<PlayerInLobby> itt = players.iterator();
 		while(itt.hasNext()) {
-			Player ply = itt.next();
-			PlayerCard plyc = new PlayerCard(ply.getName(), Parameter.blondBoy, Parameter.blueColor);
+			PlayerInLobby ply = itt.next();
+			PlayerCard plyc = new PlayerCard(ply.getPlayer().getName(), ply.getAvatar(), ply.getColor(), ratio);
 			playerCardsPane.getChildren().add(plyc);
 		}
 		

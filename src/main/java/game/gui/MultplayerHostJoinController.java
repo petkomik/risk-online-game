@@ -65,6 +65,7 @@ public class MultplayerHostJoinController extends StackPane {
 	public MultplayerHostJoinController() throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Math.min(ratio + 0.3, 1);
 		setup();
 		buttonEvents();
 	}
@@ -108,7 +109,7 @@ public class MultplayerHostJoinController extends StackPane {
 		
 		banner = new HBox(); 
 		banner.setAlignment(Pos.TOP_LEFT);
-		VBox.setMargin(banner, new Insets(50,0,0,0));
+		VBox.setMargin(banner, new Insets(50 * ratio,0,0,0));
 		banner.setPickOnBounds(false);
 		
 		backButton = new ArrowButton(60 * ratio);

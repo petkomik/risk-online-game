@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Player;
 import general.AppController;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
@@ -75,6 +77,7 @@ public class MainMenuPaneController extends StackPane {
 	public MainMenuPaneController() throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Math.min(ratio + 0.3, 1);
 		setup();
 		buttonEvents();
 	}
@@ -118,7 +121,7 @@ public class MainMenuPaneController extends StackPane {
 		
 		banner = new HBox(); 
 		banner.setAlignment(Pos.TOP_LEFT);
-		VBox.setMargin(banner, new Insets(50,0,0,0));
+		VBox.setMargin(banner, new Insets(50 * ratio,0,0,0));
 		banner.setPickOnBounds(false);
 
 		topBannerContent = new HBox();
@@ -236,21 +239,34 @@ public class MainMenuPaneController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickForwardSound();
+				Lobby lobby = new Lobby();
+				// TODO get methods for color + avatars
+				lobby.joinLobby(new Player(AppController.getProfile().getUserName(), AppController.getProfile().getId()));
 				Node node = (Node) event.getSource();
-				// Getting the Stage where the event is happened
 				stage = (Stage)node.getScene().getWindow();
-				// changing the AnchorPane from the main file
 				try {
-					anchorPane = (AnchorPane) loadFXML("gameFrame");
-				} catch (IOException e) {
+					LobbyMenuController lobbyPane = new LobbyMenuController(lobby);
+					stage.getScene().setRoot(lobbyPane);
+
+				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
-				// Setting the size of the anchorPane
-				anchorPane.setPrefSize(w, h);
-				// Setting the AnchorPane as a root of the main scene
-				stage.getScene().setRoot(anchorPane);
-				// Showing the Stage
-				stage.show();
+				
+//				Node node = (Node) event.getSource();
+//				// Getting the Stage where the event is happened
+//				stage = (Stage)node.getScene().getWindow();
+//				// changing the AnchorPane from the main file
+//				try {
+//					anchorPane = (AnchorPane) loadFXML("gameFrame");
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//				// Setting the size of the anchorPane
+//				anchorPane.setPrefSize(w, h);
+//				// Setting the AnchorPane as a root of the main scene
+//				stage.getScene().setRoot(anchorPane);
+//				// Showing the Stage
+//				stage.show();
 		    }
 	   });
 		

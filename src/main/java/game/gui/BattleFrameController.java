@@ -83,8 +83,8 @@ public class BattleFrameController extends VBox {
 	HBox numberOfDiceControls;
 	HBox diceButtonPane;
 	DesignButton throwBtn;
-	DesignButton lessBtn;
-	DesignButton moreBtn;
+	ArrowButton lessBtn;
+	ArrowButton moreBtn;
 	Label numberLabel;
 	FlowPane diceImagesAt;
 	FlowPane diceImagesDf;
@@ -313,10 +313,10 @@ public class BattleFrameController extends VBox {
 		diceControls = new VBox();
 
 		numberOfDiceControls = new HBox();
-		lessBtn = new DesignButton();
+		lessBtn = new ArrowButton(60 * menuRatio);
 		// TODO connect from gamestate
 		numberLabel = new Label(String.valueOf(this.maxDiceToThrow));
-		moreBtn = new DesignButton();
+		moreBtn = new ArrowButton(60 * menuRatio);
 		
 		diceButtonPane = new HBox();
 		throwBtn = new DesignButton();
@@ -381,9 +381,7 @@ public class BattleFrameController extends VBox {
 			    	dicesAttacker = new int[dicesAttacker.length + 1];
 			    	DiceFactory newDice;
 					try {
-						double k = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-						double kMin = Math.min(ratio + 0.3, 1);
-						newDice = new DiceFactory((i*29)%6 + 1, true, kMin);
+						newDice = new DiceFactory((i*29)%6 + 1, true, menuRatio);
 				    	diceImagesAt.getChildren().add(newDice);
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();

@@ -51,6 +51,7 @@ public class StartPaneController extends StackPane {
 	public StartPaneController() throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Math.min(ratio + 0.3, 1);
 		setup();
 	}
 
@@ -129,21 +130,6 @@ public class StartPaneController extends StackPane {
 				}
 				stage.show();
 
-//				
-//				Lobby lo = new Lobby();
-//				lo.addAI();
-//				lo.addAI();
-//				lo.addAI();
-//				lo.addAI();
-//	
-//				LobbyMenuController lobby;
-//				try {
-//					lobby = new LobbyMenuController(lo);
-//					stage.getScene().setRoot(lobby);
-//
-//				} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//				}
 	
 	    	}
 		});

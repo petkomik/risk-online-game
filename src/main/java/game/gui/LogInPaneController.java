@@ -71,6 +71,7 @@ public class LogInPaneController extends StackPane {
 	public LogInPaneController() throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Math.min(ratio + 0.3, 1);
 		setup();
 		buttonEvents();
 	}

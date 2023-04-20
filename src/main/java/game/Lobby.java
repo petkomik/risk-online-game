@@ -27,17 +27,15 @@ public class Lobby {
 	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
 			Parameter.bruntetteBoy, Parameter.mustacheMan,
 			Parameter.earringsGirl, Parameter.hatBoy};
-	static String[] aiNames = new String[] {"Jasper (AI)", "Andrea (AI)", "Mick (AI)", 
-			"Tosho (AI)", "Maria (AI)"};
+	static String[] aiNames = new String[] {"Andrea (AI)", "Jasper (AI)", "Mick (AI)", 
+			"Maria (AI)", "Tosho (AI)"};
 	
 
-	
-	
-	ArrayList<PlayerInLobby> playersInLobby;
-	ArrayList<Player> playersJoined;
-	ArrayList<Color> avaiableColors;
-	ArrayList<String> avaiableAvatars;
-	ArrayList<String> avaiableAINames;
+	private ArrayList<PlayerInLobby> playersInLobby;
+	private ArrayList<Player> playersJoined;
+	private ArrayList<Color> avaiableColors;
+	private ArrayList<String> avaiableAvatars;
+	private ArrayList<String> avaiableAINames;
 
 	public int lobbyRank;
 	public int difficultyOfAI;
@@ -67,7 +65,7 @@ public class Lobby {
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
 			this.playersJoined.add(toAdd);
-			this.updateScore();
+			//this.updateScore();
 			playersInLobby.add(this.addColorAvatar(toAdd));
 			
 		}
@@ -80,7 +78,7 @@ public class Lobby {
 			Iterator<PlayerInLobby> itt = playersInLobby.iterator();
 			while(itt.hasNext()) {
 				PlayerInLobby k = itt.next();
-				if(k.player.equals(toLeave)) {
+				if(k.getPlayer().equals(toLeave)) {
 					this.removeColorAvatar(k);
 					this.playersInLobby.remove(k);
 					break;
@@ -158,8 +156,8 @@ public class Lobby {
 	}
 	
 	private void removeColorAvatar(PlayerInLobby ply) {
-		this.avaiableAvatars.add(ply.avatar);
-		this.avaiableColors.add(ply.color);
+		this.avaiableAvatars.add(ply.getAvatar());
+		this.avaiableColors.add(ply.getColor());
 	}
 
 	
@@ -168,14 +166,12 @@ public class Lobby {
 	}
 	
 	public void addAI() {
-		System.out.println(this.avaiableAINames.size());
-
 		String aiN = aiNames[this.avaiableAINames.size() - 1];
 		this.avaiableAINames.remove(aiN);
 		Color aiC = colors[this.avaiableColors.size() - 1];
-		this.avaiableColors.remove(aiN);
+		this.avaiableColors.remove(aiC);
 		String aiA = avatars[this.avaiableAvatars.size() - 1];
-		this.avaiableAvatars.remove(aiN);
+		this.avaiableAvatars.remove(aiA);
 	
 		PlayerAI aiP = new PlayerAI(aiN, 3000, this.difficultyOfAI);
 		this.getPlayerList().add(aiP);
@@ -185,8 +181,31 @@ public class Lobby {
 		
 	}
 	
+	public ArrayList<PlayerInLobby> getPlayersInLobby() {
+		return playersInLobby;
+	}
+
+
 	public void removeAI() {
-		
+		if (this.getAIPlayerList().size() > 0) {
+			Player k = this.getAIPlayerList().get(this.getAIPlayerList().size() - 1);
+			this.playersJoined.remove(k);
+			Iterator<PlayerInLobby> itt =  this.playersInLobby.iterator();
+			PlayerInLobby removed = null;
+			while (itt.hasNext()) {
+				PlayerInLobby ply = itt.next();
+		        if (ply.getPlayer().equals(k)) {
+		        	removed = ply;
+		        }
+		    }
+			if (removed != null) {
+				this.playersInLobby.removeIf(n -> (n.getPlayer().equals(k)));
+				this.avaiableAINames.add(k.getName());
+				this.avaiableAvatars.add(removed.getAvatar());
+				this.avaiableColors.add(removed.getColor());
+				System.out.println(this.avaiableAINames.size() + " " + this.avaiableColors.size() + " " + this.avaiableAvatars.size());
+			}
+		}
 		
 	}
 	

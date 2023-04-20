@@ -105,32 +105,6 @@ public class GUISupportClasses {
 	        });
 		}
 		
-		public DesignButton(Insets inst) {
-			this();
-			this.setPadding(inst);
-			this.setStyle("-fx-background-color: #b87331;"
-					+ "-fx-background-radius: 21;"
-					+ "-fx-border-radius: 18;"
-        			+ "-fx-border-color: #b87331;"
-        			+ "-fx-border-width: 3px;");
-		
-		this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            if (newValue) {
-            	this.setStyle("-fx-background-color: #64441f;"
-							+ "-fx-background-radius: 21;"
-							+ "-fx-border-radius: 18;"
-	            			+ "-fx-border-color: #ffff;"
-	            			+ "-fx-border-width: 3px;");
-            } else {
-            	this.setStyle("-fx-background-color: #b87331;"
-							+ "-fx-background-radius: 21;"
-							+ "-fx-border-radius: 18;"
-	            			+ "-fx-border-color: #b87331;"
-	            			+ "-fx-border-width: 3px;");
-            }
-	        });
-		}
-		
 		public DesignButton(Insets inst, int radius, double fontSize, double width) {
 			super();
 			this.setPadding(inst);
@@ -180,7 +154,7 @@ public class GUISupportClasses {
 			this.setTextFill(Color.WHITE);
 			this.setStyle("-fx-background-color: #b87331;"
 					+ "-fx-background-radius: 15;"
-					+ "-fx-border-radius: 15;"
+					+ "-fx-border-radius: 12;"
 	       			+ "-fx-border-color: #b87331;"
 	    			+ "-fx-border-width: 3px;");
 			
@@ -188,13 +162,13 @@ public class GUISupportClasses {
 	            if (newValue) {
 	            	this.setStyle("-fx-background-color: #b87331;"
 	        				+ "-fx-background-radius: 15;"
-	        				+ "-fx-border-radius: 15;"
+	        				+ "-fx-border-radius: 12;"
 	            			+ "-fx-border-color: #ffffff;"
 	            			+ "-fx-border-width: 3px;");
 	            } else {
 	            	this.setStyle("-fx-background-color: #b87331;"
 	        				+ "-fx-background-radius: 15;"
-	        				+ "-fx-border-radius: 15;"
+	        				+ "-fx-border-radius: 12;"
 	            			+ "-fx-border-color: #b87331;"
 	            			+ "-fx-border-width: 3px;");
 	            }
@@ -215,19 +189,15 @@ public class GUISupportClasses {
 		String name;
 		ImageView avatar = new ImageView();
 		Color color;		
-		
 		Label playerReady = new Label("Not Ready");
-		
-		public PlayerCard() {
-			super();
-		}
-		
-		
-		public PlayerCard(String name, String avatar, Color color) throws FileNotFoundException {
+		double ratio;
+
+		public PlayerCard(String name, String avatar, Color color, double ratio) throws FileNotFoundException {
 			super();
 			this.name = name;
 			this.avatar.setImage(new Image(new FileInputStream(avatar)));
 			this.color = color;
+			this.ratio = ratio;
 			buildCard();	
 		}
 		
@@ -247,21 +217,21 @@ public class GUISupportClasses {
 			cardBanner.setStyle("-fx-background-color: " + hex + ";"
 					+ "-fx-background-radius: 7 7 0 0");
 			cardBanner.setAlignment(Pos.TOP_CENTER);
-			cardBanner.setPadding(new Insets(10, 20, 10, 20));
+			cardBanner.setPadding(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio));
 		
-			playerName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 22));
+			playerName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 22 * ratio));
 			playerName.setTextFill(Color.WHITE);
 			playerName.setAlignment(Pos.CENTER);
 			
 			cardBanner.getChildren().add(playerName);
 			
-			Circle circlePl = new Circle(50);
+			Circle circlePl = new Circle(50 * ratio);
 			circlePl.setFill(color);
 			circlePl.setStroke(color);
-			circlePl.setStrokeWidth(6);
+			circlePl.setStrokeWidth(6 * ratio);
 						
-			this.avatar.setFitWidth(100);
-			this.avatar.setFitHeight(100);
+			this.avatar.setFitWidth(100 * ratio);
+			this.avatar.setFitHeight(100 * ratio);
 			this.avatar.setPreserveRatio(true);
 			this.avatar.setSmooth(true);
 			this.avatar.setCache(true);
@@ -271,7 +241,7 @@ public class GUISupportClasses {
 			
 			readyBanner.setAlignment(Pos.BOTTOM_CENTER);
 			
-			playerReady.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24));
+			playerReady.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24 * ratio));
 			playerReady.setTextFill(Parameter.darkGrey);
 			playerReady.setAlignment(Pos.CENTER);
 			
@@ -280,16 +250,16 @@ public class GUISupportClasses {
 			this.setStyle("-fx-background-color: rgba(225, 225, 225, 0.8);");
 			this.minHeightProperty().bind(this.maxHeightProperty());
 			this.maxHeightProperty().bind(this.prefHeightProperty());
-			this.setPrefHeight(215);
+			this.setPrefHeight(215 * ratio);
 			
 			this.minWidthProperty().bind(this.maxWidthProperty());
 			this.maxWidthProperty().bind(this.prefWidthProperty());
-			this.setPrefWidth(200);
+			this.setPrefWidth(200 * ratio);
 			
 			this.setStyle("-fx-background-color: rgba(225, 225, 225, 0.7);"
 					+ "-fx-background-radius: 7;");
 
-			this.setSpacing(10);
+			this.setSpacing(10 * ratio);
 			this.getChildren().addAll(cardBanner, playerImage, readyBanner);
 
 			
