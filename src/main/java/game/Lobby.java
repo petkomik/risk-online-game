@@ -130,6 +130,7 @@ public class Lobby {
 		}
 		return players;
 	}
+	// 
 	
 	private PlayerInLobby addColorAvatar(Player ply) {
 		// TODO
