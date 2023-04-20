@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import game.logic.GameLogic;
+import javafx.scene.image.Image;
 
 /**
  * Player class to model the player entity
@@ -19,6 +20,7 @@ public class Player {
 	private String color;
 	private int id;
 	private int rank;
+	private Image image;
 	private HashMap<CountryName, Territory> ownedCountries;
 	private ArrayList<Continent> ownedContinents;
 	private int sumOfAllTroops;
@@ -39,6 +41,16 @@ public class Player {
 		cards = new ArrayList<>();
 		this.name = name;
 		this.id = id;
+		// set Random Image
+	}
+	
+	public Player(String name, int id, String imagePath) {
+		ownedCountries = new HashMap<>();
+		ownedContinents = new ArrayList<>();
+		cards = new ArrayList<>();
+		this.name = name;
+		this.id = id;
+		this.image = new Image(imagePath);
 	}
 
 	/**constructor for defensive copying*/
@@ -62,6 +74,7 @@ public class Player {
 	    this.attackPhase = player.isAttackPhase();
 	    this.cardThisRound = player.isCardThisRound();
 	    this.fortificationPhase = player.isFortificationPhase();
+	    this.image = player.image;
 	}
 
 
@@ -240,6 +253,14 @@ public class Player {
 
 	public void setOwnedContinents(ArrayList<Continent> ownedContinents) {
 		this.ownedContinents = ownedContinents;
+	}
+	
+	public Image getImage() {
+		return this.image;
+	}
+	
+	public void setImage(String imagePath) {
+		this.image = new Image(imagePath);
 	}
 
 }
