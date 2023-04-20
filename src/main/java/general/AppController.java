@@ -7,6 +7,7 @@ import game.exceptions.WrongTextFieldInputException;
 import game.logic.GameLogic;
 import game.stateClient.GameStateClient;
 import network.Client;
+import network.Server;
 
 /**
  * Class for the application logic handling
@@ -22,6 +23,7 @@ public class AppController {
 	private static int portNumber = Parameter.portDefault;
 	private static String host = Parameter.hostDefault;
 	private static Client client;
+	private static Server server;
 	
 	private static GameStateClient gameStateClient;
 	private static GameLogic gameLogic;
@@ -185,5 +187,13 @@ public class AppController {
 
 	public static void setGameLogic(GameLogic gameLogic) {
 		AppController.gameLogic = gameLogic;
+	}
+
+	public static Server getServer() {
+		return server;
+	}
+
+	public static void setServer(Server server) {
+		AppController.server = server;
 	}
 }

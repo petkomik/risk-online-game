@@ -33,6 +33,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import network.Client;
+import network.Server;
 import general.AppController;
 import general.Parameter;
 import javafx.fxml.FXMLLoader;
