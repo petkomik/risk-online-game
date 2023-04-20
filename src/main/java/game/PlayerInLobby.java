@@ -7,11 +7,13 @@ public class PlayerInLobby {
 	private Player player;
 	private Color color;
 	private String avatar;
+	private boolean isReady;
 	
 	public PlayerInLobby(Player pl, Color c, String ava) {
 		this.player = pl;
 		this.color = c;
 		this.avatar = ava;
+		this.isReady = false;
 	}
 	
 	public Player getPlayer() {
@@ -24,5 +26,13 @@ public class PlayerInLobby {
 
 	public String getAvatar() {
 		return avatar;
+	}
+
+	public boolean isReady() {
+		return isReady;
+	}
+
+	public void setReady(boolean isReady) {
+		this.isReady = isReady;
 	}
 }

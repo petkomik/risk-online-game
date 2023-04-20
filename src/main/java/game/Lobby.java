@@ -215,4 +215,11 @@ public class Lobby {
 	public void updateAILevel() {
 		// update the PlayerAI instances difficulty
 	}
+	
+	public boolean isEveryoneReady() {
+		for(PlayerInLobby p : playersInLobby) {
+			if(!p.isReady()) return false;
+		}
+		return true;
+	}
 }
