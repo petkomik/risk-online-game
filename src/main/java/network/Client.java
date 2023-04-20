@@ -173,8 +173,8 @@ public class Client {
 						case Connect:
 							System.out.println("case MessageConnect Success 1 ");
 							Profile p = ((MessageConnect)message).getProfile();
-							if(AppController.getDatabaseHandler().getProfileByID(p.getId()) == null){
-								AppController.getDatabaseHandler().createProfileData(p);
+							if(AppController.dbH.getProfileByID(p.getId()) == null){
+								AppController.dbH.createProfileData(p);
 							}
 					//sa
 							HostServerMessengerController.addLabel(
