@@ -19,7 +19,7 @@ import network.Server;
 public class AppController {
 	private static Profile profile;
 	private static AppController appController = new AppController();
-	public static PlayerProfileHandler dbH = new PlayerProfileHandler();
+	private static PlayerProfileHandler dbH = new PlayerProfileHandler();
 	private static int portNumber = Parameter.portDefault;
 	private static String host = Parameter.hostDefault;
 	private static Client client;
@@ -195,5 +195,13 @@ public class AppController {
 
 	public static void setServer(Server server) {
 		AppController.server = server;
+	}
+
+	public static PlayerProfileHandler getDatabaseHandler() {
+		return dbH;
+	}
+
+	public static void setDatabaseHandler(PlayerProfileHandler dbH) {
+		AppController.dbH = dbH;
 	}
 }
