@@ -35,7 +35,7 @@ public class GameSingleplayerLogic extends GameLogic {
 
 	@Override
 	public void startGame() {
-
+//
 	}
 
 	@Override
