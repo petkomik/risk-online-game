@@ -63,3 +63,21 @@
 	-fx-border-color: #b87331;
 	-fx-border-width: 3px;
 }
+#nextPhaseButton{
+	-fx-shape: "M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0";
+	-fx-font-size: 30px;
+	-fx-background-color: #1e90ff;
+}
+#trueButton{
+	-fx-shape: "M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0";
+	-fx-font-size: 30px;
+	-fx-background-color: #1e90ff;
+}
+#falseButton{
+	-fx-shape: "M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0";
+	-fx-font-size: 30px;
+	-fx-background-color: #1e90ff;
+}
+#cardsPane{
+	-fx-background-color: #1e90ff;
+}
