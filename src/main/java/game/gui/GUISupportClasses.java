@@ -3,6 +3,8 @@ package game.gui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import game.PlayerInLobby;
+import game.models.Player;
 import general.Parameter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -189,15 +191,17 @@ public class GUISupportClasses {
 		String name;
 		ImageView avatar = new ImageView();
 		Color color;		
-		Label playerReady = new Label("Not Ready");
+		Label playerReady;
 		double ratio;
+		
 
-		public PlayerCard(String name, String avatar, Color color, double ratio) throws FileNotFoundException {
+		public PlayerCard(PlayerInLobby player, String avatar, Color color, double ratio) throws FileNotFoundException {
 			super();
-			this.name = name;
+			this.name = player.getPlayer().getName();
 			this.avatar.setImage(new Image(new FileInputStream(avatar)));
 			this.color = color;
 			this.ratio = ratio;
+			this.playerReady = player.isReady() ? new Label("Ready") : new Label("Not Ready");
 			buildCard();	
 		}
 		

@@ -272,7 +272,7 @@ public class LobbyMenuController extends StackPane {
 		moreBtnDiff = new ArrowButton(30 * ratio);
 		
 		readyButtonPane = new HBox();
-		readyBtn = new DesignButton(new Insets(5 * ratio, 80 * ratio, 5 * ratio, 80 * ratio), 18, 28 * ratio, 300 * ratio);
+		readyBtn = new DesignButton(new Insets(5 * ratio, 20 * ratio, 5 * ratio, 20 * ratio), 18, 28 * ratio, 300 * ratio);
 		
 		/*
 		 * Settings Pane
@@ -541,10 +541,24 @@ public class LobbyMenuController extends StackPane {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	if (readyBtn.getText().equals("Ready")) {
+		    	boolean ready = readyBtn.getText().equals("Ready");
+		    	if (ready) {
 		    		readyBtn.setText("Not Ready");
 		    	} else {
 		    		readyBtn.setText("Ready");
+		    	}
+		    	if (singleplayerLobby) {
+		    		ArrayList<Player> humans = (ArrayList<Player>) lobby.getHumanPlayerList();
+		    		for(Player pl : humans) {
+			    		lobby.getPlayerInLobbyFor(pl).setReady(ready);	
+			    		try {setUpPlayerCards();} catch (FileNotFoundException e) {}
+		    			System.out.println(pl.getName() + ready);
+		    		}
+		    		
+		    		if(lobby.isEveryoneReady()) {
+		    			System.out.println("start game");
+		    		}
+
 		    	}
 	    	}
 		});
@@ -559,7 +573,11 @@ public class LobbyMenuController extends StackPane {
 		Iterator<PlayerInLobby> itt = players.iterator();
 		while(itt.hasNext()) {
 			PlayerInLobby ply = itt.next();
-			PlayerCard plyc = new PlayerCard(ply.getPlayer().getName(), ply.getAvatar(), ply.getColor(), ratio);
+			PlayerCard plyc = new PlayerCard(ply, ply.getAvatar(), ply.getColor(), ratio);
+			if (lobby.getAIPlayerList().contains(ply.getPlayer())) {
+				plyc.setReady(true);
+				ply.setReady(true);
+			}
 			playerCardsPane.getChildren().add(plyc);
 		}
 	}

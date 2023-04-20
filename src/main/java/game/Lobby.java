@@ -222,4 +222,14 @@ public class Lobby {
 		}
 		return true;
 	}
+	
+	public PlayerInLobby getPlayerInLobbyFor(Player pl) {
+		for(PlayerInLobby ply : this.playersInLobby) {
+			if(ply.getPlayer().equals(pl)) {
+				return ply;
+			}
+		}
+		
+		return null;
+	}
 }
