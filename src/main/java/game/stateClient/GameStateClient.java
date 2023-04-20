@@ -6,17 +6,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import game.gui.BattleFrameController;
+import game.gui.GamePaneController;
 import game.logic.GameLogic;
-import game.logic.GameSingleplayerLogic;
 import game.logic.GameType;
 import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
-import game.models.PlayerMP;
 import game.models.PlayerSingle;
 import game.models.Territory;
 import general.AppController;
+import javafx.scene.paint.Color;
 
 /**
  * Class for the gameState for client-logic/representation
@@ -38,11 +39,14 @@ public class GameStateClient {
 
 	private LocalDateTime gameTimer;
 	private volatile Player currentPlayer;
+	private ArrayList<Player> clientPlayers;
 	private volatile Player clientPlayer;
 
 	private GameLogic gameLogic = AppController.getGameLogic();
+	private GamePaneController gamePaneController;
+	private BattleFrameController battleFrameController;
 
-	public GameStateClient(GameType gameType, Player clientPlayer, ArrayList<Player> players) {
+	public GameStateClient(GameType gameType, ArrayList<Player> clientPlayers, ArrayList<Player> players, GamePaneController gamePaneController) {
 
 		GameStateClient.gameType = gameType;
 
@@ -59,8 +63,9 @@ public class GameStateClient {
 		GameLogic.createTerritories(territories);
 		GameLogic.createContinents(continents, territories);
 		GameLogic.createCardDeck(cards);
-
-		this.clientPlayer = new PlayerSingle(clientPlayer);
+		
+		this.clientPlayers = clientPlayers;
+		this.clientPlayer = (PlayerSingle) clientPlayers.get(0);
 	}
 
 	public void countryPossession(int playerId, CountryName country) {
@@ -68,7 +73,7 @@ public class GameStateClient {
 	}
 
 	public void diceThrowToDetermineTheBeginner() {
-		this.setCurrentPlayer(gameLogic.diceThrowToDetermineTheBeginner());
+
 	}
 
 	public void attackCountry(int playerId, CountryName countryFrom, CountryName countryTo, int troops) {
@@ -105,7 +110,7 @@ public class GameStateClient {
 
 	public void setCurrentPlayer(int id) {
 		this.currentPlayer = players.get(id);
-		// highlight current Player
+		// gamePaneController.
 	}
 
 	public boolean getUpdateGameIsOver() {
@@ -147,7 +152,7 @@ public class GameStateClient {
 		// show dices Attacker
 	}
 
-	public void SetDicesDefender(int[] dicesDefender) {
+	public void setDicesDefender(int[] dicesDefender) {
 		this.dicesDefender = dicesDefender;
 		// show dices Defender
 	}
@@ -328,6 +333,30 @@ public class GameStateClient {
 
 	public static GameType getGameType() {
 		return gameType;
+	}
+
+	public HashMap<CountryName, Territory> getTerritories() {
+		return territories;
+	}
+
+	public void setTerritories(HashMap<CountryName, Territory> territories) {
+		this.territories = territories;
+	}
+
+	public HashMap<Integer, Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(HashMap<Integer, Player> players) {
+		this.players = players;
+	}
+
+	public void setContinents(HashMap<Continent, ArrayList<Territory>> continents) {
+		this.continents = continents;
+	}
+
+	public void setCards(ArrayList<Card> cards) {
+		this.cards = cards;
 	}
 
 }

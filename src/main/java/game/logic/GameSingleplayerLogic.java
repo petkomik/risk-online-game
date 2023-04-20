@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import game.exceptions.WrongCardsException;
 import game.exceptions.WrongCountryException;
 import game.exceptions.WrongPhaseException;
 import game.exceptions.WrongTroopsCountException;
@@ -18,6 +19,7 @@ import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerMP;
 import game.models.Territory;
+import general.AppController;
 
 /**
  * Class for Singleplayer game
@@ -79,7 +81,7 @@ public class GameSingleplayerLogic extends GameLogic {
 			} else {
 				getCurrentPlayer().setPreparationPhase(true);
 				getCurrentPlayer().setCardsTurningInPhase(true);
-				super.getNewTroopsCountForPlayer(getCurrentPlayer().getID());
+				getNewTroopsCountForPlayer(getCurrentPlayer().getID());
 				
 			}
 			return false;
@@ -231,7 +233,7 @@ public class GameSingleplayerLogic extends GameLogic {
 	}
 
 	@Override
-	public int diceThrowToDetermineTheBeginner() {
+	public void diceThrowToDetermineTheBeginner() {
 		Player firstPlayer = null;
 		int highestDiceNumber = 0;
 		for (Player p : players) {
@@ -244,8 +246,139 @@ public class GameSingleplayerLogic extends GameLogic {
 		players = sortPlayerList(players, players.indexOf(firstPlayer));
 		setInitialTroopsSize();
 		setCurrentPlayer(firstPlayer);
+		AppController.getGameStateClient().setCurrentPlayer(firstPlayer.getID());
 		firstPlayer.setInitialPlacementPhase(true);
-		return firstPlayer.getID();
+		AppController.getGameStateClient().setInitialPlacementPhaseOfPlayer(true, firstPlayer.getID());
+	}
+	
+	@Override
+	public void setInitialTroopsSize() {
+		int troopsSize = 0;
+		/** set available troopsize */
+		switch (players.size()) {
+		case 2:
+			troopsSize = 40;
+			break;
+		case 3:
+			troopsSize = 35;
+			break;
+		case 4:
+			troopsSize = 30;
+			break;
+		case 5:
+			troopsSize = 25;
+			break;
+		case 6:
+			troopsSize = 20;
+			break;
+		default:
+			troopsSize = -1;
+			break;
+		}
+		for (Player p : players) {
+			p.setTroopsAvailable(troopsSize);
+			AppController.getGameStateClient().setTroopsAvailableOfPlayer(troopsSize, p.getID());
+			p.setSumOfAllTroops(troopsSize);
+			AppController.getGameStateClient().setSumOfAllTroopsOfPlayer(troopsSize, p.getID());
+
+		}
+		/** *********** */
+	}
+	
+	@Override
+	public boolean turnInCards(int playerId, ArrayList<Card> cards)
+			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException, WrongCardsException {
+		Player player = players.get(playerId);
+		if (player == null || getCurrentPlayer() != player) {
+			throw new WrongPhaseException("It is not your turn");
+		} else if (cards == null || cards.size() != 3) {
+			throw new WrongCardsException("You have to choose 3 cards", cards);
+		} else if (!player.isCardsTurningInPhase()) {
+			throw new WrongPhaseException("You cant turn in Cards right now");
+		} else if (!player.getCards().containsAll(cards)) {
+			throw new WrongCardsException("You have to own these cards", cards);
+		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
+				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)))) {
+			throw new WrongCardsException("You have to own these cards", cards);
+		}
+		player.setCardsTurningInPhase(false);
+		player.getCards().removeAll(cards);
+		for(Card card : cards) {
+			card.setOwnedBy(null);
+		}
+		incrementNumberOfCardsTurnedIn();
+		switch (getNumberOfCardsTurnedIn()) {
+		case 1:
+			player.addTroopsAvailable(4);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 4);
+			break;
+		case 2:
+			player.addTroopsAvailable(6);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 6);
+			break;
+		case 3:
+			player.addTroopsAvailable(8);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 8);
+			break;
+		case 4:
+			player.addTroopsAvailable(10);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 10);
+			break;
+		case 5:
+			player.addTroopsAvailable(12);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 12);
+			break;
+		case 6:
+			player.addTroopsAvailable(15);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + 15);
+			break;
+		default:
+			player.addTroopsAvailable((getNumberOfCardsTurnedIn() - 6) * 5 + 15);
+			player.setSumOfAllTroops(player.getSumOfAllTroops() + (getNumberOfCardsTurnedIn() - 6) * 5 + 15);
+			break;
+		}
+		return true;
+	}
+	
+	@Override
+	public int getNewTroopsCountForPlayer(int playerId) {
+		Player player = players.get(playerId);
+		int troops = 0;
+		ArrayList<Continent> ownedContinents = player.getOwnedContinents();
+
+		troops += ownedContinents.size() / 3;
+		if (ownedContinents != null) {
+			for (Continent c : ownedContinents) {
+				switch (c) {
+				case Africa:
+					troops += 3;
+					break;
+				case Asia:
+					troops += 7;
+					break;
+				case Australia:
+					troops += 2;
+					break;
+				case Europe:
+					troops += 5;
+					break;
+				case NorthAmerica:
+					troops += 5;
+					break;
+				case SouthAmerica:
+					troops += 2;
+					break;
+				}
+			}
+		}
+		// TODO checking for cards that are turned in
+		troops = troops < 3 ? 3 : troops;
+		player.setSumOfAllTroops(
+				player.getOwnedCountries().values().stream().mapToInt(Territory::getNumberOfTroops).sum() + troops);
+		for(Player p : players) {
+			AppController.getGameStateClient().setSumOfAllTroopsOfPlayer(troops, p.getID());
+		}
+		return troops;
 	}
 
 }

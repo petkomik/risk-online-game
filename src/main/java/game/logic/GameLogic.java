@@ -55,7 +55,7 @@ public abstract class GameLogic {
 	public abstract boolean countryPossession(int playerId, CountryName country)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException;
 
-	public abstract int diceThrowToDetermineTheBeginner();
+	public abstract void diceThrowToDetermineTheBeginner();
 
 	public abstract boolean attackCountry(int playerId, CountryName countryFrom, CountryName countryTo, int troops)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException;
@@ -66,35 +66,13 @@ public abstract class GameLogic {
 	public abstract boolean placeTroops(int playerId, CountryName country, int troops)
 			throws WrongPhaseException, WrongCountryException, WrongTroopsCountException;
 
-	public void setInitialTroopsSize() {
-		int troopsSize = 0;
-		/** set available troopsize */
-		switch (players.size()) {
-		case 2:
-			troopsSize = 40;
-			break;
-		case 3:
-			troopsSize = 35;
-			break;
-		case 4:
-			troopsSize = 30;
-			break;
-		case 5:
-			troopsSize = 25;
-			break;
-		case 6:
-			troopsSize = 20;
-			break;
-		default:
-			troopsSize = -1;
-			break;
-		}
-		for (Player p : players) {
-			p.setTroopsAvailable(troopsSize);
-			p.setSumOfAllTroops(troopsSize);
-		}
-		/** *********** */
-	}
+	public abstract void setInitialTroopsSize();
+	
+	public abstract int getNewTroopsCountForPlayer(int playerId);
+	
+	public abstract boolean turnInCards(int playerId, ArrayList<Card> cards)
+			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException, WrongCardsException;
+
 
 	public ArrayList<Player> sortPlayerList(ArrayList<Player> players, int firstPlayerIndex) {
 		ArrayList<Player> firstSublist;
@@ -108,60 +86,6 @@ public abstract class GameLogic {
 		return firstSublist;
 	}
 
-	public boolean turnInCards(int playerId, ArrayList<Card> cards)
-			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException, WrongCardsException {
-		Player player = players.get(playerId);
-		if (player == null || currentPlayer != player) {
-			throw new WrongPhaseException("It is not your turn");
-		} else if (cards == null || cards.size() != 3) {
-			throw new WrongCardsException("You have to choose 3 cards", cards);
-		} else if (!player.isCardsTurningInPhase()) {
-			throw new WrongPhaseException("You cant turn in Cards right now");
-		} else if (!player.getCards().containsAll(cards)) {
-			throw new WrongCardsException("You have to own these cards", cards);
-		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
-				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)))) {
-			throw new WrongCardsException("You have to own these cards", cards);
-		}
-		player.setCardsTurningInPhase(false);
-		player.getCards().removeAll(cards);
-		for(Card card : cards) {
-			card.setOwnedBy(null);
-		}
-		incrementNumberOfCardsTurnedIn();
-		switch (getNumberOfCardsTurnedIn()) {
-		case 1:
-			player.addTroopsAvailable(4);
-			player.setSumOfAllTroops(player.getSumOfAllTroops() + 4);
-			break;
-		case 2:
-			player.addTroopsAvailable(6);
-			player.setSumOfAllTroops(player.getSumOfAllTroops() + 6);
-			break;
-		case 3:
-			player.addTroopsAvailable(8);
-			player.setSumOfAllTroops(player.getSumOfAllTroops() + 8);
-			break;
-		case 4:
-			player.addTroopsAvailable(10);
-			player.setSumOfAllTroops(player.getSumOfAllTroops() + 10);
-			break;
-		case 5:
-			player.addTroopsAvailable(12);
-			player.setSumOfAllTroops(player.getSumOfAllTroops() + 12);
-			break;
-		case 6:
-			player.addTroopsAvailable(15);
-			player.setSumOfAllTroops(player.getSumOfAllTroops() + 15);
-			break;
-		default:
-			player.addTroopsAvailable((getNumberOfCardsTurnedIn() - 6) * 5 + 15);
-			player.setSumOfAllTroops(player.getSumOfAllTroops() + (getNumberOfCardsTurnedIn() - 6) * 5 + 15);
-			break;
-		}
-		return true;
-	}
-
 	public static synchronized int getRandomDiceNumber() {
 		return (int) (Math.random() * 6) + 1;
 	}
@@ -171,43 +95,6 @@ public abstract class GameLogic {
 		return cards.get(random);
 	}
 
-	public int getNewTroopsCountForPlayer(int playerId) {
-		Player player = players.get(playerId);
-		int troops = 0;
-		ArrayList<Continent> ownedContinents = player.getOwnedContinents();
-
-		troops += ownedContinents.size() / 3;
-		if (ownedContinents != null) {
-			for (Continent c : ownedContinents) {
-				switch (c) {
-				case Africa:
-					troops += 3;
-					break;
-				case Asia:
-					troops += 7;
-					break;
-				case Australia:
-					troops += 2;
-					break;
-				case Europe:
-					troops += 5;
-					break;
-				case NorthAmerica:
-					troops += 5;
-					break;
-				case SouthAmerica:
-					troops += 2;
-					break;
-				}
-			}
-		}
-		// TODO checking for cards that are turned in
-		troops = troops < 3 ? 3 : troops;
-		player.setSumOfAllTroops(
-				player.getOwnedCountries().values().stream().mapToInt(Territory::getNumberOfTroops).sum() + troops);
-		return troops;
-	}
-	
 	public Player setNextActivePlayerAsCurrentPlayer() {
 		Player nextPlayer;
 		do {
@@ -507,7 +394,7 @@ public abstract class GameLogic {
 ;
 	}
 
-	private int getNumberOfCardsTurnedIn() {
+	protected int getNumberOfCardsTurnedIn() {
 		return numberOfCardsTurnedIn;
 	}
 
@@ -515,7 +402,7 @@ public abstract class GameLogic {
 		this.numberOfCardsTurnedIn = 0;
 	}
 
-	private void incrementNumberOfCardsTurnedIn() {
+	protected void incrementNumberOfCardsTurnedIn() {
 		this.numberOfCardsTurnedIn += 1;
 	}
 

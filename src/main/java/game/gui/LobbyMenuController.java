@@ -8,8 +8,11 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
+import game.logic.GameSingleplayerLogic;
+import game.logic.GameType;
 import game.models.Player;
 import game.models.PlayerSingle;
+import game.stateClient.GameStateClient;
 import general.Parameter;
 import general.AppController;
 
@@ -560,14 +563,22 @@ public class LobbyMenuController extends StackPane {
 		    		
 		    		if(lobby.isEveryoneReady()) {
 		    			System.out.println("start game");
+		    			AppController.setGameLogic(new GameSingleplayerLogic((ArrayList<Player>) lobby.getPlayerList()));
 						try {
 					    	Node node = (Node) event.getSource();
 							// Getting the Stage where the event is happened
 							Stage stage = (Stage) node.getScene().getWindow();
 							// changing the AnchorPane from the main file
-							AnchorPane anchorPane = (AnchorPane) loadFXML("gameFrame");
+							// AnchorPane anchorPane = (AnchorPane) loadFXML("gameFrame");
+							
+							FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
+							AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
+							GamePaneController gamePaneController = fxmlLoader.getController();
 							// Setting the size of the anchorPane
 							stage.getScene().setRoot(anchorPane);
+							
+			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(),gamePaneController));
+
 							// Showing the Stage
 							stage.show();
 						} catch (IOException e) {
