@@ -194,7 +194,8 @@ public class GamePaneController implements Initializable{
 		stackPanes = new StackPane[numOfPlayer];
 		circles = new Circle[numOfPlayer];
 		imageviews = new ImageView[numOfPlayer];
-		
+		labTimer = new Label[numOfPlayer];
+		ivTimer = new ImageView[numOfPlayer];
 		
 		for(int i = 0; i < numOfPlayer; i++) {
 			imageviews[i] = new ImageView(Parameter.avatarsdir + avatars[i] + ".png");
@@ -409,7 +410,8 @@ public class GamePaneController implements Initializable{
         nextPhaseLabel.setPrefHeight(34.0);
         nextPhaseLabel.setPrefWidth(60.0);
         
-        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseButton);
+        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, rectCards, cardsPane, numCardsLabel, nextPhaseButton);
+        //phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseButton);
         phaseBoard.setScaleX(0.8 * w / 1536.0);
         phaseBoard.setScaleY(0.8 * h / 864.0);
         

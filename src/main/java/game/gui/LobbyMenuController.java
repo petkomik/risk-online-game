@@ -26,10 +26,12 @@ import database.Profile;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -42,6 +44,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -557,15 +560,29 @@ public class LobbyMenuController extends StackPane {
 		    		
 		    		if(lobby.isEveryoneReady()) {
 		    			System.out.println("start game");
-		    		}
+						try {
+					    	Node node = (Node) event.getSource();
+							// Getting the Stage where the event is happened
+							Stage stage = (Stage) node.getScene().getWindow();
+							// changing the AnchorPane from the main file
+							AnchorPane anchorPane = (AnchorPane) loadFXML("gameFrame");
+							// Setting the size of the anchorPane
+							stage.getScene().setRoot(anchorPane);
+							// Showing the Stage
+							stage.show();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
+		    		}
 		    	}
-	    	}
+		    }
 		});
-			
+		
 		this.getChildren().addAll(contentVBox, topBannerParent);
-	
 	}
+	
 	
 	public void setUpPlayerCards() throws FileNotFoundException {
 		playerCardsPane.getChildren().removeAll(playerCardsPane.getChildren());
@@ -580,6 +597,19 @@ public class LobbyMenuController extends StackPane {
 			}
 			playerCardsPane.getChildren().add(plyc);
 		}
+	}
+	
+	/**
+     * 
+     * @param fxml, file name without the ending .fxml
+     * @return Parent object, to be set as a root in a Scene object
+     * @throws IOException
+     * 
+     * This method is responsible for loading a fxml file
+     */
+	private static Parent loadFXML(String fxml) throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
+		return fxmlLoader.load();
 	}
 	
 }
