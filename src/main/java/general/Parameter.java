@@ -19,6 +19,7 @@ public class Parameter {
 	public static final String avatarsdir = resourcesdir + "avatars" + sep;
 	public static final String dicedir = resourcesdir + "dice" + sep;
 	public static final String territoryPNGdir = resourcesdir + "territories" + sep;
+	public static final String phaseLogosdir = resourcesdir + "phaseLogos" + sep;
 	public static final String logoImage = imagesdir + "transparent-risk.png";
 	public static final String dicesIcon = imagesdir + "dices-icon.png";
 	public static final String errorIcon = imagesdir + "error_icon.png";
