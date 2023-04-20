@@ -9,6 +9,8 @@ import java.util.Scanner;
 import database.Profile;
 import game.gui.HostServerMessengerController;
 import game.gui.JoinClientMessengerController;
+import game.models.Player;
+import game.models.PlayerMP;
 import general.AppController;
 import javafx.scene.layout.VBox;
 import network.messages.Message;
@@ -25,10 +27,36 @@ public class Client {
 	private ObjectOutputStream outputStream;
 	private Profile profile;
 	private String userName;
-
+	private Player player;
+	
 	public Client(Socket socket, Profile profile) {
 		this.profile = profile;
 		this.userName = profile.getUserName();
+		this.socket = socket;
+		try {
+
+			this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+			this.inputStream = new ObjectInputStream(socket.getInputStream());
+			outputStream.writeObject(new MessageProfile(profile));
+			outputStream.flush();
+			// this.sendMessage(new MessageConnect(profile));
+			// newlineofCode
+		} catch (IOException e) {
+			System.out.println("DSICONNECT");
+			// System.out.println(
+			// "Player " + (((MessageConnect) message).getPlayername()) + " has been
+			// connected ");
+			MessageDisconnect disconnectMessage = new MessageDisconnect(profile);
+			sendMessage(disconnectMessage);
+			closeEverything(socket, inputStream, outputStream);
+			e.printStackTrace();
+		}
+
+	}
+	public Client(Socket socket, Player player) {
+	
+		this.player = player;
+		this.userName = player.getName();
 		this.socket = socket;
 		try {
 
@@ -144,10 +172,15 @@ public class Client {
 							break;
 						case Connect:
 							System.out.println("case MessageConnect Success 1 ");
-							
+							Profile p = ((MessageConnect)message).getProfile();
+							if(AppController.dbH.getProfileByID(p.getId()) == null){
+								AppController.dbH.createProfileData(p);
+							}
+					//sa
 							HostServerMessengerController.addLabel(
 									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
 									vBoxMessages);
+							sendMessage(new MessageConnect(((MessageConnect)message).getProfile()));
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
@@ -167,7 +200,7 @@ public class Client {
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
-							JoinClientMessengerController.addLabel(((MessageToPerson) message).getMsg() , vBoxMessages);
+							JoinClientMessengerController.addLabel(((MessageToPerson) message).getMsg(), vBoxMessages);
 							break;
 						default:
 							break;

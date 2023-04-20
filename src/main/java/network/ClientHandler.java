@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import database.Profile;
 import game.gui.HostServerMessengerController;
 import game.gui.MainApp;
+import game.models.Player;
 import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageDisconnect;
@@ -26,6 +27,7 @@ public class ClientHandler implements Runnable {
 	private String clientUsername;
 	
 	
+	
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
 
@@ -36,7 +38,10 @@ public class ClientHandler implements Runnable {
 			this.profile = ((MessageProfile) clientIdentifierMessage).getProfile();
 			this.clientUsername = profile.getUserName();
 			clientHandlers.add(this);
-			broadcastMessage(new MessageConnect(profile) );
+			broadcastMessage(new MessageConnect(profile));
+			
+			
+			
 			
 		} catch (IOException | ClassNotFoundException e) {
 			MessageDisconnect disconnect = new MessageDisconnect(profile);
@@ -61,6 +66,14 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
+		public Profile getProfile() {
+		return profile;
+	}
+
+	public String getClientUsername() {
+		return clientUsername;
+	}
+
 		public void personalMessage(Message message, String to) {
 			System.out.println("messanger works");
 			for (ClientHandler clientHandler : clientHandlers) {

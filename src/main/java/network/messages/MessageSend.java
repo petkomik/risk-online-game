@@ -15,6 +15,7 @@ public class MessageSend extends Message {
 	private Player playerFrom;
 	private Player playerTo;
 	private String playerToS;
+	
 
 	public MessageSend(String message, Player playerFrom, Player playerTo) {
 		super(MessageType.MessageSend);
