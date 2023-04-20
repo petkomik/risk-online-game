@@ -1,45 +1,33 @@
 package game.gui;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.DiceFactory;
+import game.models.CountryName;
+import general.AppController;
 import general.Parameter;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.*;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -51,14 +39,6 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
-import javafx.util.Duration;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.ColorAdjust;
-import javafx.beans.value.ChangeListener;
 
 /**
  * @author majda
@@ -445,12 +425,14 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void clickCountry(MouseEvent e) {
-		String countryName = ((SVGPath)e.getSource()).getId();
+		String countryNameString = ((SVGPath)e.getSource()).getId();
+		CountryName countryName = CountryName.valueOf(countryNameString);
 		// method to set the countryName from GameStateClientController
 //		turnCountryGrey(countryName);
 //		pointUpCountry(countryName);
 //		deactivateCountry(countryName);
-		claimCountry(countryName, 2, Color.RED);
+//		claimCountry(countryName, 2, Color.RED);
+		AppController.getGameStateClient().countryClickedinGUI(countryName);
 	}
 	
 	

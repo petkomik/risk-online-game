@@ -75,16 +75,17 @@ public abstract class GameLogic {
 
 
 	public ArrayList<Player> sortPlayerList(ArrayList<Player> players, int firstPlayerIndex) {
-		ArrayList<Player> firstSublist;
-		ArrayList<Player> endSublist;
+	    ArrayList<Player> firstSublist;
+	    ArrayList<Player> endSublist;
 
-		firstSublist = (ArrayList<Player>) players.subList(firstPlayerIndex, players.size());
-		if (firstPlayerIndex > 0) {
-			endSublist = (ArrayList<Player>) players.subList(0, firstPlayerIndex);
-			firstSublist.addAll(endSublist);
-		}
-		return firstSublist;
+	    firstSublist = new ArrayList<>(players.subList(firstPlayerIndex, players.size()));
+	    if (firstPlayerIndex > 0) {
+	        endSublist = new ArrayList<>(players.subList(0, firstPlayerIndex));
+	        firstSublist.addAll(endSublist);
+	    }
+	    return firstSublist;
 	}
+
 
 	public static synchronized int getRandomDiceNumber() {
 		return (int) (Math.random() * 6) + 1;

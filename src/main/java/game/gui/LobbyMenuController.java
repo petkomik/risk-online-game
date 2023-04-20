@@ -563,6 +563,7 @@ public class LobbyMenuController extends StackPane {
 		    		
 		    		if(lobby.isEveryoneReady()) {
 		    			System.out.println("start game");
+		    			//Setting up the gameServerlogic
 		    			AppController.setGameLogic(new GameSingleplayerLogic((ArrayList<Player>) lobby.getPlayerList()));
 						try {
 					    	Node node = (Node) event.getSource();
@@ -577,7 +578,9 @@ public class LobbyMenuController extends StackPane {
 							// Setting the size of the anchorPane
 							stage.getScene().setRoot(anchorPane);
 							
-			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(),gamePaneController));
+							// Setting up the gameState
+			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(), gamePaneController));
+			    			AppController.getGameLogic().startGame();
 
 							// Showing the Stage
 							stage.show();

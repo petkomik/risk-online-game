@@ -49,6 +49,7 @@ public class GameStateClient {
 	public GameStateClient(GameType gameType, ArrayList<Player> clientPlayers, ArrayList<Player> players, GamePaneController gamePaneController) {
 
 		GameStateClient.gameType = gameType;
+		this.gamePaneController = gamePaneController;
 
 		this.territories = new HashMap<CountryName, Territory>();
 		this.continents = new HashMap<Continent, ArrayList<Territory>>();
@@ -110,7 +111,7 @@ public class GameStateClient {
 
 	public void setCurrentPlayer(int id) {
 		this.currentPlayer = players.get(id);
-		// gamePaneController.
+		System.out.println("Es ist " + currentPlayer.getName() + " an der Reihe.");
 	}
 
 	public boolean getUpdateGameIsOver() {
@@ -358,5 +359,18 @@ public class GameStateClient {
 	public void setCards(ArrayList<Card> cards) {
 		this.cards = cards;
 	}
-
+	
+	/** Methods called by the GUI */
+	/**********************************************************************************************************/
+	/**********************************************************************************************************/
+	
+	public void countryClickedinGUI(CountryName countryName) {
+		if(currentPlayer == clientPlayer) {
+			if(currentPlayer.isInitialPlacementPhase()) {
+				if(territories.get(countryName).getOwnedByPlayer() == null) {
+					gamePaneController.pointUpCountry(countryName.toString());
+				}
+			}
+		}
+	}
 }
