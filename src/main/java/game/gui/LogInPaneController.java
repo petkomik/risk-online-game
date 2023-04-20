@@ -241,7 +241,7 @@ public class LogInPaneController extends StackPane {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	(new GameSound()).buttonClickBackwardSound();
 				
 				Node node = (Node)event.getSource();
 				stage = (Stage)node.getScene().getWindow();

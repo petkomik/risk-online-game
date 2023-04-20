@@ -1,5 +1,6 @@
 package game.gui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import general.AppController;
 import general.Parameter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -105,7 +107,24 @@ public class UpdateSettingsController implements Initializable{
 		changeField.setStyle("-fx-font-size: "+fontSize+"px;");
 		changeField.setPrefSize(btnW, btnH);
 		
-		
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickBackwardSound();
+				
+				Node node = (Node)event.getSource();
+				stage = (Stage)node.getScene().getWindow();
+
+				try {
+					MainMenuPaneController stp = new MainMenuPaneController();
+					stage.getScene().setRoot(stp);
+
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				stage.show();
+		    }
+	   });
 
 
 
