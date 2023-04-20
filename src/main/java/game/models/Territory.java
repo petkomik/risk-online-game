@@ -1,5 +1,6 @@
 package game.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -11,7 +12,9 @@ import general.Parameter;
  *
  */
 
-public class Territory implements Cloneable {
+public class Territory implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private Player ownedByPlayer;
 	private final Continent continent;
@@ -80,11 +83,6 @@ public class Territory implements Cloneable {
 	}
 	public void setNeighboringTerritories(ArrayList<Territory> territoryNeighbours) {
 		this.neighboringTerritories = territoryNeighbours;
-	}
-	
-	@Override
-	public Territory clone() {
-		return new Territory(this);
 	}
 	
 }

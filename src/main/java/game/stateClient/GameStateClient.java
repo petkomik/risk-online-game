@@ -14,6 +14,7 @@ import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerMP;
+import game.models.PlayerSingle;
 import game.models.Territory;
 import general.AppController;
 
@@ -38,7 +39,7 @@ public class GameStateClient {
 	private LocalDateTime gameTimer;
 	private volatile Player currentPlayer;
 	private volatile Player clientPlayer;
-	
+
 	private GameLogic gameLogic = AppController.getGameLogic();
 
 	public GameStateClient(GameType gameType, Player clientPlayer, ArrayList<Player> players) {
@@ -50,29 +51,28 @@ public class GameStateClient {
 		this.players = new HashMap<Integer, Player>();
 		this.cards = new ArrayList<Card>();
 
-		for (Player player : players) {
-			if (player instanceof Player) {
-				this.players.put(player.getID(), new Player(player.getName(), player.getID()));
-			}
-			// do this for every other possible instance
+		for (int i = 0; i < players.size(); i++) {
+			Player player = players.get(i);
+			this.players.put(player.getID(), player);
 		}
 
 		GameLogic.createTerritories(territories);
 		GameLogic.createContinents(continents, territories);
 		GameLogic.createCardDeck(cards);
 
-		this.clientPlayer = new Player(clientPlayer);
+		this.clientPlayer = new PlayerSingle(clientPlayer);
 	}
 
 	public void countryPossession(int playerId, CountryName country) {
 		this.countryPossession(playerId, country);
 	}
+
 	public void diceThrowToDetermineTheBeginner() {
 		this.setCurrentPlayer(gameLogic.diceThrowToDetermineTheBeginner());
 	}
 
 	public void attackCountry(int playerId, CountryName countryFrom, CountryName countryTo, int troops) {
-		
+
 	}
 
 	public void fortifyTroops(int playerId, CountryName countryFrom, CountryName countryTo, int troops) {

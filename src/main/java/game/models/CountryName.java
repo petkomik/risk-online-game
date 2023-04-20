@@ -1,12 +1,14 @@
 package game.models;
 
-	/**
+import java.io.Serializable;
+
+/**
 	 * enum for country/territory names
 	 * @author srogalsk
 	 *
 	 */
 
-public enum CountryName {
+public enum CountryName implements Serializable {
 	Alaska,
 	Alberta,
 	NorthwestTerritory,

@@ -1,6 +1,8 @@
 package game.models;
 
-public enum PhasesEnum {
+import java.io.Serializable;
+
+public enum PhasesEnum implements Serializable {
 	cardsTurningInPhase,
 	initialPlacementPhase,
 	preparationPhase,

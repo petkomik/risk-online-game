@@ -1,10 +1,16 @@
 package game.models;
+
+import java.io.Serializable;
+
 /**
  * class for game card representation
  * @author srogalsk
  *
  */
-public class Card implements Cloneable{
+public class Card implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
 	private int cardValue; // e.g. infantry = 1, cavalry = 5, artillery = 10 or joker = -1
 	private Player ownedBy;
 	private CountryName name;
@@ -15,10 +21,10 @@ public class Card implements Cloneable{
 	}
 	
 	/**constructor for defensive copying*/
-	public Card(Card card) {
+	public Card(Card card, Player player) {
 		this.name = card.getName();
 		this.cardValue = card.getCardSymbol();
-		this.ownedBy = card.getOwnedBy() != null ? card.getOwnedBy() : null;
+		this.ownedBy = (player);
 	}
 	
 	public int getCardSymbol() {
@@ -39,9 +45,5 @@ public class Card implements Cloneable{
 	public void setName(CountryName name) {
 		this.name = name;
 	}
-	
-	@Override
-    public Card clone() {
-        return new Card(this);
-    }
+
 }

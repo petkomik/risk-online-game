@@ -1,5 +1,6 @@
 package game.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +15,10 @@ import javafx.scene.image.Image;
  * @author jorohr
  */
 
-public class Player {
+public class Player implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	private String color;
 	private int id;
@@ -64,7 +67,7 @@ public class Player {
 	    this.sumOfAllTroops = player.getSumOfAllTroops();
 	    this.troopsAvailable = player.getTroopsAvailable();
 	    this.cards = player.getCards().stream()
-                .map(Card::clone)
+                .map(card -> new Card(card, this))
                 .collect(Collectors.toCollection(ArrayList::new));
 	    this.gameEndTime = player.getGameEndTime();
 	    this.canContinuePlaying = player.isCanContinuePlaying();
