@@ -116,8 +116,26 @@ public class AppController {
 	}
 	
 	public static void updateProfile(String value,String attribute) throws WrongTextFieldInputException {
-		if(value.isBlank()) {
-			throw new WrongTextFieldInputException(attribute + " must not be blank.");
+		/*checking for inputs*/
+		if (attribute.equals("UserName") && value.isBlank()) {
+			throw new WrongTextFieldInputException("Username must not be blank.");
+		} else if (attribute.equals("UserName") && !value.matches("[a-zA-Z0-9]+")) {
+			throw new WrongTextFieldInputException("Username must only contains characters or numbers.");
+		}
+		if (attribute.equals("FirstName") && value.isBlank()) {
+			throw new WrongTextFieldInputException("Firstname must not be blank.");
+		} else if (attribute.equals("FirstName") && !value.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
+			throw new WrongTextFieldInputException(
+					"Firstname must only contains characters or hyphens and must start and end with a character.");
+		}
+		if (attribute.equals("LastName") && value.isBlank()) {
+			throw new WrongTextFieldInputException("Lastname must not be blank.");
+		} else if (attribute.equals("LastName") && !value.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
+			throw new WrongTextFieldInputException(
+					"Lastname must only contains characters or hyphens and must start and end with a character.");
+		}
+		if (attribute.equals("Password") && value.isBlank()) {
+			throw new WrongTextFieldInputException("Password must not be blank.");
 		}
 		if(attribute.equals("UserName")) {
 			for(Profile p : dbH.getAllProfiles()) {

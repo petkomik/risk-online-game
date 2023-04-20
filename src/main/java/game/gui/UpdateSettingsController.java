@@ -139,7 +139,6 @@ public class UpdateSettingsController implements Initializable{
 	public void updateUserName(ActionEvent e) throws IOException {
 		
 		(new GameSound()).buttonClickForwardSound();
-		(new GameSound()).buttonClickForwardSound();
 		String text = changeField.getText();
 		try {
 			MainApp.getAppController();
