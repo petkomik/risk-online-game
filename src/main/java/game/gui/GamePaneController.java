@@ -525,7 +525,7 @@ public class GamePaneController implements Initializable{
 		labelTroopsDisplay.get(countryName).setText(""+numOfTroops);
 	}
 	
-	public void setUpReinforce() {
+	public void setUpChoosingTroopsPane() {
 		reinforcePane = new Pane();
 		reinforcePane.setPrefSize(1536.0, 864.0);
 		reinforcePane.setScaleX(w / 1536.0);
@@ -587,7 +587,7 @@ public class GamePaneController implements Initializable{
 		reinforcePane.getChildren().addAll(rectangle, falseButtonReinf, trueButtonReinf, label, numOfTroopsHBox);
 		reinforcePane.setVisible(false);
 	}
-	public void showReinforce(Color c, int maxTroops) {
+	public void showReinforcePane(Color c, int maxTroops) {
 		reinforcePane.setVisible(true);
 		falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
@@ -613,9 +613,9 @@ public class GamePaneController implements Initializable{
             }
 	        });
 		String colorTmp = String.format("#%02X%02X%02X",
-                (int)( colors[turn].getRed() * 255 ),
-                (int)( colors[turn].getGreen() * 255 ),
-                (int)( colors[turn].getBlue() * 255 ));
+                (int)( c.getRed() * 255 ),
+                (int)( c.getGreen() * 255 ),
+                (int)( c.getBlue() * 255 ));
 		trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
     			+ "	-fx-background-color: "+ colorTmp +";");
@@ -623,17 +623,17 @@ public class GamePaneController implements Initializable{
             String colorHex;
         	if (newValue) {
         		colorHex = String.format("#%02X%02X%02X",
-                        (int)( colors[turn].getRed() * 255 ),
-                        (int)( colors[turn].getGreen() * 255 ),
-                        (int)( colors[turn].getBlue() * 255 ));
+                        (int)( c.getRed() * 255 ),
+                        (int)( c.getGreen() * 255 ),
+                        (int)( c.getBlue() * 255 ));
             	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
             			+ "	-fx-background-color: "+ colorHex +";");
             } else {
             	colorHex = String.format("#%02X%02X%02X",
-                        (int)( colors[turn].getRed() * 255 - 20),
-                        (int)( colors[turn].getGreen() * 255 - 20),
-                        (int)( colors[turn].getBlue() * 255 - 20));
+                        (int)( c.getRed() * 255 - 20),
+                        (int)( c.getGreen() * 255 - 20),
+                        (int)( c.getBlue() * 255 - 20));
             	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
             			+ "	-fx-background-color: "+ colorHex +";");
@@ -664,7 +664,7 @@ public class GamePaneController implements Initializable{
 		    }
 		});
 	}
-	public void unshowReinforce(Color c) {
+	public void unshowReinforcePane(Color c) {
 		reinforcePane.setVisible(false);
 	}
 	public void showMoveTroops() {
@@ -683,4 +683,4 @@ public class GamePaneController implements Initializable{
 		
 	}
 }
-
+// Hier ein Test
