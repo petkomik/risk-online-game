@@ -227,7 +227,7 @@ public class CreateProfilePaneController extends StackPane {
 							+  "-fx-text-fill: #303030");
 		
 		buttonRow = new HBox();
-		createProfileButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 30 * ratio, 200 * ratio);
+		createProfileButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 30 * ratio, 200 * ratio);
 		createProfileButton.setText("Sign Up");
 		
 		buttonRow.setAlignment(Pos.CENTER_RIGHT);

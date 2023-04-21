@@ -48,6 +48,9 @@ public class BattleFrameController extends VBox {
 	// negative attacker loses n troops, positive defender loses n, 0 both lose 1 {-2, -1, 0, 1, 2}
 	int lastThrow;
 	
+	HBox chatDiv;
+	DesignButton chatButton;
+	
 	HBox imgTerritories;
 	Territory attacking;
 	Territory defending;
@@ -132,13 +135,22 @@ public class BattleFrameController extends VBox {
 		this.setAlignment(Pos.CENTER);
 		this.setFillWidth(true);
 		this.setStyle("-fx-background-color: rgb(225, 211, 184);");
-		this.setPadding(new Insets(50 * ratio, 100 * ratio, 50 * ratio, 100 * ratio));
 		
 		/*
 		 * Setting up imTerritories pane
 		 * Includes imgAttacking, spacingImg, imgDefending
 		 * ImageView are wrapped in ImageViewPane which delivers responsiveness
 		 */
+		
+		chatButton = new DesignButton(new Insets(10 * menuRatio, 20 * menuRatio, 10 * menuRatio, 20 * menuRatio), 30, 28 * menuRatio, 170 * menuRatio, true);
+		chatButton.setAlignment(Pos.CENTER);
+		chatDiv = new HBox();
+		chatDiv.getChildren().add(chatButton);
+		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
+		chatDiv.maxHeightProperty().bind(chatDiv.prefHeightProperty());
+		chatDiv.setPrefHeight(100 * menuRatio);
+		chatDiv.setPadding(new Insets(20 * menuRatio, 20 * menuRatio, 0, 0));
+		chatDiv.setAlignment(Pos.TOP_RIGHT);
 		
 		imgTerritories = new HBox();
 		
@@ -190,6 +202,8 @@ public class BattleFrameController extends VBox {
 
 		imgTerritories.getChildren().addAll(attackingStack, spacingImg, defendingStack);
 		imgTerritories.setAlignment(Pos.TOP_CENTER);
+		imgTerritories.setPadding(new Insets(0 * ratio, 100 * ratio, 0, 100 * ratio));
+
 		
 		/*
 		 * Add spacingRoot 
@@ -197,7 +211,7 @@ public class BattleFrameController extends VBox {
 		 */
 		
 		Spacing spacingRoot = new Spacing();
-		this.getChildren().addAll(imgTerritories, spacingRoot);
+		this.getChildren().addAll(chatDiv, imgTerritories, spacingRoot);
 		VBox.setVgrow(spacingRoot, Priority.SOMETIMES);
 		VBox.setVgrow(imgTerritories, Priority.ALWAYS);
 		
@@ -486,8 +500,16 @@ public class BattleFrameController extends VBox {
             }
 		       
 	    });
-	    	   
 		
+		chatButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	// TODO
+		    	System.out.println("Open Chat");
+	    	}
+		});
+	    	   
 		diceSection.setSpacing(50 * menuRatio);
 		diceSection.getChildren().addAll(diceImagesAt, diceControls, diceImagesDf);
 		diceSection.setAlignment(Pos.CENTER);
@@ -502,7 +524,7 @@ public class BattleFrameController extends VBox {
 
 		diceAndProfile.getChildren().addAll(playerAt, spacingControls1, diceSection, spacingControls2, playerDf);
 		diceAndProfile.setAlignment(Pos.BOTTOM_CENTER);
-		diceAndProfile.setPadding(new Insets(0, 60 * ratio, 0, 60 * ratio));
+		diceAndProfile.setPadding(new Insets(0, 160 * ratio, 50 * ratio, 160 * ratio));
 		HBox.setHgrow(spacingControls1, Priority.ALWAYS);
 		HBox.setHgrow(spacingControls2, Priority.ALWAYS);
 
@@ -621,7 +643,7 @@ public class BattleFrameController extends VBox {
 			flow.setMaxWidth(400 * multiplier);
 		}	
 		
-		this.setPadding(new Insets(50 * multiplier, 100 * multiplier, 50 * multiplier, 100 * multiplier));
+		this.diceAndProfile.setPadding(new Insets(0, 160 * multiplier, 50 * multiplier, 160 * multiplier));
 	}	
 	
 	public void updateTroops() throws FileNotFoundException {

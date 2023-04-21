@@ -187,7 +187,7 @@ public class LogInPaneController extends StackPane {
 							+  "-fx-text-fill: #303030");
 		
 		buttonRow = new HBox();
-		logInButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 30 * ratio, 200 * ratio);
+		logInButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 30 * ratio, 200 * ratio);
 		logInButton.setText("Log In");
 		
 		buttonRow.setAlignment(Pos.CENTER_RIGHT);

@@ -60,6 +60,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -88,6 +89,8 @@ public class LobbyMenuController extends StackPane {
 	HBox topBannerContent;
 	ArrowButton backButton;
 	Label lobbyTextBanner;
+	DesignButton chatButton;
+	HBox chatDiv;
 
 	HBox mainContent;
 	FlowPane playerCardsPane;
@@ -220,8 +223,20 @@ public class LobbyMenuController extends StackPane {
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
 		
+		chatButton = new DesignButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio, 170 * ratio, true);
+		chatButton.setAlignment(Pos.CENTER);
+		chatDiv = new HBox();
+		chatDiv.getChildren().add(chatButton);
+		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
+		chatDiv.maxHeightProperty().bind(chatDiv.prefHeightProperty());
+		chatDiv.setPrefHeight(100 * ratio);
+		chatDiv.setPadding(new Insets(0, 50 * ratio, 0, 0));
+		chatDiv.setAlignment(Pos.CENTER);
+
+		
+		
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
-		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing);
+		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing, chatDiv);
 		
 		/*
 		 * Setting up the main content
@@ -278,7 +293,7 @@ public class LobbyMenuController extends StackPane {
 		moreBtnDiff = new ArrowButton(30 * ratio);
 		
 		readyButtonPane = new HBox();
-		readyBtn = new DesignButton(new Insets(5 * ratio, 20 * ratio, 5 * ratio, 20 * ratio), 18, 28 * ratio, 300 * ratio);
+		readyBtn = new DesignButton(new Insets(5 * ratio, 25 * ratio, 5 * ratio, 20 * ratio), 25, 28 * ratio, 300 * ratio);
 		
 		/*
 		 * Settings Pane
@@ -592,6 +607,15 @@ public class LobbyMenuController extends StackPane {
 		    		}
 		    	}
 		    }
+		});
+		
+		chatButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	// TODO
+		    	System.out.println("Open Chat");
+	    	}
 		});
 		
 		this.getChildren().addAll(contentVBox, topBannerParent);

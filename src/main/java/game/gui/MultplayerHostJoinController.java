@@ -148,10 +148,10 @@ public class MultplayerHostJoinController extends StackPane {
 		mainContent.setSpacing(30 * ratio);
 		mainContent.setMaxWidth(600 * ratio);
 
-		hostServer = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
+		hostServer = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
 		hostServer.setText("Host Server");
 		
-		joinServer = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
+		joinServer = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
 		joinServer.setText("Join Server");
 		
 		mainContent.setPadding(new Insets(0, 0, 100 * ratio, 0));

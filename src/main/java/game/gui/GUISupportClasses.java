@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -116,7 +117,8 @@ public class GUISupportClasses {
 			this.setStyle("-fx-background-color: "
 					+ "radial-gradient(focus-distance 0% , center 50% 50% , "
 					+ "radius 75% , #b87331, #64441f);"
-					+ "-fx-background-radius: " + radius + 3 + ";"
+					+ "-fx-background-insets: 1 1 1 1;"
+					+ "-fx-background-radius: " + radius + ";"
 					+ "-fx-border-radius: " + radius + ";"
         			+ "-fx-border-color: transparent;"
         			+ "-fx-border-width: 4px;");
@@ -124,7 +126,8 @@ public class GUISupportClasses {
 		this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
             if (newValue) {
             	this.setStyle("-fx-background-color: #64441f;"
-							+ "-fx-background-radius: " + radius + 3 + ";"
+            				+ "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";"
 							+ "-fx-border-radius: " + radius + ";"
 	            			+ "-fx-border-color: #ffff;"
 	            			+ "-fx-border-width: 4px;");
@@ -132,12 +135,30 @@ public class GUISupportClasses {
             	this.setStyle("-fx-background-color: "
             				+ "radial-gradient(focus-distance 0% , center 50% 50% , "
             				+ "radius 75% , #b87331, #64441f);"
-							+ "-fx-background-radius: " + radius + 3 + ";"
+        					+ "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";"
 							+ "-fx-border-radius: " + radius + ";"
 	            			+ "-fx-border-color: transparent;"
 	            			+ "-fx-border-width: 4px;");
             }
 	        });
+		}
+		
+		public DesignButton(Insets inst, int radius, double fontSize, double width, boolean chatButton) throws FileNotFoundException {
+			this(inst, radius, fontSize, width);
+			if(chatButton) {
+				this.setText("Chat");
+		        ImageView img = new ImageView();
+		        img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
+		        img.setFitHeight(fontSize);
+		        img.setPreserveRatio(true);
+				img.setSmooth(true);
+				img.setCache(true);
+				this.setGraphicTextGap(10);
+		        this.setGraphic(img);				
+			}
+			
+		
 		}
 	}
 	

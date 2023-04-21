@@ -101,7 +101,7 @@ public class StartPaneController extends StackPane {
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		playButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 300 * ratio);
+		playButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
 		playButton.setText("Play");
 
 		contentVBox.setSpacing(30 * ratio);

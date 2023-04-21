@@ -146,19 +146,19 @@ public class MainMenuPaneController extends StackPane {
 		mainContent.setSpacing(30 * ratio);
 		mainContent.setMaxWidth(600 * ratio);
 
-		playTutorialButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
+		playTutorialButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
 		playTutorialButton.setText("Play Tutorial");
 		
-		profileSettingsButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
+		profileSettingsButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
 		profileSettingsButton.setText("Profile Settings");
 		
-		singleplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
+		singleplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
 		singleplayerButton.setText("Singleplayer");
 		
-		multiplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
+		multiplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
 		multiplayerButton.setText("Multiplayer");
 		
-		logoutButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 450 * ratio);
+		logoutButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
 		logoutButton.setText("Log Out");
 		
 		mainContent.setPadding(new Insets(0, 0, 100 * ratio, 0));

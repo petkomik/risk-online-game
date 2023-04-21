@@ -97,10 +97,10 @@ public class UserAccessPaneController extends StackPane {
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
-		logIn = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 300 * ratio);
+		logIn = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
 		logIn.setText("Log In");
 
-		signUp = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 30, 40 * ratio, 300 * ratio);
+		signUp = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
 		signUp.setText("Sign Up");
 		
 		contentVBox.setSpacing(30 * ratio);
