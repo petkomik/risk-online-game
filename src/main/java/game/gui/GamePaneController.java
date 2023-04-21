@@ -427,11 +427,6 @@ public class GamePaneController implements Initializable{
 	public void clickCountry(MouseEvent e) {
 		String countryNameString = ((SVGPath)e.getSource()).getId();
 		CountryName countryName = CountryName.valueOf(countryNameString);
-		// method to set the countryName from GameStateClientController
-//		turnCountryGrey(countryName);
-//		pointUpCountry(countryName);
-//		deactivateCountry(countryName);
-//		claimCountry(countryName, 2, Color.RED);
 		AppController.getGameStateClient().countryClickedinGUI(countryName);
 	}
 	

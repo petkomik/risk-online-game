@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import game.exceptions.WrongCountryException;
+import game.exceptions.WrongPhaseException;
+import game.exceptions.WrongTroopsCountException;
 import game.gui.BattleFrameController;
 import game.gui.GamePaneController;
 import game.logic.GameLogic;
@@ -364,12 +367,25 @@ public class GameStateClient {
 	/**********************************************************************************************************/
 	/**********************************************************************************************************/
 	
+	/****/
 	public void countryClickedinGUI(CountryName countryName) {
 		if(currentPlayer == clientPlayer) {
 			if(currentPlayer.isInitialPlacementPhase()) {
 				if(territories.get(countryName).getOwnedByPlayer() == null) {
+						try {
+							gameLogic.countryPossession(clientPlayer.getID(), countryName);
+						} catch (WrongCountryException e) {
+							e.printStackTrace();
+						} catch (WrongTroopsCountException e) {
+							e.printStackTrace();
+						} catch (WrongPhaseException e) {
+							e.printStackTrace();
+						}
+					gamePaneController.pointUpCountry(countryName.toString());
+				} else if(territories.get(countryName).getOwnedByPlayer() == clientPlayer && !territories.values().stream().anyMatch(o -> o.getOwnedByPlayer() == null)) {
 					gamePaneController.pointUpCountry(countryName.toString());
 				}
+				
 			}
 		}
 	}

@@ -66,23 +66,31 @@ public class GameSingleplayerLogic extends GameLogic {
 		}
 
 		player.removeTroopsAvailable(1);
+		AppController.getGameStateClient().getCurrentPlayer().removeTroopsAvailable(1);
 		territories.get(country).addNumberOfTroops(1);
+		AppController.getGameStateClient().getTerritories().get(country).addNumberOfTroops(1);
 		if (territories.get(country).getOwnedByPlayer() != player) {
 			player.addAndUpdateOwnedCountries(territories.get(country));
+			AppController.getGameStateClient().getCurrentPlayer().addAndUpdateOwnedCountries(AppController.getGameStateClient().getTerritories().get(country));
 		}
 		if (player.getTroopsAvailable() < 1) {
 			player.setInitialPlacementPhase(false);
 			player.setPreparationPhase(true);
 			player.setCardsTurningInPhase(true);
 			setNextActivePlayerAsCurrentPlayer();
+			AppController.getGameStateClient().getCurrentPlayer().setInitialPlacementPhase(false);
+			AppController.getGameStateClient().getCurrentPlayer().setPreparationPhase(true);
+			AppController.getGameStateClient().getCurrentPlayer().setCardsTurningInPhase(true);
+			AppController.getGameStateClient().setCurrentPlayer(getCurrentPlayer().getID());
 			if(getCurrentPlayer().getTroopsAvailable() > 0) {
 				getCurrentPlayer().setInitialPlacementPhase(true);
-				
+				AppController.getGameStateClient().getCurrentPlayer().setInitialPlacementPhase(true);
 			} else {
 				getCurrentPlayer().setPreparationPhase(true);
 				getCurrentPlayer().setCardsTurningInPhase(true);
 				getNewTroopsCountForPlayer(getCurrentPlayer().getID());
-				
+				AppController.getGameStateClient().getCurrentPlayer().setPreparationPhase(true);
+				AppController.getGameStateClient().getCurrentPlayer().setCardsTurningInPhase(true);
 			}
 			return false;
 		}
@@ -375,9 +383,7 @@ public class GameSingleplayerLogic extends GameLogic {
 		troops = troops < 3 ? 3 : troops;
 		player.setSumOfAllTroops(
 				player.getOwnedCountries().values().stream().mapToInt(Territory::getNumberOfTroops).sum() + troops);
-		for(Player p : players) {
-			AppController.getGameStateClient().setSumOfAllTroopsOfPlayer(troops, p.getID());
-		}
+		AppController.getGameStateClient().setSumOfAllTroopsOfPlayer(player.getOwnedCountries().values().stream().mapToInt(Territory::getNumberOfTroops).sum() + troops, player.getID());
 		return troops;
 	}
 
