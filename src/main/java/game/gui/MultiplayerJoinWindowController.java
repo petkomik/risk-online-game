@@ -159,7 +159,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 		mainContent = new VBox();
 		mainContent.setAlignment(Pos.CENTER);
 		mainContent.setSpacing(30 * ratio);
-		mainContent.setMaxWidth(600 * ratio);
+		mainContent.setMaxWidth(700 * ratio);
 
 		ipAddressRow = new HBox();
 		ipAddressLabel = new Label();
