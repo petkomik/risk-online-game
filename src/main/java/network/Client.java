@@ -180,7 +180,8 @@ public class Client {
 							HostServerMessengerController.addLabel(
 									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
 									vBoxMessages);
-							sendMessage(new MessageConnect(((MessageConnect)message).getProfile()));
+							// Imporatant for different pcs communication
+							//sendMessage(new MessageConnect(((MessageConnect)message).getProfile()));
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
@@ -200,7 +201,7 @@ public class Client {
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
-							JoinClientMessengerController.addLabel(((MessageToPerson) message).getMsg(), vBoxMessages);
+							JoinClientMessengerController.addLabel(((MessageToPerson) message).getTo() + ": " +((MessageToPerson) message).getMsg().substring(((MessageToPerson) message).getMsg().indexOf(':')), vBoxMessages);
 							break;
 						default:
 							break;
