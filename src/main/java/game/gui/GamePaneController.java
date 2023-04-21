@@ -139,6 +139,7 @@ public class GamePaneController implements Initializable{
 		gameBoard.getChildren().add(leaveGameButton);
 		
 		setUpPhaseBoard();
+		setUpChoosingTroopsPane();
 	}
 	private void getComponents() {
 		countries = new ArrayList<>();
@@ -158,7 +159,11 @@ public class GamePaneController implements Initializable{
 						circleTroopsDisplay.put(tmp.getId().substring(2), (Circle) node);
 					}
 					if(node instanceof Label) {
-						labelTroopsDisplay.put(tmp.getId().substring(2), (Label) node);
+						Label labTmp = (Label)  node;
+						labTmp.setAlignment(Pos.CENTER);
+						labTmp.setStyle("-fx-font-weight: bold;"
+								+ "-fx-font-size: 100px;");
+						labelTroopsDisplay.put(tmp.getId().substring(2), labTmp);
 					}
 				}
 			}
@@ -207,6 +212,7 @@ public class GamePaneController implements Initializable{
 			labTimer[i].setLayoutY(42.0);
 			labTimer[i].setPrefHeight(34.0);
 			labTimer[i].setPrefWidth(80.0);
+			labTimer[i].setAlignment(Pos.CENTER);
 
 			// ImageView
 			ivTimer[i] = new ImageView(Parameter.phaseLogosdir + "timer.png");
@@ -293,8 +299,13 @@ public class GamePaneController implements Initializable{
         spNum.getChildren().addAll(cirNum, labNum);
         
         labPhase = new Label("CLAIM");
-        labPhase.setLayoutX(469.0);
-        labPhase.setLayoutY(91.0);
+        labPhase.setPrefSize(245, 40);
+        labPhase.setLayoutX(378);
+        labPhase.setLayoutY(81);
+        labPhase.setAlignment(Pos.CENTER);
+        labPhase.setStyle("-fx-font-family: \"Helvetica\";"
+        		+ "    -fx-font-weight: bold;"
+        		+ "    -fx-font-size: 30px;");
 
         // Erstelle ein ImageView mit einem Bild
         logo = new ImageView(); // we need enum for phases
@@ -390,8 +401,7 @@ public class GamePaneController implements Initializable{
         nextPhaseLabel.setPrefHeight(34.0);
         nextPhaseLabel.setPrefWidth(60.0);
         
-        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, rectCards, cardsPane, numCardsLabel, nextPhaseButton);
-        //phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseButton);
+        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseLabel);
         phaseBoard.setScaleX(0.8 * w / 1536.0);
         phaseBoard.setScaleY(0.8 * h / 864.0);
         
