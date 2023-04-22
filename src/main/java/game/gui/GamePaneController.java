@@ -682,4 +682,3 @@ public class GamePaneController implements Initializable{
 		
 	}
 }
-
