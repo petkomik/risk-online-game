@@ -51,8 +51,9 @@ import javafx.stage.Stage;
 
 /**
  * 
- * @author jorohr
+ * @author pmikov jorohr
  * This class handles the profile updating
+ * 
  */
 
 public class UpdateSettingsController extends StackPane {
