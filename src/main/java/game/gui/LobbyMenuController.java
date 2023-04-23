@@ -274,23 +274,23 @@ public class LobbyMenuController extends StackPane {
 		numberPlayersDiv = new VBox();
 		numberPlayersLabel = new Label(this.singleplayerLobby ? "Number of Players" : " Maximum Players");
 		numberPlayersControls = new HBox();
-		lessBtnPlayers = new ArrowButton(30 * ratio);
+		lessBtnPlayers = new ArrowButton(30 * ratio, 6.5 * ratio);
 		labelBtnPlayers = new Label();
-		moreBtnPlayers = new ArrowButton(30 * ratio);
+		moreBtnPlayers = new ArrowButton(30 * ratio, 6.5 * ratio);
 		
 		numberOfAiDiv = new VBox();
 		numberOfAiLabel = new Label("Number of AI Players");
 		numberOfAiControls = new HBox();
-		lessBtnAI = new ArrowButton(30 * ratio);
+		lessBtnAI = new ArrowButton(30 * ratio, 6.5 * ratio);
 		labelBtnAI= new Label("0");
-		moreBtnAI = new ArrowButton(30 * ratio);
+		moreBtnAI = new ArrowButton(30 * ratio, 6.5 * ratio);
 		
 		AIDifficultyDiv = new VBox();
 		AIDifficultyLabel = new Label("AI Player Difficulty");
 		AIDifficultyControls = new HBox();
-		lessBtnDiff = new ArrowButton(30 * ratio);
+		lessBtnDiff = new ArrowButton(30 * ratio, 6.5 * ratio);
 		labelBtnDiff = new Label();
-		moreBtnDiff = new ArrowButton(30 * ratio);
+		moreBtnDiff = new ArrowButton(30 * ratio, 6.5 * ratio);
 		
 		readyButtonPane = new HBox();
 		readyBtn = new DesignButton(new Insets(5 * ratio, 25 * ratio, 5 * ratio, 20 * ratio), 25, 28 * ratio, 300 * ratio);

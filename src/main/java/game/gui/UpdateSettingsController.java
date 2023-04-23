@@ -124,6 +124,13 @@ public class UpdateSettingsController extends StackPane {
 	String password;
 	String firstName;
 	String lastName;
+	
+	static Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
+			Parameter.orangeColor, Parameter.purpleColor, 
+			Parameter.redColor, Parameter.yellowColor};
+	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
+			Parameter.bruntetteBoy, Parameter.mustacheMan,
+			Parameter.earringsGirl, Parameter.hatBoy};
 
 	public UpdateSettingsController() throws FileNotFoundException {
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
@@ -218,13 +225,9 @@ public class UpdateSettingsController extends StackPane {
 		stackAvatar.setPrefHeight(200 * ratio);
 		
 		circleAvatar.setRadius(70 * ratio);
-		// TODO
-		circleAvatar.setFill(Parameter.blueColor);
 		circleAvatar.setStroke(Color.WHITE);
 		circleAvatar.setStrokeWidth(8 * ratio);
 		
-		// TODO
-		imageAvatar.setImage(new Image(new FileInputStream(Parameter.gingerGirl)));
 		imageAvatar.setFitWidth(120 * ratio);
 		imageAvatar.setFitHeight(120 * ratio);
 		imageAvatar.setPreserveRatio(true);
@@ -303,30 +306,30 @@ public class UpdateSettingsController extends StackPane {
 
 		colorRow = new HBox();
 		colorRow.setAlignment(Pos.CENTER);
-		colorRow.setSpacing(30);
+		colorRow.setSpacing(30 * ratio);
 		colorLabel = new Label("Color:");
 		colorLabel.setTextFill(Color.WHITE);
 		colorLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 40 *ratio));
-		colorLeft = new ArrowButton(30 * ratio);
-		colorCurrent= new Rectangle(0, 0, 40, 40);
-		colorRight = new ArrowButton(30 * ratio);
+		colorLeft = new ArrowButton(30 * ratio, 6.5 * ratio);
+		colorCurrent= new Rectangle(0, 0, 40 * ratio, 40 * ratio);
+		colorRight = new ArrowButton(30 * ratio, 6.5 * ratio);
 		colorRight.setText(">");
 		colorRow.getChildren().addAll(colorLabel, new Spacing(10), colorLeft, colorCurrent, colorRight);
 
 		avatarRow = new HBox();
 		avatarRow.setAlignment(Pos.CENTER);
-		avatarRow.setSpacing(25);
+		avatarRow.setSpacing(25 * ratio);
 		avatarLabel = new Label("Avatar:");
 		avatarLabel.setTextFill(Color.WHITE);
 		avatarLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 40 *ratio));
-		avatarLeft = new ArrowButton(30 * ratio);
+		avatarLeft = new ArrowButton(30 * ratio, 6.5 * ratio);
 		avatarCurrent = new ImageView();
 		avatarCurrent.setFitWidth(50 * ratio);
 		avatarCurrent.setFitHeight(50 * ratio);
 		avatarCurrent.setPreserveRatio(true);
 		avatarCurrent.setSmooth(true);
 		avatarCurrent.setCache(true);
-		avatarRight = new ArrowButton(30 * ratio);
+		avatarRight = new ArrowButton(30 * ratio, 6.5 * ratio);
 		avatarRight.setText(">");
 		avatarRow.getChildren().addAll(avatarLabel, new Spacing(10), avatarLeft, avatarCurrent, avatarRight);
 
@@ -379,12 +382,17 @@ public class UpdateSettingsController extends StackPane {
 		lastNameField.setText(AppController.getProfile().getLastName());
 		winsText.setText(String.valueOf(AppController.getProfile().getWins()));
 		losesText.setText(String.valueOf(AppController.getProfile().getLoses()));
-		// TODO set correct color and avatar
 		
-		avatarCurrent.setImage(new Image(new FileInputStream(Parameter.blondBoy)));
-		colorCurrent.setFill(Parameter.blueColor);
+		imageAvatar.setImage(new Image(new FileInputStream(
+				Parameter.avatarsdir + AppController.getProfile().getPhoto())));
+		circleAvatar.setFill(Color.web(AppController.getProfile().getColor()));
 		
-		TextField[] fields = new TextField[] {usernameTextField, passwordField, firstNameField, lastNameField};
+		avatarCurrent.setImage(new Image(new FileInputStream(
+				Parameter.avatarsdir + AppController.getProfile().getPhoto())));
+		colorCurrent.setFill(Color.web(AppController.getProfile().getColor()));
+		
+		TextField[] fields = new TextField[] {usernameTextField, passwordField, 
+											firstNameField, lastNameField};
 		for(TextField field : fields) {
 			field.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 30 * ratio));
 			field.setPadding(new Insets(5, 10, 5, 10));
@@ -413,11 +421,98 @@ public class UpdateSettingsController extends StackPane {
 		    	}
 		});
 		
+		colorLeft.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	String hex = AppController.getProfile().getColor();
+		    	for(int i = 0; i < colors.length; i++) {
+		    		if(colorToHexCode(colors[i]).equals(hex)) {
+		    			circleAvatar.setFill(colors[(i+5)%6]);
+		    			colorCurrent.setFill(colors[(i+5)%6]);
+						try {
+							AppController.updateProfile(
+									colorToHexCode(colors[(i+5)%6]), "Color");
+						} catch (WrongTextFieldInputException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    	}
+		    }	
+		});
+		
+		colorRight.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	String hex = AppController.getProfile().getColor();
+		    	for(int i = 0; i < colors.length; i++) {
+		    		if(colorToHexCode(colors[i]).equals(hex)) {
+		    			circleAvatar.setFill(colors[(i+1)%6]);
+		    			colorCurrent.setFill(colors[(i+1)%6]);
+		    			try {
+							AppController.updateProfile(
+									colorToHexCode(colors[(i+1)%6]), "Color");
+						} catch (WrongTextFieldInputException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    	}
+		    }	
+		});
+		
+		avatarLeft.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	String avatar = AppController.getProfile().getPhoto();
+		    	for(int i = 0; i < avatars.length; i++) {
+		    		if(avatars[i].equals(Parameter.avatarsdir + avatar)) {
+		    			try {
+			    			avatarCurrent.setImage(new Image(new FileInputStream(avatars[(i+5)%6])));
+							imageAvatar.setImage(new Image(new FileInputStream(avatars[(i+5)%6])));
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
+		    			try {
+							AppController.updateProfile(avatars[(i+5)%6].replace(
+									Parameter.avatarsdir, ""), "Photo");
+						} catch (WrongTextFieldInputException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    	}
+		    }	
+		});
+		
+		avatarRight.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	String avatar = AppController.getProfile().getPhoto();
+		    	for(int i = 0; i < avatars.length; i++) {
+		    		if(avatars[i].equals(Parameter.avatarsdir + avatar)) {
+		    			try {
+			    			avatarCurrent.setImage(new Image(new FileInputStream(avatars[(i+1)%6])));
+							imageAvatar.setImage(new Image(new FileInputStream(avatars[(i+1)%6])));
+						} catch (FileNotFoundException e1) {
+							e1.printStackTrace();
+						}
+		    			try {
+							AppController.updateProfile(avatars[(i+1)%6].replace(
+									Parameter.avatarsdir, ""), "Photo");
+						} catch (WrongTextFieldInputException e) {
+							e.printStackTrace();
+						}
+		    		}
+		    	}
+		    }	
+		});
+		
 		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickBackwardSound();
-
 				 // Display confirmation dialog
 			    Alert alert = new Alert(AlertType.CONFIRMATION);
 			    alert.setTitle("Confirm Delete");
@@ -502,6 +597,13 @@ public class UpdateSettingsController extends StackPane {
 		    }
 		});
 	}
+	
+	public static String colorToHexCode( Color color ) {
+        return String.format( "#%02X%02X%02X",
+            (int)( color.getRed() * 255 ),
+            (int)( color.getGreen() * 255 ),
+            (int)( color.getBlue() * 255 ) ).toLowerCase();
+    }
 }
 
 

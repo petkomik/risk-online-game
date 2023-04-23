@@ -207,7 +207,13 @@ public class GUISupportClasses {
 			this.setMaxSize(k, k);
 			this.setMinSize(k, k);
 			this.setPrefSize(k, k);
-			this.setPadding(new Insets(-12*(k/60), 0, 0, 0));
+			this.setPadding(new Insets(-k/6, 0, 0, 0));
+		}
+		
+		public ArrowButton(double size, double inset) {
+			this(size);
+			//inset = Math.min(1, inset + 0.05);
+			this.setPadding(new Insets(-inset, 0, 0, 0));
 		}
 	}
 	

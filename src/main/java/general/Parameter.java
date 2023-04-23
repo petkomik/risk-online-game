@@ -1,5 +1,7 @@
 package general;
 
+import java.util.ArrayList;
+
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 
@@ -43,6 +45,8 @@ public class Parameter {
 	public static final Color yellowColor = Color.web("#d9e021");
 	public static final Color orangeColor = Color.web("#f28a3a");
 	public static final Color purpleColor = Color.web("#c73af2");
+	public static final String[] allColors = new String[] {"#c1272d", "#0071bc",
+			"#26d124", "#d9e021", "#f28a3a", "#c73af2"};
 	
 	public static final Color darkGrey = Color.web("#303030");
 	
@@ -53,6 +57,9 @@ public class Parameter {
 	public static final String gingerGirl = avatarsdir + "ginger-girl.png";
 	public static final String hatBoy = avatarsdir + "hat-boy.png";
 	public static final String mustacheMan = avatarsdir + "mustache-man.png";
+	public static final String[] allAvatars = new String[] {"earrings-girl.png", 
+			"bruntette-boy.png", "blonde-boy.png", "ginger-girl.png", 
+			"hat-boy.png", "mustache-man.png"};
 
 	//army pngs 
 	public static final String armiesDir = resourcesdir + "armies-icons" + sep;
@@ -62,7 +69,7 @@ public class Parameter {
 
 
 	
-	
+
 	
 
 
