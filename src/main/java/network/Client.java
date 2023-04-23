@@ -180,9 +180,9 @@ public class Client {
 							if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
 								AppController.dbH.createProfileData(profilee);
 							}
-							if (!profiles.contains(profilee)) {
+							
 								profiles.add(profilee);
-							}
+							
 							sendMessage(new MessageProfile(profile));
 							HostServerMessengerController.addLabel(
 									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
