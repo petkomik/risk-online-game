@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import database.Profile;
@@ -28,7 +29,8 @@ public class Client {
 	private Profile profile;
 	private String userName;
 	private Player player;
-	
+	public static ArrayList<Profile> profiles = new ArrayList<>();
+
 	public Client(Socket socket, Profile profile) {
 		this.profile = profile;
 		this.userName = profile.getUserName();
@@ -53,8 +55,9 @@ public class Client {
 		}
 
 	}
+
 	public Client(Socket socket, Player player) {
-	
+
 		this.player = player;
 		this.userName = player.getName();
 		this.socket = socket;
@@ -141,6 +144,7 @@ public class Client {
 		Client client;
 		socket = new Socket(host, port);
 		client = new Client(socket, profile);
+
 		return client;
 	}
 
@@ -172,16 +176,19 @@ public class Client {
 							break;
 						case Connect:
 							System.out.println("case MessageConnect Success 1 ");
-							Profile p = ((MessageConnect)message).getProfile();
-							if(AppController.dbH.getProfileByID(p.getId()) == null){
-								AppController.dbH.createProfileData(p);
+							Profile profilee = ((MessageConnect) message).getProfile();
+							if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
+								AppController.dbH.createProfileData(profilee);
 							}
-					//sa
+							if (!profiles.contains(profilee)) {
+								profiles.add(profilee);
+							}
+							sendMessage(new MessageProfile(profile));
 							HostServerMessengerController.addLabel(
 									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
 									vBoxMessages);
 							// Imporatant for different pcs communication
-							//sendMessage(new MessageConnect(((MessageConnect)message).getProfile()));
+							// sendMessage(new MessageConnect(((MessageConnect)message).getProfile()));
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
@@ -201,7 +208,16 @@ public class Client {
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
-							JoinClientMessengerController.addLabel(((MessageToPerson) message).getTo() + ": " +((MessageToPerson) message).getMsg().substring(((MessageToPerson) message).getMsg().indexOf(':')), vBoxMessages);
+							JoinClientMessengerController.addLabel(
+									((MessageToPerson) message).getTo() + ": "
+											+ ((MessageToPerson) message).getMsg()
+													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
+									vBoxMessages);
+							break;
+						case MessageProfile:
+							if (!profiles.contains(((MessageProfile) message).getProfile())) {
+								profiles.add(((MessageProfile) message).getProfile());
+							}
 							break;
 						default:
 							break;

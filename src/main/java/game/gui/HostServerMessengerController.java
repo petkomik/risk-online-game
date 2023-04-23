@@ -87,7 +87,7 @@ public class HostServerMessengerController implements Initializable {
 			server = Server.createServer(port);
 			client = Client.createClient(host, port);
 			client.listenForMessage(vBoxMessages);
-
+			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -103,7 +103,7 @@ public class HostServerMessengerController implements Initializable {
 				scrollPaneMain.setVvalue((Double) newValue);
 			}
 		});
-//sss
+
 		sendButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -134,7 +134,9 @@ public class HostServerMessengerController implements Initializable {
 									String username = messageToSend.substring(0, messageToSend.indexOf(":"));
 									// send the message to the specified user
 									client.sendMessage(new MessageToPerson(messageToSend,username));
-								
+									for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
+										System.out.println(clientHandler.getProfile().getUserName());
+									} 
 
 							} else if (!messageToSend.equals(null)) {
 								// send the message to the general chat

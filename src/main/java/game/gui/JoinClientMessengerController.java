@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import database.Profile;
 import general.AppController;
 import general.Parameter;
 import javafx.application.Platform;
@@ -34,6 +35,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import network.Client;
+import network.ClientHandler;
 import network.Server;
 import network.messages.MessageDisconnect;
 import network.messages.MessageSend;
@@ -113,7 +115,9 @@ public class JoinClientMessengerController implements Initializable {
 								String username = messageToSend.substring(0, messageToSend.indexOf(":"));
 								// send the message to the specified user
 								client.sendMessage(new MessageToPerson(messageToSend, username));
-
+								for (Profile profile : Client.profiles) {
+									System.out.println(profile.getUserName() + "GAY");
+								}
 							} else if (!messageToSend.equals(null)) {
 								// send the message to the general chat
 								client.sendMessage(messageToSend);

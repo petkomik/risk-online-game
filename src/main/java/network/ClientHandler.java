@@ -20,14 +20,13 @@ import network.messages.MessageToPerson;
 public class ClientHandler implements Runnable {
 
 	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+	public static ArrayList<Profile> clients = new ArrayList<>();
 	private Socket socket;
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
 	private Profile profile;
 	private String clientUsername;
-	
-	
-	
+
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
 
@@ -38,11 +37,9 @@ public class ClientHandler implements Runnable {
 			this.profile = ((MessageProfile) clientIdentifierMessage).getProfile();
 			this.clientUsername = profile.getUserName();
 			clientHandlers.add(this);
+
 			broadcastMessage(new MessageConnect(profile));
-			
-			
-			
-			
+
 		} catch (IOException | ClassNotFoundException e) {
 			MessageDisconnect disconnect = new MessageDisconnect(profile);
 			broadcastMessage(disconnect);
@@ -66,7 +63,8 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
-		public Profile getProfile() {
+
+	public Profile getProfile() {
 		return profile;
 	}
 
@@ -74,41 +72,38 @@ public class ClientHandler implements Runnable {
 		return clientUsername;
 	}
 
-		public void personalMessage(Message message, String to) {
-			System.out.println("messanger works");
-			for (ClientHandler clientHandler : clientHandlers) {
-				try {
-					
-					if (clientHandler.clientUsername.equalsIgnoreCase(to)) {
-						System.out.println("that is what TO is: ");
-					
-						clientHandler.objectOutputStream.writeObject((MessageToPerson)message);
-						clientHandler.objectOutputStream.flush();
-						
-					}
+	public void personalMessage(Message message, String to) {
+		System.out.println("messanger works");
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+
+				if (clientHandler.clientUsername.equalsIgnoreCase(to)) {
+					System.out.println("that is what TO is: ");
+
+					clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
+					clientHandler.objectOutputStream.flush();
+
 				}
-				 catch (IOException e) {
-					closeEverything(socket, objectInputStream, objectOutputStream);
-					e.printStackTrace();
-					
-				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+
 			}
-			
 		}
+
+	}
 // methode for one to one  player
-	
 
 	public void removeClientHandler() {
 
 		clientHandlers.remove(this);
-		
 
 	}
 
 	@Override
 	public void run() {
 		Message messageFromClient;
-		
+
 		while (socket.isConnected()) {
 			try {
 
@@ -119,8 +114,8 @@ public class ClientHandler implements Runnable {
 					System.out.println("case MessageSend in Handler Success 0");
 					break;
 				case Connect:
-					MessageConnect connectionConfirmed = new MessageConnect(profile);
-					broadcastMessage(connectionConfirmed);
+					// MessageConnect connectionConfirmed = new MessageConnect(profile);
+					// broadcastMessage(connectionConfirmed);
 					System.out.println("case MessageConnect in Handler Succes 1 ");
 					break;
 				case Disconnect:
@@ -131,17 +126,17 @@ public class ClientHandler implements Runnable {
 					System.out.println("case MessageDisconnect Server Success 3 ");
 					broadcastMessage(messageFromClient);
 					closeEverything(socket, objectInputStream, objectOutputStream);
-					
+
 //					JoinClientMessengerController
 //							.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);
 					break;
 				case MessageToPerson:
 					System.out.println("case 4 in Handler");
-					personalMessage((MessageToPerson)messageFromClient, ((MessageToPerson) messageFromClient).getTo());
-					
+					personalMessage((MessageToPerson) messageFromClient, ((MessageToPerson) messageFromClient).getTo());
+
 					break;
 				case MessageProfile:
-					// Handle the message profile message
+					broadcastMessage(new MessageProfile(((MessageProfile) messageFromClient).getProfile()));
 					break;
 				case MessageMove:
 					// Handle the message move message
@@ -154,7 +149,7 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageDiceThrow:
 					// Handle the message dice throw message
-					// Zahlen zusenden von Würfeln 
+					// Zahlen zusenden von Würfeln
 					break;
 				case MessagePlayerTurn:
 					// Handle the message player turn message
@@ -182,10 +177,12 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
-	public void closeEverything(){
+
+	public void closeEverything() {
 		closeEverything(socket, objectInputStream, objectOutputStream);
-		
+
 	}
+
 	public void closeEverything(Socket socket2, ObjectInputStream objectInputStream2,
 			ObjectOutputStream objectOutputStream2) {
 		removeClientHandler();
@@ -203,8 +200,6 @@ public class ClientHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	
-		
 
 	}
 }
