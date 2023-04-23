@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
+import database.Profile;
 import general.AppController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -133,10 +134,8 @@ public class HostServerMessengerController implements Initializable {
 									System.out.println(messageToSend.substring(0, messageToSend.indexOf(":")));
 									String username = messageToSend.substring(0, messageToSend.indexOf(":"));
 									// send the message to the specified user
-									client.sendMessage(new MessageToPerson(messageToSend,username));
-									for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
-										System.out.println(clientHandler.getProfile().getUserName());
-									} 
+									client.sendMessage(new MessageToPerson(messageToSend,client.getProfile(),findProfileFromString(username)));
+									
 
 							} else if (!messageToSend.equals(null)) {
 								// send the message to the general chat
@@ -199,6 +198,14 @@ public class HostServerMessengerController implements Initializable {
 	private void setXYof(double relativeX, double relativeY, Node node) {
 		node.setLayoutX(w * relativeX);
 		node.setLayoutY(h * relativeY);
+	}
+	private Profile findProfileFromString(String username){
+		for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
+			if(clientHandler.getClientUsername().equalsIgnoreCase(username)){
+				return clientHandler.getProfile();
+			}
+		} 
+		return null;
 	}
 
 }

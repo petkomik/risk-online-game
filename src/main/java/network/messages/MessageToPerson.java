@@ -1,5 +1,6 @@
 package network.messages;
 
+import database.Profile;
 import network.Client;
 
 public class MessageToPerson extends Message {
@@ -12,6 +13,8 @@ public class MessageToPerson extends Message {
 	String to;
 	Message message;
 	String msg;
+	private Profile fromProfile;
+	private Profile toProfile;
 	public Message getMessage() {
 		return message;
 	}
@@ -24,12 +27,19 @@ public class MessageToPerson extends Message {
 		this.to = to;
 		this.message = message;
 	}
+	public MessageToPerson(String message ,Profile fromProfile, Profile toProfile) {
+		super(MessageType.MessageToPerson);
+		this.fromProfile = fromProfile;
+		this.toProfile = toProfile;
+		this.msg = message;
+	}
 	
 	public MessageToPerson(String msg, String username) {
 		super(MessageType.MessageToPerson);
 		this.msg=msg;
 		to=username;
 	}
+	
 	public String getTo() {
 		return to;
 	}
@@ -41,6 +51,12 @@ public class MessageToPerson extends Message {
 	}
 	public String getMsg() {
 		return msg;
+	}
+	public Profile getFromProfile() {
+		return fromProfile;
+	}
+	public Profile getToProfile() {
+		return toProfile;
 	}
 
 }

@@ -72,12 +72,12 @@ public class ClientHandler implements Runnable {
 		return clientUsername;
 	}
 
-	public void personalMessage(Message message, String to) {
+	public void personalMessage(Message message) {
 		System.out.println("messanger works");
 		for (ClientHandler clientHandler : clientHandlers) {
 			try {
 
-				if (clientHandler.clientUsername.equalsIgnoreCase(to)) {
+				if (clientHandler.clientUsername.equalsIgnoreCase(  ((MessageToPerson)message).getToProfile().getUserName())) {
 					System.out.println("that is what TO is: ");
 
 					clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
@@ -132,7 +132,7 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageToPerson:
 					System.out.println("case 4 in Handler");
-					personalMessage((MessageToPerson) messageFromClient, ((MessageToPerson) messageFromClient).getTo());
+					personalMessage((MessageToPerson) messageFromClient);
 
 					break;
 				case MessageProfile:

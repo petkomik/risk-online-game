@@ -209,7 +209,7 @@ public class Client {
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
 							JoinClientMessengerController.addLabel(
-									((MessageToPerson) message).getTo() + ": "
+									((MessageToPerson) message).getFromProfile().getLastName() 
 											+ ((MessageToPerson) message).getMsg()
 													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
 									vBoxMessages);

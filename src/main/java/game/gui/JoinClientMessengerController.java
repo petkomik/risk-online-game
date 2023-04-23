@@ -114,10 +114,8 @@ public class JoinClientMessengerController implements Initializable {
 								System.out.println(messageToSend.substring(0, messageToSend.indexOf(":")));
 								String username = messageToSend.substring(0, messageToSend.indexOf(":"));
 								// send the message to the specified user
-								client.sendMessage(new MessageToPerson(messageToSend, username));
-								for (Profile profile : Client.profiles) {
-									System.out.println(profile.getUserName() + "GAY");
-								}
+								client.sendMessage(new MessageToPerson(messageToSend, client.getProfile(),findProfileFromString(username)));
+
 							} else if (!messageToSend.equals(null)) {
 								// send the message to the general chat
 								client.sendMessage(messageToSend);
@@ -135,9 +133,9 @@ public class JoinClientMessengerController implements Initializable {
 	}
 
 	public void disconnectB(ActionEvent event) throws IOException {
-    	(new GameSound()).buttonClickForwardSound();
-		Node node = (Node)event.getSource();
-		Stage stage = (Stage)node.getScene().getWindow();
+		(new GameSound()).buttonClickForwardSound();
+		Node node = (Node) event.getSource();
+		Stage stage = (Stage) node.getScene().getWindow();
 
 		try {
 			UserAccessPaneController stp = new UserAccessPaneController();
@@ -182,4 +180,15 @@ public class JoinClientMessengerController implements Initializable {
 		node.setLayoutY(h * relativeY);
 	}
 
+	private Profile findProfileFromString(String username) {
+
+		for (Profile profile : Client.profiles) {
+			System.out.println(profile.getUserName() + "TEST");
+			if (profile.getUserName().equalsIgnoreCase(username)) {
+				return profile;
+			}
+		}
+
+		return null;
+	}
 }
