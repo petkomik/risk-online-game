@@ -1,6 +1,8 @@
 package general;
 
 
+import java.util.Arrays;
+
 import database.PlayerProfileHandler;
 import database.Profile;
 import game.exceptions.WrongTextFieldInputException;
@@ -28,8 +30,6 @@ public class AppController {
 	private static GameStateClient gameStateClient;
 	private static GameLogic gameLogic;
 	// private static GameMultiplayerLogic multiplayerGameLogic;
-
-
 	
 	/**
 	 * @param firstName
@@ -99,6 +99,10 @@ public class AppController {
 	public static boolean logIntoProfile(String username, String password) {
 		for(Profile profile : dbH.getAllProfiles()) {
 			if(profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
+				// TODO delete
+				if(profile.getColor() == null || profile.getPhoto() == null) {
+					profile.setAnyColorAvatar();
+				} 
 				AppController.profile=profile;
 				return true;
 			}
@@ -143,6 +147,14 @@ public class AppController {
 					throw new WrongTextFieldInputException("This username is used already.");
 				}
 			}
+		}
+		if (attribute.equals("Color") && !Arrays.stream(Parameter.allColors).
+											anyMatch(n -> n.equals(value))) {
+			throw new WrongTextFieldInputException("Invalid Color Code.");
+		}
+		if (attribute.equals("Photo") && !Arrays.stream(Parameter.allAvatars).
+											anyMatch(n -> n.equals(value))) {
+			throw new WrongTextFieldInputException("Invalid Avatar.");
 		}
 		dbH.updateProfileInfo(value, attribute, AppController.profile);
 		AppController.profile.setAttribute(attribute, value);

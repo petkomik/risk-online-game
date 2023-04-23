@@ -3,6 +3,9 @@ package database;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import general.Parameter;
+import javafx.scene.paint.Color;
+
 /**
  * Profile class to handle data via database.
  *
@@ -22,6 +25,13 @@ public class Profile implements Serializable {
 	private String photo;
 		
 	private int isPersonal;
+	
+	static Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
+			Parameter.orangeColor, Parameter.purpleColor, 
+			Parameter.redColor, Parameter.yellowColor};
+	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
+			Parameter.bruntetteBoy, Parameter.mustacheMan,
+			Parameter.earringsGirl, Parameter.hatBoy};
 
 	public Profile(int id,  String userName, String firstName, String lastName,String color,  int wins, int loses, String photo, String password, int isPersonal) {
 		
@@ -57,6 +67,8 @@ public class Profile implements Serializable {
 		this.lastName = lastName;
 		this.userName = userName;
 		this.password = password;
+		this.color = this.colorToHexCode(colors[(int) (Math.random() * 6)]);
+		this.photo = avatars[(int) (Math.random() * 6)].replace(Parameter.avatarsdir, "");
 		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", "").replace("T", "").substring(15,24));
 	}
 
@@ -160,5 +172,18 @@ public class Profile implements Serializable {
 		case "Photo": this.setPhoto(value); break;
 		case "Password": this.setPassword(value); break;
 		}
+	}
+	
+	public String colorToHexCode( Color color ) {
+        return String.format( "#%02X%02X%02X",
+            (int)( color.getRed() * 255 ),
+            (int)( color.getGreen() * 255 ),
+            (int)( color.getBlue() * 255 ) ).toLowerCase();
+    }
+	
+	// TODO delete 
+	public void setAnyColorAvatar() {
+		this.color = this.colorToHexCode(colors[(int) (Math.random() * 6)]);
+		this.photo = avatars[(int) (Math.random() * 6)].replace(Parameter.avatarsdir, "");
 	}
 }
