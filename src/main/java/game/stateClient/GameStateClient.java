@@ -372,15 +372,15 @@ public class GameStateClient {
 		if(currentPlayer == clientPlayer) {
 			if(currentPlayer.isInitialPlacementPhase()) {
 				if(territories.get(countryName).getOwnedByPlayer() == null) {
-						try {
-							gameLogic.countryPossession(clientPlayer.getID(), countryName);
-						} catch (WrongCountryException e) {
-							e.printStackTrace();
-						} catch (WrongTroopsCountException e) {
-							e.printStackTrace();
-						} catch (WrongPhaseException e) {
-							e.printStackTrace();
-						}
+//						try {
+//							gameLogic.countryPossession(clientPlayer.getID(), countryName);
+//						} catch (WrongCountryException e) {
+//							e.printStackTrace();
+//						} catch (WrongTroopsCountException e) {
+//							e.printStackTrace();
+//						} catch (WrongPhaseException e) {
+//							e.printStackTrace();
+//						}
 					gamePaneController.pointUpCountry(countryName.toString());
 				} else if(territories.get(countryName).getOwnedByPlayer() == clientPlayer && !territories.values().stream().anyMatch(o -> o.getOwnedByPlayer() == null)) {
 					gamePaneController.pointUpCountry(countryName.toString());
