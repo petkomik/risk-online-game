@@ -576,7 +576,7 @@ public class LobbyMenuController extends StackPane {
 		    			System.out.println(pl.getName() + ready);
 		    		}
 		    		
-		    		if(lobby.isEveryoneReady()) {
+		    		if(lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1) {
 		    			System.out.println("start game");
 		    			//Setting up the gameServerlogic
 		    			AppController.setGameLogic(new GameSingleplayerLogic((ArrayList<Player>) lobby.getPlayerList()));

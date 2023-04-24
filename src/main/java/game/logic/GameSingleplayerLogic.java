@@ -178,7 +178,8 @@ public class GameSingleplayerLogic extends GameLogic {
 	}
 	
 	// endAttackPhase
-	public void endAttackPhase(Player player) throws WrongPhaseException {
+	public void endAttackPhase(int id) throws WrongPhaseException {
+		Player player = players.get(id);
 		if (getCurrentPlayer() != player) {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (!player.isAttackPhase()) {

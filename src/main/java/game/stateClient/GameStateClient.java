@@ -388,6 +388,7 @@ public class GameStateClient {
 				
 			}
 		}
+		gamePaneController.pointUpCountry(countryName.toString());
 	}
 }
 // Hier ein Test
