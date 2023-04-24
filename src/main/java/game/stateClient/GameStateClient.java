@@ -389,6 +389,7 @@ public class GameStateClient {
 			}
 		}
 		gamePaneController.pointUpCountry(countryName.toString(), currentPlayer.getColor());
+		this.currentPlayer = gameLogic.setNextActivePlayerAsCurrentPlayer();
 	}
 }
 // Hier ein Test
