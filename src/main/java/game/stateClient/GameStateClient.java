@@ -388,7 +388,7 @@ public class GameStateClient {
 				
 			}
 		}
-		gamePaneController.pointUpCountry(countryName.toString());
+		gamePaneController.pointUpCountry(countryName.toString(), currentPlayer.getColor());
 	}
 }
 // Hier ein Test

@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import game.logic.GameLogic;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * Player class to model the player entity
@@ -20,7 +21,7 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	private String color;
+	private Color color;
 	private int id;
 	private int rank;
 	private Image image;
@@ -59,7 +60,7 @@ public class Player implements Serializable {
 	/**constructor for defensive copying*/
 	public Player(Player player) {
 	    this.name = new String(player.getName());
-	    this.color = (new String(player.getColor()));
+	    this.color = player.getColor();
 	    this.id = player.getID();
 	    this.rank = player.getRank();
 	    this.ownedCountries = new HashMap<CountryName, Territory>(player.getOwnedCountries());
@@ -242,11 +243,11 @@ public class Player implements Serializable {
 		this.cardThisRound = cardThisRound;
 	}
 
-	public String getColor() {
+	public Color getColor() {
 		return color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(Color color) {
 		this.color = color;
 	}
 

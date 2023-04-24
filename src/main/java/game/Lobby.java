@@ -64,6 +64,7 @@ public class Lobby {
 	
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
+			toAdd.setColor(colors[playersInLobby.size()]);
 			this.playersJoined.add(toAdd);
 			//this.updateScore();
 			playersInLobby.add(this.addColorAvatar(toAdd));

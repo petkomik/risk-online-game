@@ -516,6 +516,26 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
+	public void pointUpCountry(String countryName, Color playerColor) {
+		for(SVGPath s : countries) {
+			if(s.getId().equals(countryName)) {
+				Lighting lighting = new Lighting();
+				lighting.setBumpInput(null);
+				lighting.setDiffuseConstant(1.68);
+				lighting.setSpecularConstant(2.0);
+				lighting.setSpecularExponent(40.0);
+				lighting.setSurfaceScale(10.0);
+
+				Light.Distant light = new Light.Distant();
+				light.setColor(playerColor);
+
+				lighting.setLight(light);
+
+				s.setEffect(lighting);
+			}
+		}
+	}
+	
 	public void activateCountry(String countryName) {
 		for(SVGPath s : countries) {
 			if(s.getId().equals(countryName)) {
