@@ -21,9 +21,10 @@ public enum MessageType {
 	MessagePossessCountry,
 	MessageChooseCountry,
 	MessagePlaceTroops,
-	MessageJoinGame,// MessageJoinGame Nachricht
+	MessageJoinGame,// WHAT
 	// MessageCreateGame
-	MessageCreateGame,
+	MessageCreateGame, //WHAT
+	MessageFortifyTroops,
 	MessageDiceThrowRequest; // was an dem server gesendet wird (nicht wirklich viel)
 
 	// MessageJoinGame Nachricht

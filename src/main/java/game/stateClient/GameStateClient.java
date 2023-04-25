@@ -21,11 +21,16 @@ import game.models.PlayerSingle;
 import game.models.Territory;
 import general.AppController;
 import javafx.scene.paint.Color;
+import network.messages.MessageAttack;
+import network.messages.MessageDiceThrow;
+import network.messages.MessageFortifyTroops;
+import network.messages.MessagePlaceTroops;
+import network.messages.MessagePossessCountry;
 
 /**
  * Class for the gameState for client-logic/representation
  * 
- * @author srogalsk
+ * @author srogalsk & dignatov
  *
  */
 
@@ -74,21 +79,31 @@ public class GameStateClient {
 
 	public void countryPossession(int playerId, CountryName country) {
 		this.countryPossession(playerId, country);
+		AppController.getClient().sendMessage(new MessagePossessCountry(playerId, country));
+
 	}
 
 	public void diceThrowToDetermineTheBeginner() {
-
+		this.diceThrowToDetermineTheBeginner();
+		AppController.getClient().sendMessage(new MessageDiceThrow());
+	
 	}
 
 	public void attackCountry(int playerId, CountryName countryFrom, CountryName countryTo, int troops) {
-
+		this.attackCountry(playerId, countryFrom, countryTo, troops);
+		AppController.getClient().sendMessage(new MessageAttack(playerId, countryFrom, countryTo, troops));
+	
 	}
 
 	public void fortifyTroops(int playerId, CountryName countryFrom, CountryName countryTo, int troops) {
-
+		this.fortifyTroops(playerId, countryFrom, countryTo, troops);
+		AppController.getClient().sendMessage(new MessageFortifyTroops(playerId, countryFrom, countryTo, troops));
+	
 	}
 
 	public void placeTroops(int playerId, CountryName country, int troops) {
+		this.placeTroops(playerId, country, troops);
+		AppController.getClient().sendMessage(new MessagePlaceTroops(playerId, country, troops));
 
 	}
 

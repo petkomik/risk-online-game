@@ -148,6 +148,14 @@ public class Client {
 		return client;
 	}
 
+	public static void removeProfile(Profile profilee) {
+		for (Profile profile : profiles) {
+			if (profile.equals(profilee)) {
+				profiles.remove(profile);
+			}
+		}
+	}
+
 	public void sendMessage(Message message) {
 		try {
 			outputStream.flush();
@@ -180,9 +188,9 @@ public class Client {
 							if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
 								AppController.dbH.createProfileData(profilee);
 							}
-							
-								profiles.add(profilee);
-							
+
+							profiles.add(profilee);
+
 							sendMessage(new MessageProfile(profile));
 							HostServerMessengerController.addLabel(
 									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
@@ -209,7 +217,7 @@ public class Client {
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
 							JoinClientMessengerController.addLabel(
-									((MessageToPerson) message).getFromProfile().getLastName() 
+									((MessageToPerson) message).getFromProfile().getLastName()
 											+ ((MessageToPerson) message).getMsg()
 													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
 									vBoxMessages);

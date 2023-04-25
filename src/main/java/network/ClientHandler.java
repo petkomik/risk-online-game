@@ -11,8 +11,14 @@ import game.gui.HostServerMessengerController;
 import game.gui.MainApp;
 import game.models.Player;
 import network.messages.Message;
+import network.messages.MessageAttack;
 import network.messages.MessageConnect;
+import network.messages.MessageDiceThrow;
 import network.messages.MessageDisconnect;
+import network.messages.MessageFortifyTroops;
+import network.messages.MessagePlaceTroops;
+import network.messages.MessagePlayerTurn;
+import network.messages.MessagePossessCountry;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
 import network.messages.MessageToPerson;
@@ -77,7 +83,8 @@ public class ClientHandler implements Runnable {
 		for (ClientHandler clientHandler : clientHandlers) {
 			try {
 
-				if (clientHandler.clientUsername.equalsIgnoreCase(  ((MessageToPerson)message).getToProfile().getUserName())) {
+				if (clientHandler.clientUsername
+						.equalsIgnoreCase(((MessageToPerson) message).getToProfile().getUserName())) {
 					System.out.println("that is what TO is: ");
 
 					clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
@@ -121,6 +128,8 @@ public class ClientHandler implements Runnable {
 				case Disconnect:
 					System.out.println("case MessageDisconnect Server Success 3 ");
 					broadcastMessage(messageFromClient);
+					removeClient(((MessageDisconnect) messageFromClient).getProfile());
+
 					break;
 				case MessageServerCloseConnection:
 					System.out.println("case MessageDisconnect Server Success 3 ");
@@ -141,30 +150,32 @@ public class ClientHandler implements Runnable {
 				case MessageMove:
 					// Handle the message move message
 					break;
+				case MessagePlayerTurn:
+					broadcastMessage(((MessagePlayerTurn) messageFromClient));
+					break;
 				case MessagePlacingTroops:
-					// Handle the message placing troops message
+					broadcastMessage(((MessagePlaceTroops) messageFromClient));
 					break;
 				case MessageAttack:
-					// Handle the message attack message
+					broadcastMessage(((MessageAttack) messageFromClient));
 					break;
 				case MessageDiceThrow:
-					// Handle the message dice throw message
-					// Zahlen zusenden von Würfeln
-					break;
-				case MessagePlayerTurn:
-					// Handle the message player turn message
+					broadcastMessage(((MessageDiceThrow) messageFromClient));
 					break;
 				case MessagePossessCountry:
-					// Handle the message possess country message
+					broadcastMessage(((MessagePossessCountry) messageFromClient));
 					break;
 				case MessageChooseCountry:
 					// Handle the message choose country message
 					break;
 				case MessagePlaceTroops:
-					// Handle the message place troops message
+					broadcastMessage(((MessagePlaceTroops) messageFromClient));
 					break;
 				case MessageDiceThrowRequest:
 					// Handle the message dice throw request message
+					break;
+				case MessageFortifyTroops:
+					broadcastMessage(((MessageFortifyTroops) messageFromClient));
 					break;
 				default:
 					// Handle unknown message types, if necessary
@@ -202,4 +213,15 @@ public class ClientHandler implements Runnable {
 		}
 
 	}
+	
+	public void removeClient(Profile profile){
+		for (ClientHandler clientHandler : clientHandlers) {
+			if(clientHandler.getProfile().equals(profile)){
+				clientHandler.removeClient(profile);
+				}
+		}
+		
+	}
+	
+	
 }

@@ -84,7 +84,7 @@ public class HostServerMessengerController implements Initializable {
 		/******/
 
 		try {
-			//sd
+			
 			server = Server.createServer(port);
 			client = Client.createClient(host, port);
 			client.listenForMessage(vBoxMessages);
