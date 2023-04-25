@@ -1,6 +1,8 @@
 package game.models;
 
 import database.Profile;
+import general.Parameter;
+import javafx.scene.paint.Color;
 import network.ClientHandler;
 import network.messages.Message;
 import network.messages.MessageType;
@@ -47,6 +49,14 @@ public class PlayerMP extends Player {
 
 	public ClientHandler getClientHandler() {
 		return clientHandler;
+	}
+	
+	public Color getPrefColor() {
+		return Parameter.purpleColor;
+	}
+	
+	public String getPrefAvatar() {
+		return Parameter.avatarsdir + this.profile.getPhoto();
 	}
 	
 	// hello

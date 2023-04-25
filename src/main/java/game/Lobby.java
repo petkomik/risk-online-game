@@ -135,8 +135,16 @@ public class Lobby {
 	
 	private PlayerInLobby addColorAvatar(Player ply) {
 		// TODO
-		Color prefC = Parameter.blueColor; 						//= ply.getPrefColor();
-		String prefAv = Parameter.blondBoy;						//= ply.getPrefAvatar();
+		Color prefC;					
+		String prefAv;
+		
+		if(ply instanceof PlayerSingle) {
+			prefC = ((PlayerSingle) ply).getPrefColor();
+			prefAv = ((PlayerSingle) ply).getPrefAvatar();
+		}else {
+			prefC = Parameter.blueColor;
+			prefAv = Parameter.blondBoy;
+		}
 		Color realC;
 		String realAv;
 		

@@ -225,7 +225,7 @@ public class MainMenuPaneController extends StackPane {
 				(new GameSound()).buttonClickForwardSound();
 				Lobby lobby = new Lobby();
 				// TODO get methods for color + avatars
-				lobby.joinLobby(new PlayerSingle(AppController.getProfile().getUserName(), AppController.getProfile().getId()));
+				lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {
