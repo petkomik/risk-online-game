@@ -518,7 +518,7 @@ public class LobbyMenuController extends StackPane {
 		    		if(lobby.getHumanPlayerList().size() < 6) {
 				    	Profile newProfile = new SecondaryPlayerDialog().addPlayerDialog();
 				    	if(newProfile != null ) {
-					    	PlayerSingle playerSingle = new PlayerSingle(newProfile.getUserName(), newProfile.getId());
+					    	PlayerSingle playerSingle = new PlayerSingle(newProfile);
 					    	lobby.joinLobby(playerSingle);
 				    		labelBtnPlayers.setText(String.valueOf(lobby.getHumanPlayerList().size()));
 				    	}

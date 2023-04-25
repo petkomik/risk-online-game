@@ -139,7 +139,7 @@ public class Lobby {
 		String prefAv;
 		
 		if(ply instanceof PlayerSingle) {
-			prefC = ((PlayerSingle) ply).getPrefColor();
+			prefC = Color.web(((PlayerSingle) ply).getPrefColor());
 			prefAv = ((PlayerSingle) ply).getPrefAvatar();
 		}else {
 			prefC = Parameter.blueColor;

@@ -21,8 +21,8 @@ public class PlayerSingle extends Player {
 		this.profile = profile;
 	}
 	
-	public Color getPrefColor() {
-		return Parameter.purpleColor;
+	public String getPrefColor() {
+		return this.profile.getColor();
 	}
 	
 	public String getPrefAvatar() {
