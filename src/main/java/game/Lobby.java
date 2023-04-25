@@ -64,7 +64,7 @@ public class Lobby {
 	
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
-			toAdd.setColor(colors[playersInLobby.size()]);
+//			toAdd.setColor(colors[playersInLobby.size()]);
 			this.playersJoined.add(toAdd);
 			//this.updateScore();
 			playersInLobby.add(this.addColorAvatar(toAdd));
@@ -178,11 +178,11 @@ public class Lobby {
 	}
 	
 	public void addAI() {
-		String aiN = aiNames[this.avaiableAINames.size() - 1];
+		String aiN = avaiableAINames.get(this.avaiableAINames.size() - 1);
 		this.avaiableAINames.remove(aiN);
-		Color aiC = colors[this.avaiableColors.size() - 1];
+		Color aiC = avaiableColors.get(this.avaiableColors.size() - 1);
 		this.avaiableColors.remove(aiC);
-		String aiA = avatars[this.avaiableAvatars.size() - 1];
+		String aiA = avaiableAvatars.get(this.avaiableAvatars.size() - 1);
 		this.avaiableAvatars.remove(aiA);
 	
 		PlayerAI aiP = new PlayerAI(aiN, 3000, this.difficultyOfAI);

@@ -21,7 +21,7 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	private Color color;
+	private String color;
 	private int id;
 	private int rank;
 	private Image image;
@@ -243,11 +243,11 @@ public class Player implements Serializable {
 		this.cardThisRound = cardThisRound;
 	}
 
-	public Color getColor() {
+	public String getColor() {
 		return color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(String color) {
 		this.color = color;
 	}
 

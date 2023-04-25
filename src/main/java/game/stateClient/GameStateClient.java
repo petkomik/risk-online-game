@@ -403,7 +403,7 @@ public class GameStateClient {
 				
 			}
 		}
-		gamePaneController.pointUpCountry(countryName.toString(), currentPlayer.getColor());
+		gamePaneController.pointUpCountry(countryName.toString(), Color.web(currentPlayer.getColor()));
 		try {
 			gameLogic.countryPossession(clientPlayer.getID(), countryName);
 		} catch (WrongCountryException | WrongTroopsCountException | WrongPhaseException e) {
