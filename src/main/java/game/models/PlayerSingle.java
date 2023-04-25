@@ -19,14 +19,9 @@ public class PlayerSingle extends Player {
 	public PlayerSingle(Profile profile) {
 		super(profile.getUserName(), profile.getId());
 		this.profile = profile;
+		this.setColor(profile.getColor());
+		this.setAvatar(Parameter.avatarsdir + profile.getPhoto());
 	}
 	
-	public String getPrefColor() {
-		return this.profile.getColor();
-	}
-	
-	public String getPrefAvatar() {
-		return Parameter.avatarsdir + this.profile.getPhoto();
-	}
 
 }

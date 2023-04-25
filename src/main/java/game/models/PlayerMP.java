@@ -51,13 +51,6 @@ public class PlayerMP extends Player {
 		return clientHandler;
 	}
 	
-	public Color getPrefColor() {
-		return Parameter.purpleColor;
-	}
-	
-	public String getPrefAvatar() {
-		return Parameter.avatarsdir + this.profile.getPhoto();
-	}
 	
 	// hello
 	

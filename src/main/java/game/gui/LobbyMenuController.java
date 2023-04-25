@@ -571,7 +571,7 @@ public class LobbyMenuController extends StackPane {
 		    	if (singleplayerLobby) {
 		    		ArrayList<Player> humans = (ArrayList<Player>) lobby.getHumanPlayerList();
 		    		for(Player pl : humans) {
-			    		lobby.getPlayerInLobbyFor(pl).setReady(ready);	
+			    		lobby.setReady(pl, ready);	
 			    		try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 		    			System.out.println(pl.getName() + ready);
 		    		}
@@ -624,14 +624,15 @@ public class LobbyMenuController extends StackPane {
 	
 	public void setUpPlayerCards() throws FileNotFoundException {
 		playerCardsPane.getChildren().removeAll(playerCardsPane.getChildren());
-		ArrayList<PlayerInLobby> players = new ArrayList<>(lobby.getPlayersInLobby());
-		Iterator<PlayerInLobby> itt = players.iterator();
+		//ArrayList<PlayerInLobby> players = new ArrayList<>(lobby.getPlayersInLobby());
+		ArrayList<Player> players = new ArrayList<>(lobby.getPlayerList());
+		Iterator<Player> itt = players.iterator();
 		while(itt.hasNext()) {
-			PlayerInLobby ply = itt.next();
-			PlayerCard plyc = new PlayerCard(ply, ply.getAvatar(), ply.getColor(), ratio);
-			if (lobby.getAIPlayerList().contains(ply.getPlayer())) {
+			Player ply = itt.next();
+			PlayerCard plyc = new PlayerCard(ply, ply.getAvatar(), Color.web(ply.getColor()), ratio, lobby.isReady(ply));
+			if (lobby.getAIPlayerList().contains(ply)) {
 				plyc.setReady(true);
-				ply.setReady(true);
+				lobby.setReady(ply, true);
 			}
 			playerCardsPane.getChildren().add(plyc);
 		}

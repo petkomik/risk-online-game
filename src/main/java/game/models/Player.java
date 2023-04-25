@@ -22,9 +22,9 @@ public class Player implements Serializable {
 	
 	private String name;
 	private String color;
+	private String avatar;
 	private int id;
 	private int rank;
-	private Image image;
 	private HashMap<CountryName, Territory> ownedCountries;
 	private ArrayList<Continent> ownedContinents;
 	private int sumOfAllTroops;
@@ -45,7 +45,7 @@ public class Player implements Serializable {
 		cards = new ArrayList<>();
 		this.name = name;
 		this.id = id;
-		// set Random Image
+		// set Random avatar
 	}
 	
 	public Player(String name, int id, String imagePath) {
@@ -54,7 +54,7 @@ public class Player implements Serializable {
 		cards = new ArrayList<>();
 		this.name = name;
 		this.id = id;
-		this.image = new Image(imagePath);
+		this.avatar = imagePath;
 	}
 
 	/**constructor for defensive copying*/
@@ -78,7 +78,7 @@ public class Player implements Serializable {
 	    this.attackPhase = player.isAttackPhase();
 	    this.cardThisRound = player.isCardThisRound();
 	    this.fortificationPhase = player.isFortificationPhase();
-	    this.image = player.image;
+	    this.avatar = player.avatar;
 	}
 
 
@@ -259,12 +259,12 @@ public class Player implements Serializable {
 		this.ownedContinents = ownedContinents;
 	}
 	
-	public Image getImage() {
-		return this.image;
+	public String getAvatar() {
+		return this.avatar;
 	}
 	
-	public void setImage(String imagePath) {
-		this.image = new Image(imagePath);
+	public void setAvatar(String imagePath) {
+		this.avatar = imagePath;
 	}
 
 }

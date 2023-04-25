@@ -278,13 +278,13 @@ public class GUISupportClasses {
 		double ratio;
 		
 
-		public PlayerCard(PlayerInLobby player, String avatar, Color color, double ratio) throws FileNotFoundException {
+		public PlayerCard(Player player, String avatar, Color color, double ratio, boolean ready) throws FileNotFoundException {
 			super();
-			this.name = player.getPlayer().getName();
+			this.name = player.getName();
 			this.avatar.setImage(new Image(new FileInputStream(avatar)));
 			this.color = color;
 			this.ratio = ratio;
-			this.playerReady = player.isReady() ? new Label("Ready") : new Label("Not Ready");
+			this.playerReady = ready ? new Label("Ready") : new Label("Not Ready");
 			buildCard();	
 		}
 		

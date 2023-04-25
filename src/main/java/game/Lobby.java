@@ -1,12 +1,12 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javafx.scene.paint.Color;
 
 import game.models.*;
-import game.models.PlayerAI;
 import general.Parameter;
 
 
@@ -30,19 +30,17 @@ public class Lobby {
 	static String[] aiNames = new String[] {"Andrea (AI)", "Jasper (AI)", "Mick (AI)", 
 			"Maria (AI)", "Tosho (AI)"};
 	
-
-	private ArrayList<PlayerInLobby> playersInLobby;
 	private ArrayList<Player> playersJoined;
 	private ArrayList<Color> avaiableColors;
 	private ArrayList<String> avaiableAvatars;
 	private ArrayList<String> avaiableAINames;
+	private HashMap<Player, Boolean> readyHashMap;
 
 	public int lobbyRank;
 	public int difficultyOfAI;
 	public int maxNumberOfPlayers;
 
 	public Lobby() {
-		this.playersInLobby = new ArrayList<PlayerInLobby>();
 		this.playersJoined = new ArrayList<Player>();
 		this.lobbyRank = 0;
 		this.difficultyOfAI = 0;
@@ -59,15 +57,15 @@ public class Lobby {
 		for(String k : aiNames) {
 			this.avaiableAINames.add(k);
 		}
+		this.readyHashMap = new HashMap<Player, Boolean>();
 	}
 	
 	
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
-//			toAdd.setColor(colors[playersInLobby.size()]);
-			this.playersJoined.add(toAdd);
 			//this.updateScore();
-			playersInLobby.add(this.addColorAvatar(toAdd));
+			playersJoined.add(this.addColorAvatar(toAdd));
+			this.setReady(toAdd, false);
 			
 		}
 	}
@@ -75,16 +73,8 @@ public class Lobby {
 	public void leaveLobby(Player toLeave) {
 		if(this.playersJoined.contains(toLeave)) {
 			this.playersJoined.remove(toLeave);
-			this.updateScore();
-			Iterator<PlayerInLobby> itt = playersInLobby.iterator();
-			while(itt.hasNext()) {
-				PlayerInLobby k = itt.next();
-				if(k.getPlayer().equals(toLeave)) {
-					this.removeColorAvatar(k);
-					this.playersInLobby.remove(k);
-					break;
-				}
-			}
+			this.updateScore();	
+			removeColorAvatar(toLeave);
 		}
 	}
 		
@@ -94,7 +84,7 @@ public class Lobby {
 			k += i.getRank();
 		}
 		
-		k = Math.round(k / this.playersInLobby.size());
+		k = Math.round(k / this.getPlayerList().size());
 		this.lobbyRank = k;
 		
 	}
@@ -133,14 +123,14 @@ public class Lobby {
 	}
 	// 
 	
-	private PlayerInLobby addColorAvatar(Player ply) {
+	private Player addColorAvatar(Player ply) {
 		// TODO
 		Color prefC;					
 		String prefAv;
 		
 		if(ply instanceof PlayerSingle) {
-			prefC = Color.web(((PlayerSingle) ply).getPrefColor());
-			prefAv = ((PlayerSingle) ply).getPrefAvatar();
+			prefC = Color.web(((PlayerSingle) ply).getColor());
+			prefAv = ((PlayerSingle) ply).getAvatar();
 		}else {
 			prefC = Parameter.blueColor;
 			prefAv = Parameter.blondBoy;
@@ -154,6 +144,7 @@ public class Lobby {
 		} else {
 			realC = this.avaiableColors.get(0);
 			this.avaiableColors.remove(0);
+			ply.setColor(colorToHexCode(realC));;
 		}
 		
 		if(this.avaiableAvatars.contains(prefAv)) {
@@ -162,14 +153,15 @@ public class Lobby {
 		} else {
 			realAv = this.avaiableAvatars.get(0);
 			this.avaiableAvatars.remove(0);
+			ply.setAvatar(realAv);
 		}
 		
-		return new PlayerInLobby(ply, realC, realAv);
+		return ply;
 	}
 	
-	private void removeColorAvatar(PlayerInLobby ply) {
-		this.avaiableAvatars.add(ply.getAvatar());
-		this.avaiableColors.add(ply.getColor());
+	private void removeColorAvatar(Player toLeave) {
+		this.avaiableAvatars.add(toLeave.getAvatar());
+		this.avaiableColors.add(Color.web(toLeave.getColor()));
 	}
 
 	
@@ -186,39 +178,23 @@ public class Lobby {
 		this.avaiableAvatars.remove(aiA);
 	
 		PlayerAI aiP = new PlayerAI(aiN, 3000, this.difficultyOfAI);
+		aiP.setColor(colorToHexCode(aiC));
+		aiP.setAvatar(aiA);
 		this.getPlayerList().add(aiP);
-		
-		PlayerInLobby plyC = new PlayerInLobby(aiP, aiC, aiA);
-		this.playersInLobby.add(plyC);
-		
-	}
+		this.setReady(aiP, true);
 	
-	public ArrayList<PlayerInLobby> getPlayersInLobby() {
-		return playersInLobby;
+		
 	}
-
 
 	public void removeAI() {
 		if (this.getAIPlayerList().size() > 0) {
 			Player k = this.getAIPlayerList().get(this.getAIPlayerList().size() - 1);
 			this.playersJoined.remove(k);
-			Iterator<PlayerInLobby> itt =  this.playersInLobby.iterator();
-			PlayerInLobby removed = null;
-			while (itt.hasNext()) {
-				PlayerInLobby ply = itt.next();
-		        if (ply.getPlayer().equals(k)) {
-		        	removed = ply;
-		        }
-		    }
-			if (removed != null) {
-				this.playersInLobby.removeIf(n -> (n.getPlayer().equals(k)));
-				this.avaiableAINames.add(k.getName());
-				this.avaiableAvatars.add(removed.getAvatar());
-				this.avaiableColors.add(removed.getColor());
+			this.avaiableAINames.add(k.getName());
+			this.avaiableAvatars.add(k.getAvatar());
+			this.avaiableColors.add(Color.web(k.getColor()));
 				System.out.println(this.avaiableAINames.size() + " " + this.avaiableColors.size() + " " + this.avaiableAvatars.size());
-			}
 		}
-		
 	}
 	
 	public void updateAILevel() {
@@ -226,19 +202,28 @@ public class Lobby {
 	}
 	
 	public boolean isEveryoneReady() {
-		for(PlayerInLobby p : playersInLobby) {
-			if(!p.isReady()) return false;
+		for(boolean p : this.readyHashMap.values()) {
+			if(!p) { 
+				return false;
+			};
 		}
 		return true;
 	}
 	
-	public PlayerInLobby getPlayerInLobbyFor(Player pl) {
-		for(PlayerInLobby ply : this.playersInLobby) {
-			if(ply.getPlayer().equals(pl)) {
-				return ply;
-			}
-		}
-		
-		return null;
+	
+	public static String colorToHexCode( Color color ) {
+        return String.format( "#%02X%02X%02X",
+            (int)( color.getRed() * 255 ),
+            (int)( color.getGreen() * 255 ),
+            (int)( color.getBlue() * 255 ) ).toLowerCase();
+    }
+	
+	public void setReady(Player ply, boolean ready) {
+		this.readyHashMap.put(ply, ready);
+	}
+	
+	public boolean isReady(Player ply) {
+		return this.readyHashMap.get(ply);
 	}
 }
+
