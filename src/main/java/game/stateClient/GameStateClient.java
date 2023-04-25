@@ -385,7 +385,7 @@ public class GameStateClient {
 	/****/
 	public void countryClickedinGUI(CountryName countryName) {
 		if(currentPlayer == clientPlayer) {
-			if(currentPlayer.isInitialPlacementPhase()) {
+			if(currentPlayer.isInitialPlacementPhase() && !currentPlayer.isPreparationPhase()) {
 				if(territories.get(countryName).getOwnedByPlayer() == null) {
 //						try {
 //							gameLogic.countryPossession(clientPlayer.getID(), countryName);
@@ -404,7 +404,24 @@ public class GameStateClient {
 			}
 		}
 		gamePaneController.pointUpCountry(countryName.toString(), currentPlayer.getColor());
-		this.currentPlayer = gameLogic.setNextActivePlayerAsCurrentPlayer();
+		try {
+			gameLogic.countryPossession(clientPlayer.getID(), countryName);
+		} catch (WrongCountryException | WrongTroopsCountException | WrongPhaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(currentPlayer.isPreparationPhase()) {
+			try {
+				gameLogic.placeTroops(this.getCurrentPlayer().getID(), countryName, 1);
+				gamePaneController.setNumTroops(String.valueOf(gameIsOver), 1);
+			} catch (WrongPhaseException | WrongCountryException | WrongTroopsCountException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
 }
 // Hier ein Test
+

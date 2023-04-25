@@ -50,7 +50,7 @@ public class GameSingleplayerLogic extends GameLogic {
 	@Override
 	public boolean countryPossession(int id, CountryName country)
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException {
-		Player player = players.get(id);
+		Player player = this.getCurrentPlayer();
 		if (getCurrentPlayer() != player) {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (!player.isInitialPlacementPhase()) {
@@ -95,6 +95,7 @@ public class GameSingleplayerLogic extends GameLogic {
 			return false;
 		}
 		setNextActivePlayerAsCurrentPlayer();
+		AppController.getGameStateClient().setCurrentPlayer(this.getCurrentPlayer().getID());
 		getCurrentPlayer().setInitialPlacementPhase(true);
 		return true;
 	}
