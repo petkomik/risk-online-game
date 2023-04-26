@@ -10,6 +10,7 @@ import database.Profile;
 import game.gui.HostServerMessengerController;
 import game.gui.MainApp;
 import game.models.Player;
+import gameState.GameHandler;
 import network.messages.Message;
 import network.messages.MessageAttack;
 import network.messages.MessageConnect;
@@ -161,6 +162,7 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageDiceThrow:
 					broadcastMessage(((MessageDiceThrow) messageFromClient));
+					
 					break;
 				case MessagePossessCountry:
 					broadcastMessage(((MessagePossessCountry) messageFromClient));
