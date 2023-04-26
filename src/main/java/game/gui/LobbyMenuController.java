@@ -582,25 +582,19 @@ public class LobbyMenuController extends StackPane {
 		    			AppController.setGameLogic(new GameSingleplayerLogic((ArrayList<Player>) lobby.getPlayerList()));
 						try {
 					    	Node node = (Node) event.getSource();
-							// Getting the Stage where the event is happened
 							Stage stage = (Stage) node.getScene().getWindow();
-							// changing the AnchorPane from the main file
-							// AnchorPane anchorPane = (AnchorPane) loadFXML("gameFrame");
-							
+				
 							FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
 							AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
 							GamePaneController gamePaneController = fxmlLoader.getController();
-							// Setting the size of the anchorPane
 							stage.getScene().setRoot(anchorPane);
 							
 							// Setting up the gameState
 			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(), gamePaneController));
 			    			AppController.getGameLogic().startGame();
 
-							// Showing the Stage
 							stage.show();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 

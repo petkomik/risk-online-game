@@ -75,6 +75,7 @@ public class Logic {
 		return -1;
 	}
 	
+	
 
 	public static boolean isGameOver(GameState gameState) {
 		return gameState.getAlivePlayers().size() == 1;
