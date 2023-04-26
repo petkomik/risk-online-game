@@ -147,7 +147,7 @@ public class GamePaneController implements Initializable{
 		setUpChoosingTroopsPane();
 	}
 	
-	public void initData(SinglePlayerHandler singlePlayerHandler) {
+	public void initSinglePlayer(SinglePlayerHandler singlePlayerHandler) {
 		gameType = GameType.SinglePlayer;
 		this.singlePlayerHandler = singlePlayerHandler;
 	}

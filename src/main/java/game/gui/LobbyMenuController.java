@@ -13,6 +13,7 @@ import game.logic.GameType;
 import game.models.Player;
 import game.models.PlayerSingle;
 import game.stateClient.GameStateClient;
+import gameState.SinglePlayerHandler;
 import general.Parameter;
 import general.AppController;
 
@@ -583,15 +584,16 @@ public class LobbyMenuController extends StackPane {
 						try {
 					    	Node node = (Node) event.getSource();
 							Stage stage = (Stage) node.getScene().getWindow();
-				
 							FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
 							AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
 							GamePaneController gamePaneController = fxmlLoader.getController();
+							SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby);
+							gamePaneController.initSinglePlayer(singleHandler);
 							stage.getScene().setRoot(anchorPane);
 							
-							// Setting up the gameState
-			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(), gamePaneController));
-			    			AppController.getGameLogic().startGame();
+//							// Setting up the gameState
+//			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(), gamePaneController));
+//			    			AppController.getGameLogic().startGame();
 
 							stage.show();
 						} catch (IOException e) {
