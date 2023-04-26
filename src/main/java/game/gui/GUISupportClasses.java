@@ -5,19 +5,31 @@ import java.io.FileNotFoundException;
 
 import game.PlayerInLobby;
 import game.models.Player;
+import general.AppController;
 import general.Parameter;
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.Skin;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.skin.ComboBoxPopupControl;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -27,9 +39,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Screen;
+import network.messages.MessageToPerson;
 
 public class GUISupportClasses {
 	static class Spacing extends Region {
@@ -403,5 +420,210 @@ public class GUISupportClasses {
 	        });
 	        this.imageViewProperty.set(imageView);
 	    }
+	}
+	
+	static class ChatWindow extends StackPane{
+		public ChatWindow() {
+		//	this.super();
+			VBox chatAndMenu = new VBox();
+			ScrollPane chat = new ScrollPane();
+			VBox vBoxMessages = new VBox();
+			HBox textfieldAndButtons = new HBox();
+			TextField textfieldMessage = new TextField();
+			VBox comboAndSend = new VBox();
+			DesignButton sendButton;
+			ComboBox<String> names = new ComboBox<String>();
+			
+			/*
+			 * alles in container nacheinander
+			 * methode für neue messages
+			 * beim send button action aufrufen eingabe Werte ist String
+			 * wenn alles fertig probgieren das ganze über Popup zu emplimentieren
+			 * ServerMainWIndowController richtig skalieren
+			 */
+			
+			double ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+			ratio = Math.min(ratio + 0.3, 1);
+			
+			/*
+			 * setting up the scrollpane that contains the chat visuals
+			 */
+			chat.setMaxWidth(ratio*600);
+			chat.setMinWidth(ratio*600);
+			chat.setMaxHeight(ratio*400);
+			chat.setMinHeight(ratio*400);
+			chat.setHbarPolicy(ScrollBarPolicy.NEVER);
+			chat.setCache(true);
+			chat.setStyle("-fx-background: null;"
+					+"-fx-background-color: rgba(225,211,184,0.9);"
+					+"-fx-background-radius: 10 10 0 0;"
+					+"-fx-border-color: rgba(92,64,51);"
+					+"-fx-border-width: 4px;"
+					+"-fx-border-style: solid;"
+					+"-fx-border-radius: 7 7 0 0");
+			Platform.runLater(()-> {
+				try {
+					
+				/*
+				 * setting up the color shape of the scrollbar and thumb
+				 */
+					
+				ScrollBar vertikalScrollBar = (ScrollBar) chat.lookup(".scroll-bar:vertical");
+				vertikalScrollBar.setStyle("-fx-background-color: rgba(196, 164, 132);-fx-background-radius: 10;");
+				vertikalScrollBar.setPrefWidth(25);
+				vertikalScrollBar.lookup(".thumb").setStyle("-fx-background-color: rgba(92,64,51);");
+				
+				/*
+				 * shape and color of increment and decrement buttons
+				 */
+				
+				Region incButton = (Region) chat.lookup(".increment-button");
+				Region decButton = (Region) chat.lookup(".decrement-button");
+				incButton.setStyle("-fx-background-color: rgba(92,64,51);"
+								+  "-fx-background-radius: 0 0 10 10;"
+								+  "-fx-pref-height: 20;"
+								+  "-fx-pref-width: 20;");
+				decButton.setStyle("-fx-background-color: rgba(92,64,51);"
+								+  "-fx-background-radius: 10 10 0 0;"
+								+  "-fx-pref-height: 20;"
+								+  "-fx-pref-width: 20;");
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+					
+			});
+			
+			/*
+			 * setting up the Button and ComboBox
+			 */
+			
+			sendButton = new DesignButton(new Insets(0,10,0,10),10,ratio*15,ratio*120);
+			sendButton.setText("SEND");
+			
+			names.setPrefWidth(ratio*120);
+			//TODO add names or change them with a foreach
+			names.getItems().addAll("Name1","Name2","Name3");
+			names.setStyle("-fx-background-color: rgba(225,211,184,0.9); -fx-background-radius: 10 10 10 10");
+			
+			comboAndSend.prefHeight(ratio*100);
+			comboAndSend.prefWidth(ratio*120);
+			comboAndSend.setAlignment(Pos.CENTER);
+			comboAndSend.getChildren().addAll(sendButton,new Spacing(15),names);
+			
+			/*
+			 * setting up textfieldMessage
+			 */
+			textfieldMessage.setMaxHeight(ratio*100);
+			textfieldMessage.setMaxWidth(ratio*400);
+			textfieldMessage.setPrefHeight(ratio*100);
+			textfieldMessage.setPrefWidth(ratio*400);
+			textfieldMessage.setStyle("-fx-background-color: rgba(225,211,184,0.9); -fx-background-radius: 10 10 10 10");
+			textfieldMessage.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 17*ratio));
+			/*
+			 * setting up the textfield with the buttons
+			 */
+			
+			textfieldAndButtons.setPrefHeight(ratio*100);
+			textfieldAndButtons.setPrefWidth(ratio*600);
+			textfieldAndButtons.setMaxHeight(ratio*100);
+			textfieldAndButtons.setMaxWidth(ratio*600);
+			textfieldAndButtons.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 0 0 10 10");
+			textfieldAndButtons.setAlignment(Pos.CENTER_RIGHT);
+			textfieldAndButtons.setPadding(new Insets(20,20,20,20));
+			textfieldAndButtons.getChildren().addAll(textfieldMessage,new Spacing(20),comboAndSend);
+			
+			
+			vBoxMessages.setPrefWidth(ratio*600);
+			vBoxMessages.heightProperty().addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					chat.setVvalue((Double) newValue);
+				}
+			});			
+			vBoxMessages.setAlignment(Pos.TOP_LEFT);
+			Text text = new Text("host messageaaaaaaaaaa");
+			text.setFill(Color.RED);
+			HBox message = new HBox();
+			message.setPrefSize(ratio*100, ratio*2000);
+			message.getChildren().add(text);
+			vBoxMessages.getChildren().addAll(message,text);
+			
+			chat.setContent(vBoxMessages);
+			
+			sendButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					String messageToSend = textfieldMessage.getText();
+					if (!messageToSend.isBlank()) {
+						HBox hBox = new HBox();
+						hBox.setAlignment(Pos.CENTER_RIGHT);
+						hBox.setPadding(new Insets(5, 40, 5, 10));
+						Text text = new Text(messageToSend);
+						TextFlow textFlow = new TextFlow(text);
+						textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
+								+ "-fx-background-radius: 20px;");
+						textFlow.setPadding(new Insets(5, 10, 5, 10));
+						text.setFill(Color.color(0.934, 0.945, 0.996));
+
+						hBox.getChildren().add(textFlow);
+
+						vBoxMessages.getChildren().add(hBox);
+
+//						Platform.runLater(new Runnable() {
+//							@Override
+//							public void run() {
+//								System.out.println("Run of Host sworks, this is what it starts with ");
+//								if (messageToSend.contains(":")) {
+//								
+//										System.out.println(messageToSend.substring(0, messageToSend.indexOf(":")));
+//										String username = messageToSend.substring(0, messageToSend.indexOf(":"));
+//										// send the message to the specified user
+//										client.sendMessage(new MessageToPerson(messageToSend,client.getProfile(),findProfileFromString(username)));
+//										
+//
+//								} else if (!messageToSend.equals(null)) {
+//									// send the message to the general chat
+//									client.sendMessage(messageToSend);
+//								}
+//							}
+//						});
+
+						textfieldMessage.clear();
+
+					}
+				}
+			});
+			
+			/*
+			 * setting up main window Proportions
+			 */
+			
+			chatAndMenu.setMaxHeight(ratio*500);
+			chatAndMenu.setMaxWidth(ratio*600);
+			chatAndMenu.getChildren().addAll(chat,textfieldAndButtons);
+			this.getChildren().add(chatAndMenu);
+		}
+		
+		public static void addLabel(String messageFromCLient, VBox vBox) {
+			HBox hBox = new HBox();
+			hBox.setAlignment(Pos.CENTER_LEFT);
+			hBox.setPadding(new Insets(5, 5, 5, 10));
+
+			Text text = new Text(messageFromCLient);
+			TextFlow textFlow = new TextFlow(text);
+			textFlow.setStyle("-fx-color: rgb(239,242,255); " + "-fx-background-color: rgb(233,233,235); "
+					+ "-fx-background-radius: 20px;");
+			textFlow.setPadding(new Insets(5, 10, 5, 10));
+			hBox.getChildren().add(textFlow);
+
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					vBox.getChildren().add(hBox);
+				}
+			});
+
+		}
 	}
 }
