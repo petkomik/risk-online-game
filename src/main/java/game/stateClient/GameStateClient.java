@@ -80,7 +80,6 @@ public class GameStateClient {
 	public void countryPossession(int playerId, CountryName country) {
 		this.countryPossession(playerId, country);
 		AppController.getClient().sendMessage(new MessagePossessCountry(playerId, country));
-
 	}
 
 	public void diceThrowToDetermineTheBeginner() {
