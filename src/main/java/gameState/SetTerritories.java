@@ -3,6 +3,7 @@ package gameState;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import game.models.Card;
@@ -13,23 +14,40 @@ import game.models.Territory;
 public class SetTerritories {
 
 
-	public static void createContinents(HashMap<Continent, ArrayList<Territory>> continents,
+	public static void createContinents(HashMap<Continent, ArrayList<CountryName>> continents,
 			HashMap<CountryName, Territory> territories) {
-		continents.put(Continent.Australia,
-				new ArrayList<Territory>(Arrays.asList(territories.get(CountryName.Indonesia),
-						territories.get(CountryName.NewGuinea), territories.get(CountryName.EasternAustralia),
-						territories.get(CountryName.WesternAustralia))));
-
-		continents.put(Continent.Asia, (ArrayList<Territory>) territories.values().stream()
-				.filter(o -> o.getContinent().equals(Continent.Asia)).collect(Collectors.toList()));
-		continents.put(Continent.Africa, (ArrayList<Territory>) territories.values().stream()
-				.filter(o -> o.getContinent().equals(Continent.Africa)).collect(Collectors.toList()));
-		continents.put(Continent.NorthAmerica, (ArrayList<Territory>) territories.values().stream()
-				.filter(o -> o.getContinent().equals(Continent.NorthAmerica)).collect(Collectors.toList()));
-		continents.put(Continent.SouthAmerica, (ArrayList<Territory>) territories.values().stream()
-				.filter(o -> o.getContinent().equals(Continent.SouthAmerica)).collect(Collectors.toList()));
-		continents.put(Continent.Europe, (ArrayList<Territory>) territories.values().stream()
-				.filter(o -> o.getContinent().equals(Continent.Europe)).collect(Collectors.toList()));
+		continents.put(Continent.Australia, (ArrayList<CountryName>) territories.entrySet().stream()
+				.filter(o -> o.getValue().getContinent().equals(Continent.Australia))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList())
+				);
+		continents.put(Continent.Asia, (ArrayList<CountryName>) territories.entrySet().stream()
+				.filter(o -> o.getValue().getContinent().equals(Continent.Asia))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList())
+				);
+		continents.put(Continent.Africa, (ArrayList<CountryName>) territories.entrySet().stream()
+				.filter(o -> o.getValue().getContinent().equals(Continent.Africa))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList())
+				);
+		continents.put(Continent.NorthAmerica, (ArrayList<CountryName>) territories.entrySet().stream()
+				.filter(o -> o.getValue().getContinent().equals(Continent.NorthAmerica))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList())
+				);
+		continents.put(Continent.SouthAmerica, (ArrayList<CountryName>) territories.entrySet().stream()
+				.filter(o -> o.getValue().getContinent().equals(Continent.SouthAmerica))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList())
+				);
+		
+		continents.put(Continent.Europe, (ArrayList<CountryName>) territories.entrySet().stream()
+				.filter(o -> o.getValue().getContinent().equals(Continent.Europe))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList())
+				);
+		
 	}
 
 	public static void createCardDeck(ArrayList<Card> cards) {
