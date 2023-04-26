@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import game.gui.GUISupportClasses.DesignButton;
+import game.logic.GameType;
 import game.models.CountryName;
+import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
@@ -100,6 +102,9 @@ public class GamePaneController implements Initializable{
 	private Button trueButtonReinf;
 	private Button falseButtonReinf;
 	
+	private GameType gameType;
+	private SinglePlayerHandler singlePlayerHandler;
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -141,6 +146,12 @@ public class GamePaneController implements Initializable{
 		setUpPhaseBoard();
 		setUpChoosingTroopsPane();
 	}
+	
+	public void initData(SinglePlayerHandler singlePlayerHandler) {
+		gameType = GameType.SinglePlayer;
+		this.singlePlayerHandler = singlePlayerHandler;
+	}
+	
 	private void getComponents() {
 		countries = new ArrayList<>();
 		spTroopsDisplay = new ArrayList<>();
@@ -435,6 +446,20 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void clickCountry(MouseEvent e) {
+		switch (gameType) {
+		case SinglePlayer:
+			
+			break;
+
+		case Tutorial:
+			
+			break;
+		case Multiplayer:
+			
+			break;
+		default:
+			break;
+		}
 		String countryNameString = ((SVGPath)e.getSource()).getId();
 		CountryName countryName = CountryName.valueOf(countryNameString);
 		AppController.getGameStateClient().countryClickedinGUI(countryName);
