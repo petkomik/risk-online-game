@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
 import game.models.CountryName;
+import game.models.Player;
 import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.Parameter;
@@ -61,7 +62,7 @@ public class GamePaneController implements Initializable{
 	private HashMap<String, Circle> circleTroopsDisplay;
 	private HashMap<String, Label> labelTroopsDisplay;	
 	private int numOfPlayer;
-	private int turn = 0;
+	private int turn;
 	private String[] avatars = {"blonde-boy", "bruntette-boy", "earrings-girl", "ginger-girl", "hat-boy", "mustache-man"};
 	private Color[] colors = {Color.BLUE, Color.ORANGE, Color.GREEN, Color.RED,
 			Color.BROWN, Color.YELLOW};
@@ -104,6 +105,9 @@ public class GamePaneController implements Initializable{
 	
 	private GameType gameType;
 	private SinglePlayerHandler singlePlayerHandler;
+	private ArrayList<String> playerColors;
+	private ArrayList<String> playerAvatar;
+	private ArrayList<Integer> playerIDs;
 	
 	
 	@Override
@@ -150,6 +154,24 @@ public class GamePaneController implements Initializable{
 	public void initSinglePlayer(SinglePlayerHandler singlePlayerHandler) {
 		gameType = GameType.SinglePlayer;
 		this.singlePlayerHandler = singlePlayerHandler;
+		playerColors = new ArrayList<>();
+		playerAvatar = new ArrayList<>();
+		playerIDs = new ArrayList<>();
+		
+		for(Player p : this.singlePlayerHandler.getLobby().getPlayerList()) {
+			playerColors.add(p.getColor());
+			playerAvatar.add(p.getAvatar());
+			playerIDs.add(p.getID());
+		}
+		numOfPlayer = this.singlePlayerHandler.getLobby().getPlayerList().size();
+	}
+	
+	public void setPlayer(Player p) {
+		for(Integer i : playerIDs) {
+			if(p.getID() == i) {
+				turn = i;
+			}
+		}
 	}
 	
 	private void getComponents() {
@@ -181,7 +203,6 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	public void setUpPlayerList() {
-		numOfPlayer = 3; // we need a method to get the number of the playing players
 		vb = new VBox();
 		vb.setPrefWidth(192);
 		vb.setPrefHeight(numOfPlayer * 100);
@@ -194,18 +215,18 @@ public class GamePaneController implements Initializable{
 		ivTimer = new ImageView[numOfPlayer];
 		
 		for(int i = 0; i < numOfPlayer; i++) {
-			imageviews[i] = new ImageView(Parameter.avatarsdir + avatars[i] + ".png");
+			imageviews[i] = new ImageView(Parameter.avatarsdir + playerAvatar.get(turn) + ".png");
 			imageviews[i].setFitWidth(80);
 			imageviews[i].setFitHeight(80);
 			circles[i] = new Circle(42);
 			circles[i].setStrokeWidth(3);
 			circles[i].setStroke(Color.WHITE);
-			circles[i].setFill(colors[i]);
+			circles[i].setFill(Color.web(playerColors.get(i)));
 			stackPanes[i] = new StackPane(circles[i], imageviews[i]);
 			stackPanes[i].setLayoutX(108);
 			rectangles[i] = new Rectangle(150, 84);
 			rectangles[i].setStrokeWidth(0);
-			rectangles[i].setFill(colors[i]);
+			rectangles[i].setFill(Color.web(playerColors.get(i)));
 			rectangles[i].setOpacity(0.44);
 			rectangles[i].setArcHeight(5.0);
 			rectangles[i].setArcWidth(5.0);
@@ -272,14 +293,14 @@ public class GamePaneController implements Initializable{
         vbPhase.getChildren().addAll(rectPhase, pB);
         
         cirPhase = new Circle();
-        cirPhase.setFill(colors[turn]);
+        cirPhase.setFill(Color.web(playerColors.get(turn)));
         cirPhase.setRadius(42.0);
         cirPhase.setStroke(Color.WHITE);
         cirPhase.setStrokeType(StrokeType.INSIDE);
         cirPhase.setStrokeWidth(3.0);
 
         // Erstelle ein ImageView mit einem Bild
-        ivPhase = new ImageView(Parameter.avatarsdir + avatars[turn] + ".png");
+        ivPhase = new ImageView(Parameter.avatarsdir + playerAvatar.get(turn) + ".png");
         ivPhase.setFitHeight(80.0);
         ivPhase.setFitWidth(80.0);
         ivPhase.setPickOnBounds(true);
@@ -292,7 +313,7 @@ public class GamePaneController implements Initializable{
         spPhase.getChildren().addAll(cirPhase, ivPhase);
         
         cirNum = new Circle();
-        cirNum.setFill(colors[turn]);
+        cirNum.setFill(Color.web(playerColors.get(turn)));
         cirNum.setRadius(20.0);
         cirNum.setStroke(Color.WHITE);
         cirNum.setStrokeType(StrokeType.INSIDE);
@@ -335,9 +356,9 @@ public class GamePaneController implements Initializable{
         nextPhaseButton.setPrefHeight(72.0);
         nextPhaseButton.setPrefWidth(72.0);
         String color = String.format("#%02X%02X%02X",
-                (int)( colors[turn].getRed() * 255 ),
-                (int)( colors[turn].getGreen() * 255 ),
-                (int)( colors[turn].getBlue() * 255 ));;
+                (int)( Color.web(playerColors.get(turn)).getRed() * 255 ),
+                (int)( Color.web(playerColors.get(turn)).getGreen() * 255 ),
+                (int)( Color.web(playerColors.get(turn)).getBlue() * 255 ));;
         nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
     			+ "	-fx-background-color: "+ color +";");
@@ -345,17 +366,17 @@ public class GamePaneController implements Initializable{
             String colorHex;
         	if (newValue) {
         		colorHex = String.format("#%02X%02X%02X",
-                        (int)( colors[turn].getRed() * 255 ),
-                        (int)( colors[turn].getGreen() * 255 ),
-                        (int)( colors[turn].getBlue() * 255 ));
+                        (int)( Color.web(playerColors.get(turn)).getRed() * 255 ),
+                        (int)( Color.web(playerColors.get(turn)).getGreen() * 255 ),
+                        (int)( Color.web(playerColors.get(turn)).getBlue() * 255 ));
             	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
             			+ "	-fx-background-color: "+ colorHex +";");
             } else {
             	colorHex = String.format("#%02X%02X%02X",
-                        (int)( colors[turn].getRed() * 255 - 20),
-                        (int)( colors[turn].getGreen() * 255 - 20),
-                        (int)( colors[turn].getBlue() * 255 - 20));
+                        (int)( Color.web(playerColors.get(turn)).getRed() * 255 - 20),
+                        (int)( Color.web(playerColors.get(turn)).getGreen() * 255 - 20),
+                        (int)( Color.web(playerColors.get(turn)).getBlue() * 255 - 20));
             	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
             			+ "	-fx-background-color: "+ colorHex +";");
@@ -366,7 +387,7 @@ public class GamePaneController implements Initializable{
         rectCards = new Rectangle();
         rectCards.setArcHeight(5.0);
         rectCards.setArcWidth(5.0);
-        rectCards.setFill(colors[turn]);
+        rectCards.setFill(Color.web(playerColors.get(turn)));
 		rectCards.setOpacity(0.44);
         rectCards.setHeight(84.0);
         rectCards.setLayoutX(99.0);
@@ -422,7 +443,7 @@ public class GamePaneController implements Initializable{
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
-	public void changeTurnColor(Color c, String avatar, String currentPlayer) {
+	public void changeTurnColor(Color c, String avatar) {
 		cirPhase.setFill(c);
 		ivPhase.setImage(new Image(avatar));
 		cirNum.setFill(c);
@@ -435,7 +456,7 @@ public class GamePaneController implements Initializable{
 		for(int i = 0; i < numOfPlayer; i++) {
 			for(Node n : panes[i].getChildren()) {
 				if(n instanceof Rectangle) {
-					n.setVisible(panes[i].equals(currentPlayer));
+					n.setVisible(panes[i].equals(playerIDs.get(turn)));
 				}
 			}
 		}
