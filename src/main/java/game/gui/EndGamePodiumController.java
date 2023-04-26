@@ -2,7 +2,10 @@ package game.gui;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
+import database.Profile;
+import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.ImageViewPane;
@@ -37,10 +40,11 @@ import javafx.stage.Stage;
 
 public class EndGamePodiumController extends Application {
 
-	public int players = 3;
+	private int players;
 	private double ratio;
+	private ArrayList<Profile> ranking; 							//ranking at the end of the game 
 	// public int players = game.Lobby.getPlayerList().size();
-
+	
 	private StackPane container;
 	private HBox backgroundPic;
 	private HBox backgroundColor;
@@ -66,6 +70,16 @@ public class EndGamePodiumController extends Application {
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
+		this.players = 3;
+		this.container = this.setup();
+	}
+	
+	public EndGamePodiumController(Lobby lobby) throws Exception {
+		super();
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
+				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Math.min(ratio + 0.3, 1);
+		this.players = lobby.getPlayerList().size();
 		this.container = this.setup();
 	}
 
