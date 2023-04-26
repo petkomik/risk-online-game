@@ -18,6 +18,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContentDisplay;
@@ -32,6 +33,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.skin.ComboBoxPopupControl;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -65,6 +68,15 @@ public class GUISupportClasses {
 			HBox.setHgrow(this, Priority.ALWAYS);
 			VBox.setVgrow(this, Priority.ALWAYS);
 		}
+		
+		public Spacing(double width,double heigth) {
+			this();
+			this.setMinWidth(width);
+			this.setMinHeight(heigth);
+			HBox.setHgrow(this, Priority.ALWAYS);
+			VBox.setVgrow(this, Priority.ALWAYS);
+		}
+		
 	}
 	
 	static class DiceFactory extends ImageView{
@@ -453,6 +465,7 @@ public class GUISupportClasses {
 			chat.setMaxHeight(ratio*400);
 			chat.setMinHeight(ratio*400);
 			chat.setHbarPolicy(ScrollBarPolicy.NEVER);
+			chat.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 			chat.setCache(true);
 			chat.setStyle("-fx-background: null;"
 					+"-fx-background-color: rgba(225,211,184,0.9);"
@@ -468,7 +481,8 @@ public class GUISupportClasses {
 				 * setting up the color shape of the scrollbar and thumb
 				 */
 					
-				ScrollBar vertikalScrollBar = (ScrollBar) chat.lookup(".scroll-bar:vertical");
+				ScrollBar vertikalScrollBar = new ScrollBar();
+				vertikalScrollBar = (ScrollBar) chat.lookup(".scroll-bar:vertical");
 				vertikalScrollBar.setStyle("-fx-background-color: rgba(196, 164, 132);-fx-background-radius: 10;");
 				vertikalScrollBar.setPrefWidth(25);
 				vertikalScrollBar.lookup(".thumb").setStyle("-fx-background-color: rgba(92,64,51);");
@@ -541,19 +555,42 @@ public class GUISupportClasses {
 					chat.setVvalue((Double) newValue);
 				}
 			});			
-			vBoxMessages.setAlignment(Pos.TOP_LEFT);
-			Text text = new Text("host messageaaaaaaaaaa");
-			text.setFill(Color.RED);
-			HBox message = new HBox();
-			message.setPrefSize(ratio*100, ratio*2000);
-			message.getChildren().add(text);
-			vBoxMessages.getChildren().addAll(message,text);
 			
+			// TODO decide if (host message if needed) stays 
+			
+			HBox hBox = new HBox();
+			hBox.setAlignment(Pos.CENTER_LEFT);
+			hBox.setPadding(new Insets(5, 40, 5, 10));
+			Text text = new Text("host is:");
+			TextFlow textFlow = new TextFlow(text);
+			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
+					+ "-fx-background-radius: 20px;");
+			textFlow.setPadding(new Insets(5, 10, 5, 10));
+			text.setFill(Color.color(0.934, 0.945, 0.996));
+			HBox message = new HBox();
+			message.getChildren().addAll(textFlow, new Spacing(150,20));
+			
+			vBoxMessages.getChildren().add(message);
 			chat.setContent(vBoxMessages);
 			
+			 /*
+			  * event for the button
+			  */
+			
+			textfieldMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
+				@Override
+				public void handle(KeyEvent keyEvent) {
+					if (keyEvent.getCode() == KeyCode.ENTER) {
+						sendButton.fire();
+						
+					}
+				}
+			});
+			 
 			sendButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
+					
 					String messageToSend = textfieldMessage.getText();
 					if (!messageToSend.isBlank()) {
 						HBox hBox = new HBox();
@@ -565,29 +602,10 @@ public class GUISupportClasses {
 								+ "-fx-background-radius: 20px;");
 						textFlow.setPadding(new Insets(5, 10, 5, 10));
 						text.setFill(Color.color(0.934, 0.945, 0.996));
-
-						hBox.getChildren().add(textFlow);
+						
+						hBox.getChildren().addAll(new Spacing(150,20),textFlow);
 
 						vBoxMessages.getChildren().add(hBox);
-
-//						Platform.runLater(new Runnable() {
-//							@Override
-//							public void run() {
-//								System.out.println("Run of Host sworks, this is what it starts with ");
-//								if (messageToSend.contains(":")) {
-//								
-//										System.out.println(messageToSend.substring(0, messageToSend.indexOf(":")));
-//										String username = messageToSend.substring(0, messageToSend.indexOf(":"));
-//										// send the message to the specified user
-//										client.sendMessage(new MessageToPerson(messageToSend,client.getProfile(),findProfileFromString(username)));
-//										
-//
-//								} else if (!messageToSend.equals(null)) {
-//									// send the message to the general chat
-//									client.sendMessage(messageToSend);
-//								}
-//							}
-//						});
 
 						textfieldMessage.clear();
 
@@ -615,7 +633,7 @@ public class GUISupportClasses {
 			textFlow.setStyle("-fx-color: rgb(239,242,255); " + "-fx-background-color: rgb(233,233,235); "
 					+ "-fx-background-radius: 20px;");
 			textFlow.setPadding(new Insets(5, 10, 5, 10));
-			hBox.getChildren().add(textFlow);
+			hBox.getChildren().addAll(textFlow, new Spacing(150,20));
 
 			Platform.runLater(new Runnable() {
 				@Override
