@@ -30,7 +30,7 @@ public class GameState {
 	private ArrayList<Card> cards;
 	private int numberOfCardsTurnedIn;
 	private boolean gameIsOver;
-	private HashMap<Integer, Player> alivePlayers;
+	private ArrayList<Player> alivePlayers;
 //	private int dicesAttacker[];
 //	private int dicesDefender[];
 
@@ -40,19 +40,20 @@ public class GameState {
 	private Period currentGamePeriod;
 	private HashMap<Player, Integer> playersDiceThrown;
 	private HashMap<Player, Integer> playerTroopsLeft;
-	public HashMap<Player, Integer> getPlayersDiceThrown() {
-		return playersDiceThrown;
-	}
-
-	public void setPlayersDiceThrown(HashMap<Player, Integer> playersDiceThrown) {
-		this.playersDiceThrown = playersDiceThrown;
-	}
 
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
 		cards = new ArrayList<Card>();
 		territories = new HashMap<CountryName, Territory>();
 		players = new HashMap<Integer, Player>();
+		alivePlayers = new ArrayList<Player>();
+		playerTroopsLeft = new HashMap<Player, Integer>();
+		playersDiceThrown = new HashMap<Player, Integer>();
+		numberOfCardsTurnedIn = 0;
+		currentTurnPhase = null;
+		currentGamePeriod = Period.COUNTRYPOSESSION;
+		gameIsOver = false;
+		
 		SetTerritories.createCardDeck(cards);
 		SetTerritories.createTerritories(territories);
 		SetTerritories.setNeighboringCountrys(territories);
@@ -60,18 +61,54 @@ public class GameState {
 
 		for (Player player : lobby.getPlayerList()) {
 			this.players.put(player.getID(), player);
+			this.alivePlayers.add(player);
 		}
-
+		
 	}
+	
+	public HashMap<Player, Integer> getPlayersDiceThrown() {
+		return playersDiceThrown;
+	}
+
+	public void setPlayersDiceThrown(HashMap<Player, Integer> playersDiceThrown) {
+		this.playersDiceThrown = playersDiceThrown;
+	}
+	
 	public void addTroopsToPlayer(Player player, int numberOfTroops){
 		this.getPlayerTroopsLeft().put(player,
 				this.getPlayerTroopsLeft().get(player) + numberOfTroops);
 	}
+	
+	public void subtractTroopsToPlayer(Player player, int numberOfTroops){
+		if(this.playerTroopsLeft.get(player) >= numberOfTroops) {
+		this.getPlayerTroopsLeft().put(player,
+				this.getPlayerTroopsLeft().get(player) - numberOfTroops);
+		}else {
+			System.out.println("Tried to remove more troops than available");
+		}
+		
+	}
 
-	public void updateTerritorie(CountryName countryName, Player player, int numberTroops) {
+	public void updateTerritory(CountryName countryName, Player player, int numberTroops) {
 		this.territories.get(countryName).setOwnedByPlayer(player);
 		this.territories.get(countryName).addNumberOfTroops(numberTroops);
-
+	}
+	
+	public void updateTroopsOnTerritory(CountryName countryName, int numberTroops) {
+		this.territories.get(countryName).setNumberOfTroops(numberTroops);
+	}
+	
+	public void setInitialTroops(int troops) {
+		for(Player player : this.players.values()) {
+			this.playerTroopsLeft.put(player, 0);
+		}
+		for(Player player : this.players.values()) {
+			this.addTroopsToPlayer(player, troops);
+		}
+	}
+	
+	public void setOwnedByTerritory(CountryName country, Player player) {
+		this.territories.get(country).setOwnedByPlayer(player);
 	}
 
 	public HashMap<CountryName, Territory> getTerritories() {
@@ -102,7 +139,7 @@ public class GameState {
 		return currentPlayer;
 	}
 
-	public HashMap<Integer, Player> getAlivePlayers() {
+	public ArrayList <Player> getAlivePlayers() {
 		return alivePlayers;
 	}
 
@@ -112,6 +149,10 @@ public class GameState {
 
 	public void setCurrentTurnPhase(Phase currentTurnPhase) {
 		this.currentTurnPhase = currentTurnPhase;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 
 	public Period getCurrentGamePeriod() {
@@ -124,5 +165,9 @@ public class GameState {
 
 	public HashMap<Player, Integer> getPlayerTroopsLeft() {
 		return playerTroopsLeft;
+	}
+
+	public void setNextPlayer() {
+		this.currentPlayer = this.alivePlayers.get((this.alivePlayers.indexOf(currentPlayer)+1)%this.alivePlayers.size());
 	}
 }

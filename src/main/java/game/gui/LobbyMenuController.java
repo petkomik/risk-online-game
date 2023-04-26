@@ -588,6 +588,7 @@ public class LobbyMenuController extends StackPane {
 							AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
 							GamePaneController gamePaneController = fxmlLoader.getController();
 							SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby);
+							singleHandler.setGamePaneController(gamePaneController);
 							gamePaneController.initSinglePlayer(singleHandler);
 							stage.getScene().setRoot(anchorPane);
 							

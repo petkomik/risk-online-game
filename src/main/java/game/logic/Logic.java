@@ -14,6 +14,33 @@ import general.AppController;
 
 public class Logic {
 	// playerDiceThrown back to GameHandler, to Gui/ Messanger
+	public static int setInitialTroopsSize(GameState gamestate) {
+		int troopsSize = 0;
+		/** set available troopsize */
+		switch (gamestate.getPlayers().size()) {
+		case 2:
+			troopsSize = 40;
+			break;
+		case 3:
+			troopsSize = 35;
+			break;
+		case 4:
+			troopsSize = 30;
+			break;
+		case 5:
+			troopsSize = 25;
+			break;
+		case 6:
+			troopsSize = 20;
+			break;
+		default:
+			troopsSize = -1;
+			break;
+		}
+
+		return troopsSize;
+	}
+	
 	public static HashMap<Player, Integer> diceThrowToDetermineTheBeginner(GameState gameState) {
 		HashMap<Player, Integer> playersDiceThrown = new HashMap<Player, Integer>();
 		for (Player p : gameState.getPlayers().values()) {
@@ -23,7 +50,7 @@ public class Logic {
 		return playersDiceThrown;
 	}
 
-	public Player getFirstPlayer(GameState gameState) {
+	public static Player getFirstPlayer(GameState gameState) {
 		HashMap<Player, Integer> playerDice = gameState.getPlayersDiceThrown();
 		Player firstPlayer = null;
 		int maxDice = 0;
