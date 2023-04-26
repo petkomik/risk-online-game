@@ -143,10 +143,11 @@ public class SetTerritories {
 		territories.put(CountryName.Madagascar, new Territory(CountryName.Madagascar, Continent.Africa));
 		territories.put(CountryName.SouthAfrica, new Territory(CountryName.SouthAfrica, Continent.Africa));
 
-		setNeighboringCountrys(territories);
+		
 	}
 
 	public static void setNeighboringCountrys(HashMap<CountryName, Territory> territories) {
+		
 		territories.get(CountryName.Alaska)
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Kamchatka),
 						territories.get(CountryName.NorthwestTerritory), territories.get(CountryName.Alberta))));

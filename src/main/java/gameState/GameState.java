@@ -49,7 +49,10 @@ public class GameState {
 	}
 
 	public GameState(Lobby lobby) {
-
+		continents = new HashMap<Continent, ArrayList<CountryName>>();
+		cards = new ArrayList<Card>();
+		territories = new HashMap<CountryName, Territory>();
+		players = new HashMap<Integer, Player>();
 		SetTerritories.createCardDeck(cards);
 		SetTerritories.createTerritories(territories);
 		SetTerritories.setNeighboringCountrys(territories);
