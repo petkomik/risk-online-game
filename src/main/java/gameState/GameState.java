@@ -25,7 +25,7 @@ public class GameState {
 	 *
 	 */
 	private HashMap<CountryName, Territory> territories;
-	private HashMap<Continent, ArrayList<Territory>> continents;
+	private HashMap<Continent, ArrayList<CountryName>> continents;
 	private HashMap<Integer, Player> players;
 	private ArrayList<Card> cards;
 	private int numberOfCardsTurnedIn;
@@ -50,10 +50,10 @@ public class GameState {
 
 	public GameState(Lobby lobby) {
 
-		SetTerritories.createContinents(continents, territories);
 		SetTerritories.createCardDeck(cards);
 		SetTerritories.createTerritories(territories);
 		SetTerritories.setNeighboringCountrys(territories);
+		SetTerritories.createContinents(continents, territories);
 
 		for (Player player : lobby.getPlayerList()) {
 			this.players.put(player.getID(), player);
@@ -75,7 +75,7 @@ public class GameState {
 		return territories;
 	}
 
-	public HashMap<Continent, ArrayList<Territory>> getContinents() {
+	public HashMap<Continent, ArrayList<CountryName>> getContinents() {
 		return continents;
 	}
 
