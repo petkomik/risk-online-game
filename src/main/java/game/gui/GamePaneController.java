@@ -9,6 +9,7 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
 import game.models.CountryName;
 import game.models.Player;
+import gameState.Phase;
 import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.Parameter;
@@ -102,6 +103,7 @@ public class GamePaneController implements Initializable{
 	private Label numberLabel;
 	private Button trueButtonReinf;
 	private Button falseButtonReinf;
+	private Label choosingTroopsPhaseLabel;
 	
 	private GameType gameType;
 	private SinglePlayerHandler singlePlayerHandler;
@@ -635,10 +637,10 @@ public class GamePaneController implements Initializable{
 			// num
 		});
 
-		Label label = new Label("Label");
-		label.setLayoutX(661.0);
-		label.setLayoutY(614.0);
-		label.setPrefSize(206.0, 60.0);
+		choosingTroopsPhaseLabel = new Label("Label");
+		choosingTroopsPhaseLabel.setLayoutX(661.0);
+		choosingTroopsPhaseLabel.setLayoutY(614.0);
+		choosingTroopsPhaseLabel.setPrefSize(206.0, 60.0);
 		
 		lessBtn = new DesignButton();
 		moreBtn = new DesignButton();
@@ -660,59 +662,41 @@ public class GamePaneController implements Initializable{
 		numOfTroopsHBox.setLayoutY(514.0);
 		
 
-		ChoosingTroopsPane.getChildren().addAll(rectangle, falseButtonReinf, trueButtonReinf, label, numOfTroopsHBox);
+		ChoosingTroopsPane.getChildren().addAll(rectangle, falseButtonReinf, trueButtonReinf, choosingTroopsPhaseLabel, numOfTroopsHBox);
 		ChoosingTroopsPane.setVisible(false);
 	}
-	public void showChoosingTroopsPane(Color c, int maxTroops) {
+	public void showChoosingTroopsPane(Color c, int maxTroops, int minTroops, Phase phase) {
 		ChoosingTroopsPane.setVisible(true);
+		choosingTroopsPhaseLabel.setText(phase.toString());
+		if(phase == Phase.ATTACK) {
+			falseButtonReinf.setVisible(false);
+		}
 		falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ Color.WHITE +";");
+    			+ "	-fx-background-color: "+ toHex(c) +";");
 		falseButtonReinf.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            String colorHex;
         	if (newValue) {
-        		colorHex = String.format("#%02X%02X%02X",
-                        (int)( c.getRed() * 255 ),
-                        (int)( c.getGreen() * 255 ),
-                        (int)( c.getBlue() * 255 ));
         		falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ colorHex +";");
+            			+ "	-fx-background-color: "+ toHex(c) +";");
             } else {
-            	colorHex = String.format("#%02X%02X%02X",
-                        (int)( (c.getRed() * 255 - 20) != 0 ? c.getRed() * 255 - 20:0),
-                        (int)( (c.getGreen() * 255 - 20) != 0 ? c.getGreen() * 255 - 20:0),
-                        (int)( (c.getBlue() * 255 - 20) != 0 ? c.getBlue() * 255 - 20:0));
             	falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ colorHex +";");
+            			+ "	-fx-background-color: "+ makeColorHexDarker(c) +";");
             }
 	        });
-		String colorTmp = String.format("#%02X%02X%02X",
-                (int)( c.getRed() * 255 ),
-                (int)( c.getGreen() * 255 ),
-                (int)( c.getBlue() * 255 ));
 		trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ colorTmp +";");
+    			+ "	-fx-background-color: "+ toHex(c) +";");
         trueButtonReinf.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            String colorHex;
         	if (newValue) {
-        		colorHex = String.format("#%02X%02X%02X",
-                        (int)( c.getRed() * 255 ),
-                        (int)( c.getGreen() * 255 ),
-                        (int)( c.getBlue() * 255 ));
             	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ colorHex +";");
+            			+ "	-fx-background-color: "+ toHex(c) +";");
             } else {
-            	colorHex = String.format("#%02X%02X%02X",
-                        (int)( (c.getRed() * 255 - 20) != 0 ? c.getRed() * 255 - 20:0),
-                        (int)( (c.getGreen() * 255 - 20) != 0 ? c.getGreen() * 255 - 20:0),
-                        (int)( (c.getBlue() * 255 - 20) != 0 ? c.getBlue() * 255 - 20:0));
             	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ colorHex +";");
+            			+ "	-fx-background-color: "+ makeColorHexDarker(c) +";");
             }
 	        });
 		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -720,7 +704,7 @@ public class GamePaneController implements Initializable{
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	
-		    	if (Integer.parseInt(numberLabel.getText()) > 1) {
+		    	if (Integer.parseInt(numberLabel.getText()) > minTroops) {
 		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
 			    	numberLabel.setText(String.valueOf(i));		    	
 		    	}
@@ -742,6 +726,22 @@ public class GamePaneController implements Initializable{
 	}
 	public void unshowChoosingTroopsPane(Color c) {
 		ChoosingTroopsPane.setVisible(false);
+	}
+	
+	private String toHex(Color c) {
+		String colorHex = String.format("#%02X%02X%02X",
+                (int)( c.getRed() * 255 ),
+                (int)( c.getGreen() * 255 ),
+                (int)( c.getBlue() * 255 ));
+		return colorHex;
+	}
+	
+	private String makeColorHexDarker(Color c) {
+		String colorHex = String.format("#%02X%02X%02X",
+                (int)( (c.getRed() * 255 - 20) != 0 ? c.getRed() * 255 - 20:0),
+                (int)( (c.getGreen() * 255 - 20) != 0 ? c.getGreen() * 255 - 20:0),
+                (int)( (c.getBlue() * 255 - 20) != 0 ? c.getBlue() * 255 - 20:0));
+		return colorHex;
 	}
 	
 	private void clickLeaveGameButton(ActionEvent e) {
