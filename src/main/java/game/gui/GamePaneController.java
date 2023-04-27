@@ -168,14 +168,30 @@ public class GamePaneController implements Initializable{
 			playerIDs.add(p.getID());
 		}
 		numOfPlayer = this.singlePlayerHandler.getLobby().getPlayerList().size();
-	}
-	
-	public void setPlayer(Player p) {
-		for(Integer i : playerIDs) {
-			if(p.getID() == i) {
-				turn = i;
-			}
+		
+		for(int i = 0; i < numOfPlayer; i++) {
+			circles[i].setFill(Color.web(playerColors.get(i)));
+			rectangles[i].setFill(Color.web(playerColors.get(i)));
+			panes[i].setId(String.valueOf(playerIDs.get(i)));
 		}
+        cirPhase.setFill(Color.web(playerColors.get(0)));
+        ivPhase.setImage(new Image(Parameter.avatarsdir + playerAvatar.get(0) + ".png"));
+        nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ playerColors.get(0) +";");
+        nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ playerColors.get(0) +";");
+            } else {
+            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(0))) +";");
+            }
+	        });
+        rectCards.setFill(Color.web(playerColors.get(0)));
+        cirNum.setFill(Color.web(playerColors.get(0)));
 	}
 	
 	private void getComponents() {
@@ -225,12 +241,10 @@ public class GamePaneController implements Initializable{
 			circles[i] = new Circle(42);
 			circles[i].setStrokeWidth(3);
 			circles[i].setStroke(Color.WHITE);
-			circles[i].setFill(Color.web(playerColors.get(i)));
 			stackPanes[i] = new StackPane(circles[i], imageviews[i]);
 			stackPanes[i].setLayoutX(108);
 			rectangles[i] = new Rectangle(150, 84);
 			rectangles[i].setStrokeWidth(0);
-			rectangles[i].setFill(Color.TRANSPARENT);
 			rectangles[i].setOpacity(0.44);
 			rectangles[i].setArcHeight(5.0);
 			rectangles[i].setArcWidth(5.0);
@@ -260,7 +274,7 @@ public class GamePaneController implements Initializable{
 			ivTimer[i].setPreserveRatio(true);
 			
 			panes[i] = new Pane(rectangles[i], stackPanes[i], labTimer[i], ivTimer[i]);
-			panes[i].setId(String.valueOf(playerIDs.get(i))); // method for getting player ID
+			
 		}
 		vb.getChildren().addAll(panes);
 		vb.setScaleX(w / 1536.0);
@@ -297,14 +311,13 @@ public class GamePaneController implements Initializable{
         vbPhase.getChildren().addAll(rectPhase, pB);
         
         cirPhase = new Circle();
-        cirPhase.setFill(Color.web(playerColors.get(turn)));
         cirPhase.setRadius(42.0);
         cirPhase.setStroke(Color.WHITE);
         cirPhase.setStrokeType(StrokeType.INSIDE);
         cirPhase.setStrokeWidth(3.0);
 
         // Erstelle ein ImageView mit einem Bild
-        ivPhase = new ImageView(Parameter.avatarsdir + playerAvatar.get(turn) + ".png");
+        ivPhase = new ImageView();
         ivPhase.setFitHeight(80.0);
         ivPhase.setFitWidth(80.0);
         ivPhase.setPickOnBounds(true);
@@ -317,7 +330,6 @@ public class GamePaneController implements Initializable{
         spPhase.getChildren().addAll(cirPhase, ivPhase);
         
         cirNum = new Circle();
-        cirNum.setFill(Color.web(playerColors.get(turn)));
         cirNum.setRadius(20.0);
         cirNum.setStroke(Color.WHITE);
         cirNum.setStrokeType(StrokeType.INSIDE);
@@ -377,26 +389,12 @@ public class GamePaneController implements Initializable{
         nextPhaseButton.setMnemonicParsing(false);
         nextPhaseButton.setPrefHeight(72.0);
         nextPhaseButton.setPrefWidth(72.0);
-        nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-        nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-            } else {
-            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
-            }
-	        });
+        
         nextPhaseButton.setVisible(false);
 
         rectCards = new Rectangle();
         rectCards.setArcHeight(5.0);
         rectCards.setArcWidth(5.0);
-        rectCards.setFill(Color.web(playerColors.get(turn)));
 		rectCards.setOpacity(0.44);
         rectCards.setHeight(84.0);
         rectCards.setLayoutX(99.0);
@@ -454,20 +452,6 @@ public class GamePaneController implements Initializable{
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
-	public void changeTurnColor(Color c, String avatar) {
-		cirPhase.setFill(c);
-		ivPhase.setImage(new Image(avatar));
-		cirNum.setFill(c);
-		pB.setStyle("-fx-accent: " + toHex(c) + ";");
-		
-		for(int i = 0; i < numOfPlayer; i++) {
-			for(Node n : panes[i].getChildren()) {
-				if(n instanceof Rectangle) {
-					n.setVisible(panes[i].equals(playerIDs.get(turn)));
-				}
-			}
-		}
-	}
 	
 	public void decreaseProgressbar() {
 		pB.setProgress(pB.getProgress()-1);
@@ -513,6 +497,22 @@ public class GamePaneController implements Initializable{
 			        });
 			}
 		}
+	}
+	public void setCurrentPlayer(Player player) {
+		for(int i = 0; i < playerIDs.size(); i++) {
+			if(player.getID() == playerIDs.get(i)) {
+				turn = i;
+			}
+		}
+		for(int i = 0; i < numOfPlayer; i++) {
+			rectangles[i].setVisible(i == turn);
+			labTimer[i].setVisible(i == turn);
+			ivTimer[i].setVisible(i == turn);
+		}
+		cirPhase.setFill(Color.web(playerColors.get(turn)));
+		ivPhase.setImage(new Image(Parameter.phaseLogosdir + playerAvatar.get(turn) + ".png"));
+		cirNum.setFill(Color.web(playerColors.get(turn)));
+		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
 	}
 	
 	public void changePhase(String phase) {
