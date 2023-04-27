@@ -494,21 +494,21 @@ public class GamePaneController implements Initializable{
 	}
 	
 	
-	public void claimCountry(String countryName, int numOfTroops, Color c) {
+	public void claimCountry(CountryName countryName, Player player) {
 		for(StackPane sp : spTroopsDisplay) {
-			if(sp.getId().equals("sp"+countryName)) {
+			if(sp.getId().equals("sp"+countryName.toString())) {
 				sp.setVisible(true);
 			}
 		}
-		labelTroopsDisplay.get(countryName).setText("" + numOfTroops);
-		circleTroopsDisplay.get(countryName).setFill(c);
+		labelTroopsDisplay.get(countryName.toString()).setText(String.valueOf(1));
+		circleTroopsDisplay.get(countryName.toString()).setFill(Color.web(player.getColor()));
 		for(SVGPath s : countries) {
-			if(s.getId().equals(countryName)) {
+			if(s.getId().equals(countryName.toString())) {
 				s.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 		        	if (newValue) {
-		            	s.setStyle("-fx-fill: "+ toHex(c) +";");
+		            	s.setStyle("-fx-fill: "+ player.getColor() +";");
 		            } else {
-		            	s.setStyle("-fx-fill: "+ makeColorHexDarker(c) +";");
+		            	s.setStyle("-fx-fill: "+ makeColorHexDarker(Color.web(player.getColor())) +";");
 		            }
 			        });
 			}
