@@ -325,8 +325,7 @@ public class EndGamePodiumController extends Application {
 		contentVBox.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
 
 		contentVBox.getChildren().addAll(banner, new Spacing(50), vBoxIcons, new Spacing(100));
-		ChatWindow test = new ChatWindow();
-		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox, test);
+		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox);
 
 		return container;
 	}
