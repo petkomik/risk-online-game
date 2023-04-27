@@ -460,6 +460,7 @@ public class GUISupportClasses {
 			/*
 			 * setting up the scrollpane that contains the chat visuals
 			 */
+	        chat.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 			chat.setMaxWidth(ratio*600);
 			chat.setMinWidth(ratio*600);
 			chat.setMaxHeight(ratio*400);
@@ -467,47 +468,7 @@ public class GUISupportClasses {
 			chat.setHbarPolicy(ScrollBarPolicy.NEVER);
 			chat.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 			chat.setCache(true);
-			chat.setStyle("-fx-background: null;"
-					+"-fx-background-color: rgba(225,211,184,0.9);"
-					+"-fx-background-radius: 10 10 0 0;"
-					+"-fx-border-color: rgba(92,64,51);"
-					+"-fx-border-width: 4px;"
-					+"-fx-border-style: solid;"
-					+"-fx-border-radius: 7 7 0 0");
-			Platform.runLater(()-> {
-				try {
-					
-				/*
-				 * setting up the color shape of the scrollbar and thumb
-				 */
-					
-				ScrollBar vertikalScrollBar = new ScrollBar();
-				vertikalScrollBar = (ScrollBar) chat.lookup(".scroll-bar:vertical");
-				vertikalScrollBar.setStyle("-fx-background-color: rgba(196, 164, 132);-fx-background-radius: 10;");
-				vertikalScrollBar.setPrefWidth(25);
-				vertikalScrollBar.lookup(".thumb").setStyle("-fx-background-color: rgba(92,64,51);");
-				
-				/*
-				 * shape and color of increment and decrement buttons
-				 */
-				
-				Region incButton = (Region) chat.lookup(".increment-button");
-				Region decButton = (Region) chat.lookup(".decrement-button");
-				incButton.setStyle("-fx-background-color: rgba(92,64,51);"
-								+  "-fx-background-radius: 0 0 10 10;"
-								+  "-fx-pref-height: 20;"
-								+  "-fx-pref-width: 20;");
-				decButton.setStyle("-fx-background-color: rgba(92,64,51);"
-								+  "-fx-background-radius: 10 10 0 0;"
-								+  "-fx-pref-height: 20;"
-								+  "-fx-pref-width: 20;");
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-					
-			});
-			
+
 			/*
 			 * setting up the Button and ComboBox
 			 */

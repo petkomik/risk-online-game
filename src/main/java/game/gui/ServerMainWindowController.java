@@ -151,44 +151,15 @@ public class ServerMainWindowController extends Application {
 		/*
 		 * setting up ScrollPane
 		 */
-
+		
+		lobbyListContainer.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 		lobbyListContainer.setMaxSize(ratio * 900, ratio * 500);
 		lobbyListContainer.setMinSize(ratio * 900, ratio * 500);
-		lobbyListContainer.setStyle("-fx-background: null;" + "-fx-background-color: rgba(225,211,184,0.9);"
-				+ "-fx-background-radius: 0 0 10 10;" + "-fx-border-color: rgba(92,64,51);" + "-fx-border-width: 4px;"
-				+ "-fx-border-style: solid;" + "-fx-border-radius: 0 0 10 10");
 		lobbyListContainer.setHbarPolicy(ScrollBarPolicy.NEVER);
 		lobbyListContainer.setCache(true);
 		lobbyListContainer.setMaxWidth(ScrollPane.USE_PREF_SIZE);
 		lobbyListContainer.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 
-		Platform.runLater(() -> {
-			try {
-
-				/*
-				 * setting up the color shape of the scrollbar and thumb
-				 */
-
-				ScrollBar vertikalScrollBar = (ScrollBar) lobbyListContainer.lookup(".scroll-bar:vertical");
-				vertikalScrollBar.setStyle("-fx-background-color: rgba(196, 164, 132);-fx-background-radius: 10;");
-				vertikalScrollBar.setPrefWidth(25);
-				vertikalScrollBar.lookup(".thumb").setStyle("-fx-background-color: rgba(92,64,51);");
-
-				/*
-				 * shape and color of increment and decrement buttons
-				 */
-
-				Region incButton = (Region) lobbyListContainer.lookup(".increment-button");
-				Region decButton = (Region) lobbyListContainer.lookup(".decrement-button");
-				incButton.setStyle("-fx-background-color: rgba(92,64,51);" + "-fx-background-radius: 0 0 10 10;"
-						+ "-fx-pref-height: 20;" + "-fx-pref-width: 20;");
-				decButton.setStyle("-fx-background-color: rgba(92,64,51);" + "-fx-background-radius: 10 10 0 0;"
-						+ "-fx-pref-height: 20;" + "-fx-pref-width: 20;");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-		});
 
 		/*
 		 * Setting up the menu visuals
