@@ -97,7 +97,6 @@ public class ServerMainWindowController extends Application {
 		lobbyList = new HashMap<String,LobbyGUI>(); 
 		menu = new HBox();							
 		vbox = new VBox();		
-		
 		/*
 		 * setting up background image
 		 */

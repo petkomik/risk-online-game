@@ -61,8 +61,6 @@ public class LobbyGUI extends HBox {
 
 		hBox = new HBox();
 		hBox.setPrefSize(ratio * 850, ratio * 120);
-		hBox.setMaxSize(ratio * 850, ratio * 120);
-		hBox.setMinSize(ratio * 850, ratio * 120);
 		hBox.setStyle("-fx-background-color: rgba(92,64,51);-fx-background-radius: 25;");
 		hBox.setAlignment(Pos.CENTER_LEFT);
 		hBox.setPadding(new Insets(20, 20, 20, 20));
@@ -75,7 +73,7 @@ public class LobbyGUI extends HBox {
 				ratio * 130);
 		joinButton.setText("JOIN");
 		joinButton.setAlignment(Pos.CENTER);
-
+		
 		lobbyName = new TextField();
 		lobbyName.setText(lobbyNameString);
 		lobbyName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, ratio * 22));

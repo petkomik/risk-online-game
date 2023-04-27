@@ -50,6 +50,7 @@
 	-fx-background: transparent;
 	-fx-background-color: rgba(225,211,184);
 	-fx-background-radius: 0 0 10 10;
+	-fx-background-insets: 10px;
 	-fx-border-color: rgba(92,64,51);
 	-fx-border-width: 4px;
 	-fx-border-style: solid;
