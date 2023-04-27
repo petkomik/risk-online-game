@@ -89,7 +89,9 @@ public class GamePaneController implements Initializable{
 	private Circle cirNum;
 	private Label labNum;
 	private Label labPhase;
-	private ImageView logo;
+	private ImageView firstPhaseLogo;
+	private ImageView middlePhaseLogo;
+	private ImageView lastPhaseLogo;
 	private Button nextPhaseButton;
 	private Rectangle rectCards;
 	private ImageView cardsImageView;
@@ -217,7 +219,7 @@ public class GamePaneController implements Initializable{
 		ivTimer = new ImageView[numOfPlayer];
 		
 		for(int i = 0; i < numOfPlayer; i++) {
-			imageviews[i] = new ImageView(Parameter.avatarsdir + playerAvatar.get(turn) + ".png");
+			imageviews[i] = new ImageView(Parameter.avatarsdir + playerAvatar.get(i) + ".png");
 			imageviews[i].setFitWidth(80);
 			imageviews[i].setFitHeight(80);
 			circles[i] = new Circle(42);
@@ -228,7 +230,7 @@ public class GamePaneController implements Initializable{
 			stackPanes[i].setLayoutX(108);
 			rectangles[i] = new Rectangle(150, 84);
 			rectangles[i].setStrokeWidth(0);
-			rectangles[i].setFill(Color.web(playerColors.get(i)));
+			rectangles[i].setFill(Color.TRANSPARENT);
 			rectangles[i].setOpacity(0.44);
 			rectangles[i].setArcHeight(5.0);
 			rectangles[i].setArcWidth(5.0);
@@ -258,7 +260,7 @@ public class GamePaneController implements Initializable{
 			ivTimer[i].setPreserveRatio(true);
 			
 			panes[i] = new Pane(rectangles[i], stackPanes[i], labTimer[i], ivTimer[i]);
-			panes[i].setId(""); // method for getting player ID
+			panes[i].setId(String.valueOf(playerIDs.get(i))); // method for getting player ID
 		}
 		vb.getChildren().addAll(panes);
 		vb.setScaleX(w / 1536.0);
@@ -341,14 +343,32 @@ public class GamePaneController implements Initializable{
         		+ "    -fx-font-weight: bold;"
         		+ "    -fx-font-size: 30px;");
 
+        firstPhaseLogo = new ImageView(Parameter.phaseLogosdir + "reinforce" + ".png"); 
+        firstPhaseLogo.setFitHeight(27.0);
+        firstPhaseLogo.setFitWidth(32.0);
+        firstPhaseLogo.setLayoutX(400.0);
+        firstPhaseLogo.setLayoutY(27.0);
+        firstPhaseLogo.setPickOnBounds(true);
+        firstPhaseLogo.setPreserveRatio(true);
+        firstPhaseLogo.setVisible(false);
+        
         // Erstelle ein ImageView mit einem Bild
-        logo = new ImageView(); // we need enum for phases
-        logo.setFitHeight(27.0);
-        logo.setFitWidth(32.0);
-        logo.setLayoutX(474.0);
-        logo.setLayoutY(27.0);
-        logo.setPickOnBounds(true);
-        logo.setPreserveRatio(true);
+        middlePhaseLogo = new ImageView(Parameter.phaseLogosdir + "claim" + ".png"); 
+        middlePhaseLogo.setFitHeight(27.0);
+        middlePhaseLogo.setFitWidth(32.0);
+        middlePhaseLogo.setLayoutX(474.0);
+        middlePhaseLogo.setLayoutY(27.0);
+        middlePhaseLogo.setPickOnBounds(true);
+        middlePhaseLogo.setPreserveRatio(true);
+        
+        lastPhaseLogo = new ImageView(Parameter.phaseLogosdir + "fortify" + ".png"); 
+        lastPhaseLogo.setFitHeight(27.0);
+        lastPhaseLogo.setFitWidth(32.0);
+        lastPhaseLogo.setLayoutX(548.0);
+        lastPhaseLogo.setLayoutY(27.0);
+        lastPhaseLogo.setPickOnBounds(true);
+        lastPhaseLogo.setPreserveRatio(true);
+        lastPhaseLogo.setVisible(false);
         
         nextPhaseButton = new Button("✓");
         nextPhaseButton.setId("nextPhaseButton");
@@ -357,34 +377,21 @@ public class GamePaneController implements Initializable{
         nextPhaseButton.setMnemonicParsing(false);
         nextPhaseButton.setPrefHeight(72.0);
         nextPhaseButton.setPrefWidth(72.0);
-        String color = String.format("#%02X%02X%02X",
-                (int)( Color.web(playerColors.get(turn)).getRed() * 255 ),
-                (int)( Color.web(playerColors.get(turn)).getGreen() * 255 ),
-                (int)( Color.web(playerColors.get(turn)).getBlue() * 255 ));;
         nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ color +";");
+    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
         nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            String colorHex;
         	if (newValue) {
-        		colorHex = String.format("#%02X%02X%02X",
-                        (int)( Color.web(playerColors.get(turn)).getRed() * 255 ),
-                        (int)( Color.web(playerColors.get(turn)).getGreen() * 255 ),
-                        (int)( Color.web(playerColors.get(turn)).getBlue() * 255 ));
             	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ colorHex +";");
+            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
             } else {
-            	colorHex = String.format("#%02X%02X%02X",
-                        (int)( Color.web(playerColors.get(turn)).getRed() * 255 - 20),
-                        (int)( Color.web(playerColors.get(turn)).getGreen() * 255 - 20),
-                        (int)( Color.web(playerColors.get(turn)).getBlue() * 255 - 20));
             	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ colorHex +";");
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
             }
 	        });
-//        nextPhaseButton.setVisible(false);
+        nextPhaseButton.setVisible(false);
 
         rectCards = new Rectangle();
         rectCards.setArcHeight(5.0);
@@ -427,15 +434,17 @@ public class GamePaneController implements Initializable{
         numCardsLabel.setLayoutY(45.0);
         numCardsLabel.setPrefHeight(50.0);
         numCardsLabel.setPrefWidth(92.0);
+        numCardsLabel.setVisible(false);
 
-        // Second label
+        // nextPhaseLabel
         nextPhaseLabel = new Label("Label");
         nextPhaseLabel.setLayoutX(682.0);
         nextPhaseLabel.setLayoutY(6.0);
         nextPhaseLabel.setPrefHeight(34.0);
         nextPhaseLabel.setPrefWidth(60.0);
+        nextPhaseLabel.setVisible(false);
         
-        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, logo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseLabel);
+        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, middlePhaseLogo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseLabel);
         phaseBoard.setScaleX(0.8 * w / 1536.0);
         phaseBoard.setScaleY(0.8 * h / 864.0);
         
@@ -449,11 +458,7 @@ public class GamePaneController implements Initializable{
 		cirPhase.setFill(c);
 		ivPhase.setImage(new Image(avatar));
 		cirNum.setFill(c);
-		String tmpColor = String.format("#%02X%02X%02X",
-                (int)( c.getRed() * 255 ),
-                (int)( c.getGreen() * 255 ),
-                (int)( c.getBlue() * 255 ));
-		pB.setStyle("-fx-accent: " + tmpColor + ";");
+		pB.setStyle("-fx-accent: " + toHex(c) + ";");
 		
 		for(int i = 0; i < numOfPlayer; i++) {
 			for(Node n : panes[i].getChildren()) {
@@ -500,19 +505,10 @@ public class GamePaneController implements Initializable{
 		for(SVGPath s : countries) {
 			if(s.getId().equals(countryName)) {
 				s.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-		            String tmpColor;
 		        	if (newValue) {
-		        		tmpColor = String.format("#%02X%02X%02X",
-				                (int)( c.getRed() * 255 ),
-				                (int)( c.getGreen() * 255 ),
-				                (int)( c.getBlue() * 255 )); 
-		            	s.setStyle("-fx-fill: "+ tmpColor +";");
+		            	s.setStyle("-fx-fill: "+ toHex(c) +";");
 		            } else {
-		            	tmpColor = String.format("#%02X%02X%02X",
-				                (int)( (c.getRed() * 255) != 0 ? c.getRed() * 255 -20:0),
-				                (int)( (c.getGreen() * 255) != 0 ? c.getGreen() * 255 -20:0),
-				                (int)( (c.getBlue() * 255) != 0 ? c.getBlue() * 255 -20:0)); 
-		            	s.setStyle("-fx-fill: "+ tmpColor +";");
+		            	s.setStyle("-fx-fill: "+ makeColorHexDarker(c) +";");
 		            }
 			        });
 			}
@@ -521,7 +517,10 @@ public class GamePaneController implements Initializable{
 	
 	public void changePhase(String phase) {
 		labPhase.setText(phase);
-		logo.setImage(new Image(Parameter.phaseLogosdir + phase + ".png"));
+		middlePhaseLogo.setImage(new Image(Parameter.phaseLogosdir + phase + ".png"));
+		firstPhaseLogo.setVisible(phase.equalsIgnoreCase("attack"));
+		lastPhaseLogo.setVisible(phase.equalsIgnoreCase("attack"));
+		
 	}
 	
 	public void showNextPhaseButton() {
