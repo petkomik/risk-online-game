@@ -35,7 +35,6 @@ public class LobbyGUI extends HBox {
 		this.ratingString = "3000";
 		setup();
 	
-		
 	}
 	
 	public LobbyGUI(Profile profile) {
