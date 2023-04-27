@@ -323,7 +323,7 @@ public class EndGamePodiumController extends Application {
 		contentVBox.setAlignment(Pos.CENTER);
 		contentVBox.setSpacing(30 * ratio);
 		contentVBox.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
-
+		
 		contentVBox.getChildren().addAll(banner, new Spacing(50), vBoxIcons, new Spacing(100));
 		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox);
 

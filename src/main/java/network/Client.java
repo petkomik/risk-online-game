@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import database.Profile;
+import game.Lobby;
 import game.gui.HostServerMessengerController;
 import game.gui.JoinClientMessengerController;
 import game.models.Player;
@@ -226,6 +227,11 @@ public class Client {
 							if (!profiles.contains(((MessageProfile) message).getProfile())) {
 								profiles.add(((MessageProfile) message).getProfile());
 							}
+							break;
+						case MessageCreateLobby:
+							
+							break;
+						case MessageJoinLobby:
 							break;
 						default:
 							break;

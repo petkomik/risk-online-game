@@ -5,8 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 import database.Profile;
+import game.Lobby;
 import game.gui.HostServerMessengerController;
 import game.gui.MainApp;
 import game.models.Player;
@@ -14,9 +17,11 @@ import gameState.GameHandler;
 import network.messages.Message;
 import network.messages.MessageAttack;
 import network.messages.MessageConnect;
+import network.messages.MessageCreateLobby;
 import network.messages.MessageDiceThrow;
 import network.messages.MessageDisconnect;
 import network.messages.MessageFortifyTroops;
+import network.messages.MessageJoinLobby;
 import network.messages.MessagePlaceTroops;
 import network.messages.MessagePlayerTurn;
 import network.messages.MessagePossessCountry;
@@ -28,6 +33,7 @@ public class ClientHandler implements Runnable {
 
 	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 	public static ArrayList<Profile> clients = new ArrayList<>();
+	private HashMap<String, Lobby> lobbies = new HashMap<>();
 	private Socket socket;
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
@@ -79,13 +85,34 @@ public class ClientHandler implements Runnable {
 		return clientUsername;
 	}
 
-	public void personalMessage(Message message) {
+	public void personalTextMessage(Message message) {
 		System.out.println("messanger works");
 		for (ClientHandler clientHandler : clientHandlers) {
 			try {
 
 				if (clientHandler.clientUsername
 						.equalsIgnoreCase(((MessageToPerson) message).getToProfile().getUserName())) {
+					System.out.println("that is what TO is: ");
+
+					clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
+					clientHandler.objectOutputStream.flush();
+
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+
+			}
+		}
+
+	}
+
+	public void personalMessage(int playerId, Message message) {
+		System.out.println("messanger works");
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+
+				if (clientHandler.getProfile().getId() == playerId) {
 					System.out.println("that is what TO is: ");
 
 					clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
@@ -142,8 +169,8 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageToPerson:
 					System.out.println("case 4 in Handler");
-					personalMessage((MessageToPerson) messageFromClient);
-
+					personalTextMessage((MessageToPerson) messageFromClient);
+					// theoretisch ein Thread
 					break;
 				case MessageProfile:
 					broadcastMessage(new MessageProfile(((MessageProfile) messageFromClient).getProfile()));
@@ -162,7 +189,7 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageDiceThrow:
 					broadcastMessage(((MessageDiceThrow) messageFromClient));
-					
+
 					break;
 				case MessagePossessCountry:
 					broadcastMessage(((MessagePossessCountry) messageFromClient));
@@ -178,7 +205,30 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageFortifyTroops:
 					broadcastMessage(((MessageFortifyTroops) messageFromClient));
+
 					break;
+				case MessageCreateLobby:
+
+					Lobby aLobby = new Lobby();
+					BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
+						int i = 1;
+						String newUsername = clientUsername;
+						while (lobbies.containsKey(newUsername)) {
+							newUsername = clientUsername + i;
+							i++;
+						}
+						lobbies.put(newUsername, lobby);
+						lobby.setLobbyName(newUsername);
+					};
+					addLobby.accept(clientUsername, aLobby);
+					broadcastMessage(new MessageCreateLobby(this.getProfile().getId(), aLobby.getLobbyName()));
+
+					break;
+
+				case MessageJoinLobby:
+
+					break;
+
 				default:
 					// Handle unknown message types, if necessary
 					break;
@@ -215,15 +265,14 @@ public class ClientHandler implements Runnable {
 		}
 
 	}
-	
-	public void removeClient(Profile profile){
+
+	public void removeClient(Profile profile) {
 		for (ClientHandler clientHandler : clientHandlers) {
-			if(clientHandler.getProfile().equals(profile)){
+			if (clientHandler.getProfile().equals(profile)) {
 				clientHandler.removeClient(profile);
-				}
+			}
 		}
-		
+
 	}
-	
-	
+
 }

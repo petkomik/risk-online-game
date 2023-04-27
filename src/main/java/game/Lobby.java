@@ -20,7 +20,12 @@ import general.Parameter;
  */
 
 public class Lobby {
-	
+			public void setLobbyName(String lobbyName) {
+		this.lobbyName = lobbyName;
+	}
+
+
+			private String lobbyName;
 	static Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
 			Parameter.orangeColor, Parameter.purpleColor, 
 			Parameter.redColor, Parameter.yellowColor};
@@ -224,6 +229,11 @@ public class Lobby {
 	
 	public boolean isReady(Player ply) {
 		return this.readyHashMap.get(ply);
+	}
+
+
+	public String getLobbyName() {
+		return lobbyName;
 	}
 }
 
