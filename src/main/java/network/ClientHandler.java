@@ -221,7 +221,7 @@ public class ClientHandler implements Runnable {
 						lobby.setLobbyName(newUsername);
 					};
 					addLobby.accept(clientUsername, aLobby);
-					broadcastMessage(new MessageCreateLobby(this.getProfile().getId(), aLobby.getLobbyName()));
+					broadcastMessage(new MessageCreateLobby(this.getProfile().getId(), aLobby));
 
 					break;
 
