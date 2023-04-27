@@ -9,6 +9,7 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
 import game.models.CountryName;
 import game.models.Player;
+import gameState.Period;
 import gameState.Phase;
 import gameState.SinglePlayerHandler;
 import general.AppController;
@@ -103,8 +104,8 @@ public class GamePaneController implements Initializable{
 	private DesignButton lessBtn;
 	private DesignButton moreBtn;
 	private Label numberLabel;
-	private Button trueButtonReinf;
-	private Button falseButtonReinf;
+	private Button trueButtonChoosingTroops;
+	private Button falseButtonChoosingTroops;
 	private Label choosingTroopsPhaseLabel;
 	
 	private GameType gameType;
@@ -112,6 +113,9 @@ public class GamePaneController implements Initializable{
 	private ArrayList<String> playerColors;
 	private ArrayList<String> playerAvatar;
 	private ArrayList<Integer> playerIDs;
+	
+	private Phase currentPhase;
+	private Period currentPeriod;
 	
 	
 	@Override
@@ -452,6 +456,95 @@ public class GamePaneController implements Initializable{
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
+	public void setUpChoosingTroopsPane() {
+		ChoosingTroopsPane = new Pane();
+		ChoosingTroopsPane.setPrefSize(1536.0, 864.0);
+		ChoosingTroopsPane.setScaleX(w / 1536.0);
+		ChoosingTroopsPane.setScaleY(h / 864.0);
+		ChoosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+
+		Rectangle rectangle = new Rectangle();
+		rectangle.setArcHeight(5.0);
+		rectangle.setArcWidth(5.0);
+		rectangle.setFill(Color.web("#ecd9c6"));
+		rectangle.setHeight(61.0);
+		rectangle.setLayoutX(622.0);
+		rectangle.setLayoutY(613.0);
+		rectangle.setStrokeWidth(0.0);
+		rectangle.setWidth(284.0);
+
+		falseButtonChoosingTroops = new Button("x");
+		falseButtonChoosingTroops.setLayoutX(586.0);
+		falseButtonChoosingTroops.setLayoutY(608.0);
+		falseButtonChoosingTroops.setMnemonicParsing(false);
+		falseButtonChoosingTroops.setPrefSize(72.0, 72.0);
+
+		trueButtonChoosingTroops = new Button("✓");
+		trueButtonChoosingTroops.setLayoutX(879.0);
+		trueButtonChoosingTroops.setLayoutY(608.0);
+		trueButtonChoosingTroops.setMnemonicParsing(false);
+		trueButtonChoosingTroops.setPrefSize(72.0, 72.0);
+		
+		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+		falseButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+        		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+            } else {
+            	falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
+            }
+	        });
+		falseButtonChoosingTroops.setOnAction(e -> clickFalseButtonChoosingTroops(e));
+		trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+        trueButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+            } else {
+            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
+            }
+	        });
+        trueButtonChoosingTroops.setOnAction(e -> clickTrueButtonChoosingTroops(e));
+		
+
+		choosingTroopsPhaseLabel = new Label();
+		choosingTroopsPhaseLabel.setLayoutX(661.0);
+		choosingTroopsPhaseLabel.setLayoutY(614.0);
+		choosingTroopsPhaseLabel.setPrefSize(206.0, 60.0);
+		
+		lessBtn = new DesignButton();
+		moreBtn = new DesignButton();
+		numberLabel = new Label();
+		
+		lessBtn.setText("<");
+		moreBtn.setText(">");
+		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 34));
+		numberLabel.setTextFill(Color.web("#b87331"));
+		numberLabel.textOverrunProperty().set(OverrunStyle.CLIP);
+		numberLabel.setMinWidth(50);
+		numberLabel.setAlignment(Pos.CENTER);
+		
+		HBox numOfTroopsHBox = new HBox();
+		
+		numOfTroopsHBox.setSpacing(25);
+		numOfTroopsHBox.getChildren().addAll(lessBtn, numberLabel, moreBtn);
+		numOfTroopsHBox.setLayoutX((w - numOfTroopsHBox.getHeight()) / 2.0);
+		numOfTroopsHBox.setLayoutY(514.0);
+		
+
+		ChoosingTroopsPane.getChildren().addAll(rectangle, falseButtonChoosingTroops, trueButtonChoosingTroops, choosingTroopsPhaseLabel, numOfTroopsHBox);
+		ChoosingTroopsPane.setVisible(false);
+	}
 	
 	public void decreaseProgressbar() {
 		pB.setProgress(pB.getProgress()-1);
@@ -513,6 +606,50 @@ public class GamePaneController implements Initializable{
 		ivPhase.setImage(new Image(Parameter.phaseLogosdir + playerAvatar.get(turn) + ".png"));
 		cirNum.setFill(Color.web(playerColors.get(turn)));
 		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
+		rectCards.setFill(Color.web(playerColors.get(turn)));
+		cardsPane.setStyle(null);
+		numCardsLabel.setText(String.valueOf(player.getCards().size()));
+	}
+	
+	public void setNumTroops(CountryName countryName, int numOfTroops) {
+		labelTroopsDisplay.get(countryName.toString()).setText(""+numOfTroops);
+	}
+	
+	public void showChoosingTroopsPane(int maxTroops, int minTroops) {
+		ChoosingTroopsPane.setVisible(true);
+		choosingTroopsPhaseLabel.setText(currentPhase.toString());
+		if(currentPhase == Phase.ATTACK) {
+			falseButtonChoosingTroops.setVisible(false);
+		}
+		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+		    	if (Integer.parseInt(numberLabel.getText()) > minTroops) {
+		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
+			    	numberLabel.setText(String.valueOf(i));		    	
+		    	}
+
+		    }
+		});
+		
+		moreBtn.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+		    	if (Integer.parseInt(numberLabel.getText()) < maxTroops) {
+		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
+		    		numberLabel.setText(String.valueOf(i));
+		    	}
+		    }
+		});
+	}
+	
+
+	public void unshowChoosingTroopsPane(Color c) {
+		ChoosingTroopsPane.setVisible(false);
 	}
 	
 	public void changePhase(String phase) {
@@ -598,134 +735,7 @@ public class GamePaneController implements Initializable{
 			}
 		}
 	}
-	public void setNumTroops(String countryName, int numOfTroops) {
-		labelTroopsDisplay.get(countryName).setText(""+numOfTroops);
-	}
 	
-	public void setUpChoosingTroopsPane() {
-		ChoosingTroopsPane = new Pane();
-		ChoosingTroopsPane.setPrefSize(1536.0, 864.0);
-		ChoosingTroopsPane.setScaleX(w / 1536.0);
-		ChoosingTroopsPane.setScaleY(h / 864.0);
-		ChoosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
-
-		Rectangle rectangle = new Rectangle();
-		rectangle.setArcHeight(5.0);
-		rectangle.setArcWidth(5.0);
-		rectangle.setFill(Color.web("#ecd9c6"));
-		rectangle.setHeight(61.0);
-		rectangle.setLayoutX(622.0);
-		rectangle.setLayoutY(613.0);
-		rectangle.setStrokeWidth(0.0);
-		rectangle.setWidth(284.0);
-
-		falseButtonReinf = new Button("x");
-		falseButtonReinf.setLayoutX(586.0);
-		falseButtonReinf.setLayoutY(608.0);
-		falseButtonReinf.setMnemonicParsing(false);
-		falseButtonReinf.setPrefSize(72.0, 72.0);
-		falseButtonReinf.setOnAction(e -> ChoosingTroopsPane.setVisible(false));		
-
-		trueButtonReinf = new Button("✓");
-		trueButtonReinf.setLayoutX(879.0);
-		trueButtonReinf.setLayoutY(608.0);
-		trueButtonReinf.setMnemonicParsing(false);
-		trueButtonReinf.setPrefSize(72.0, 72.0);
-		trueButtonReinf.setOnAction(e -> {
-			ChoosingTroopsPane.setVisible(false);
-			// num
-		});
-
-		choosingTroopsPhaseLabel = new Label("Label");
-		choosingTroopsPhaseLabel.setLayoutX(661.0);
-		choosingTroopsPhaseLabel.setLayoutY(614.0);
-		choosingTroopsPhaseLabel.setPrefSize(206.0, 60.0);
-		
-		lessBtn = new DesignButton();
-		moreBtn = new DesignButton();
-		numberLabel = new Label();
-		
-		lessBtn.setText("<");
-		moreBtn.setText(">");
-		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 34));
-		numberLabel.setTextFill(Color.web("#b87331"));
-		numberLabel.textOverrunProperty().set(OverrunStyle.CLIP);
-		numberLabel.setMinWidth(50);
-		numberLabel.setAlignment(Pos.CENTER);
-		
-		HBox numOfTroopsHBox = new HBox();
-		
-		numOfTroopsHBox.setSpacing(25);
-		numOfTroopsHBox.getChildren().addAll(lessBtn, numberLabel, moreBtn);
-		numOfTroopsHBox.setLayoutX((w - numOfTroopsHBox.getHeight()) / 2.0);
-		numOfTroopsHBox.setLayoutY(514.0);
-		
-
-		ChoosingTroopsPane.getChildren().addAll(rectangle, falseButtonReinf, trueButtonReinf, choosingTroopsPhaseLabel, numOfTroopsHBox);
-		ChoosingTroopsPane.setVisible(false);
-	}
-	public void showChoosingTroopsPane(Color c, int maxTroops, int minTroops, Phase phase) {
-		ChoosingTroopsPane.setVisible(true);
-		choosingTroopsPhaseLabel.setText(phase.toString());
-		if(phase == Phase.ATTACK) {
-			falseButtonReinf.setVisible(false);
-		}
-		falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ toHex(c) +";");
-		falseButtonReinf.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-        		falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ toHex(c) +";");
-            } else {
-            	falseButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(c) +";");
-            }
-	        });
-		trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ toHex(c) +";");
-        trueButtonReinf.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-            	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ toHex(c) +";");
-            } else {
-            	trueButtonReinf.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(c) +";");
-            }
-	        });
-		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-		    	
-		    	if (Integer.parseInt(numberLabel.getText()) > minTroops) {
-		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
-			    	numberLabel.setText(String.valueOf(i));		    	
-		    	}
-
-		    }
-		});
-		
-		moreBtn.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-		    	
-		    	if (Integer.parseInt(numberLabel.getText()) < maxTroops) {
-		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
-		    		numberLabel.setText(String.valueOf(i));
-		    	}
-		    }
-		});
-	}
-	public void unshowChoosingTroopsPane(Color c) {
-		ChoosingTroopsPane.setVisible(false);
-	}
 	
 	private String toHex(Color c) {
 		String colorHex = String.format("#%02X%02X%02X",
@@ -745,5 +755,11 @@ public class GamePaneController implements Initializable{
 	
 	private void clickLeaveGameButton(ActionEvent e) {
 		
+	}
+	private void clickTrueButtonChoosingTroops(ActionEvent e) {
+		
+	}
+	private void clickFalseButtonChoosingTroops(ActionEvent e) {
+
 	}
 }
