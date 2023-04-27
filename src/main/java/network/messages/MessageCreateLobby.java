@@ -17,9 +17,7 @@ public class MessageCreateLobby extends Message {
 	public int getPlayerID() {
 		return playerID;
 	}
-	public String getLobbyname() {
-		return lobbyname;
-	}
+	
 	public Lobby getLobby() {
 		return lobby;
 	}
