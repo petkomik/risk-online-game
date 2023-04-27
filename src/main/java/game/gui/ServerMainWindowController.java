@@ -53,6 +53,7 @@ public class ServerMainWindowController extends Application {
 	private StackPane container; 				//main container
 	private VBox scrollAndMenu;
 	private HBox backgroundPic;					//background
+	private HBox backgroundColor;				//*
 	private ImageView imgBackground;			//*
 	private ImageViewPane imgBackgroundPane;	//*
 
@@ -95,8 +96,8 @@ public class ServerMainWindowController extends Application {
 		lobbyListContainer = new ScrollPane();		
 		lobbyList = new HashMap<String,LobbyGUI>(); 
 		menu = new HBox();							
-		vbox = new VBox();							
-
+		vbox = new VBox();		
+		
 		/*
 		 * setting up background image
 		 */
@@ -106,6 +107,12 @@ public class ServerMainWindowController extends Application {
 		imgBackground.setPreserveRatio(false);
 		imgBackground.setSmooth(true);
 		imgBackground.setCache(true);
+		
+		backgroundColor = new HBox();
+		backgroundColor.setAlignment(Pos.CENTER);
+		backgroundColor.setFillHeight(true);
+		backgroundColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.85);");
+		backgroundColor.setDisable(true);
 
 		imgBackgroundPane = new ImageViewPane(imgBackground);
 		HBox.setHgrow(imgBackgroundPane, Priority.ALWAYS);
@@ -257,8 +264,7 @@ public class ServerMainWindowController extends Application {
 				vbox.getChildren().clear();
 
 				for (String key : lobbyList.keySet()) {
-					Label label = createLabel(key);
-					vbox.getChildren().addAll(new Spacing(5), lobbyList.get(key).getVisual(), new Spacing(5));
+					vbox.getChildren().addAll(new Spacing(ratio*5), lobbyList.get(key).getVisual(), new Spacing(ratio*5));
 				}
 				lobbyListContainer.setContent(vbox);
 
@@ -291,7 +297,6 @@ public class ServerMainWindowController extends Application {
 		/*
 		 * adding elements to the main container
 		 */
-		ChatWindow test = new ChatWindow();
 
 		contentVBox = new VBox();
 		contentVBox.getChildren().addAll(banner, new Spacing(50), scrollAndMenu, new Spacing(100));
@@ -299,7 +304,7 @@ public class ServerMainWindowController extends Application {
 		contentVBox.setSpacing(30 * ratio);
 		contentVBox.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
 
-		container.getChildren().addAll(backgroundPic, contentVBox);
+		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox);
 		return container;
 	}
 
