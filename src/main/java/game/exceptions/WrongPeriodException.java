@@ -4,16 +4,12 @@ import java.util.ArrayList;
 
 import game.models.Card;
 
-public class WrongCardsException extends Exception {
+public class WrongPeriodException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	private String message;
 
-	public WrongCardsException(String message, ArrayList<Card> cards) {
-		this.message = message;
-	}
-
-	public WrongCardsException(String message) {
+	public WrongPeriodException(String message) {
 		this.message = message;
 	}
 

@@ -57,24 +57,28 @@ public class ServerMainWindowController extends Application {
 	private ImageView imgBackground;			//*
 	private ImageViewPane imgBackgroundPane;	//*
 
-	private HBox banner;						//Banner + components
+	private HBox topBannerParent;				//banner
 	private HBox topBannerContent;				//*
 	private Label lobbyTextBanner;				//*
-	private VBox contentVBox;					//*
 	private ArrowButton backButton;				//*
 
 
 	private HBox menu;							//menu
-	private DesignButton hostGameButton;		//*
-	
 	private HBox searchBar;						//searchField + Button
 	private TextField searchField;				//*
 	private DesignButton searchButton;			//*
 	
+	private HBox buttonsHBox;					//Join and Host buttons
+	private DesignButton hostGameButton;		//*
+	private DesignButton joinGameButton;		//*
+	private Button refreshButton;
+	
 	private ScrollPane lobbyListContainer;		//ScrollPane that will include the Lobbies
 	private VBox vbox;							//Lobbies in the scrollPane
-	private Lobby lobby;
-	private HashMap<String,LobbyGUI> lobbyList;	//Hashmap with all the Lobbies
+	private HashMap<String, LobbyGUI> lobbyGUIList;	//Hashmap with all the Lobbies
+	private HashMap<String, Lobby> lobbyList;
+	private Lobby selectedLobby;				
+
 
 	public ServerMainWindowController() throws Exception {
 		super();
@@ -94,9 +98,12 @@ public class ServerMainWindowController extends Application {
 
 		scrollAndMenu = new VBox();
 		lobbyListContainer = new ScrollPane();		
-		lobbyList = new HashMap<String,LobbyGUI>(); 
+		lobbyGUIList = new HashMap<String, LobbyGUI>(); 
 		menu = new HBox();							
-		vbox = new VBox();		
+		vbox = new VBox();	
+		vbox.setAlignment(Pos.CENTER);
+		vbox.setSpacing(15);
+		
 		/*
 		 * setting up background image
 		 */
@@ -121,38 +128,39 @@ public class ServerMainWindowController extends Application {
 		 * setting up banner layer
 		 */
 
-		banner = new HBox();
-		banner.setAlignment(Pos.TOP_LEFT);
-		VBox.setMargin(banner, new Insets(50 * ratio, 0, 0, -15 * ratio));
-		banner.setPickOnBounds(false);
+		topBannerParent = new HBox(); 
+		topBannerParent.setAlignment(Pos.TOP_LEFT);
+		StackPane.setMargin(topBannerParent, new Insets(50 * ratio,0,0,0));
+		topBannerParent.setPickOnBounds(false);
 
 		topBannerContent = new HBox();
 		topBannerContent.setAlignment(Pos.CENTER);
-		topBannerContent.setStyle("-fx-background-color: " + "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
-								+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
-		topBannerContent.setMaxWidth(800 * ratio);
-		topBannerContent.setMinWidth(500 * ratio);
+		topBannerContent.setStyle("-fx-background-color: "
+				+ "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
+				+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
+		topBannerContent.setMaxWidth(1000 * ratio);
+		topBannerContent.setMinWidth(800 * ratio);
 		topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
 		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
 		topBannerContent.setPrefHeight(100 * ratio);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
-
+		
 		backButton = new ArrowButton(60 * ratio);
 
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
-
-		lobbyTextBanner = new Label("LOBBIES");
+		
+		lobbyTextBanner = new Label("SERVER MENU");
 		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
 		lobbyTextBanner.setTextFill(Color.WHITE);
-
+		
 		Spacing bannerSpacing = new Spacing();
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
-
+			
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
-		banner.getChildren().addAll(topBannerContent, bannerSpacing);
+		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing);
 
 		/*
 		 * setting up ScrollPane
@@ -165,6 +173,8 @@ public class ServerMainWindowController extends Application {
 		lobbyListContainer.setCache(true);
 		lobbyListContainer.setMaxWidth(ScrollPane.USE_PREF_SIZE);
 		lobbyListContainer.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+		lobbyListContainer.setPadding(new Insets(20 * ratio, 20 * ratio, 20 * ratio, 20 * ratio));
+		lobbyListContainer.setFitToWidth(true);
 
 
 		/*
@@ -184,17 +194,47 @@ public class ServerMainWindowController extends Application {
 
 		backButton = new ArrowButton(45);
 
-		hostGameButton = new DesignButton(new Insets(ratio * 10, ratio * 10, ratio * 10, ratio * 10), 12,
-										  ratio * 20, ratio * 230);
+	
 
 		/*
-		 * setting up button text
+		 * setting up button & text
 		 */
-
-		hostGameButton.setText("CREATE GAME");
+		hostGameButton = new DesignButton(new Insets(ratio * 20, ratio * 10, ratio * 20, ratio * 10), 50,
+				  ratio * 30, ratio * 350);
+		hostGameButton.setText("CREATE LOBBY");
 		hostGameButton.setAlignment(Pos.CENTER);
 		hostGameButton.setMinHeight(ratio * 60);
-
+		
+		joinGameButton = new DesignButton(new Insets(ratio * 20, ratio * 10, ratio * 20, ratio * 10), 50,
+				  ratio * 30, ratio * 350);
+		joinGameButton.setText("JOIN LOBBY");
+		joinGameButton.setAlignment(Pos.CENTER);
+		joinGameButton.setMinHeight(ratio * 60);
+		
+		
+		refreshButton = new Button();
+		ImageView img = new ImageView();
+        img.setImage(new Image(new FileInputStream(Parameter.refreshIcon)));
+        img.setFitHeight(60);
+        img.setPreserveRatio(true);
+		img.setSmooth(true);
+		img.setCache(true);
+		refreshButton.setGraphicTextGap(10);
+		refreshButton.setGraphic(img);	
+		refreshButton.setStyle("-fx-background-color: transparent");
+		
+		refreshButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				refreshButton.setRotate(refreshButton.getRotate() + 90);
+				
+				//client.sendMessage(new MessageRefresh())
+				// return HashMap<String, Lobby>
+			}
+			
+			
+		});
+		
 		/*
 		 * setting up the searchBar and Button
 		 */
@@ -253,8 +293,10 @@ public class ServerMainWindowController extends Application {
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickForwardSound();
 
+				LobbyGUI lobbyEntry = new LobbyGUI();
+				
 				try {
-					lobbyList.put("avatars_name " + counter, new LobbyGUI());
+					lobbyGUIList.put("avatars_name " + counter, lobbyEntry);
 					counter++;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -262,48 +304,77 @@ public class ServerMainWindowController extends Application {
 
 				vbox.getChildren().clear();
 
-				for (String key : lobbyList.keySet()) {
-					vbox.getChildren().addAll(new Spacing(ratio*5), lobbyList.get(key).getVisual(), new Spacing(ratio*5));
+				for (String key : lobbyGUIList.keySet()) {
+					vbox.getChildren().add(lobbyGUIList.get(key));
 				}
 				lobbyListContainer.setContent(vbox);
 
+				
+				lobbyEntry.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						(new GameSound()).buttonClickBackwardSound();
+						selectedLobby = lobbyEntry.getLobby();
+						for(LobbyGUI lobbyEnt : lobbyGUIList.values()) {
+							lobbyEnt.setSelected(false);
+						}
+						
+						lobbyEntry.setSelected(true);
+						
+					}
+				});
+				
+	
 			}
-
+			
+			//TODO send message to CLientHandler to create a lobby
 		});
 
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickBackwardSound();
-				// TODO has to return the player to the Host/Join Window
+				// TODO has to return the player to the Host/Join Window and disconnect from the server
 			}
 		});
+		
+		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				(new GameSound()).buttonClickBackwardSound();
+				// TODO join the lobby and send a message to the server so that the lobby knows who the new paticipant is
+			}
+		});
+		
+		
 
 		/*
 		 * assembling the menu
 		 */
 
-		menu.getChildren().addAll(searchBar, new Spacing(50 * ratio), hostGameButton);
+		menu.getChildren().addAll(searchBar, new Spacing(1), refreshButton);
 		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
 
 		/*
 		 * assembling menu and scrollpane with lobbies
 		 */
+		
+		buttonsHBox = new HBox();
+		buttonsHBox.setAlignment(Pos.CENTER);
+		buttonsHBox.getChildren().addAll(hostGameButton,joinGameButton);
+		buttonsHBox.setSpacing(20*ratio);
+		buttonsHBox.setPadding(new Insets(30*ratio,0,0,0));
 
-		scrollAndMenu.getChildren().addAll(menu, lobbyListContainer);
+
+		scrollAndMenu.getChildren().addAll(menu, lobbyListContainer, buttonsHBox);
 		scrollAndMenu.setAlignment(Pos.CENTER);
 
 		/*
 		 * adding elements to the main container
 		 */
 
-		contentVBox = new VBox();
-		contentVBox.getChildren().addAll(banner, new Spacing(50), scrollAndMenu, new Spacing(100));
-		contentVBox.setAlignment(Pos.CENTER);
-		contentVBox.setSpacing(30 * ratio);
-		contentVBox.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
-
-		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox);
+		
+		container.getChildren().addAll(backgroundPic, backgroundColor, scrollAndMenu, topBannerParent);
 		return container;
 	}
 

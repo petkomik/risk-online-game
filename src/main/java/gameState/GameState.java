@@ -170,4 +170,31 @@ public class GameState {
 	public void setNextPlayer() {
 		this.currentPlayer = this.alivePlayers.get((this.alivePlayers.indexOf(currentPlayer)+1)%this.alivePlayers.size());
 	}
+	
+	public int playerTurnsInCard(ArrayList<Card> cardsFromPlayer) {
+		for(Card card : this.cards) {
+			if(cards.contains(card) && cardsFromPlayer.contains(card)) {
+				this.cards.get(this.cards.indexOf(card)).setOwnedBy(null);
+			}
+		}
+		
+		this.numberOfCardsTurnedIn++;
+		switch (this.numberOfCardsTurnedIn) {
+		case 1:
+			return 4;
+		case 2:
+			return 6;
+		case 3:
+			return 8;
+		case 4:
+			return 10;
+		case 5:
+			return 12;
+		case 6:
+			return 15;
+		default:
+			return (this.numberOfCardsTurnedIn - 6) * 5 + 15;
+		}
+		
+	}
 }

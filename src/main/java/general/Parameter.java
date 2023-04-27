@@ -26,6 +26,7 @@ public class Parameter {
 	public static final String dicesIcon = imagesdir + "dices-icon.png";
 	public static final String errorIcon = imagesdir + "error_icon.png";
 	public static final String chatIcon = imagesdir + "chat-img.png";
+	public static final String refreshIcon = imagesdir + "refresh.png";
 	public static final String coord = resourcesdir + sep + "game" + sep + "gui" + sep + "coord.txt";
 	public static final String css = resourcesdir + "game" + sep + "gui" + sep + "application.css";
 	public static final String dbName = "risk-database.db";

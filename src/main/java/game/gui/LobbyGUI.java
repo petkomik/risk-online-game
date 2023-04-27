@@ -1,5 +1,7 @@
 package game.gui;
 
+import java.io.FileNotFoundException;
+
 import database.Profile;
 import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
@@ -8,25 +10,32 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
-public class LobbyGUI extends HBox {
+public class LobbyGUI extends ToggleButton {
 
 	private double ratio;
-	private Lobby lobby;
+	private int numberOfPlayersJoined;
+	private int maxNumberOfPlayers;
 	private String lobbyNameString;
 	private String ratingString;
-	private String participantsString;
+	private Lobby lobby;
 
 	private HBox hBox;
-	private DesignButton joinButton;
-	private TextField lobbyName;
-	private TextField rating;
-	private TextField participants;
+	private Label lobbyName;
+	private Label rating;
+
+	private Label playersJoined;
 	
 	public LobbyGUI() {
 		super();
@@ -34,8 +43,9 @@ public class LobbyGUI extends HBox {
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
 		this.lobbyNameString = "LobbyName";
-		this.ratingString = "3000";
-		this.participantsString = " 2/6";
+		this.ratingString = String.valueOf((int) (Math.random() * 100));
+		this.numberOfPlayersJoined = 1;
+		this.maxNumberOfPlayers = 6;
 		setup();
 	
 		
@@ -50,7 +60,13 @@ public class LobbyGUI extends HBox {
 		this.lobbyNameString = profile.getUserName();
 		//this.ratingString = profile.getRating();
 		//this.participantsString = lobby...
+		this.numberOfPlayersJoined = 1;
+		this.maxNumberOfPlayers = 6;
 		setup();
+	}
+	
+	public LobbyGUI(String name, int joinedPlayers, int maxPlayers, int rank) {
+		
 	}
 	
 	public HBox getVisual() {
@@ -58,50 +74,75 @@ public class LobbyGUI extends HBox {
 	}
 
 	public void setup() {
+		
+		this.setStyle("-fx-background-color: rgba(92,64,51);"
+				+ "-fx-background-radius: 25;"
+				+ "-fx-background-insets: 1 1 1 1;"
+				+ "-fx-border-color: transparent;"
+			    + "-fx-border-width: 6px;"
+			    + "-fx-border-radius: 25");
+		this.setPrefWidth(800 * ratio);
+		this.setAlignment(Pos.CENTER);
+		this.setPickOnBounds(true);
+
 
 		hBox = new HBox();
-		hBox.setPrefSize(ratio * 850, ratio * 120);
-		hBox.setStyle("-fx-background-color: rgba(92,64,51);-fx-background-radius: 25;");
-		hBox.setAlignment(Pos.CENTER_LEFT);
-		hBox.setPadding(new Insets(20, 20, 20, 20));
+		hBox.setPadding(new Insets(20, 40, 20, 40));
 
-		/*
-		 * setting up the lobby parts
-		 */
-
-		joinButton = new DesignButton(new Insets(ratio * 10, ratio * 10, ratio * 10, ratio * 10), 12, ratio * 20,
-				ratio * 130);
-		joinButton.setText("JOIN");
-		joinButton.setAlignment(Pos.CENTER);
-		
-		lobbyName = new TextField();
+		lobbyName = new Label();
 		lobbyName.setText(lobbyNameString);
-		lobbyName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, ratio * 22));
-		lobbyName.setEditable(false);
+		lobbyName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, ratio * 28));
 		lobbyName.setMouseTransparent(true);
 		lobbyName.setStyle("-fx-background-color: transparent;" 
 						 + "-fx-text-fill: white");
 
-		rating = new TextField();
+		rating = new Label();
 		rating.setText(ratingString + " \u2605");
-		rating.setFont(Font.font("Cooper Black", FontWeight.NORMAL, ratio * 22));
-		rating.setEditable(false);
+		rating.setFont(Font.font("Cooper Black", FontWeight.NORMAL, ratio * 28));
 		rating.setMouseTransparent(true);
 		rating.setStyle("-fx-background-color: transparent;"
 					  + "-fx-text-fill: white");
 
-		/*
-		 * assembling the elements
-		 */
+		playersJoined = new Label();
+		playersJoined.setText("" + this.numberOfPlayersJoined + " / " + this.maxNumberOfPlayers + " Players");
+		playersJoined.setFont(Font.font("Cooper Black", FontWeight.NORMAL, ratio * 28));
+		playersJoined.setStyle("-fx-background-color: transparent;"
+					  + "-fx-text-fill: white");
+
+
+		Spacing spacing1 = new Spacing(1);
+		HBox.setHgrow(spacing1, Priority.ALWAYS);
+		Spacing spacing2 = new Spacing(1);
+		HBox.setHgrow(spacing2, Priority.ALWAYS);
+		hBox.getChildren().addAll(lobbyName, spacing2, rating, spacing1, playersJoined);
+		this.setGraphic(hBox);
 		
-		hBox.getChildren().addAll(lobbyName, new Spacing(ratio * 20), rating, new Spacing(ratio * 20), joinButton);
-
-		joinButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
-
+		this.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+			if(newValue) {
+				this.setStyle("-fx-background-color: rgba(92,64,51);"
+						+ "-fx-background-radius: 25;"
+    					+ "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-color: white;"
+        			    + "-fx-border-width: 6px;"
+        			    + "-fx-border-radius: 25");
+			} else {
+				this.setStyle("-fx-background-color: rgba(92,64,51);"
+						+ "-fx-background-radius: 25;"
+    					+ "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-color: transparent;"
+        			    + "-fx-border-width: 6px;"
+        			    + "-fx-border-radius: 25");
 			}
-		});
+		}));
+
 	}
+	
+	public String getRating() {
+		return rating.getText();
+	}
+	
+	public Lobby getLobby() {
+		return lobby;
+	}
+	
 }

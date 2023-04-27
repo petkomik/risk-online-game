@@ -1,7 +1,10 @@
 package gameState;
 
+import java.util.List;
+
 import game.Lobby;
 import game.gui.GamePaneController;
+import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
 import javafx.scene.paint.Color;
@@ -18,13 +21,13 @@ public class SinglePlayerHandler {
 	
 	}
 	
-	public void clickCountry(Player player, CountryName country) {
-		this.gameHandler.clickCountry(player, country);
+	public void clickCountry(int idOfPlayer, CountryName country) {
+		this.gameHandler.clickCountry(idOfPlayer, country);
 	}
 	
-	public void possesCountryOnGUI(CountryName country, Player player) {
-		this.gamePaneController.claimCountry(country.toString(),
-				1, Color.web(player.getColor()));
+	public void possesCountryOnGUI(CountryName country, Color colorOfPlayer) {
+//		this.gamePaneController.claimCountry(country.toString(),
+//				1, colorOfPlayer);
 	}
 	
 	public void chooseNumberOfTroopsOnGUI(CountryName country,int min, int max) {
@@ -49,18 +52,29 @@ public class SinglePlayerHandler {
 	 * returns the value of the dice for the player 
 	 */
 	
-	public int getInitialThrowDice(Player player) {
-		return this.gameHandler.getInitialThrowDice(player);
+	public int getInitialThrowDice(int idOfPlayer) {
+		return this.gameHandler.getInitialThrowDice(idOfPlayer);
 	}
 	
 	/*
 	 * gives the GUI the current Player
 	 */
-	public void setCurrentPlayerOnGUI(Player player) {
+	public void setCurrentPlayerOnGUI(int idOfPlayer) {
 		
+	}
+	
+	public void turnInRiskCards(List<Card> cards, int idOfPlayer) {
+		this.gameHandler.turnInRiskCards(cards, idOfPlayer);
 	}
 	
 	public Lobby getLobby() {
 		return lobby;
+	}
+
+	public void riskCardsTurnedInOnGui(int idOfPlayer, List<Card> cards,
+			int troopsPlyaerGets) {
+		// - removeRiskCard(List<Card> toRemove, Player player)
+		// - addAmountOfTroopsLeftToDeploy(Player player,  int number)
+
 	}
 }

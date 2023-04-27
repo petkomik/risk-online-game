@@ -8,6 +8,7 @@ import game.models.Player;
 import general.AppController;
 import general.Parameter;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -155,6 +156,7 @@ public class GUISupportClasses {
 		
 		this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
             if (newValue) {
+
             	this.setStyle("-fx-background-color: #64441f;"
             				+ "-fx-background-insets: 1 1 1 1;"
 							+ "-fx-background-radius: " + radius + ";"
@@ -172,6 +174,8 @@ public class GUISupportClasses {
 	            			+ "-fx-border-width: 4px;");
             }
 	        });
+		
+		
 		}
 		
 		public DesignButton(Insets inst, int radius, double fontSize, double width, boolean chatButton) throws FileNotFoundException {

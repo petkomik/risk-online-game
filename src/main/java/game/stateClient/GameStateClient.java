@@ -413,7 +413,7 @@ public class GameStateClient {
 		if(currentPlayer.isPreparationPhase()) {
 			try {
 				gameLogic.placeTroops(this.getCurrentPlayer().getID(), countryName, 1);
-				gamePaneController.setNumTroops(String.valueOf(gameIsOver), 1);
+		//		gamePaneController.setNumTroops(String.valueOf(gameIsOver), 1);
 			} catch (WrongPhaseException | WrongCountryException | WrongTroopsCountException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
