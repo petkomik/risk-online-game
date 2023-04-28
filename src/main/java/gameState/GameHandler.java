@@ -25,8 +25,9 @@ public class GameHandler {
 		gameState.setInitialTroops(Logic.setInitialTroopsSize(this.gameState));
 	}
 	// 
-	public void initSingleplayer() {
+	public void initSingleplayer(SinglePlayerHandler singlePlayerHandler) {
 		this.gameType = GameType.SinglePlayer;
+		this.singlePlayerHandler = singlePlayerHandler;
 	}
 	
 	public void determineInitialDice() {
