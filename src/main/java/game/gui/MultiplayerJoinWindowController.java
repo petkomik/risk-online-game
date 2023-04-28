@@ -256,6 +256,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 				stage = (Stage)node.getScene().getWindow();
 				try {
 					ServerMainWindowController serverMenu = new ServerMainWindowController();
+					serverMenu.initClient();
 					stage.getScene().setRoot(serverMenu);
 
 				} catch (Exception e) {

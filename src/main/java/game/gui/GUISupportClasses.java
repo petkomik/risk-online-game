@@ -191,8 +191,7 @@ public class GUISupportClasses {
 				this.setGraphicTextGap(10);
 		        this.setGraphic(img);				
 			}
-			
-		
+
 		}
 	}
 	
@@ -254,51 +253,134 @@ public class GUISupportClasses {
 	
 	static class ChatButton extends ToggleButton {
 		
+//		public ChatButton() {
+//			super();
+//			this.setText("\uD83D\uDDE8");
+//			this.setAlignment(Pos.CENTER_LEFT);
+//			this.setFont(Font.font("Segoe UI Emoji", FontWeight.BOLD, 60));
+//			this.setMaxSize(60, 60);
+//			this.setMinSize(60, 60);
+//			this.setPrefSize(60, 60);
+//			this.setAlignment(Pos.BASELINE_CENTER);
+//			this.setPadding(new Insets(0, 0, 0, 0));
+//			this.setSelected(false);
+//
+//			this.setTextFill(Color.WHITE);
+//			this.setStyle("-fx-background-color: #b87331;"
+//					+ "-fx-background-insets: 1 1 1 1;"
+//					+ "-fx-background-radius: 12;"
+//					+ "-fx-border-radius: 12;"
+//	       			+ "-fx-border-color: #b87331;"
+//	    			+ "-fx-border-width: 3px;");
+//			
+//			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+//	            if (newValue) {
+//	            	this.setStyle("-fx-background-color: #b87331;"
+//	    					+ "-fx-background-insets: 1 1 1 1;"
+//	        				+ "-fx-background-radius: 12;"
+//	        				+ "-fx-border-radius: 12;"
+//	            			+ "-fx-border-color: #ffffff;"
+//	            			+ "-fx-border-width: 3px;");
+//	            } else {
+//	            	this.setStyle("-fx-background-color: #b87331;"
+//	    					+ "-fx-background-insets: 1 1 1 1;"
+//	        				+ "-fx-background-radius: 12;"
+//	        				+ "-fx-border-radius: 12;"
+//	            			+ "-fx-border-color: #b87331;"
+//	            			+ "-fx-border-width: 3px;");
+//	            }
+//	        });
+//		}
+//		
+//		public ChatButton(double k) {
+//			this();
+//			this.setFont(Font.font("Segoe UI Emoji", FontWeight.BOLD, k/3));
+//			this.setMaxSize(k, k);
+//			this.setMinSize(k, k);
+//			this.setPrefSize(k, k);
+//		}
+		
 		public ChatButton() {
 			super();
-			this.setText("\uD83D\uDDE8");
-			this.setAlignment(Pos.CENTER_LEFT);
-			this.setFont(Font.font("Segoe UI Emoji", FontWeight.BOLD, 60));
-			this.setMaxSize(60, 60);
-			this.setMinSize(60, 60);
-			this.setPrefSize(60, 60);
-			this.setAlignment(Pos.BASELINE_CENTER);
-			this.setPadding(new Insets(0, 0, 0, 0));
-			this.setSelected(false);
-
+			this.setPadding(new Insets(10, 20, 10, 20));
+			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
 			this.setTextFill(Color.WHITE);
 			this.setStyle("-fx-background-color: #b87331;"
-					+ "-fx-background-insets: 1 1 1 1;"
-					+ "-fx-background-radius: 12;"
-					+ "-fx-border-radius: 12;"
-	       			+ "-fx-border-color: #b87331;"
-	    			+ "-fx-border-width: 3px;");
+						+ "-fx-background-radius: 15;"
+						+ "-fx-border-radius: 12;"
+            			+ "-fx-border-color: #b87331;"
+            			+ "-fx-border-width: 3px;");
+			this.setSelected(false);
+
 			
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 	            if (newValue) {
-	            	this.setStyle("-fx-background-color: #b87331;"
-	    					+ "-fx-background-insets: 1 1 1 1;"
-	        				+ "-fx-background-radius: 12;"
-	        				+ "-fx-border-radius: 12;"
-	            			+ "-fx-border-color: #ffffff;"
-	            			+ "-fx-border-width: 3px;");
+	            	this.setStyle("-fx-background-color: #64441f;"
+								+ "-fx-background-radius: 15;"
+								+ "-fx-border-radius: 12;"
+		            			+ "-fx-border-color: #ffff;"
+		            			+ "-fx-border-width: 3px;");
 	            } else {
 	            	this.setStyle("-fx-background-color: #b87331;"
-	    					+ "-fx-background-insets: 1 1 1 1;"
-	        				+ "-fx-background-radius: 12;"
-	        				+ "-fx-border-radius: 12;"
-	            			+ "-fx-border-color: #b87331;"
-	            			+ "-fx-border-width: 3px;");
+								+ "-fx-background-radius: 15;"
+								+ "-fx-border-radius: 12;"
+		            			+ "-fx-border-color: #b87331;"
+		            			+ "-fx-border-width: 3px;");
 	            }
 	        });
 		}
 		
-		public ChatButton(double k) {
-			this();
-			this.setFont(Font.font("Segoe UI Emoji", FontWeight.BOLD, k/3));
-			this.setMaxSize(k, k);
-			this.setMinSize(k, k);
-			this.setPrefSize(k, k);
+		public ChatButton(Insets inst, int radius, double fontSize, double width) {
+			super();
+			this.setPadding(inst);
+			this.setPrefWidth(width);
+			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, fontSize));
+			this.setTextFill(Color.WHITE);
+			this.setStyle("-fx-background-color: "
+					+ "radial-gradient(focus-distance 0% , center 50% 50% , "
+					+ "radius 75% , #b87331, #64441f);"
+					+ "-fx-background-insets: 1 1 1 1;"
+					+ "-fx-background-radius: " + radius + ";"
+					+ "-fx-border-radius: " + radius + ";"
+        			+ "-fx-border-color: transparent;"
+        			+ "-fx-border-width: 4px;");
+		
+		this.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+            if (newValue) {
+
+            	this.setStyle("-fx-background-color: #64441f;"
+            				+ "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";"
+							+ "-fx-border-radius: " + radius + ";"
+	            			+ "-fx-border-color: #ffff;"
+	            			+ "-fx-border-width: 4px;");
+            } else {
+            	this.setStyle("-fx-background-color: "
+            				+ "radial-gradient(focus-distance 0% , center 50% 50% , "
+            				+ "radius 75% , #b87331, #64441f);"
+        					+ "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";"
+							+ "-fx-border-radius: " + radius + ";"
+	            			+ "-fx-border-color: transparent;"
+	            			+ "-fx-border-width: 4px;");
+            }
+	        });
+		}
+		
+		public ChatButton(Insets inst, int radius, double fontSize, double width, boolean chatButton) throws FileNotFoundException {
+			this(inst, radius, fontSize, width);
+			if(chatButton) {
+				this.setText("Chat");
+		        ImageView img = new ImageView();
+		        img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
+		        img.setFitHeight(fontSize);
+		        img.setPreserveRatio(true);
+				img.setSmooth(true);
+				img.setCache(true);
+				this.setGraphicTextGap(10);
+		        this.setGraphic(img);				
+			}
+
 		}
 
 	}
@@ -438,10 +520,12 @@ public class GUISupportClasses {
 	    }
 	}
 	
-	static class ChatWindow extends StackPane{
+	static class ChatWindow extends VBox {
 		public ChatWindow() {
-		//	this.super();
-			VBox chatAndMenu = new VBox();
+			
+			double ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+			ratio = Math.min(ratio + 0.3, 1);
+			
 			ScrollPane chat = new ScrollPane();
 			VBox vBoxMessages = new VBox();
 			HBox textfieldAndButtons = new HBox();
@@ -449,6 +533,14 @@ public class GUISupportClasses {
 			VBox comboAndSend = new VBox();
 			DesignButton sendButton;
 			ComboBox<String> names = new ComboBox<String>();
+			HBox dragArea = new HBox();
+			
+			dragArea.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0");
+			dragArea.setPrefHeight(30 * ratio);
+			dragArea.getChildren().add(new Spacing(1));
+			HBox.setHgrow(dragArea, Priority.ALWAYS);
+			
+
 			
 			/*
 			 * alles in container nacheinander
@@ -457,9 +549,7 @@ public class GUISupportClasses {
 			 * wenn alles fertig probgieren das ganze über Popup zu emplimentieren
 			 * ServerMainWIndowController richtig skalieren
 			 */
-			
-			double ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-			ratio = Math.min(ratio + 0.3, 1);
+	
 			
 			/*
 			 * setting up the scrollpane that contains the chat visuals
@@ -582,10 +672,9 @@ public class GUISupportClasses {
 			 * setting up main window Proportions
 			 */
 			
-			chatAndMenu.setMaxHeight(ratio*500);
-			chatAndMenu.setMaxWidth(ratio*600);
-			chatAndMenu.getChildren().addAll(chat,textfieldAndButtons);
-			this.getChildren().add(chatAndMenu);
+			this.setMaxHeight(ratio*530);
+			this.setMaxWidth(ratio*600);
+			this.getChildren().addAll(dragArea, chat, textfieldAndButtons);
 		}
 		
 		public static void addLabel(String messageFromCLient, VBox vBox) {

@@ -185,6 +185,7 @@ public class Client {
 							break;
 						case Connect:
 							System.out.println("case MessageConnect Success 1 ");
+							sendMessage(new MessageConnect(profile));
 							Profile profilee = ((MessageConnect) message).getProfile();
 							if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
 								AppController.dbH.createProfileData(profilee);

@@ -51,6 +51,9 @@ public class ClientHandler implements Runnable {
 			this.clientUsername = profile.getUserName();
 			clientHandlers.add(this);
 
+			for (ClientHandler clientHandler : clientHandlers) {
+				System.out.println(clientHandler.getProfile().getUserName());
+			}
 			broadcastMessage(new MessageConnect(profile));
 
 		} catch (IOException | ClassNotFoundException e) {
@@ -150,7 +153,9 @@ public class ClientHandler implements Runnable {
 					break;
 				case Connect:
 					// MessageConnect connectionConfirmed = new MessageConnect(profile);
-					// broadcastMessage(connectionConfirmed);
+					System.out.println("kur,ur");
+					System.out.println(((MessageConnect)messageFromClient).getPlayername());
+					broadcastMessage(new MessageSend("dd"));
 					System.out.println("case MessageConnect in Handler Succes 1 ");
 					break;
 				case Disconnect:

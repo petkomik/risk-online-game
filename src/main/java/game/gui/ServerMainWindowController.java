@@ -41,6 +41,8 @@ import javafx.stage.Stage;
 import network.Client;
 import network.ClientHandler;
 import network.Server;
+import network.messages.MessageConnect;
+import network.messages.MessageSend;
 
 /**
  * 
@@ -394,6 +396,8 @@ public class ServerMainWindowController extends StackPane {
 			
 			server = Server.createServer(port);
 			client = Client.createClient(host, port);
+			client.listenForMessage(new VBox());
+
 			
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -401,6 +405,9 @@ public class ServerMainWindowController extends StackPane {
 	}
 	
 	public void initClient( ) {
+		Client client = AppController.getClient();
+		client.listenForMessage(new VBox());
+		client.sendMessage(new MessageConnect(AppController.getProfile()));
 		
 	}
 

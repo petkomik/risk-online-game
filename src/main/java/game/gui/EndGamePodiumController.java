@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import database.Profile;
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
+import game.gui.GUISupportClasses.ChatButton;
 import game.gui.GUISupportClasses.ChatWindow;
+import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import general.*;
@@ -49,7 +51,7 @@ public class EndGamePodiumController extends Application {
 	private HBox backgroundPic;
 	private HBox backgroundColor;
 	private VBox vBoxIcons;
-	private HBox banner;
+	private HBox topBannerParent;
 	private HBox topBannerContent;
 	private Label lobbyTextBanner;
 	private VBox contentVBox;
@@ -64,7 +66,10 @@ public class EndGamePodiumController extends Application {
 	private HBox place;
 	private ImageView firstPlaceCup, secondPlaceCup, thirdPlaceCup;
 	private Text caption;
-
+	private HBox chatDiv;
+	private ChatButton chatButton;
+	private ChatWindow chatPane;
+	
 	public EndGamePodiumController() throws Exception {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
@@ -127,14 +132,15 @@ public class EndGamePodiumController extends Application {
 		 * setting up banner layer
 		 */
 
-		banner = new HBox();
-		banner.setAlignment(Pos.TOP_LEFT);
-		VBox.setMargin(banner, new Insets(50 * ratio, 0, 0, -15 * ratio));
-		banner.setPickOnBounds(false);
+		topBannerParent = new HBox(); 
+		topBannerParent.setAlignment(Pos.TOP_LEFT);
+		VBox.setMargin(topBannerParent, new Insets(50 * ratio,0,0,0));
+		topBannerParent.setPickOnBounds(false);
 
 		topBannerContent = new HBox();
 		topBannerContent.setAlignment(Pos.CENTER);
-		topBannerContent.setStyle("-fx-background-color: " + "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
+		topBannerContent.setStyle("-fx-background-color: "
+				+ "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
 				+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
 		topBannerContent.setMaxWidth(800 * ratio);
 		topBannerContent.setMinWidth(500 * ratio);
@@ -143,22 +149,32 @@ public class EndGamePodiumController extends Application {
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
 		topBannerContent.setPrefHeight(100 * ratio);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
-
+		
 		backButton = new ArrowButton(60 * ratio);
 
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
-
-		lobbyTextBanner = new Label("TOP PLAYERS");
+		
+		lobbyTextBanner = new Label("LOBBY");
 		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
 		lobbyTextBanner.setTextFill(Color.WHITE);
-
+		
 		Spacing bannerSpacing = new Spacing();
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
+		
+		chatButton = new ChatButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio, 170 * ratio, true);
+		chatButton.setAlignment(Pos.CENTER);
+		chatDiv = new HBox();
+		chatDiv.getChildren().add(chatButton);
+		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
+		chatDiv.maxHeightProperty().bind(chatDiv.prefHeightProperty());
+		chatDiv.setPrefHeight(100 * ratio);
+		chatDiv.setPadding(new Insets(0, 50 * ratio, 0, 0));
+		chatDiv.setAlignment(Pos.CENTER);
 
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
-		banner.getChildren().addAll(topBannerContent, bannerSpacing);
+		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing, chatDiv);
 
 		/*
 		 * setting up players avatars - in the VBox avatars
@@ -307,6 +323,10 @@ public class EndGamePodiumController extends Application {
 		/*
 		 * Action handler for the button
 		 */
+		
+		chatPane = new ChatWindow();
+		chatPane.setVisible(false);
+		chatPane.setPickOnBounds(true);
 
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -316,16 +336,34 @@ public class EndGamePodiumController extends Application {
 
 			}
 		});
+		
+		chatButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				(new GameSound()).buttonClickForwardSound();
+				if(!chatButton.isSelected()) {
+					chatButton.setSelected(false);
+					chatPane.setVisible(false);
+					System.out.print("wdwdwwdwdwddwdwd");
+
+					
+				} else {
+					System.out.print("jjjjjjjjjjjjjjjj");
+
+					chatButton.setSelected(true);
+					chatPane.setVisible(true);
+				}
+			}
+		});
 
 		/*
 		 * adding everything to the top container
 		 */
 		contentVBox.setAlignment(Pos.CENTER);
 		contentVBox.setSpacing(30 * ratio);
-		contentVBox.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
 		
-		contentVBox.getChildren().addAll(banner, new Spacing(50), vBoxIcons, new Spacing(100));
-		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox);
+		contentVBox.getChildren().addAll(topBannerParent, new Spacing(50), vBoxIcons, new Spacing(100));
+		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox, chatPane);
 
 		return container;
 	}
