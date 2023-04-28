@@ -100,7 +100,7 @@ public class Logic {
 	public static int canDeployTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
 		if (gameState.getCurrentPlayer().equals(player)) {
 			if (gameState.getCurrentGamePeriod().equals(Period.INITIALREINFORCEMENT)) {
-				if (gameState.getTerritories().get(territory).getOwnedByPlayer().equals(player)) {
+				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
 					if (gameState.getPlayerTroopsLeft().get(player) >= 1) {
 						return gameState.getPlayerTroopsLeft().get(player);
 					}

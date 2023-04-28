@@ -26,8 +26,13 @@ public class SinglePlayerHandler {
 		this.gameHandler.clickCountry(id, country);
 	}
 	
-	public void possesCountryOnGUI(CountryName country, int id) {
+	public void possesCountryOnGUI(CountryName country, int id, int numTroopsOfPlayer) {
 		this.gamePaneController.claimCountry(country, id);
+		this.gamePaneController.addAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
+	}
+	
+	public void setPeriod(Period period) {
+		this.gamePaneController.setPeriod(period);
 	}
 	
 	public void chooseNumberOfTroopsOnGUI(CountryName country,int min, int max) {
@@ -61,6 +66,11 @@ public class SinglePlayerHandler {
 	 */
 	public void setCurrentPlayerOnGUI(int id) {
 		this.gamePaneController.setCurrentPlayer(id);
+	}
+	
+	public void initialDeployOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
+		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
+		this.gamePaneController.addAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
 	public Lobby getLobby() {
