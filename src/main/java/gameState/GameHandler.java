@@ -26,8 +26,8 @@ public class GameHandler {
 	}
 	// 
 	public void initSingleplayer(SinglePlayerHandler singlePlayerHandler) {
-		this.gameType = GameType.SinglePlayer;
 		this.singlePlayerHandler = singlePlayerHandler;
+		this.gameType = GameType.SinglePlayer;
 	}
 	
 	public void determineInitialDice() {
@@ -88,12 +88,15 @@ public class GameHandler {
 				this.gameState.updateTroopsOnTerritory(country, 1);
 				switch (this.gameType) {
 				case SinglePlayer:
-					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID());
+					int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
+					this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
+					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID(), numTroopsPlayer);
 					if(Logic.allTerritoriesClaimed(gameState)) {
 						gameState.setCurrentGamePeriod(Period.INITIALREINFORCEMENT);
+						this.singlePlayerHandler.setPeriod(Period.INITIALREINFORCEMENT);
 					}
 					gameState.setNextPlayer();
-					singlePlayerHandler.gamePaneController.setCurrentPlayer(gameState.getCurrentPlayer().getID());
+					this.singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID());
 					break;
 				case Multiplayer:
 					break;
@@ -106,7 +109,14 @@ public class GameHandler {
 			if(Logic.canDeployTroopsToTerritory(this.gameState, player, country)!=-1) {
 				switch (this.gameType) {
 				case SinglePlayer:
-					this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, player.getTroopsAvailable());
+					this.gameState.getTerritories().get(country).addNumberOfTroops(1);
+					int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
+					this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
+					this.singlePlayerHandler.initialDeployOnGUI(country, gameState.getTerritories().get(country).getNumberOfTroops(), numTroopsPlayer);
+					
+					this.gameState.setNextPlayer();
+					this.singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID());
+//					this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, player.getTroopsAvailable());
 					break;
 				case Multiplayer:
 					break;
@@ -149,3 +159,5 @@ public class GameHandler {
 	}
 
 }
+
+

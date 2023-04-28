@@ -562,6 +562,7 @@ public class GamePaneController implements Initializable{
 		circleTroopsDisplay.get(countryName.toString()).setFill(Color.web(player.getColor()));
 		for(SVGPath s : countries) {
 			if(s.getId().equals(countryName.toString())) {
+            	s.setStyle("-fx-fill: "+ player.getColor() +";");
 				s.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 		        	if (newValue) {
 		            	s.setStyle("-fx-fill: "+ makeColorHexDarker(Color.web(player.getColor())) +";");
@@ -786,9 +787,9 @@ public class GamePaneController implements Initializable{
 	
 	private String makeColorHexDarker(Color c) {
 		String colorHex = String.format("#%02X%02X%02X",
-                (int)( (c.getRed() * 255 - 20) != 0 ? c.getRed() * 255 - 20:0),
-                (int)( (c.getGreen() * 255 - 20) != 0 ? c.getGreen() * 255 - 20:0),
-                (int)( (c.getBlue() * 255 - 20) != 0 ? c.getBlue() * 255 - 20:0));
+                (int)( (c.getRed() * 255 - 20) >= 0 ? c.getRed() * 255 - 20:0),
+                (int)( (c.getGreen() * 255 - 20) >= 0 ? c.getGreen() * 255 - 20:0),
+                (int)( (c.getBlue() * 255 - 20) >= 0 ? c.getBlue() * 255 - 20:0));
 		return colorHex;
 	}
 	
