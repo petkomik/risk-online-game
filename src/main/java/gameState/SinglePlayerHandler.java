@@ -1,10 +1,7 @@
 package gameState;
 
-import java.util.List;
-
 import game.Lobby;
 import game.gui.GamePaneController;
-import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
 import javafx.scene.paint.Color;
@@ -18,16 +15,19 @@ public class SinglePlayerHandler {
 	public SinglePlayerHandler(Lobby lobby) {
 		gameHandler = new GameHandler(lobby);
 		this.lobby = lobby;
-	
+		
 	}
 	
-	public void clickCountry(int idOfPlayer, CountryName country) {
-		this.gameHandler.clickCountry(idOfPlayer, country);
+	public GameHandler getGameHandler() {
+		return gameHandler;
+	}
+
+	public void clickCountry(int id, CountryName country) {
+		this.gameHandler.clickCountry(id, country);
 	}
 	
-	public void possesCountryOnGUI(CountryName country, Color colorOfPlayer) {
-//		this.gamePaneController.claimCountry(country.toString(),
-//				1, colorOfPlayer);
+	public void possesCountryOnGUI(CountryName country, int id) {
+		this.gamePaneController.claimCountry(country, id);
 	}
 	
 	public void chooseNumberOfTroopsOnGUI(CountryName country,int min, int max) {
@@ -52,29 +52,18 @@ public class SinglePlayerHandler {
 	 * returns the value of the dice for the player 
 	 */
 	
-	public int getInitialThrowDice(int idOfPlayer) {
-		return this.gameHandler.getInitialThrowDice(idOfPlayer);
+	public int getInitialThrowDice(Player player) {
+		return this.gameHandler.getInitialThrowDice(player);
 	}
 	
 	/*
 	 * gives the GUI the current Player
 	 */
-	public void setCurrentPlayerOnGUI(int idOfPlayer) {
-		
-	}
-	
-	public void turnInRiskCards(List<Card> cards, int idOfPlayer) {
-		this.gameHandler.turnInRiskCards(cards, idOfPlayer);
+	public void setCurrentPlayerOnGUI(int id) {
+		this.gamePaneController.setCurrentPlayer(id);
 	}
 	
 	public Lobby getLobby() {
 		return lobby;
-	}
-
-	public void riskCardsTurnedInOnGui(int idOfPlayer, List<Card> cards,
-			int troopsPlyaerGets) {
-		// - removeRiskCard(List<Card> toRemove, Player player)
-		// - addAmountOfTroopsLeftToDeploy(Player player,  int number)
-
 	}
 }
