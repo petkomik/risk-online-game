@@ -662,11 +662,6 @@ public class GamePaneController implements Initializable{
 		});
 	}
 	
-
-	public void unshowChoosingTroopsPane(Color c) {
-		ChoosingTroopsPane.setVisible(false);
-	}
-	
 	public void setPhase(Phase phase) {
 		
 	}
@@ -688,9 +683,9 @@ public class GamePaneController implements Initializable{
 		cardsPane.setVisible(true);
 	}
 	
-	public void turnCountryGrey(String countryName) {
+	public void turnCountryGrey(CountryName countryName) {
 		for(SVGPath s : countries) {
-			if(s.getId().equals(countryName)) {
+			if(s.getId().equals(countryName.toString())) {
 				ColorAdjust colorAdjust = new ColorAdjust();
 		        colorAdjust.setBrightness(-0.2);
 
@@ -699,9 +694,9 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
-	public void pointUpCountry(String countryName) {
+	public void pointUpCountry(CountryName countryName) {
 		for(SVGPath s : countries) {
-			if(s.getId().equals(countryName)) {
+			if(s.getId().equals(countryName.toString())) {
 				Lighting lighting = new Lighting();
 				lighting.setBumpInput(null);
 				lighting.setDiffuseConstant(1.68);
@@ -719,37 +714,17 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
-	public void pointUpCountry(String countryName, Color playerColor) {
+	public void activateCountry(CountryName countryName) {
 		for(SVGPath s : countries) {
-			if(s.getId().equals(countryName)) {
-				Lighting lighting = new Lighting();
-				lighting.setBumpInput(null);
-				lighting.setDiffuseConstant(1.68);
-				lighting.setSpecularConstant(2.0);
-				lighting.setSpecularExponent(40.0);
-				lighting.setSurfaceScale(10.0);
-
-				Light.Distant light = new Light.Distant();
-				light.setColor(playerColor);
-
-				lighting.setLight(light);
-
-				s.setEffect(lighting);
-			}
-		}
-	}
-	
-	public void activateCountry(String countryName) {
-		for(SVGPath s : countries) {
-			if(s.getId().equals(countryName)) {
+			if(s.getId().equals(countryName.toString())) {
 				s.setDisable(false);
 			}
 		}
 	}
 	
-	public void deactivateCountry(String countryName) {
+	public void deactivateCountry(CountryName countryName) {
 		for(SVGPath s : countries) {
-			if(s.getId().equals(countryName)) {
+			if(s.getId().equals(countryName.toString())) {
 				s.setDisable(true);
 			}
 		}
