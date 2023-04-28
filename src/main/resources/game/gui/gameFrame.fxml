@@ -101,7 +101,7 @@
                   <Label prefHeight="68.0" prefWidth="140.0" text="5" />
                </children>
             </StackPane>
-            <StackPane fx:id="spAberta" layoutX="785.0" layoutY="3136.0" prefHeight="144.0" prefWidth="124.0" scaleY="-1.0">
+            <StackPane fx:id="spAlberta" layoutX="785.0" layoutY="3136.0" prefHeight="144.0" prefWidth="124.0" scaleY="-1.0">
                <children>
                   <Circle fill="DODGERBLUE" radius="80.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="3.0" />
                   <Label prefHeight="68.0" prefWidth="140.0" text="5" />

@@ -23,10 +23,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Light;
@@ -562,9 +564,9 @@ public class GamePaneController implements Initializable{
 			if(s.getId().equals(countryName.toString())) {
 				s.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 		        	if (newValue) {
-		            	s.setStyle("-fx-fill: "+ player.getColor() +";");
-		            } else {
 		            	s.setStyle("-fx-fill: "+ makeColorHexDarker(Color.web(player.getColor())) +";");
+		            } else {
+		            	s.setStyle("-fx-fill: "+ player.getColor() +";");
 		            }
 			        });
 			}
@@ -591,9 +593,10 @@ public class GamePaneController implements Initializable{
 		numCardsLabel.setText(String.valueOf(player.getCards().size()));
 	}
 	
-	public void setNumTroops(CountryName countryName, int numOfTroops) {
-		labelTroopsDisplay.get(countryName.toString()).setText(""+numOfTroops);
+	public void setNumTroops(CountryName countryName, int numTroops) {
+		labelTroopsDisplay.get(countryName.toString()).setText(String.valueOf(numTroops));;
 	}
+	
 	
 	public void showChoosingTroopsPane(int maxTroops, int minTroops) {
 		ChoosingTroopsPane.setVisible(true);
@@ -664,20 +667,16 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void setPhase(Phase phase) {
-		this.currentPhase = phase;
-	}
-	
-	public void setPriod(Period period) {
-		this.currentPeriod = period;
-	}
-	
-	public void changePhase(String phase) {
-		labPhase.setText(phase);
-		middlePhaseLogo.setImage(new Image(Parameter.phaseLogosdir + phase + ".png"));
-		firstPhaseLogo.setVisible(phase.equalsIgnoreCase("attack"));
-		lastPhaseLogo.setVisible(phase.equalsIgnoreCase("attack"));
 		
 	}
+	
+	public void setPeriod(Period period) {
+		labPhase.setText(period.toString());
+		firstPhaseLogo.setVisible(period == Period.COUNTRYPOSESSION);
+		middlePhaseLogo.setVisible(period == Period.INITIALREINFORCEMENT);
+		lastPhaseLogo.setVisible(period == Period.MAINPERIOD);
+	}
+	
 	
 	public void showNextPhaseButton() {
 		nextPhaseButton.setVisible(true);
@@ -755,16 +754,26 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
+	public void removeAmountOfTroopsLeftToDeploy() {
+		spNum.setVisible(false);
+	}
+	
+	public void addAmountOfTroopsLeftToDeploy(int number) {
+		labNum.setText(String.valueOf(number));
+	}
+	
 	public void endGame(LinkedList<Player> playersByRank) {
 		
 	}
 	
 	public void showException(String message) {
-		Stage messagestage = new Stage();
-		AnchorPane messagePane = new AnchorPane();
-		messagePane.setPrefSize(400, 300);
-		messagePane.setStyle("-fx-background-color: #ecd9c6;");
-		
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setContentText(message);
+		alert.setHeaderText("ERROR");
+		alert.setTitle("");
+		Stage tmp = (Stage)alert.getDialogPane().getScene().getWindow();
+		tmp.getIcons().add(new Image(Parameter.errorIcon));
+		alert.showAndWait();
 	}
 	
 	private String toHex(Color c) {
