@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -147,7 +148,6 @@ public class GamePaneController implements Initializable{
 		
 		/*  */
 		getComponents();
-		
 		Button leaveGameButton = new Button("LEAVE GAME");
 		leaveGameButton.setId("leaveGameButton");
 		leaveGameButton.setOnAction(e -> clickLeaveGameButton(e));
@@ -216,6 +216,7 @@ public class GamePaneController implements Initializable{
 			if(n instanceof StackPane) {
 				StackPane tmp = (StackPane) n;
 				spTroopsDisplay.add(tmp);
+				tmp.setMouseTransparent(true);
 				for(Node node : tmp.getChildren()) {
 					if(node instanceof Circle) {
 						circleTroopsDisplay.put(tmp.getId().substring(2), (Circle) node);
@@ -613,11 +614,11 @@ public class GamePaneController implements Initializable{
         	if (newValue) {
         		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
             } else {
             	falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
+            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
             }
 	        });
 		falseButtonChoosingTroops.setOnAction(e -> clickFalseButtonChoosingTroops(e));
@@ -628,11 +629,11 @@ public class GamePaneController implements Initializable{
         	if (newValue) {
             	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
             } else {
             	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
             			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
+            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
             }
 	        });
         trueButtonChoosingTroops.setOnAction(e -> clickTrueButtonChoosingTroops(e));
