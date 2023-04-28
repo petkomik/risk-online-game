@@ -165,25 +165,17 @@ public class MultplayerHostJoinController extends StackPane {
 		hostServer.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	Node node = (Node) event.getSource();
-				// Getting the Stage where the event is happened
-				stage = (Stage) node.getScene().getWindow();
-				// changing the AnchorPane from the main file
+		    	(new GameSound()).buttonClickForwardSound();
+				Node node = (Node) event.getSource();
+				stage = (Stage)node.getScene().getWindow();
 				try {
-					anchorPane = (AnchorPane) loadFXML("HostServerMessengerFrame");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					ServerMainWindowController serverMenu = new ServerMainWindowController();
+					ServerMainWindowController.initServer();
+					stage.getScene().setRoot(serverMenu);
+
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				// Setting the size of the anchorPane
-				anchorPane.setPrefSize(w, h);
-				// Setting the AnchorPane as a root of the main scene
-				stage.getScene().setRoot(anchorPane);
-				// Showing the Stage
-				stage.show();
-				(new GameSound()).buttonClickForwardSound();
-
-
 		    }	
 		});
 		

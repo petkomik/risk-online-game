@@ -20,12 +20,6 @@ import general.Parameter;
  */
 
 public class Lobby {
-			public void setLobbyName(String lobbyName) {
-		this.lobbyName = lobbyName;
-	}
-
-
-			private String lobbyName;
 	static Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
 			Parameter.orangeColor, Parameter.purpleColor, 
 			Parameter.redColor, Parameter.yellowColor};
@@ -41,6 +35,7 @@ public class Lobby {
 	private ArrayList<String> avaiableAINames;
 	private HashMap<Player, Boolean> readyHashMap;
 
+	private String lobbyName;
 	public int lobbyRank;
 	public int difficultyOfAI;
 	public int maxNumberOfPlayers;
@@ -231,9 +226,12 @@ public class Lobby {
 		return this.readyHashMap.get(ply);
 	}
 
-
 	public String getLobbyName() {
 		return lobbyName;
+	}		
+	
+	public void setLobbyName(String lobbyName) {
+		this.lobbyName = lobbyName;
 	}
 }
 

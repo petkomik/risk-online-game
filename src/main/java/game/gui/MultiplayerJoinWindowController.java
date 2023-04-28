@@ -238,6 +238,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 					}
 
 					AppController.setClient(Client.createClient(AppController.getHost(), AppController.getPortNumber()));
+					
 				} catch (IOException | WrongTextFieldInputException e1) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setContentText(e1.getMessage() + ((e1 instanceof IOException) ? "\nHost: " + AppController.getHost() + " Port: " + AppController.getPortNumber(): ""));
@@ -250,22 +251,16 @@ public class MultiplayerJoinWindowController extends StackPane {
 					return;
 				}
 
+				(new GameSound()).buttonClickForwardSound();
 				Node node = (Node) event.getSource();
-				// Getting the Stage where the event is happened
-				stage = (Stage) node.getScene().getWindow();
-				// changing the AnchorPane from the main file
+				stage = (Stage)node.getScene().getWindow();
 				try {
-					anchorPane = (AnchorPane) loadFXML("JoinClientMessengerFrame");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					ServerMainWindowController serverMenu = new ServerMainWindowController();
+					stage.getScene().setRoot(serverMenu);
+
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				// Setting the size of the anchorPane
-				anchorPane.setPrefSize(w, h);
-				// Setting the AnchorPane as a root of the main scene
-				stage.getScene().setRoot(anchorPane);
-				// Showing the Stage
-				stage.show();
 		    }
 		});
 		

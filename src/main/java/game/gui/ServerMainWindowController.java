@@ -1,6 +1,8 @@
 package game.gui;
 
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 
 import game.Lobby;
@@ -13,6 +15,7 @@ import general.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -35,6 +38,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import network.Client;
+import network.ClientHandler;
+import network.Server;
 
 /**
  * 
@@ -42,7 +48,7 @@ import javafx.stage.Stage;
  * 
  */
 
-public class ServerMainWindowController extends Application {
+public class ServerMainWindowController extends StackPane {
 
 	/*
 	 * all containers for easier understanding of the construction
@@ -50,7 +56,6 @@ public class ServerMainWindowController extends Application {
 	static int counter = 0;
 	private double ratio;
 	
-	private StackPane container; 				//main container
 	private VBox scrollAndMenu;
 	private HBox backgroundPic;					//background
 	private HBox backgroundColor;				//*
@@ -84,16 +89,15 @@ public class ServerMainWindowController extends Application {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-		this.ratio = Math.min(ratio + 0.3, 1);
-		this.container = this.setup();
+		this.ratio = Math.min(1, this.ratio + 0.2);
+		this.setup();
 	}
 
-	public StackPane setup() throws Exception {
+	public void setup() throws Exception {
 
 		/*
 		 * to be returned StackPane
 		 */
-		container = new StackPane();
 		backgroundPic = new HBox();					
 
 		scrollAndMenu = new VBox();
@@ -215,7 +219,7 @@ public class ServerMainWindowController extends Application {
 		refreshButton = new Button();
 		ImageView img = new ImageView();
         img.setImage(new Image(new FileInputStream(Parameter.refreshIcon)));
-        img.setFitHeight(60);
+        img.setFitHeight(60 * ratio);
         img.setPreserveRatio(true);
 		img.setSmooth(true);
 		img.setCache(true);
@@ -368,41 +372,36 @@ public class ServerMainWindowController extends Application {
 
 		scrollAndMenu.getChildren().addAll(menu, lobbyListContainer, buttonsHBox);
 		scrollAndMenu.setAlignment(Pos.CENTER);
+		scrollAndMenu.setPadding(new Insets(50 * ratio, 0, 0, 0));
 
 		/*
 		 * adding elements to the main container
 		 */
 
 		
-		container.getChildren().addAll(backgroundPic, backgroundColor, scrollAndMenu, topBannerParent);
-		return container;
+		this.getChildren().addAll(backgroundPic, backgroundColor, scrollAndMenu, topBannerParent);
 	}
-
-	/*
-	 * creates the lobby in the server window
-	 */
-
-	private Label createLabel(String string) {
-		Label name = new Label(string);
-		name.setPadding(new Insets(10, 20, 10, 45));
-		return name;
+	
+	public static void initServer() {
+		
+		Server server;
+		Client client;
+		ClientHandler handler;
+		Socket socket;
+		int port = AppController.getPortNumber();
+		String host = AppController.getHost();
+		try {
+			
+			server = Server.createServer(port);
+			client = Client.createClient(host, port);
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}		
 	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-		Scene scene = new Scene(setup(), 1300, 900);
-		primaryStage.setScene(scene);
-		primaryStage.setFullScreen(true);
-		primaryStage.setTitle("MainServerWindow");
-		primaryStage.setMinHeight(800);
-		primaryStage.setMinWidth(1300);
-		primaryStage.show();
-
-	}
-
-	public static void main(String[] args) {
-		launch(args);
+	
+	public void initClient( ) {
+		
 	}
 
 }
