@@ -3,6 +3,7 @@ package game.gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import game.gui.GUISupportClasses.DesignButton;
@@ -20,6 +21,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -143,7 +145,6 @@ public class GamePaneController implements Initializable{
 		
 		/*  */
 		getComponents();
-		setUpPlayerList();
 		
 		Button leaveGameButton = new Button("LEAVE GAME");
 		leaveGameButton.setId("leaveGameButton");
@@ -172,14 +173,16 @@ public class GamePaneController implements Initializable{
 			playerIDs.add(p.getID());
 		}
 		numOfPlayer = this.singlePlayerHandler.getLobby().getPlayerList().size();
-		
+		setUpPlayerList();
 		for(int i = 0; i < numOfPlayer; i++) {
 			circles[i].setFill(Color.web(playerColors.get(i)));
 			rectangles[i].setFill(Color.web(playerColors.get(i)));
 			panes[i].setId(String.valueOf(playerIDs.get(i)));
 		}
+		rectangles[0].setVisible(true);
         cirPhase.setFill(Color.web(playerColors.get(0)));
-        ivPhase.setImage(new Image(Parameter.avatarsdir + playerAvatar.get(0) + ".png"));
+        ivPhase.setImage(new Image(playerAvatar.get(0)));
+		pB.setStyle("-fx-accent: " + playerColors.get(0) + ";");
         nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
     			+ "	-fx-background-color: "+ playerColors.get(0) +";");
@@ -239,7 +242,8 @@ public class GamePaneController implements Initializable{
 		ivTimer = new ImageView[numOfPlayer];
 		
 		for(int i = 0; i < numOfPlayer; i++) {
-			imageviews[i] = new ImageView(Parameter.avatarsdir + playerAvatar.get(i) + ".png");
+			System.out.println(playerAvatar.get(i));
+			imageviews[i] = new ImageView(playerAvatar.get(i));
 			imageviews[i].setFitWidth(80);
 			imageviews[i].setFitHeight(80);
 			circles[i] = new Circle(42);
@@ -254,6 +258,7 @@ public class GamePaneController implements Initializable{
 			rectangles[i].setArcWidth(5.0);
 			rectangles[i].setStrokeType(StrokeType.INSIDE);
 			rectangles[i].setStrokeWidth(0.0);
+			rectangles[i].setVisible(false);
 			
 			// Hinzufügen des BoxBlur-Effekts
 			BoxBlur boxBlur = new BoxBlur();
@@ -267,6 +272,7 @@ public class GamePaneController implements Initializable{
 			labTimer[i].setPrefHeight(34.0);
 			labTimer[i].setPrefWidth(80.0);
 			labTimer[i].setAlignment(Pos.CENTER);
+			labTimer[i].setVisible(false);
 
 			// ImageView
 			ivTimer[i] = new ImageView(Parameter.phaseLogosdir + "timer.png");
@@ -276,6 +282,7 @@ public class GamePaneController implements Initializable{
 			ivTimer[i].setLayoutY(9.0);
 			ivTimer[i].setPickOnBounds(true);
 			ivTimer[i].setPreserveRatio(true);
+			ivTimer[i].setVisible(false);
 			
 			panes[i] = new Pane(rectangles[i], stackPanes[i], labTimer[i], ivTimer[i]);
 			
@@ -485,36 +492,7 @@ public class GamePaneController implements Initializable{
 		trueButtonChoosingTroops.setMnemonicParsing(false);
 		trueButtonChoosingTroops.setPrefSize(72.0, 72.0);
 		
-		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-		falseButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-        		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-            } else {
-            	falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
-            }
-	        });
-		falseButtonChoosingTroops.setOnAction(e -> clickFalseButtonChoosingTroops(e));
-		trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-        trueButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-            } else {
-            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
-            }
-	        });
-        trueButtonChoosingTroops.setOnAction(e -> clickTrueButtonChoosingTroops(e));
+		
 		
 
 		choosingTroopsPhaseLabel = new Label();
@@ -551,9 +529,12 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void clickCountry(MouseEvent e) {
+		String countryName = ((SVGPath) e.getSource()).getId();
+		int idOfPlayer = singlePlayerHandler.getGameHandler().getGameState().getCurrentPlayer().getID();
+		CountryName country = CountryName.valueOf(countryName);
 		switch (gameType) {
 		case SinglePlayer:
-			
+			singlePlayerHandler.getGameHandler().clickCountry(idOfPlayer, country);
 			break;
 
 		case Tutorial:
@@ -565,13 +546,11 @@ public class GamePaneController implements Initializable{
 		default:
 			break;
 		}
-		String countryNameString = ((SVGPath)e.getSource()).getId();
-		CountryName countryName = CountryName.valueOf(countryNameString);
-		AppController.getGameStateClient().countryClickedinGUI(countryName);
 	}
 	
 	
-	public void claimCountry(CountryName countryName, Player player) {
+	public void claimCountry(CountryName countryName, int id) {
+		Player player = singlePlayerHandler.getGameHandler().getGameState().getPlayers().get(id);
 		for(StackPane sp : spTroopsDisplay) {
 			if(sp.getId().equals("sp"+countryName.toString())) {
 				sp.setVisible(true);
@@ -591,7 +570,8 @@ public class GamePaneController implements Initializable{
 			}
 		}
 	}
-	public void setCurrentPlayer(Player player) {
+	public void setCurrentPlayer(int id) {
+		Player player = singlePlayerHandler.getGameHandler().getGameState().getPlayers().get(id);
 		for(int i = 0; i < playerIDs.size(); i++) {
 			if(player.getID() == playerIDs.get(i)) {
 				turn = i;
@@ -603,7 +583,7 @@ public class GamePaneController implements Initializable{
 			ivTimer[i].setVisible(i == turn);
 		}
 		cirPhase.setFill(Color.web(playerColors.get(turn)));
-		ivPhase.setImage(new Image(Parameter.phaseLogosdir + playerAvatar.get(turn) + ".png"));
+		ivPhase.setImage(new Image(playerAvatar.get(turn)));
 		cirNum.setFill(Color.web(playerColors.get(turn)));
 		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
 		rectCards.setFill(Color.web(playerColors.get(turn)));
@@ -621,6 +601,37 @@ public class GamePaneController implements Initializable{
 		if(currentPhase == Phase.ATTACK) {
 			falseButtonChoosingTroops.setVisible(false);
 		}
+		
+		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+		falseButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+        		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+            } else {
+            	falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
+            }
+	        });
+		falseButtonChoosingTroops.setOnAction(e -> clickFalseButtonChoosingTroops(e));
+		trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+    			+ "	-fx-font-size: 30px;"
+    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+        trueButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
+            } else {
+            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
+            			+ "	-fx-font-size: 30px;"
+            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
+            }
+	        });
+        trueButtonChoosingTroops.setOnAction(e -> clickTrueButtonChoosingTroops(e));
 		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
@@ -650,6 +661,14 @@ public class GamePaneController implements Initializable{
 
 	public void unshowChoosingTroopsPane(Color c) {
 		ChoosingTroopsPane.setVisible(false);
+	}
+	
+	public void setPhase(Phase phase) {
+		this.currentPhase = phase;
+	}
+	
+	public void setPriod(Period period) {
+		this.currentPeriod = period;
 	}
 	
 	public void changePhase(String phase) {
@@ -736,6 +755,17 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
+	public void endGame(LinkedList<Player> playersByRank) {
+		
+	}
+	
+	public void showException(String message) {
+		Stage messagestage = new Stage();
+		AnchorPane messagePane = new AnchorPane();
+		messagePane.setPrefSize(400, 300);
+		messagePane.setStyle("-fx-background-color: #ecd9c6;");
+		
+	}
 	
 	private String toHex(Color c) {
 		String colorHex = String.format("#%02X%02X%02X",

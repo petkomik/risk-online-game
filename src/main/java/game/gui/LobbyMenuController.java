@@ -591,7 +591,9 @@ public class LobbyMenuController extends StackPane {
 							singleHandler.setGamePaneController(gamePaneController);
 							gamePaneController.initSinglePlayer(singleHandler);
 							stage.getScene().setRoot(anchorPane);
-							
+							singleHandler.getGameHandler().getGameState().setCurrentPlayer(lobby.getPlayerList().get(1));
+							gamePaneController.setCurrentPlayer(lobby.getPlayerList().get(1).getID());
+							singleHandler.getGameHandler().initSingleplayer();
 //							// Setting up the gameState
 //			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(), gamePaneController));
 //			    			AppController.getGameLogic().startGame();
