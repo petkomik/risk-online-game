@@ -40,6 +40,8 @@ public class GameState {
 	private Period currentGamePeriod;
 	private HashMap<Player, Integer> playersDiceThrown;
 	private HashMap<Player, Integer> playerTroopsLeft;
+	private HashMap<Player, ArrayList<Card>> riskCardsInPlayers;
+
 
 
 
@@ -202,5 +204,13 @@ public class GameState {
 	
 	public void setPlayerTroopsLeft(HashMap<Player, Integer> playerTroopsLeft) {
 		this.playerTroopsLeft = playerTroopsLeft;
+	}
+
+	public HashMap<Player, ArrayList<Card>> getRiskCardsInPlayers() {
+		return riskCardsInPlayers;
+	}
+	
+	public void editRiskCardsInPlayers(ArrayList<Card> cards, int idOfPlayer) {
+		this.riskCardsInPlayers.replace(this.players.get(idOfPlayer), cards);
 	}
 }

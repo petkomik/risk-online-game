@@ -275,23 +275,23 @@ public class LobbyMenuController extends StackPane {
 		numberPlayersDiv = new VBox();
 		numberPlayersLabel = new Label(this.singleplayerLobby ? "Number of Players" : " Maximum Players");
 		numberPlayersControls = new HBox();
-		lessBtnPlayers = new ArrowButton(30 * ratio, 6.5 * ratio);
+		lessBtnPlayers = new ArrowButton(30 * ratio);
 		labelBtnPlayers = new Label();
-		moreBtnPlayers = new ArrowButton(30 * ratio, 6.5 * ratio);
+		moreBtnPlayers = new ArrowButton(30 * ratio);
 		
 		numberOfAiDiv = new VBox();
 		numberOfAiLabel = new Label("Number of AI Players");
 		numberOfAiControls = new HBox();
-		lessBtnAI = new ArrowButton(30 * ratio, 6.5 * ratio);
+		lessBtnAI = new ArrowButton(30 * ratio);
 		labelBtnAI= new Label("0");
-		moreBtnAI = new ArrowButton(30 * ratio, 6.5 * ratio);
+		moreBtnAI = new ArrowButton(30 * ratio);
 		
 		AIDifficultyDiv = new VBox();
 		AIDifficultyLabel = new Label("AI Player Difficulty");
 		AIDifficultyControls = new HBox();
-		lessBtnDiff = new ArrowButton(30 * ratio, 6.5 * ratio);
+		lessBtnDiff = new ArrowButton(30 * ratio);
 		labelBtnDiff = new Label();
-		moreBtnDiff = new ArrowButton(30 * ratio, 6.5 * ratio);
+		moreBtnDiff = new ArrowButton(30 * ratio);
 		
 		readyButtonPane = new HBox();
 		readyBtn = new DesignButton(new Insets(5 * ratio, 25 * ratio, 5 * ratio, 20 * ratio), 25, 28 * ratio, 300 * ratio);
@@ -348,18 +348,15 @@ public class LobbyMenuController extends StackPane {
 		AIDifficultyLabel.setTextFill(Color.WHITE);
 		AIDifficultyLabel.setAlignment(Pos.CENTER);
 		
-		lessBtnPlayers.setText("<");
-		moreBtnPlayers.setText(">");
+		moreBtnPlayers.setRotate(180);
 		labelBtnPlayers.setText(String.valueOf(this.singleplayerLobby ? 
 				this.lobby.getHumanPlayerList().size() : 
 				this.lobby.maxNumberOfPlayers));
 
-		lessBtnAI.setText("<");
-		moreBtnAI.setText(">");
+		moreBtnAI.setRotate(180);
 		labelBtnAI.setText(String.valueOf(this.lobby.getAIPlayerList().size()));
 
-		lessBtnDiff.setText("<");
-		moreBtnDiff.setText(">");
+		moreBtnDiff.setRotate(180);
 		labelBtnDiff.setText(String.valueOf(this.aiDifficultyLevels[this.lobby.difficultyOfAI]));
 
 		labelBtnPlayers.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
@@ -586,17 +583,10 @@ public class LobbyMenuController extends StackPane {
 							FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
 							AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
 							GamePaneController gamePaneController = fxmlLoader.getController();
-							SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby);
-							singleHandler.setGamePaneController(gamePaneController);
+							SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby, gamePaneController);
 							gamePaneController.initSinglePlayer(singleHandler);
 							stage.getScene().setRoot(anchorPane);
-							singleHandler.getGameHandler().getGameState().setCurrentPlayer(lobby.getPlayerList().get(1));
-							gamePaneController.setCurrentPlayer(lobby.getPlayerList().get(1).getID());
 							singleHandler.getGameHandler().initSingleplayer(singleHandler);
-//							// Setting up the gameState
-//			    			AppController.setGameStateClient(new GameStateClient(GameType.SinglePlayer, humans, (ArrayList<Player>) lobby.getPlayerList(), gamePaneController));
-//			    			AppController.getGameLogic().startGame();
-
 							stage.show();
 						} catch (IOException e) {
 							e.printStackTrace();

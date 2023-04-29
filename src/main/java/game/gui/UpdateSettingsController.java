@@ -240,7 +240,7 @@ public class UpdateSettingsController extends StackPane {
 		this.getChildren().add(topBannerParent);
 	}
 	
-	public void setupMainContent() {
+	public void setupMainContent() throws FileNotFoundException {
 		mainContent = new VBox();
 		mainContent.setAlignment(Pos.CENTER);
 		mainContent.setSpacing(50 * ratio);
@@ -310,10 +310,10 @@ public class UpdateSettingsController extends StackPane {
 		colorLabel = new Label("Color:");
 		colorLabel.setTextFill(Color.WHITE);
 		colorLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 40 *ratio));
-		colorLeft = new ArrowButton(30 * ratio, 6.5 * ratio);
+		colorLeft = new ArrowButton(30 * ratio);
 		colorCurrent= new Rectangle(0, 0, 40 * ratio, 40 * ratio);
-		colorRight = new ArrowButton(30 * ratio, 6.5 * ratio);
-		colorRight.setText(">");
+		colorRight = new ArrowButton(30 * ratio);
+		colorRight.setRotate(180);
 		colorRow.getChildren().addAll(colorLabel, new Spacing(10), colorLeft, colorCurrent, colorRight);
 
 		avatarRow = new HBox();
@@ -322,15 +322,15 @@ public class UpdateSettingsController extends StackPane {
 		avatarLabel = new Label("Avatar:");
 		avatarLabel.setTextFill(Color.WHITE);
 		avatarLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 40 *ratio));
-		avatarLeft = new ArrowButton(30 * ratio, 6.5 * ratio);
+		avatarLeft = new ArrowButton(30 * ratio);
 		avatarCurrent = new ImageView();
 		avatarCurrent.setFitWidth(50 * ratio);
 		avatarCurrent.setFitHeight(50 * ratio);
 		avatarCurrent.setPreserveRatio(true);
 		avatarCurrent.setSmooth(true);
 		avatarCurrent.setCache(true);
-		avatarRight = new ArrowButton(30 * ratio, 6.5 * ratio);
-		avatarRight.setText(">");
+		avatarRight = new ArrowButton(30 * ratio);
+		avatarRight.setRotate(180);
 		avatarRow.getChildren().addAll(avatarLabel, new Spacing(10), avatarLeft, avatarCurrent, avatarRight);
 
 		winsRow = new HBox();

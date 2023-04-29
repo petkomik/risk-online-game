@@ -175,48 +175,46 @@ public class GUISupportClasses {
 	}
 
 	static class ArrowButton extends Button {
-		public ArrowButton() {
+		public ArrowButton(double k) throws FileNotFoundException {
 			super();
-			this.setText("<");
-			this.setAlignment(Pos.CENTER_LEFT);
-			this.setFont(Font.font("Consolas", FontWeight.BLACK, 60));
-			this.setMaxSize(60, 60);
-			this.setMinSize(60, 60);
-			this.setPrefSize(60, 60);
-			this.setAlignment(Pos.CENTER);
-			this.setPadding(new Insets(-12, 0, 0, 0));
-
-			this.setTextFill(Color.WHITE);
-			this.setStyle(
-					"-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;" + "-fx-background-radius: 12;"
-							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
-
-			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-				if (newValue) {
-					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: 12;" + "-fx-border-radius: 12;" + "-fx-border-color: #ffffff;"
-							+ "-fx-border-width: 3px;");
-				} else {
-					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: 12;" + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
-							+ "-fx-border-width: 3px;");
-				}
-			});
-		}
-
-		public ArrowButton(double k) {
-			this();
-			this.setFont(Font.font("Consolas", FontWeight.BLACK, k));
 			this.setMaxSize(k, k);
 			this.setMinSize(k, k);
 			this.setPrefSize(k, k);
-			this.setPadding(new Insets(-k / 6, 0, 0, 0));
-		}
+			
+			ImageView img = new ImageView();
+			img.setImage(new Image(new FileInputStream(Parameter.buttonArrow)));
+			img.setFitHeight(k / 1.7);
+			img.setPreserveRatio(true);
+			img.setSmooth(true);
+			img.setCache(true);
+			this.setGraphic(img);
+			this.setAlignment(Pos.CENTER);
+			this.setTextFill(Color.WHITE);
+			this.setStyle("-fx-background-color: #b87331;" 
+				+ "-fx-background-insets: 1 1 1 1;" 
+				+ "-fx-background-radius: 12;"
+				+ "-fx-border-radius: 12;" 
+				+ "-fx-border-color: #b87331;" 
+				+ "-fx-border-width: " + k / 12 + "px;");
 
-		public ArrowButton(double size, double inset) {
-			this(size);
-			// inset = Math.min(1, inset + 0.05);
-			this.setPadding(new Insets(-inset, 0, 0, 0));
+			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+				if (newValue) {
+					this.setStyle("-fx-background-color: #b87331;" 
+							+ "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: 12;" 
+							+ "-fx-border-radius: 12;" 
+							+ "-fx-border-color: #ffffff;"
+							+ "-fx-border-width: " + k / 12 + "px;");
+				} else {
+					this.setStyle("-fx-background-color: #b87331;" 
+							+ "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: 12;" 
+							+ "-fx-border-radius: 12;" 
+							+ "-fx-border-color: #b87331;"
+							+ "-fx-border-width: " + k / 12 + "px;");
+				}
+			});
+			
 		}
 	}
 

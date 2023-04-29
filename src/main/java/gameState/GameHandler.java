@@ -23,6 +23,7 @@ public class GameHandler {
 		this.singlePlayerHandler= null; 
 		determineInitialDice();
 		gameState.setInitialTroops(Logic.setInitialTroopsSize(this.gameState));
+		gameState.setCurrentPlayer(lobby.getPlayerList().get(0));
 	}
 	// 
 	public void initSingleplayer(SinglePlayerHandler singlePlayerHandler) {
@@ -94,7 +95,7 @@ public class GameHandler {
 					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID());
 					if(Logic.allTerritoriesClaimed(gameState)) {
 						gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
-						this.singlePlayerHandler.setPeriod(Period.INITIALDEPLOY);
+						this.singlePlayerHandler.setPeriodOnGUI(Period.INITIALDEPLOY);
 					}
 					gameState.setNextPlayer();
 					this.singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID(),
@@ -117,10 +118,10 @@ public class GameHandler {
 					this.singlePlayerHandler.initialDeployOnGUI(country, gameState.getTerritories().get(country).getNumberOfTroops(), numTroopsPlayer);
 					if(Logic.isDeployPeriodOver(this.gameState)) {
 						gameState.setCurrentGamePeriod(Period.MAINPERIOD);
-						this.singlePlayerHandler.setPeriod(Period.MAINPERIOD);
+						this.singlePlayerHandler.setPeriodOnGUI(Period.MAINPERIOD);
 						
 						gameState.setCurrentTurnPhase(Phase.REINFORCE);
-						this.singlePlayerHandler.setPhase(Phase.REINFORCE);
+						this.singlePlayerHandler.setPhaseOnGUI(Phase.REINFORCE);
 						this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
 					}
 					this.gameState.setNextPlayer();
@@ -143,7 +144,8 @@ public class GameHandler {
 				if(Logic.canReinforceTroopsToTerritory(this.gameState, player, country)!=-1) {
 					switch(this.gameType) {
 						case SinglePlayer:
-							this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, player.getTroopsAvailable());
+							this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
+									player.getTroopsAvailable(), ChoosePane.REINFORCE);
 							break;
 						case Multiplayer:
 							break;

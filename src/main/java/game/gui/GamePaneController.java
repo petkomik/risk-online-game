@@ -11,6 +11,8 @@ import game.logic.GameType;
 import game.models.CountryName;
 import game.models.Player;
 import gameState.ChoosePane;
+import gameState.GameHandler;
+import gameState.GameState;
 import gameState.Period;
 import gameState.Phase;
 import gameState.SinglePlayerHandler;
@@ -202,6 +204,8 @@ public class GamePaneController implements Initializable{
 	        });
         rectCards.setFill(Color.web(playerColors.get(0)));
         cirNum.setFill(Color.web(playerColors.get(0)));
+        
+        this.setCurrentPlayer(playerIDs.get(0));
 	}
 	
 	private void getComponents() {
@@ -640,7 +644,7 @@ public class GamePaneController implements Initializable{
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	singlePlayerHandler.confirmDeployNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()));
+		    	//singlePlayerHandler.confirmDeployNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()));
 		    }
 		});
         
