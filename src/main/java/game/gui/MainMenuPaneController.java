@@ -180,14 +180,13 @@ public class MainMenuPaneController extends StackPane {
 				try {
 					battle = new BattleFrameController();
 					stage.getScene().setRoot(battle);
-					battle.setCorrectTroops(battle.armiesFlowAt, true);
-					battle.setCorrectTroops(battle.armiesFlowDf, false);
+					battle.setCorrectTroops();
 					stage.getScene().heightProperty().addListener(new ChangeListener<Number>() {
-					    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+					    @Override 
+					    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
 					    	if(newSceneHeight.doubleValue() != oldSceneHeight.doubleValue()) {
 							try {
-						    	battle.setCorrectTroops(battle.armiesFlowAt, true);
-								battle.setCorrectTroops(battle.armiesFlowDf, false);
+								battle.setCorrectTroops();
 							} catch (FileNotFoundException e) {
 								e.printStackTrace();
 							}

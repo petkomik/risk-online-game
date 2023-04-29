@@ -1,9 +1,12 @@
 package game.gui;
 
 import game.gui.GUISupportClasses.*;
+import game.logic.GameType;
 import game.models.Continent;
 import game.models.CountryName;
+import game.models.Player;
 import game.models.Territory;
+import gameState.SinglePlayerHandler;
 import game.Lobby;
 import general.*;
 
@@ -40,57 +43,69 @@ import javafx.util.Duration;
 public class BattleFrameController extends VBox {
 	
 	// TODO
-	// controll the ints
-	int maxDiceToThrow;
-	int defendingDice;
-	int[] dicesAttacker;
-	int[] dicesDefender;
-	// negative attacker loses n troops, positive defender loses n, 0 both lose 1 {-2, -1, 0, 1, 2}
-	int lastThrow;
+	private int maxDiceToThrow;
+	private int defendingDice;
+	private int[] dicesAttacker;
+	private int[] dicesDefender;
+	// negative attacker loses n troops, positive defender loses n,
+	// 0 both lose 1 {-2, -1, 0, 1, 2}
+	private int lastThrow;
+	private String attackingPNG;
+	private String defendingPNG;
+	private int troopsInAttackAt;
+	private int troopsInAttackDf;
+	private Player attackingPlayer;
+	private Player defendingPlayer;
+	private String attackingAvatar;
+	private String defendingAvatar;
+	private Color attackerColor;
+	private Color defenderColor;
 	
-	HBox chatDiv;
-	DesignButton chatButton;
+	private GameType gameType;
+	private SinglePlayerHandler singleplayerHandler;
+//	TODO
+//	priavte MultiPlayerHandler mult...
 	
-	HBox imgTerritories;
-	Territory attacking;
-	Territory defending;
+	private HBox chatDiv;
+	private DesignButton chatButton;
 	
-	StackPane defendingStack;
-	ImageView imgDefending;
-	StackPane attackingStack;
-	ImageView imgAttacking;
+	private HBox imgTerritories;
+	private StackPane defendingStack;
+	private ImageView imgDefending;
+	private StackPane attackingStack;
+	private ImageView imgAttacking;
 
-	ImageViewPane imgAttackingPane;
-	ImageViewPane imgDefendingPane;
-	FlowPane armiesFlowDf;
-	FlowPane armiesFlowAt;
+	private ImageViewPane imgAttackingPane;
+	private ImageViewPane imgDefendingPane;
+	private FlowPane armiesFlowDf;
+	private FlowPane armiesFlowAt;
 	
-	HBox diceAndProfile; 
-	StackPane playerAt;
-	StackPane playerDf;
-	HBox diceSection;
+	private HBox diceAndProfile; 
+	private StackPane playerAt;
+	private StackPane playerDf;
+	private HBox diceSection;
 	
-	StackPane stackTroopsAt;
-	Circle circleAt;
-	ImageView avatarAt;
-	Circle circleTroopsAt;
-	Label troopsTextAt;
+	private StackPane stackTroopsAt;
+	private Circle circleAt;
+	private ImageView avatarAt;
+	private Circle circleTroopsAt;
+	private Label troopsTextAt;
 	
-	StackPane stackTroopsDf;
-	Circle circleDf;
-	ImageView avatarDf;
-	Circle circleTroopsDf;
-	Label troopsTextDf;
+	private StackPane stackTroopsDf;
+	private Circle circleDf;
+	private ImageView avatarDf;
+	private Circle circleTroopsDf;
+	private Label troopsTextDf;
 	
-	VBox diceControls;
-	HBox numberOfDiceControls;
-	HBox diceButtonPane;
-	DesignButton throwBtn;
-	ArrowButton lessBtn;
-	ArrowButton moreBtn;
-	Label numberLabel;
-	FlowPane diceImagesAt;
-	FlowPane diceImagesDf;
+	private VBox diceControls;
+	private HBox numberOfDiceControls;
+	private HBox diceButtonPane;
+	private DesignButton throwBtn;
+	private ArrowButton lessBtn;
+	private ArrowButton moreBtn;
+	private Label numberLabel;
+	private FlowPane diceImagesAt;
+	private FlowPane diceImagesDf;
 	
 	private double ratio;
 	private double menuRatio;
@@ -98,30 +113,55 @@ public class BattleFrameController extends VBox {
 
 	public BattleFrameController() throws Exception {
 		super();
-		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * 
+					 Screen.getPrimary().getVisualBounds().getHeight() 
+					 / (1846 * 1080);
 		this.menuRatio = Math.min(ratio + 0.3, 1);
-		this.attacking = new Territory(CountryName.SouthernEurope, Continent.Europe);
-		this.defending = new Territory(CountryName.Ukraine, Continent.Europe);
-		// TODO remove
-		attacking.addNumberOfTroops(50);
-		defending.addNumberOfTroops(50);
-		this.maxDiceToThrow = Math.min(3, attacking.getNumberOfTroops() - 1);
-		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
-		dicesAttacker = new int[this.maxDiceToThrow];
-		dicesDefender = new int[this.defendingDice];
+		this.attackingPNG = new Territory(CountryName.SouthernEurope, 
+				Continent.Europe).getAddressToPNG();
+		this.defendingPNG = new Territory(CountryName.Ukraine, 
+				Continent.Europe).getAddressToPNG();
+		this.troopsInAttackAt = 50;
+		this.troopsInAttackDf = 38;
+		this.maxDiceToThrow = Math.min(3, this.troopsInAttackAt);
+		this.defendingDice =  Math.min(2, this.troopsInAttackDf);
+		this.dicesAttacker = new int[this.maxDiceToThrow];
+		this.dicesDefender = new int[this.defendingDice];
+		this.attackingPlayer = null;
+		this.defendingPlayer = null;
+		this.attackingAvatar = Parameter.avatarsdir + "blonde-boy.png";
+		this.defendingAvatar = Parameter.avatarsdir + "ginger-girl.png";
+		this.attackerColor = Parameter.blueColor;
+		this.defenderColor = Parameter.greenColor;
 		setup();
 	
 	}
 	
-	public BattleFrameController(Territory at, Territory df, Lobby lobby) throws Exception {
+	public BattleFrameController(Continent continentAt, CountryName countryNameAt, 
+								Continent continentDf, CountryName countryNameDf,
+								Player playerAt, Player playerDf, boolean attackerGui,
+								int troopsAt, int troopsDf) throws Exception {
 		super();
-		this.attacking = at;
-		this.defending = df;
-		this.maxDiceToThrow = Math.min(3, attacking.getNumberOfTroops() - 1);
-		this.defendingDice =  Math.min(2, defending.getNumberOfTroops());
-		dicesAttacker = new int[this.maxDiceToThrow];
-		dicesDefender = new int[this.defendingDice];
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * 
+				 Screen.getPrimary().getVisualBounds().getHeight() 
+				 / (1846 * 1080);
+		this.menuRatio = Math.min(ratio + 0.3, 1);
+		this.attackingPNG = new Territory(countryNameAt, continentAt).getAddressToPNG();
+		this.defendingPNG = new Territory(countryNameDf, continentDf).getAddressToPNG();
+		this.troopsInAttackAt = troopsAt;
+		this.troopsInAttackDf = troopsDf;
+		this.maxDiceToThrow = Math.min(3, this.troopsInAttackAt);
+		this.defendingDice =  Math.min(2, this.troopsInAttackDf);
+		this.dicesAttacker = new int[this.maxDiceToThrow];
+		this.dicesDefender = new int[this.defendingDice];
+		this.attackingPlayer = playerAt;
+		this.defendingPlayer = playerDf;
+		this.attackingAvatar = playerAt.getAvatar();
+		this.defendingAvatar = playerDf.getAvatar();
+		this.attackerColor = Color.web(playerAt.getColor());
+		this.defenderColor = Color.web(playerDf.getColor());
 		setup();
+		this.throwBtn.setVisible(attackerGui);
 
 	}
 
@@ -142,7 +182,8 @@ public class BattleFrameController extends VBox {
 		 * ImageView are wrapped in ImageViewPane which delivers responsiveness
 		 */
 		
-		chatButton = new DesignButton(new Insets(10 * menuRatio, 20 * menuRatio, 10 * menuRatio, 20 * menuRatio), 30, 28 * menuRatio, 170 * menuRatio, true);
+		chatButton = new DesignButton(new Insets(10 * menuRatio, 20 * menuRatio, 
+				10 * menuRatio, 20 * menuRatio), 30, 28 * menuRatio, 170 * menuRatio, true);
 		chatButton.setAlignment(Pos.CENTER);
 		chatDiv = new HBox();
 		chatDiv.getChildren().add(chatButton);
@@ -155,7 +196,8 @@ public class BattleFrameController extends VBox {
 		imgTerritories = new HBox();
 		
 		imgAttacking = new ImageView();
-		imgAttacking.setImage(new Image(new FileInputStream(attacking.getAddressToPNG())));
+//		TODO
+		imgAttacking.setImage(new Image(new FileInputStream(this.attackingPNG)));
 		imgAttacking.setPreserveRatio(true);
 		imgAttacking.setSmooth(true);
 		imgAttacking.setCache(true);
@@ -176,7 +218,8 @@ public class BattleFrameController extends VBox {
 		attackingStack.getChildren().addAll(imgAttackingPane, armiesFlowAt);
 		
 		imgDefending = new ImageView();
-		imgDefending.setImage(new Image(new FileInputStream(defending.getAddressToPNG())));
+//		TODO
+		imgDefending.setImage(new Image(new FileInputStream(this.defendingPNG)));
 		imgDefending.setPreserveRatio(true);
 		imgDefending.setSmooth(true);
 		imgDefending.setCache(true);
@@ -230,20 +273,21 @@ public class BattleFrameController extends VBox {
 		 * Setting up playerAt
 		 * Includes Circle with player color (circleAt)
 		 * 			Player avatar (avatarAt)
-		 * 			Top circle with number of troops left in attack - circleTroopsAt, troopsTextAt, stackTroopsAt
+		 * 			Top circle with number of troops left in attack - 
+		 * 			circleTroopsAt, troopsTextAt, stackTroopsAt
 		 */
 		
 		circleAt = new Circle(80 * menuRatio);
-		// TODO change to correct collor
-		circleAt.setFill(Parameter.blueColor);
+//		TODO change to correct collor
+		circleAt.setFill(this.attackerColor);
 		circleAt.setStroke(Color.WHITE);
 		circleAt.setStrokeWidth(6 * menuRatio);
 		
 		playerAt.getChildren().add(circleAt);
 		
 		avatarAt = new ImageView();
-		// TODO change to correct avatar
-		avatarAt.setImage(new Image(new FileInputStream(Parameter.avatarsdir + "blonde-boy.png")));
+//		TODO change to correct avatar
+		avatarAt.setImage(new Image(new FileInputStream(this.attackingAvatar)));
 		avatarAt.setFitWidth(140 * menuRatio);
 		avatarAt.setFitHeight(140 * menuRatio);
 		avatarAt.setPreserveRatio(true);
@@ -257,8 +301,8 @@ public class BattleFrameController extends VBox {
 		circleTroopsAt.setStroke(Color.WHITE);
 		circleTroopsAt.setStrokeWidth(0);
 		
-		// TODO is this correct troops
-		troopsTextAt = new Label(String.valueOf(attacking.getNumberOfTroops() - 1));
+//		TODO is this correct troops
+		troopsTextAt = new Label(String.valueOf(this.troopsInAttackAt));
 		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * menuRatio));
 		troopsTextAt.setTextFill(Color.web("#303030"));
 		troopsTextAt.setMinWidth(80 * menuRatio);
@@ -275,20 +319,21 @@ public class BattleFrameController extends VBox {
 		 * Setting up playerDf
 		 * Includes Circle with player color (circleDf)
 		 * 			Player avatar (avatarDf)
-		 * 			Top circle with number of troops left in attack - circleTroopsDf, troopsTextDf, stackTroopsDf
+		 * 			Top circle with number of troops left in attack - 
+		 * 			circleTroopsDf, troopsTextDf, stackTroopsDf
 		 */
 		
 		circleDf = new Circle(80 * menuRatio);
-		// TODO change to correct collor
-		circleDf.setFill(Parameter.greenColor);
+//		TODO change to correct collor
+		circleDf.setFill(this.defenderColor);
 		circleDf.setStroke(Color.WHITE);
 		circleDf.setStrokeWidth(6);
 
 		playerDf.getChildren().add(circleDf);
 		
 		avatarDf = new ImageView();
-		// TODO change to correct avatar
-		avatarDf.setImage(new Image(new FileInputStream(Parameter.avatarsdir + "ginger-girl.png")));
+//		TODO change to correct avatar
+		avatarDf.setImage(new Image(new FileInputStream(this.defendingAvatar)));
 		avatarDf.setFitWidth(140 * menuRatio);
 		avatarDf.setFitHeight(140 * menuRatio);
 		avatarDf.setPreserveRatio(true);
@@ -302,8 +347,8 @@ public class BattleFrameController extends VBox {
 		circleTroopsDf.setStroke(Color.WHITE);
 		circleTroopsDf.setStrokeWidth(0);
 		
-		// TODO is this correct troops
-		troopsTextDf = new Label(String.valueOf(defending.getNumberOfTroops()));
+//		TODO is this correct troops
+		troopsTextDf = new Label(String.valueOf(this.troopsInAttackDf));
 		troopsTextDf.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * menuRatio));
 		troopsTextDf.setTextFill(Color.web("#303030"));
 		troopsTextDf.setMinWidth(80 * menuRatio);
@@ -328,7 +373,7 @@ public class BattleFrameController extends VBox {
 
 		numberOfDiceControls = new HBox();
 		lessBtn = new ArrowButton(60 * menuRatio);
-		// TODO connect from gamestate
+//		TODO connect from gamestate
 		numberLabel = new Label(String.valueOf(this.maxDiceToThrow));
 		moreBtn = new ArrowButton(60 * menuRatio);
 		
@@ -346,9 +391,11 @@ public class BattleFrameController extends VBox {
 		numberOfDiceControls.setSpacing(25 * menuRatio);
 		numberOfDiceControls.getChildren().addAll(lessBtn, numberLabel, moreBtn);
 		numberOfDiceControls.setAlignment(Pos.CENTER);
+		numberOfDiceControls.setVisible(false);
 		
 		throwBtn.setText("Throw Dice");
-		throwBtn.setPadding(new Insets(10 * menuRatio, 40 * menuRatio, 10 * menuRatio, 40 * menuRatio));
+		throwBtn.setPadding(new Insets(10 * menuRatio, 40 * menuRatio, 
+				10 * menuRatio, 40 * menuRatio));
 		throwBtn.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24 * menuRatio));
 		diceButtonPane.getChildren().add(throwBtn);
 		diceButtonPane.setAlignment(Pos.CENTER);
@@ -409,10 +456,21 @@ public class BattleFrameController extends VBox {
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-	
-				dicesAttacker = new int[dicesAttacker.length];
-				dicesDefender = new int[defendingDice];
+				lastThrow = Integer.MAX_VALUE;
 				
+				switch(gameType) {
+				case SinglePlayer: 
+					//singleplayerHandler.battleDiceThrow();
+					break;
+				
+				case Multiplayer:
+					// TODO
+					break;
+					
+				case Tutorial:
+					// TODO
+					break;
+				}
 		    	throwBtn.setDisable(true);
                 lessBtn.setDisable(true);
                 moreBtn.setDisable(true);
@@ -424,14 +482,13 @@ public class BattleFrameController extends VBox {
 		        		int n = random.nextInt(6)+1;
 		                DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
 		                try {
-							dice.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
+							dice.setImage(new Image(new FileInputStream(
+									Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
 						} catch (FileNotFoundException e1) {
 							e1.printStackTrace();
 						}
 		                final int m = k;
                     	diceImagesAt.getChildren().set(m, dice);
-                    	// TODO remove
-		                dicesAttacker[k] = n;
 		    		}
 		    		
 		    		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
@@ -439,64 +496,61 @@ public class BattleFrameController extends VBox {
 		        		int n = random.nextInt(6)+1;
 		                DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
 		                try {
-							dice.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(n) + "b.png")));
+							dice.setImage(new Image(new FileInputStream(
+									Parameter.dicedir + "dice" + String.valueOf(n) + "b.png")));
 						} catch (FileNotFoundException e1) {
 							e1.printStackTrace();
 						}
 		                final int m = k;
                     	diceImagesDf.getChildren().set(m, dice);       
-                    	// TODO remove
-
-		                dicesDefender[k] = n;
 		    		}
 		    		
 		    		})
     			);
-    			timeline.setCycleCount(12);
+    			timeline.setCycleCount(15);
     			timeline.play();
+		    	while (lastThrow == Integer.MAX_VALUE) {
+		    		timeline.setCycleCount(timeline.getCycleCount() + 1);
+		    	}
+		    	
+                throwBtn.setDisable(false);
+                lessBtn.setDisable(false);
+                moreBtn.setDisable(false);
     			
-    			timeline.setOnFinished(new EventHandler<ActionEvent>() {
-    			      @Override
-    			      public void handle(ActionEvent evt) {
+//    			timeline.setOnFinished(new EventHandler<ActionEvent>() {
+//    			      @Override
+//    			      public void handle(ActionEvent evt) {
+//    			    	  
+//    			    	  // TODO get logic from game state
+//    			    	  // update dice images based on dices array from gamestate (dicesfactory)
+//    			    	  // update troops
+//    			    	  lastThrow = 0;
+//    			    	  int maxDf = Arrays.stream(dicesDefender).max().getAsInt();
+//    			    	  int maxAt = Arrays.stream(dicesAttacker).max().getAsInt();
+//    			    	  
+//    			    	  if (maxAt > maxDf) {
+//    			    		  lastThrow++;  
+//    			    	  } else {
+//    			    		  lastThrow--;  
+//    			    	  }
+//    			    	  
+//    			    	  if(dicesDefender.length == 2 && dicesAttacker.length > 1) {
+//        			    	  int nextDf = Arrays.stream(dicesDefender).min().getAsInt();
+//        			    	  
+//        			    	  int minAt = Arrays.stream(dicesAttacker).min().getAsInt();
+//        			    	  int nextAt = Arrays.stream(dicesAttacker).sum() - minAt - maxAt;
+//
+//        			    	  if (nextAt > nextDf) {
+//        			    		  lastThrow++;  
+//        			    	  } else {
+//        			    		  lastThrow--;  
+//        			    	  }
+//    			    	  }
     			    	  
-    			    	  // TODO get logic from game state
-    			    	  // update dice images based on dices array from gamestate (dicesfactory)
-    			    	  // update troops
-    			    	  lastThrow = 0;
-    			    	  int maxDf = Arrays.stream(dicesDefender).max().getAsInt();
-    			    	  int maxAt = Arrays.stream(dicesAttacker).max().getAsInt();
-    			    	  
-    			    	  if (maxAt > maxDf) {
-    			    		  lastThrow++;  
-    			    	  } else {
-    			    		  lastThrow--;  
-    			    	  }
-    			    	  
-    			    	  if(dicesDefender.length == 2 && dicesAttacker.length > 1) {
-        			    	  int nextDf = Arrays.stream(dicesDefender).min().getAsInt();
-        			    	  
-        			    	  int minAt = Arrays.stream(dicesAttacker).min().getAsInt();
-        			    	  int nextAt = Arrays.stream(dicesAttacker).sum() - minAt - maxAt ;
 
-        			    	  if (nextAt > nextDf) {
-        			    		  lastThrow++;  
-        			    	  } else {
-        			    		  lastThrow--;  
-        			    	  }
-    			    	  }
-    			    	     			    	  
-    			    	try {
-							updateTroops();
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						} 
-
-		                throwBtn.setDisable(false);
-		                lessBtn.setDisable(false);
-		                moreBtn.setDisable(false);
-		              
-    			      }
-    			    });            
+//		              
+//    			      }
+//    			    });            
             }
 		       
 	    });
@@ -522,7 +576,8 @@ public class BattleFrameController extends VBox {
 		Spacing spacingControls1 = new Spacing();
 		Spacing spacingControls2 = new Spacing();
 
-		diceAndProfile.getChildren().addAll(playerAt, spacingControls1, diceSection, spacingControls2, playerDf);
+		diceAndProfile.getChildren().addAll(playerAt, spacingControls1, 
+				diceSection, spacingControls2, playerDf);
 		diceAndProfile.setAlignment(Pos.BOTTOM_CENTER);
 		diceAndProfile.setPadding(new Insets(0, 160 * ratio, 50 * ratio, 160 * ratio));
 		HBox.setHgrow(spacingControls1, Priority.ALWAYS);
@@ -556,6 +611,11 @@ public class BattleFrameController extends VBox {
 		return diceImages;
 	}
 	
+	public void setCorrectTroops() throws FileNotFoundException {
+		this.setCorrectTroops(this.armiesFlowAt, true);
+		this.setCorrectTroops(this.armiesFlowDf, false);
+	}
+	
 	public void setCorrectTroops(FlowPane flow, boolean attacking) throws FileNotFoundException {
 		
 		int inf = 0;
@@ -567,20 +627,17 @@ public class BattleFrameController extends VBox {
 		
 		Territory territ;
 		int numberTroops;
-		int leftOverSoldier = attacking ? 1 : 0;
 		
 		double heightFrame =  this.getHeight();
 		double multiplier = Math.min(1, heightFrame / 1000);
 		multiplier *= 0.8;
 		
 		if(attacking) {
-			territ = this.attacking;
+			numberTroops = Math.min(30 + (this.troopsInAttackAt) % 10, this.troopsInAttackAt);
 		} else {
-			territ = this.defending;
+			numberTroops = Math.min(30 + (this.troopsInAttackDf) % 10, this.troopsInAttackDf);
 		}
 		
-		numberTroops = Math.min(30 + (territ.getNumberOfTroops() - leftOverSoldier) % 10, territ.getNumberOfTroops() - leftOverSoldier);
-
 		while (numberTroops > 0) {
 			if (numberTroops >= 10) {
 				numberTroops -= 10;
@@ -643,65 +700,132 @@ public class BattleFrameController extends VBox {
 			flow.setMaxWidth(400 * multiplier);
 		}	
 		
-		this.diceAndProfile.setPadding(new Insets(0, 160 * multiplier, 50 * multiplier, 160 * multiplier));
+		this.diceAndProfile.setPadding(new Insets(0, 160 * multiplier, 
+				50 * multiplier, 160 * multiplier));
 	}	
 	
-	public void updateTroops() throws FileNotFoundException {
-		
-		// TODO remove lastthrow logik, add troops lost for at and df, get from gamestate
-		if(this.lastThrow < 0) {
-			this.attacking.removeNumberOfTroops(-1 * this.lastThrow);
-		} else if (this.lastThrow > 0) {
-			this.defending.removeNumberOfTroops(this.lastThrow);
-		} else {
-			this.attacking.removeNumberOfTroops(1);
-			this.defending.removeNumberOfTroops(1);
-		}
-		
-		this.setCorrectTroops(armiesFlowAt, true);
-		this.setCorrectTroops(armiesFlowDf, false);
-		
-		troopsTextAt.setText(String.valueOf(attacking.getNumberOfTroops() - 1));
-		troopsTextDf.setText(String.valueOf(defending.getNumberOfTroops()));
-		
-		if(this.defending.getNumberOfTroops() == 1 && defendingDice != 1) {
-			this.defendingDice = 1;
-			diceImagesDf.getChildren().remove(1); 
-		}
-		
-		
-		if(this.attacking.getNumberOfTroops() == 2) {
-			this.maxDiceToThrow = 1;
-			if (Integer.parseInt(numberLabel.getText()) > 1) {
-		    	numberLabel.setText("1");
-		    	dicesAttacker = new int[1];
-		    	
-		    	if(diceImagesAt.getChildren().size() == 3) {
-		    		diceImagesAt.getChildren().remove(1);
-		    		diceImagesAt.getChildren().remove(1);
-		    	} else {
-		    		diceImagesAt.getChildren().remove(1);
-		    	}
-			
-			} 
-
-		} else if (this.attacking.getNumberOfTroops() == 3) {
-			this.maxDiceToThrow = 2;
-			if (Integer.parseInt(numberLabel.getText()) > 2) {
-	    		int i = Integer.parseInt(numberLabel.getText()) - 1;
-		    	numberLabel.setText(String.valueOf(i));
-		    	dicesAttacker = new int[dicesAttacker.length - 1];
-		    	diceImagesAt.getChildren().remove(0);
-		    	
-	    	}
-		}
-		
-		if(this.defending.getNumberOfTroops() == 0) {
-			// TODO stop decide win
-		} else if(this.attacking.getNumberOfTroops() == 0) {
-			// TODO stop decide win
-
-		}
-
+	public void updateWithResultFromThrow(int[] attackerDiceValues, int[] defenderDiceValues,
+			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice, int resultFromThrow) 
+					throws FileNotFoundException {
+		this.troopsInAttackAt = troopsInAttackAt;
+		this.troopsInAttackDf = troopsInAttackDf;
+		troopsTextAt.setText(String.valueOf(troopsInAttackAt));
+		troopsTextDf.setText(String.valueOf(troopsInAttackDf));
+		this.maxDiceToThrow = numberOfDice[0];
+		this.defendingDice = numberOfDice[1];
+		this.dicesAttacker = attackerDiceValues;
+		this.dicesDefender = defenderDiceValues;
+		this.lastThrow = resultFromThrow;
 	}
+	
+	public void setupForNextThrow() throws FileNotFoundException {
+		this.numberLabel.setText(String.valueOf(this.maxDiceToThrow));
+		this.diceImagesDf.getChildren().removeIf(x -> true);
+		this.diceImagesDf = diceImageFactory(this.defendingDice, false);
+		this.diceImagesAt.getChildren().removeIf(x -> true);
+		this.diceImagesAt = diceImageFactory(this.maxDiceToThrow, true);
+	
+		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
+            DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
+            try {
+				dice.setImage(new Image(new FileInputStream(
+						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + ".png")));
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+            final int m = k;
+        	diceImagesAt.getChildren().set(m, dice);
+		}
+		
+		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
+            DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
+            try {
+				dice.setImage(new Image(new FileInputStream(
+						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + "b.png")));
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+            final int m = k;
+        	diceImagesDf.getChildren().set(m, dice);       
+		}
+	}
+//		if(this.attacking.getNumberOfTroops() == 2) {
+//			this.maxDiceToThrow = 1;
+//			if (Integer.parseInt(numberLabel.getText()) > 1) {
+//		    	numberLabel.setText("1");
+//		    	dicesAttacker = new int[1];
+//		    	
+//		    	if(diceImagesAt.getChildren().size() == 3) {
+//		    		diceImagesAt.getChildren().remove(1);
+//		    		diceImagesAt.getChildren().remove(1);
+//		    	} else {
+//		    		diceImagesAt.getChildren().remove(1);
+//		    	}
+//			
+//			} 
+//
+//		} else if (this.attacking.getNumberOfTroops() == 3) {
+//			this.maxDiceToThrow = 2;
+//			if (Integer.parseInt(numberLabel.getText()) > 2) {
+//	    		int i = Integer.parseInt(numberLabel.getText()) - 1;
+//		    	numberLabel.setText(String.valueOf(i));
+//		    	dicesAttacker = new int[dicesAttacker.length - 1];
+//		    	diceImagesAt.getChildren().remove(0);
+//	    	}
+//		}
+//		// TODO remove lastthrow logik, add troops lost for at and df, get from gamestate
+//		if(this.lastThrow < 0) {
+//			this.attacking.removeNumberOfTroops(-1 * this.lastThrow);
+//		} else if (this.lastThrow > 0) {
+//			this.defendingPNG.removeNumberOfTroops(this.lastThrow);
+//		} else {
+//			this.attacking.removeNumberOfTroops(1);
+//			this.defendingPNG.removeNumberOfTroops(1);
+//		}
+//		
+//		this.setCorrectTroops();
+//		
+//		troopsTextAt.setText(String.valueOf(attacking.getNumberOfTroops() - 1));
+//		troopsTextDf.setText(String.valueOf(defendingPNG.getNumberOfTroops()));
+//		
+//		if(this.defendingPNG.getNumberOfTroops() == 1 && defendingDice != 1) {
+//			this.defendingDice = 1;
+//			diceImagesDf.getChildren().remove(1); 
+//		}
+//		
+//		
+//		if(this.attacking.getNumberOfTroops() == 2) {
+//			this.maxDiceToThrow = 1;
+//			if (Integer.parseInt(numberLabel.getText()) > 1) {
+//		    	numberLabel.setText("1");
+//		    	dicesAttacker = new int[1];
+//		    	
+//		    	if(diceImagesAt.getChildren().size() == 3) {
+//		    		diceImagesAt.getChildren().remove(1);
+//		    		diceImagesAt.getChildren().remove(1);
+//		    	} else {
+//		    		diceImagesAt.getChildren().remove(1);
+//		    	}
+//			
+//			} 
+//
+//		} else if (this.attacking.getNumberOfTroops() == 3) {
+//			this.maxDiceToThrow = 2;
+//			if (Integer.parseInt(numberLabel.getText()) > 2) {
+//	    		int i = Integer.parseInt(numberLabel.getText()) - 1;
+//		    	numberLabel.setText(String.valueOf(i));
+//		    	dicesAttacker = new int[dicesAttacker.length - 1];
+//		    	diceImagesAt.getChildren().remove(0);
+//		    	
+//	    	}
+//		}
+//		
+//		if(this.defendingPNG.getNumberOfTroops() == 0) {
+//			// TODO stop decide win
+//		} else if(this.attacking.getNumberOfTroops() == 0) {
+//			// TODO stop decide win
+//
+//		}
+
+	
 }

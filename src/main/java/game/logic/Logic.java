@@ -12,6 +12,7 @@ import game.exceptions.WrongPeriodException;
 import game.exceptions.WrongPhaseException;
 import game.exceptions.WrongTroopsCountException;
 import game.models.Card;
+import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
 import game.models.Territory;
@@ -172,7 +173,50 @@ public class Logic {
 	}
 
 	public static HashMap<Player, Integer> getTroopsReinforce(GameState gameState) {
+		HashMap<Player, Integer> troops = gameState.getPlayerTroopsLeft();
 		
-		return null;
+		for(Territory territory : gameState.getTerritories().values()) {
+			troops.put(territory.getOwnedByPlayer(), troops.get(territory.getOwnedByPlayer()) + 1);
+		}
+		
+		for(Player player : troops.keySet()) {
+			troops.replace(player, Math.max((troops.get(player) - troops.get(player) % 3) / 3, 3));
+		}
+		
+		for(Continent continent : gameState.getContinents().keySet()) {
+			Player continentOwner = gameState.getTerritories()
+					.get(gameState.getContinents().get(continent).get(0)).getOwnedByPlayer();
+			boolean success = true;
+			for(CountryName countryName : gameState.getContinents().get(continent)) {
+				Territory territory = gameState.getTerritories().get(countryName);
+				if(!continentOwner.equals(territory.getOwnedByPlayer())) {
+					success = false;
+					break;
+				}
+			}
+			if(success) {
+				switch (continent) {
+				case Africa:
+					troops.replace(continentOwner, troops.get(continentOwner) + 3);
+					break;
+				case Asia:
+					troops.replace(continentOwner, troops.get(continentOwner) + 7);
+					break;
+				case Australia:
+					troops.replace(continentOwner, troops.get(continentOwner) + 2);
+					break;
+				case Europe:
+					troops.replace(continentOwner, troops.get(continentOwner) + 5);
+					break;
+				case NorthAmerica:
+					troops.replace(continentOwner, troops.get(continentOwner) + 5);
+					break;
+				case SouthAmerica:
+					troops.replace(continentOwner, troops.get(continentOwner) + 2);
+					break;
+				}
+			}
+		}
+		return troops;
 	}
 }
