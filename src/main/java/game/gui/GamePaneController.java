@@ -469,8 +469,6 @@ public class GamePaneController implements Initializable{
 	public void setUpChoosingTroopsPane() {
 		choosingTroopsPane = new Pane();
 		choosingTroopsPane.setPrefSize(1536.0, 864.0);
-		choosingTroopsPane.setScaleX(w / 1536.0);
-		choosingTroopsPane.setScaleY(h / 864.0);
 		choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
 
 		Rectangle rectangle = new Rectangle();
@@ -515,11 +513,13 @@ public class GamePaneController implements Initializable{
 		HBox numOfTroopsHBox = new HBox();
 		
 		numOfTroopsHBox.setSpacing(25);
+		numOfTroopsHBox.setPrefSize(200, 60);
 		numOfTroopsHBox.getChildren().addAll(lessBtn, numberLabel, moreBtn);
-		numOfTroopsHBox.setLayoutX((w - numOfTroopsHBox.getHeight()) / 2.0);
+		numOfTroopsHBox.setLayoutX((1536.0 - numOfTroopsHBox.getPrefHeight()) / 2.0);
 		numOfTroopsHBox.setLayoutY(514.0);
 		
-
+		choosingTroopsPane.setScaleX(w / 1536.0);
+		choosingTroopsPane.setScaleY(h / 864.0);
 		choosingTroopsPane.getChildren().addAll(rectangle, falseButtonChoosingTroops, trueButtonChoosingTroops, choosingTroopsPhaseLabel, numOfTroopsHBox);
 		choosingTroopsPane.setVisible(false);
 		gameBoard.getChildren().add(choosingTroopsPane);
