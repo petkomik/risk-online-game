@@ -10,6 +10,7 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
 import game.models.CountryName;
 import game.models.Player;
+import gameState.ChoosePane;
 import gameState.Period;
 import gameState.Phase;
 import gameState.SinglePlayerHandler;
@@ -598,9 +599,9 @@ public class GamePaneController implements Initializable{
 	}
 	
 	
-	public void showChoosingTroopsPane(CountryName countryName, int minTroops, int maxTroops) {
+	public void showChoosingTroopsPane(CountryName countryName, int minTroops, int maxTroops, ChoosePane choosePane) {
 		choosingTroopsPane.setVisible(true);
-		choosingTroopsPhaseLabel.setText(currentPhase.toString());
+		choosingTroopsPhaseLabel.setText(choosePane.toString());
 		this.numberLabel.setText(String.valueOf(minTroops));
 		if(currentPhase == Phase.ATTACK) {
 			falseButtonChoosingTroops.setVisible(false);
