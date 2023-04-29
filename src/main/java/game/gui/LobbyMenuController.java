@@ -77,54 +77,54 @@ import javafx.util.Pair;
 
 public class LobbyMenuController extends StackPane {
 	
-	Lobby lobby;
-	String[] aiDifficultyLevels = {"easy", "casual", "hard"};
+	private Lobby lobby;
+	private String[] aiDifficultyLevels = {"easy", "casual", "hard"};
 	
-	VBox vBox;
-	ImageView imgBackground;
-	ImageViewPane imgBackgroundPane;
-	VBox vBoxColor;
-	VBox contentVBox;
+	private VBox vBox;
+	private ImageView imgBackground;
+	private ImageViewPane imgBackgroundPane;
+	private VBox vBoxColor;
+	private VBox contentVBox;
 	
-	HBox topBannerParent;
-	HBox topBannerContent;
-	ArrowButton backButton;
-	Label lobbyTextBanner;
-	DesignButton chatButton;
-	HBox chatDiv;
+	private HBox topBannerParent;
+	private HBox topBannerContent;
+	private ArrowButton backButton;
+	private Label lobbyTextBanner;
+	private DesignButton chatButton;
+	private HBox chatDiv;
 
-	HBox mainContent;
-	FlowPane playerCardsPane;
+	private HBox mainContent;
+	private FlowPane playerCardsPane;
 
-	VBox settingsReadyPane;		
-	VBox settingsPane;
-	HBox settingsBanner;
-	Label settingsName;
-	VBox settingsControlPane;
+	private VBox settingsReadyPane;		
+	private VBox settingsPane;
+	private HBox settingsBanner;
+	private Label settingsName;
+	private VBox settingsControlPane;
 		
-	VBox numberPlayersDiv;
-	Label numberPlayersLabel;
-	HBox numberPlayersControls;
-	ArrowButton lessBtnPlayers;
-	Label labelBtnPlayers;
-	ArrowButton moreBtnPlayers;
+	private VBox numberPlayersDiv;
+	private Label numberPlayersLabel;
+	private HBox numberPlayersControls;
+	private ArrowButton lessBtnPlayers;
+	private Label labelBtnPlayers;
+	private ArrowButton moreBtnPlayers;
 			
-	VBox numberOfAiDiv;
-	Label numberOfAiLabel;
-	HBox numberOfAiControls;
-	ArrowButton lessBtnAI;
-	Label labelBtnAI;
-	ArrowButton moreBtnAI;
+	private VBox numberOfAiDiv;
+	private Label numberOfAiLabel;
+	private HBox numberOfAiControls;
+	private ArrowButton lessBtnAI;
+	private Label labelBtnAI;
+	private ArrowButton moreBtnAI;
 
-	VBox AIDifficultyDiv;
-	Label AIDifficultyLabel;
-	HBox AIDifficultyControls;
-	ArrowButton lessBtnDiff;
-	Label labelBtnDiff;
-	ArrowButton moreBtnDiff;
+	private VBox AIDifficultyDiv;
+	private Label AIDifficultyLabel;
+	private HBox AIDifficultyControls;
+	private ArrowButton lessBtnDiff;
+	private Label labelBtnDiff;
+	private ArrowButton moreBtnDiff;
 			
-	HBox readyButtonPane;
-	DesignButton readyBtn;
+	private HBox readyButtonPane;
+	private DesignButton readyBtn;
 	
 	double ratio;
 	boolean singleplayerLobby;
@@ -250,7 +250,7 @@ public class LobbyMenuController extends StackPane {
 		mainContent.setAlignment(Pos.CENTER);
 		mainContent.setSpacing(50 * ratio);
 		mainContent.setFillHeight(true);
-		mainContent.setPadding(new Insets(50 * ratio, 150 * ratio, 50 * ratio, 150 * ratio));
+		mainContent.setPadding(new Insets(50 * ratio, 0, 50 * ratio, 0));
 
 		playerCardsPane = new FlowPane();
 		playerCardsPane.setOrientation(Orientation.HORIZONTAL);
@@ -259,7 +259,7 @@ public class LobbyMenuController extends StackPane {
 		playerCardsPane.setPrefHeight(450 * ratio);
 		playerCardsPane.minWidthProperty().bind(playerCardsPane.maxWidthProperty());
 		playerCardsPane.maxWidthProperty().bind(playerCardsPane.prefWidthProperty());
-		playerCardsPane.setPrefWidth(640 * ratio);
+		playerCardsPane.setPrefWidth(660 * ratio);
 		playerCardsPane.setHgap(20 * ratio);
 		playerCardsPane.setVgap(20 * ratio);
 		playerCardsPane.setAlignment(Pos.TOP_LEFT);
@@ -487,7 +487,6 @@ public class LobbyMenuController extends StackPane {
 		    	// TODO
 		    	int labelBefore = Integer.parseInt(labelBtnAI.getText());
 		    	if(lobby.getAIPlayerList().size() < 5 &&  lobby.maxNumberOfPlayers > lobby.getPlayerList().size()) {
-		    		System.out.println("Btn click");
 		    		lobby.addAI();
 		    		labelBtnAI.setText(String.valueOf(labelBefore + 1));
 		    	}
