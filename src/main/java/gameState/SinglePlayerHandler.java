@@ -26,9 +26,8 @@ public class SinglePlayerHandler {
 		this.gameHandler.clickCountry(id, country);
 	}
 	
-	public void possesCountryOnGUI(CountryName country, int id, int numTroopsOfPlayer) {
+	public void possesCountryOnGUI(CountryName country, int id) {
 		this.gamePaneController.claimCountry(country, id);
-		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
 	public void setPeriod(Period period) {
@@ -65,8 +64,10 @@ public class SinglePlayerHandler {
 	/*
 	 * gives the GUI the current Player
 	 */
-	public void setCurrentPlayerOnGUI(int id) {
+	public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
 		this.gamePaneController.setCurrentPlayer(id);
+		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
+
 	}
 	
 	public void initialDeployOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {

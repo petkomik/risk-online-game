@@ -105,7 +105,7 @@ public class GamePaneController implements Initializable{
 	private Label nextPhaseLabel;
 	private Label numCardsLabel;
 	
-	private Pane ChoosingTroopsPane;
+	private Pane choosingTroopsPane;
 	private DesignButton lessBtn;
 	private DesignButton moreBtn;
 	private Label numberLabel;
@@ -467,11 +467,11 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void setUpChoosingTroopsPane() {
-		ChoosingTroopsPane = new Pane();
-		ChoosingTroopsPane.setPrefSize(1536.0, 864.0);
-		ChoosingTroopsPane.setScaleX(w / 1536.0);
-		ChoosingTroopsPane.setScaleY(h / 864.0);
-		ChoosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		choosingTroopsPane = new Pane();
+		choosingTroopsPane.setPrefSize(1536.0, 864.0);
+		choosingTroopsPane.setScaleX(w / 1536.0);
+		choosingTroopsPane.setScaleY(h / 864.0);
+		choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
 
 		Rectangle rectangle = new Rectangle();
 		rectangle.setArcHeight(5.0);
@@ -494,10 +494,7 @@ public class GamePaneController implements Initializable{
 		trueButtonChoosingTroops.setLayoutY(608.0);
 		trueButtonChoosingTroops.setMnemonicParsing(false);
 		trueButtonChoosingTroops.setPrefSize(72.0, 72.0);
-		
-		
-		
-
+	
 		choosingTroopsPhaseLabel = new Label();
 		choosingTroopsPhaseLabel.setLayoutX(661.0);
 		choosingTroopsPhaseLabel.setLayoutY(614.0);
@@ -523,8 +520,9 @@ public class GamePaneController implements Initializable{
 		numOfTroopsHBox.setLayoutY(514.0);
 		
 
-		ChoosingTroopsPane.getChildren().addAll(rectangle, falseButtonChoosingTroops, trueButtonChoosingTroops, choosingTroopsPhaseLabel, numOfTroopsHBox);
-		ChoosingTroopsPane.setVisible(false);
+		choosingTroopsPane.getChildren().addAll(rectangle, falseButtonChoosingTroops, trueButtonChoosingTroops, choosingTroopsPhaseLabel, numOfTroopsHBox);
+		choosingTroopsPane.setVisible(false);
+		gameBoard.getChildren().add(choosingTroopsPane);
 	}
 	
 	public void decreaseProgressbar() {
@@ -601,8 +599,9 @@ public class GamePaneController implements Initializable{
 	
 	
 	public void showChoosingTroopsPane(CountryName countryName, int minTroops, int maxTroops) {
-		ChoosingTroopsPane.setVisible(true);
+		choosingTroopsPane.setVisible(true);
 		choosingTroopsPhaseLabel.setText(currentPhase.toString());
+		this.numberLabel.setText(String.valueOf(minTroops));
 		if(currentPhase == Phase.ATTACK) {
 			falseButtonChoosingTroops.setVisible(false);
 		}
@@ -675,6 +674,7 @@ public class GamePaneController implements Initializable{
 		middlePhaseLogo.setVisible(phase == Phase.ATTACK);
 		lastPhaseLogo.setVisible(phase == Phase.FORTIFY);
 		labPhase.setText(phase.toString());
+		this.currentPhase = phase;
 	}
 	
 	public void setPeriod(Period period) {
@@ -695,6 +695,7 @@ public class GamePaneController implements Initializable{
 			break;
 		}
 		middlePhaseLogo.setImage(new Image(path));
+		this.currentPeriod = period;
 	}
 	
 	

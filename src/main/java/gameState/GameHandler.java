@@ -70,7 +70,7 @@ public class GameHandler {
 		}else {
 			gameState.setNextPlayer();
 		}
-		singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID());
+		singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID(), 0);
 		
 		return this.gameState.getPlayersDiceThrown().get(player);
 	}
@@ -91,13 +91,14 @@ public class GameHandler {
 				case SinglePlayer:
 					int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
 					this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
-					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID(), numTroopsPlayer);
+					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID());
 					if(Logic.allTerritoriesClaimed(gameState)) {
 						gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
 						this.singlePlayerHandler.setPeriod(Period.INITIALDEPLOY);
 					}
 					gameState.setNextPlayer();
-					this.singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID());
+					this.singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID(),
+							numTroopsPlayer);
 					break;
 				case Multiplayer:
 					break;
@@ -123,7 +124,8 @@ public class GameHandler {
 						this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
 					}
 					this.gameState.setNextPlayer();
-					this.singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID());
+					this.singlePlayerHandler.setCurrentPlayerOnGUI(gameState.getCurrentPlayer().getID(), 
+							this.gameState.getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer()));
 //					this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, player.getTroopsAvailable());
 					break;
 				case Multiplayer:
