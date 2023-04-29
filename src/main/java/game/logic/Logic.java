@@ -99,7 +99,7 @@ public class Logic {
 	// click on Country , check if u can deploy troops , if yes, return number of troops, if not allowed -1
 	public static int canDeployTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
 		if (gameState.getCurrentPlayer().equals(player)) {
-			if (gameState.getCurrentGamePeriod().equals(Period.INITIALREINFORCEMENT)) {
+			if (gameState.getCurrentGamePeriod().equals(Period.INITIALDEPLOY)) {
 				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
 					if (gameState.getPlayerTroopsLeft().get(player) >= 1) {
 						return gameState.getPlayerTroopsLeft().get(player);
@@ -110,7 +110,18 @@ public class Logic {
 		return -1;
 	}
 	
-	
+	public static int canReinforceTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
+		if (gameState.getCurrentPlayer().equals(player)) {
+			if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
+					if (gameState.getPlayerTroopsLeft().get(player) >= 1) {
+						return gameState.getPlayerTroopsLeft().get(player);
+					}
+				}
+			}
+		}
+		return -1;
+	}
 
 	public static boolean isGameOver(GameState gameState) {
 		return gameState.getAlivePlayers().size() == 1;
@@ -136,7 +147,7 @@ public class Logic {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (cards == null || cards.size() != 3) {
 			throw new WrongCardsException("You have to choose 3 cards");
-		} else if (gameState.getCurrentTurnPhase().equals(Phase.DEPLOY)) {
+		} else if (gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
 			throw new WrongPhaseException("You are not in Deploy Phase. Can't turn in cards in the moment");
 		} else if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
 			throw new WrongPeriodException("You are not in Main Period.");
@@ -149,5 +160,19 @@ public class Logic {
 		}
 		
 		return true;
+	}
+
+	public static boolean isDeployPeriodOver(GameState gameState) {
+		for(int leftOver : gameState.getPlayerTroopsLeft().values()) {
+			if(leftOver != 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static HashMap<Player, Integer> getTroopsReinforce(GameState gameState) {
+		
+		return null;
 	}
 }

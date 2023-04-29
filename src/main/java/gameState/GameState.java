@@ -41,6 +41,8 @@ public class GameState {
 	private HashMap<Player, Integer> playersDiceThrown;
 	private HashMap<Player, Integer> playerTroopsLeft;
 
+
+
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
 		cards = new ArrayList<Card>();
@@ -196,5 +198,9 @@ public class GameState {
 			return (this.numberOfCardsTurnedIn - 6) * 5 + 15;
 		}
 		
+	}
+	
+	public void setPlayerTroopsLeft(HashMap<Player, Integer> playerTroopsLeft) {
+		this.playerTroopsLeft = playerTroopsLeft;
 	}
 }

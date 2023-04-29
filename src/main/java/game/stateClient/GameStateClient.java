@@ -395,14 +395,11 @@ public class GameStateClient {
 //						} catch (WrongPhaseException e) {
 //							e.printStackTrace();
 //						}
-					gamePaneController.pointUpCountry(countryName.toString());
 				} else if(territories.get(countryName).getOwnedByPlayer() == clientPlayer && !territories.values().stream().anyMatch(o -> o.getOwnedByPlayer() == null)) {
-					gamePaneController.pointUpCountry(countryName.toString());
 				}
 				
 			}
 		}
-		gamePaneController.pointUpCountry(countryName.toString(), Color.web(currentPlayer.getColor()));
 		try {
 			gameLogic.countryPossession(clientPlayer.getID(), countryName);
 		} catch (WrongCountryException | WrongTroopsCountException | WrongPhaseException e) {

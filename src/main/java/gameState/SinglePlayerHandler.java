@@ -28,7 +28,7 @@ public class SinglePlayerHandler {
 	
 	public void possesCountryOnGUI(CountryName country, int id, int numTroopsOfPlayer) {
 		this.gamePaneController.claimCountry(country, id);
-		this.gamePaneController.addAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
+		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
 	public void setPeriod(Period period) {
@@ -41,6 +41,7 @@ public class SinglePlayerHandler {
 		//max is the number of troops that the player has left
 		// min is 1 (i think)
 		//this.gamePaneController.setNumTroops(country.toString(), max); Idee
+		this.gamePaneController.showChoosingTroopsPane(country, min, max);
 	}
 	
 	public void addTroopsToCountry(CountryName country,int troops) {
@@ -70,10 +71,25 @@ public class SinglePlayerHandler {
 	
 	public void initialDeployOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
 		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
-		this.gamePaneController.addAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
+		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
+	}
+	
+	public void reinforceOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
+		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
+		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
+	}
+	
+	public void confirmDeployNumberOfTroops(CountryName countryName, int numDeployTroops) {
+		this.gameHandler.addTroopsToCountry(countryName, numDeployTroops);
 	}
 	
 	public Lobby getLobby() {
 		return lobby;
 	}
+
+	public void setPhase(Phase phase) {
+		this.gamePaneController.setPhase(phase);
+	}
+
+	
 }

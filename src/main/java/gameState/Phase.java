@@ -1,10 +1,10 @@
 package gameState;
 
 public enum Phase {
-	DEPLOY  {
+	REINFORCE  {
         @Override
         public String toString() {
-            return "Deploy";
+            return "Reinforce";
         }
     },
 	ATTACK  {

@@ -10,13 +10,13 @@ public enum Period {
 	COUNTRYPOSESSION {
         @Override
         public String toString() {
-            return "Country Possesion";
+            return "Claim";
         }
     },
-    INITIALREINFORCEMENT {
+    INITIALDEPLOY {
         @Override
         public String toString() {
-            return "Initial Reinforcement";
+            return "Deploy";
         }
     },
     MAINPERIOD {

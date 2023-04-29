@@ -369,7 +369,7 @@ public class GamePaneController implements Initializable{
         		+ "    -fx-font-weight: bold;"
         		+ "    -fx-font-size: 30px;");
 
-        firstPhaseLogo = new ImageView(Parameter.phaseLogosdir + "reinforce" + ".png"); 
+        firstPhaseLogo = new ImageView(Parameter.phaseLogosdir + "reinforce.png"); 
         firstPhaseLogo.setFitHeight(27.0);
         firstPhaseLogo.setFitWidth(32.0);
         firstPhaseLogo.setLayoutX(400.0);
@@ -379,7 +379,7 @@ public class GamePaneController implements Initializable{
         firstPhaseLogo.setVisible(false);
         
         // Erstelle ein ImageView mit einem Bild
-        middlePhaseLogo = new ImageView(Parameter.phaseLogosdir + "claim" + ".png"); 
+        middlePhaseLogo = new ImageView(Parameter.phaseLogosdir + "claim.png"); 
         middlePhaseLogo.setFitHeight(27.0);
         middlePhaseLogo.setFitWidth(32.0);
         middlePhaseLogo.setLayoutX(474.0);
@@ -387,7 +387,7 @@ public class GamePaneController implements Initializable{
         middlePhaseLogo.setPickOnBounds(true);
         middlePhaseLogo.setPreserveRatio(true);
         
-        lastPhaseLogo = new ImageView(Parameter.phaseLogosdir + "fortify" + ".png"); 
+        lastPhaseLogo = new ImageView(Parameter.phaseLogosdir + "fortify.png"); 
         lastPhaseLogo.setFitHeight(27.0);
         lastPhaseLogo.setFitWidth(32.0);
         lastPhaseLogo.setLayoutX(548.0);
@@ -456,7 +456,7 @@ public class GamePaneController implements Initializable{
         nextPhaseLabel.setPrefWidth(60.0);
         nextPhaseLabel.setVisible(false);
         
-        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, middlePhaseLogo, nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseLabel);
+        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo, middlePhaseLogo, lastPhaseLogo,nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseLabel);
         phaseBoard.setScaleX(0.8 * w / 1536.0);
         phaseBoard.setScaleY(0.8 * h / 864.0);
         
@@ -600,7 +600,7 @@ public class GamePaneController implements Initializable{
 	}
 	
 	
-	public void showChoosingTroopsPane(int maxTroops, int minTroops) {
+	public void showChoosingTroopsPane(CountryName countryName, int minTroops, int maxTroops) {
 		ChoosingTroopsPane.setVisible(true);
 		choosingTroopsPhaseLabel.setText(currentPhase.toString());
 		if(currentPhase == Phase.ATTACK) {
@@ -636,7 +636,14 @@ public class GamePaneController implements Initializable{
             			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
             }
 	        });
-        trueButtonChoosingTroops.setOnAction(e -> clickTrueButtonChoosingTroops(e));
+        trueButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	singlePlayerHandler.confirmDeployNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()));
+		    }
+		});
+        
 		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
@@ -664,14 +671,30 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void setPhase(Phase phase) {
-		
+		firstPhaseLogo.setVisible(phase == Phase.REINFORCE);
+		middlePhaseLogo.setVisible(phase == Phase.ATTACK);
+		lastPhaseLogo.setVisible(phase == Phase.FORTIFY);
+		labPhase.setText(phase.toString());
 	}
 	
 	public void setPeriod(Period period) {
-		labPhase.setText(period.toString());
-		firstPhaseLogo.setVisible(period == Period.COUNTRYPOSESSION);
-		middlePhaseLogo.setVisible(period == Period.INITIALREINFORCEMENT);
-		lastPhaseLogo.setVisible(period == Period.MAINPERIOD);
+		String path = Parameter.phaseLogosdir;
+		switch(period) {
+		case COUNTRYPOSESSION:
+			labPhase.setText(period.toString());
+			path += "claim.png";
+			break;
+		case INITIALDEPLOY:
+			path += "claim.png";
+			break;
+		case MAINPERIOD:
+			labPhase.setText(period.toString());
+			path += "attack.png";
+			break;
+		default:
+			break;
+		}
+		middlePhaseLogo.setImage(new Image(path));
 	}
 	
 	
@@ -735,7 +758,7 @@ public class GamePaneController implements Initializable{
 		spNum.setVisible(false);
 	}
 	
-	public void addAmountOfTroopsLeftToDeploy(int number) {
+	public void setAmountOfTroopsLeftToDeploy(int number) {
 		labNum.setText(String.valueOf(number));
 	}
 	
