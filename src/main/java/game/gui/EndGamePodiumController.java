@@ -46,29 +46,36 @@ public class EndGamePodiumController extends Application {
 	private double ratio;
 	private ArrayList<Profile> ranking; 							//ranking at the end of the game 
 	// public int players = game.Lobby.getPlayerList().size();
+	private Stage stage;
 	
-	private StackPane container;
-	private HBox backgroundPic;
-	private HBox backgroundColor;
-	private VBox vBoxIcons;
-	private HBox topBannerParent;
-	private HBox topBannerContent;
-	private Label lobbyTextBanner;
-	private VBox contentVBox;
-	private ArrowButton backButton;
-	private Popup popup;
-	private ImageView imgBackground;
-	private ImageViewPane imgBackgroundPane;
-	private HBox avatars;
-	private StackPane firstP, secondP, thirdP;
-	private Circle circleFirstP, circleSecondP, circleThirdP;
-	private ImageView circleFirstI, circleSecondI, circleThirdI;
-	private HBox place;
-	private ImageView firstPlaceCup, secondPlaceCup, thirdPlaceCup;
-	private Text caption;
-	private HBox chatDiv;
-	private ChatButton chatButton;
-	private ChatWindow chatPane;
+	private StackPane container;									//TODO will be removed by this when added to the rest
+	private VBox contentVBox;										//main container
+	
+	private HBox backgroundPic;										//background
+	private HBox backgroundColor;									//*
+	private ImageView imgBackground;								//*
+	private ImageViewPane imgBackgroundPane;						//*
+	
+	private HBox topBannerParent;									//banner
+	private HBox topBannerContent;									//*
+	private Label lobbyTextBanner;									//*
+	private ArrowButton backButton;									//*
+	
+	private VBox vBoxIcons;											//VBox with the caption,avatars and place	
+	private Text caption;											//caption
+	
+	private HBox avatars;											//avatars
+	private StackPane firstP, secondP, thirdP;						//*
+	private Circle circleFirstP, circleSecondP, circleThirdP;		//*
+	private ImageView circleFirstI, circleSecondI, circleThirdI;	//*
+	
+	private HBox place;												//places
+	private ImageView firstPlaceCup, secondPlaceCup, thirdPlaceCup;	//*
+	
+	private HBox chatDiv;											//chatdiv with button
+	private ChatButton chatButton;									//*
+	private ChatWindow chatPane;									//chatPane
+	
 	
 	public EndGamePodiumController() throws Exception {
 		super();
@@ -77,6 +84,8 @@ public class EndGamePodiumController extends Application {
 		this.ratio = Math.min(ratio + 0.3, 1);
 		this.players = 3;
 		this.container = this.setup();
+		actionEventsSetup();
+		
 	}
 	
 	public EndGamePodiumController(Lobby lobby) throws Exception {
@@ -86,15 +95,11 @@ public class EndGamePodiumController extends Application {
 		this.ratio = Math.min(ratio + 0.3, 1);
 		this.players = lobby.getPlayerList().size();
 		this.container = this.setup();
+		actionEventsSetup();
 	}
 
 	public StackPane setup() throws Exception {
 
-		/*
-		 * to be returned Stackpane background->shade->content content consists of
-		 * Icons->Button Icons consists of 2 VBoxes each VBox has 2-3 Parts
-		 */
-		
 		container = new StackPane();
 		contentVBox = new VBox();
 		contentVBox.setAlignment(Pos.CENTER);
@@ -308,6 +313,7 @@ public class EndGamePodiumController extends Application {
 		/*
 		 * adding endgame text
 		 */
+		
 		caption = new Text("WINNER");
 		caption.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 100 * ratio));
 		caption.setFill(Color.GOLD);
@@ -315,57 +321,74 @@ public class EndGamePodiumController extends Application {
 		caption.setStrokeWidth(2.0);
 
 		/*
-		 * adding the cups and avatars to the hBox
+		 * adding the caption, cups and avatars to the vBox
 		 */
 
 		vBoxIcons.getChildren().addAll(caption, avatars, place);
-
-		/*
-		 * Action handler for the button
-		 */
 		
 		chatPane = new ChatWindow();
 		chatPane.setVisible(false);
 		chatPane.setPickOnBounds(true);
 
-		backButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
-				// TODO has to return the player to the ServerMainWindow
-
-			}
-		});
-		
-		chatButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
-				if(!chatButton.isSelected()) {
-					chatButton.setSelected(false);
-					chatPane.setVisible(false);
-					System.out.print("wdwdwwdwdwddwdwd");
-
-					
-				} else {
-					System.out.print("jjjjjjjjjjjjjjjj");
-
-					chatButton.setSelected(true);
-					chatPane.setVisible(true);
-				}
-			}
-		});
-
 		/*
 		 * adding everything to the top container
 		 */
+		
 		contentVBox.setAlignment(Pos.CENTER);
 		contentVBox.setSpacing(30 * ratio);
 		
 		contentVBox.getChildren().addAll(topBannerParent, new Spacing(50), vBoxIcons, new Spacing(100));
 		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox, chatPane);
 
+		//TODO remove when main is removed
+		actionEventsSetup();
+
+		
 		return container;
+	}
+	
+
+	/*
+	 * Action handler for the button
+	 */
+	
+	public void actionEventsSetup() {
+		
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			 public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+				Node node = (Node) event.getSource();
+				
+				stage = (Stage)node.getScene().getWindow();
+				try {
+					ServerMainWindowController serverMenu = new ServerMainWindowController();
+					stage.getScene().setRoot(serverMenu);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+		    }
+			
+		});
+
+		chatButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				(new GameSound()).buttonClickForwardSound();
+				
+				if (!chatButton.isSelected()) {
+					chatButton.setSelected(false);
+					chatPane.setVisible(false);
+				} else {
+					chatButton.setSelected(true);
+					chatPane.setVisible(true);
+				}
+			}
+		});
+
 	}
 
 	@Override

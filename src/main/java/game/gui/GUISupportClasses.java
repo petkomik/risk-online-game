@@ -61,7 +61,7 @@ public class GUISupportClasses {
 			this.setMaxWidth(Double.MAX_VALUE);
 			this.setMaxHeight(Double.MAX_VALUE);
 		}
-		
+
 		public Spacing(double i) {
 			this();
 			this.setMinWidth(i);
@@ -69,34 +69,34 @@ public class GUISupportClasses {
 			HBox.setHgrow(this, Priority.ALWAYS);
 			VBox.setVgrow(this, Priority.ALWAYS);
 		}
-		
-		public Spacing(double width,double heigth) {
+
+		public Spacing(double width, double heigth) {
 			this();
 			this.setMinWidth(width);
 			this.setMinHeight(heigth);
 			HBox.setHgrow(this, Priority.ALWAYS);
 			VBox.setVgrow(this, Priority.ALWAYS);
 		}
-		
+
 	}
-	
-	static class DiceFactory extends ImageView{
+
+	static class DiceFactory extends ImageView {
 		public DiceFactory() {
 			super();
 		}
-		
+
 		public DiceFactory(int i, boolean at, double ratio) throws FileNotFoundException {
 			super();
 			String bDice = at ? "" : "b";
-			this.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bDice + ".png")));
+			this.setImage(
+					new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bDice + ".png")));
 			this.setFitWidth(70 * ratio);
 			this.setFitHeight(70 * ratio);
 			this.setPreserveRatio(true);
 			this.setSmooth(true);
 			this.setCache(true);
 		}
-		
-		
+
 	}
 
 	static class MenuButton extends Button {
@@ -105,97 +105,75 @@ public class GUISupportClasses {
 			this.setText(text);
 			this.getStyleClass().add("menuButton");
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 68));
-			
+
 		}
 	}
 
-	
 	static class DesignButton extends Button {
 		public DesignButton() {
 			super();
 			this.setPadding(new Insets(10, 20, 10, 20));
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: #b87331;"
-						+ "-fx-background-radius: 15;"
-						+ "-fx-border-radius: 12;"
-            			+ "-fx-border-color: #b87331;"
-            			+ "-fx-border-width: 3px;");
-			
+			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-border-radius: 12;"
+					+ "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-	            if (newValue) {
-	            	this.setStyle("-fx-background-color: #64441f;"
-								+ "-fx-background-radius: 15;"
-								+ "-fx-border-radius: 12;"
-		            			+ "-fx-border-color: #ffff;"
-		            			+ "-fx-border-width: 3px;");
-	            } else {
-	            	this.setStyle("-fx-background-color: #b87331;"
-								+ "-fx-background-radius: 15;"
-								+ "-fx-border-radius: 12;"
-		            			+ "-fx-border-color: #b87331;"
-		            			+ "-fx-border-width: 3px;");
-	            }
-	        });
+				if (newValue) {
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-radius: 15;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+				} else {
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+				}
+			});
 		}
-		
+
 		public DesignButton(Insets inst, int radius, double fontSize, double width) {
 			super();
 			this.setPadding(inst);
 			this.setPrefWidth(width);
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, fontSize));
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: "
-					+ "radial-gradient(focus-distance 0% , center 50% 50% , "
-					+ "radius 75% , #b87331, #64441f);"
-					+ "-fx-background-insets: 1 1 1 1;"
-					+ "-fx-background-radius: " + radius + ";"
-					+ "-fx-border-radius: " + radius + ";"
-        			+ "-fx-border-color: transparent;"
-        			+ "-fx-border-width: 4px;");
-		
-		this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            if (newValue) {
+			this.setStyle("-fx-background-color: " + "radial-gradient(focus-distance 0% , center 50% 50% , "
+					+ "radius 75% , #b87331, #64441f);" + "-fx-background-insets: 1 1 1 1;" + "-fx-background-radius: "
+					+ radius + ";" + "-fx-border-radius: " + radius + ";" + "-fx-border-color: transparent;"
+					+ "-fx-border-width: 4px;");
 
-            	this.setStyle("-fx-background-color: #64441f;"
-            				+ "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: " + radius + ";"
-							+ "-fx-border-radius: " + radius + ";"
-	            			+ "-fx-border-color: #ffff;"
-	            			+ "-fx-border-width: 4px;");
-            } else {
-            	this.setStyle("-fx-background-color: "
-            				+ "radial-gradient(focus-distance 0% , center 50% 50% , "
-            				+ "radius 75% , #b87331, #64441f);"
-        					+ "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: " + radius + ";"
-							+ "-fx-border-radius: " + radius + ";"
-	            			+ "-fx-border-color: transparent;"
-	            			+ "-fx-border-width: 4px;");
-            }
-	        });
-		
-		
+			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+				if (newValue) {
+
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";" + "-fx-border-radius: " + radius + ";"
+							+ "-fx-border-color: #ffff;" + "-fx-border-width: 4px;");
+				} else {
+					this.setStyle("-fx-background-color: " + "radial-gradient(focus-distance 0% , center 50% 50% , "
+							+ "radius 75% , #b87331, #64441f);" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";" + "-fx-border-radius: " + radius + ";"
+							+ "-fx-border-color: transparent;" + "-fx-border-width: 4px;");
+				}
+			});
+
 		}
-		
-		public DesignButton(Insets inst, int radius, double fontSize, double width, boolean chatButton) throws FileNotFoundException {
+
+		public DesignButton(Insets inst, int radius, double fontSize, double width, boolean chatButton)
+				throws FileNotFoundException {
 			this(inst, radius, fontSize, width);
-			if(chatButton) {
+			if (chatButton) {
 				this.setText("Chat");
-		        ImageView img = new ImageView();
-		        img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
-		        img.setFitHeight(fontSize);
-		        img.setPreserveRatio(true);
+				ImageView img = new ImageView();
+				img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
+				img.setFitHeight(fontSize);
+				img.setPreserveRatio(true);
 				img.setSmooth(true);
 				img.setCache(true);
 				this.setGraphicTextGap(10);
-		        this.setGraphic(img);				
+				this.setGraphic(img);
 			}
 
 		}
 	}
-	
-	
+
 	static class ArrowButton extends Button {
 		public ArrowButton() {
 			super();
@@ -209,356 +187,285 @@ public class GUISupportClasses {
 			this.setPadding(new Insets(-12, 0, 0, 0));
 
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: #b87331;"
-					+ "-fx-background-insets: 1 1 1 1;"
-					+ "-fx-background-radius: 12;"
-					+ "-fx-border-radius: 12;"
-	       			+ "-fx-border-color: #b87331;"
-	    			+ "-fx-border-width: 3px;");
-			
+			this.setStyle(
+					"-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;" + "-fx-background-radius: 12;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-	            if (newValue) {
-	            	this.setStyle("-fx-background-color: #b87331;"
-	    					+ "-fx-background-insets: 1 1 1 1;"
-	        				+ "-fx-background-radius: 12;"
-	        				+ "-fx-border-radius: 12;"
-	            			+ "-fx-border-color: #ffffff;"
-	            			+ "-fx-border-width: 3px;");
-	            } else {
-	            	this.setStyle("-fx-background-color: #b87331;"
-	    					+ "-fx-background-insets: 1 1 1 1;"
-	        				+ "-fx-background-radius: 12;"
-	        				+ "-fx-border-radius: 12;"
-	            			+ "-fx-border-color: #b87331;"
-	            			+ "-fx-border-width: 3px;");
-	            }
-	        });
+				if (newValue) {
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: 12;" + "-fx-border-radius: 12;" + "-fx-border-color: #ffffff;"
+							+ "-fx-border-width: 3px;");
+				} else {
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: 12;" + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
+							+ "-fx-border-width: 3px;");
+				}
+			});
 		}
-		
+
 		public ArrowButton(double k) {
 			this();
 			this.setFont(Font.font("Consolas", FontWeight.BLACK, k));
 			this.setMaxSize(k, k);
 			this.setMinSize(k, k);
 			this.setPrefSize(k, k);
-			this.setPadding(new Insets(-k/6, 0, 0, 0));
+			this.setPadding(new Insets(-k / 6, 0, 0, 0));
 		}
-		
+
 		public ArrowButton(double size, double inset) {
 			this(size);
-			//inset = Math.min(1, inset + 0.05);
+			// inset = Math.min(1, inset + 0.05);
 			this.setPadding(new Insets(-inset, 0, 0, 0));
 		}
 	}
-	
+
 	static class ChatButton extends ToggleButton {
-		
-//		public ChatButton() {
-//			super();
-//			this.setText("\uD83D\uDDE8");
-//			this.setAlignment(Pos.CENTER_LEFT);
-//			this.setFont(Font.font("Segoe UI Emoji", FontWeight.BOLD, 60));
-//			this.setMaxSize(60, 60);
-//			this.setMinSize(60, 60);
-//			this.setPrefSize(60, 60);
-//			this.setAlignment(Pos.BASELINE_CENTER);
-//			this.setPadding(new Insets(0, 0, 0, 0));
-//			this.setSelected(false);
-//
-//			this.setTextFill(Color.WHITE);
-//			this.setStyle("-fx-background-color: #b87331;"
-//					+ "-fx-background-insets: 1 1 1 1;"
-//					+ "-fx-background-radius: 12;"
-//					+ "-fx-border-radius: 12;"
-//	       			+ "-fx-border-color: #b87331;"
-//	    			+ "-fx-border-width: 3px;");
-//			
-//			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-//	            if (newValue) {
-//	            	this.setStyle("-fx-background-color: #b87331;"
-//	    					+ "-fx-background-insets: 1 1 1 1;"
-//	        				+ "-fx-background-radius: 12;"
-//	        				+ "-fx-border-radius: 12;"
-//	            			+ "-fx-border-color: #ffffff;"
-//	            			+ "-fx-border-width: 3px;");
-//	            } else {
-//	            	this.setStyle("-fx-background-color: #b87331;"
-//	    					+ "-fx-background-insets: 1 1 1 1;"
-//	        				+ "-fx-background-radius: 12;"
-//	        				+ "-fx-border-radius: 12;"
-//	            			+ "-fx-border-color: #b87331;"
-//	            			+ "-fx-border-width: 3px;");
-//	            }
-//	        });
-//		}
-//		
-//		public ChatButton(double k) {
-//			this();
-//			this.setFont(Font.font("Segoe UI Emoji", FontWeight.BOLD, k/3));
-//			this.setMaxSize(k, k);
-//			this.setMinSize(k, k);
-//			this.setPrefSize(k, k);
-//		}
-		
+
 		public ChatButton() {
 			super();
 			this.setPadding(new Insets(10, 20, 10, 20));
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: #b87331;"
-						+ "-fx-background-radius: 15;"
-						+ "-fx-border-radius: 12;"
-            			+ "-fx-border-color: #b87331;"
-            			+ "-fx-border-width: 3px;");
+			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-border-radius: 12;"
+					+ "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 			this.setSelected(false);
 
-			
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-	            if (newValue) {
-	            	this.setStyle("-fx-background-color: #64441f;"
-								+ "-fx-background-radius: 15;"
-								+ "-fx-border-radius: 12;"
-		            			+ "-fx-border-color: #ffff;"
-		            			+ "-fx-border-width: 3px;");
-	            } else {
-	            	this.setStyle("-fx-background-color: #b87331;"
-								+ "-fx-background-radius: 15;"
-								+ "-fx-border-radius: 12;"
-		            			+ "-fx-border-color: #b87331;"
-		            			+ "-fx-border-width: 3px;");
-	            }
-	        });
+				if (newValue) {
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-radius: 15;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+				} else {
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+				}
+			});
 		}
-		
+
 		public ChatButton(Insets inst, int radius, double fontSize, double width) {
 			super();
 			this.setPadding(inst);
 			this.setPrefWidth(width);
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, fontSize));
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: "
-					+ "radial-gradient(focus-distance 0% , center 50% 50% , "
-					+ "radius 75% , #b87331, #64441f);"
-					+ "-fx-background-insets: 1 1 1 1;"
-					+ "-fx-background-radius: " + radius + ";"
-					+ "-fx-border-radius: " + radius + ";"
-        			+ "-fx-border-color: transparent;"
-        			+ "-fx-border-width: 4px;");
-		
-		this.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-            if (newValue) {
+			this.setStyle("-fx-background-color: " + "radial-gradient(focus-distance 0% , center 50% 50% , "
+					+ "radius 75% , #b87331, #64441f);" + "-fx-background-insets: 1 1 1 1;" + "-fx-background-radius: "
+					+ radius + ";" + "-fx-border-radius: " + radius + ";" + "-fx-border-color: transparent;"
+					+ "-fx-border-width: 4px;");
 
-            	this.setStyle("-fx-background-color: #64441f;"
-            				+ "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: " + radius + ";"
-							+ "-fx-border-radius: " + radius + ";"
-	            			+ "-fx-border-color: #ffff;"
-	            			+ "-fx-border-width: 4px;");
-            } else {
-            	this.setStyle("-fx-background-color: "
-            				+ "radial-gradient(focus-distance 0% , center 50% 50% , "
-            				+ "radius 75% , #b87331, #64441f);"
-        					+ "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: " + radius + ";"
-							+ "-fx-border-radius: " + radius + ";"
-	            			+ "-fx-border-color: transparent;"
-	            			+ "-fx-border-width: 4px;");
-            }
-	        });
+			this.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+				if (newValue) {
+
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";" + "-fx-border-radius: " + radius + ";"
+							+ "-fx-border-color: #ffff;" + "-fx-border-width: 4px;");
+				} else {
+					this.setStyle("-fx-background-color: " + "radial-gradient(focus-distance 0% , center 50% 50% , "
+							+ "radius 75% , #b87331, #64441f);" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";" + "-fx-border-radius: " + radius + ";"
+							+ "-fx-border-color: transparent;" + "-fx-border-width: 4px;");
+				}
+			});
 		}
-		
-		public ChatButton(Insets inst, int radius, double fontSize, double width, boolean chatButton) throws FileNotFoundException {
+
+		public ChatButton(Insets inst, int radius, double fontSize, double width, boolean chatButton)
+				throws FileNotFoundException {
 			this(inst, radius, fontSize, width);
-			if(chatButton) {
+			if (chatButton) {
 				this.setText("Chat");
-		        ImageView img = new ImageView();
-		        img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
-		        img.setFitHeight(fontSize);
-		        img.setPreserveRatio(true);
+				ImageView img = new ImageView();
+				img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
+				img.setFitHeight(fontSize);
+				img.setPreserveRatio(true);
 				img.setSmooth(true);
 				img.setCache(true);
 				this.setGraphicTextGap(10);
-		        this.setGraphic(img);				
+				this.setGraphic(img);
 			}
 
 		}
 
 	}
-	
+
 	static class PlayerCard extends VBox {
 		String name;
 		ImageView avatar = new ImageView();
-		Color color;		
+		Color color;
 		Label playerReady;
 		double ratio;
-		
 
-		public PlayerCard(Player player, String avatar, Color color, double ratio, boolean ready) throws FileNotFoundException {
+		public PlayerCard(Player player, String avatar, Color color, double ratio, boolean ready)
+				throws FileNotFoundException {
 			super();
 			this.name = player.getName();
 			this.avatar.setImage(new Image(new FileInputStream(avatar)));
 			this.color = color;
 			this.ratio = ratio;
 			this.playerReady = ready ? new Label("Ready") : new Label("Not Ready");
-			buildCard();	
+			buildCard();
 		}
-		
+
 		private void buildCard() {
-			
+
 			HBox cardBanner = new HBox();
 			Label playerName = new Label(name.toUpperCase());
 			StackPane playerImage = new StackPane();
 			HBox readyBanner = new HBox();
 			this.setFillWidth(true);
 
-			String hex =  String.format( "#%02X%02X%02X",
-		            (int)( color.getRed() * 255 ),
-		            (int)( color.getGreen() * 255 ),
-		            (int)( color.getBlue() * 255 ) );
-			
-			cardBanner.setStyle("-fx-background-color: " + hex + ";"
-					+ "-fx-background-radius: 7 7 0 0");
+			String hex = String.format("#%02X%02X%02X", (int) (color.getRed() * 255), (int) (color.getGreen() * 255),
+					(int) (color.getBlue() * 255));
+
+			cardBanner.setStyle("-fx-background-color: " + hex + ";" + "-fx-background-radius: 7 7 0 0");
 			cardBanner.setAlignment(Pos.TOP_CENTER);
 			cardBanner.setPadding(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio));
-		
+
 			playerName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 22 * ratio));
 			playerName.setTextFill(Color.WHITE);
 			playerName.setAlignment(Pos.CENTER);
-			
+
 			cardBanner.getChildren().add(playerName);
-			
+
 			Circle circlePl = new Circle(50 * ratio);
 			circlePl.setFill(color);
 			circlePl.setStroke(color);
 			circlePl.setStrokeWidth(6 * ratio);
-						
+
 			this.avatar.setFitWidth(100 * ratio);
 			this.avatar.setFitHeight(100 * ratio);
 			this.avatar.setPreserveRatio(true);
 			this.avatar.setSmooth(true);
 			this.avatar.setCache(true);
-			
+
 			playerImage.getChildren().addAll(circlePl, this.avatar);
 			playerImage.setAlignment(Pos.CENTER);
-			
+
 			readyBanner.setAlignment(Pos.BOTTOM_CENTER);
-			
+
 			playerReady.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24 * ratio));
 			playerReady.setTextFill(Parameter.darkGrey);
 			playerReady.setAlignment(Pos.CENTER);
-			
+
 			readyBanner.getChildren().add(playerReady);
-			
+
 			this.setStyle("-fx-background-color: rgba(225, 225, 225, 0.8);");
 			this.minHeightProperty().bind(this.maxHeightProperty());
 			this.maxHeightProperty().bind(this.prefHeightProperty());
 			this.setPrefHeight(215 * ratio);
-			
+
 			this.minWidthProperty().bind(this.maxWidthProperty());
 			this.maxWidthProperty().bind(this.prefWidthProperty());
 			this.setPrefWidth(200 * ratio);
-			
-			this.setStyle("-fx-background-color: rgba(225, 225, 225, 0.7);"
-					+ "-fx-background-radius: 7;");
+
+			this.setStyle("-fx-background-color: rgba(225, 225, 225, 0.7);" + "-fx-background-radius: 7;");
 
 			this.setSpacing(10 * ratio);
 			this.getChildren().addAll(cardBanner, playerImage, readyBanner);
 
-			
 		}
-		
+
 		public void setReady(boolean status) {
-			this.playerReady.setText(status ? "Ready" : "Not Ready");		
+			this.playerReady.setText(status ? "Ready" : "Not Ready");
 		}
 	}
-	
+
 	static class ImageViewPane extends Region {
-	    
-	    private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<ImageView>();
-	    
-	    public ObjectProperty<ImageView> imageViewProperty() {
-	        return imageViewProperty;
-	    }
-	    
-	    public ImageView getImageView() {
-	        return imageViewProperty.get();
-	    }
-	    
-	    public void setImageView(ImageView imageView) {
-	        this.imageViewProperty.set(imageView);
-	    }
 
-	    public ImageViewPane() {
-	        this(new ImageView());
-	    }
+		private ObjectProperty<ImageView> imageViewProperty = new SimpleObjectProperty<ImageView>();
 
-	    @Override
-	    protected void layoutChildren() {
-	        ImageView imageView = imageViewProperty.get();
-	        if (imageView != null) {
-	            imageView.setFitWidth(getWidth());
-	            imageView.setFitHeight(getHeight());
-	            layoutInArea(imageView, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
-	        }
-	        super.layoutChildren();
-	    }
-	    
-	    public ImageViewPane(ImageView imageView) {
-	        imageViewProperty.addListener(new ChangeListener<ImageView>() {
+		public ObjectProperty<ImageView> imageViewProperty() {
+			return imageViewProperty;
+		}
 
-	            @Override
-	            public void changed(ObservableValue<? extends ImageView> arg0, ImageView oldIV, ImageView newIV) {
-	                if (oldIV != null) {
-	                    getChildren().remove(oldIV);
-	                }
-	                if (newIV != null) {
-	                    getChildren().add(newIV);
-	                }
-	            }
-	        });
-	        this.imageViewProperty.set(imageView);
-	    }
+		public ImageView getImageView() {
+			return imageViewProperty.get();
+		}
+
+		public void setImageView(ImageView imageView) {
+			this.imageViewProperty.set(imageView);
+		}
+
+		public ImageViewPane() {
+			this(new ImageView());
+		}
+
+		@Override
+		protected void layoutChildren() {
+			ImageView imageView = imageViewProperty.get();
+			if (imageView != null) {
+				imageView.setFitWidth(getWidth());
+				imageView.setFitHeight(getHeight());
+				layoutInArea(imageView, 0, 0, getWidth(), getHeight(), 0, HPos.CENTER, VPos.CENTER);
+			}
+			super.layoutChildren();
+		}
+
+		public ImageViewPane(ImageView imageView) {
+			imageViewProperty.addListener(new ChangeListener<ImageView>() {
+
+				@Override
+				public void changed(ObservableValue<? extends ImageView> arg0, ImageView oldIV, ImageView newIV) {
+					if (oldIV != null) {
+						getChildren().remove(oldIV);
+					}
+					if (newIV != null) {
+						getChildren().add(newIV);
+					}
+				}
+			});
+			this.imageViewProperty.set(imageView);
+		}
 	}
-	
+
 	static class ChatWindow extends VBox {
+
+		ScrollPane chat;
+		VBox vBoxMessages;
+		HBox textfieldAndButtons;
+		TextField textfieldMessage;
+		VBox comboAndSend;
+		DesignButton sendButton;
+		ComboBox<String> names;
+		HBox dragArea;
+		String messageToBeSend;			//message to be send, should used by client
+		
+		boolean dragAreaHover = false;
+		double ratio;
+		double xCord;
+		double yCord;
+
 		public ChatWindow() {
-			
-			double ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+
+			ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight()
+					/ (1846 * 1080);
 			ratio = Math.min(ratio + 0.3, 1);
-			
-			ScrollPane chat = new ScrollPane();
-			VBox vBoxMessages = new VBox();
-			HBox textfieldAndButtons = new HBox();
-			TextField textfieldMessage = new TextField();
-			VBox comboAndSend = new VBox();
-			DesignButton sendButton;
-			ComboBox<String> names = new ComboBox<String>();
-			HBox dragArea = new HBox();
-			
+			setup();
+			actionEventsSetup();
+
+		}
+
+		public void setup() {
+			chat = new ScrollPane();
+			vBoxMessages = new VBox();
+			textfieldAndButtons = new HBox();
+			textfieldMessage = new TextField();
+			comboAndSend = new VBox();
+			names = new ComboBox<String>();
+			dragArea = new HBox();
+
 			dragArea.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0");
 			dragArea.setPrefHeight(30 * ratio);
 			dragArea.getChildren().add(new Spacing(1));
 			HBox.setHgrow(dragArea, Priority.ALWAYS);
-			
 
-			
-			/*
-			 * alles in container nacheinander
-			 * methode für neue messages
-			 * beim send button action aufrufen eingabe Werte ist String
-			 * wenn alles fertig probgieren das ganze über Popup zu emplimentieren
-			 * ServerMainWIndowController richtig skalieren
-			 */
-	
-			
 			/*
 			 * setting up the scrollpane that contains the chat visuals
 			 */
-	        chat.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
-			chat.setMaxWidth(ratio*600);
-			chat.setMinWidth(ratio*600);
-			chat.setMaxHeight(ratio*400);
-			chat.setMinHeight(ratio*400);
+			chat.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
+			chat.setMaxWidth(ratio * 600);
+			chat.setMinWidth(ratio * 600);
+			chat.setMaxHeight(ratio * 400);
+			chat.setMinHeight(ratio * 400);
 			chat.setHbarPolicy(ScrollBarPolicy.NEVER);
 			chat.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 			chat.setCache(true);
@@ -566,136 +473,206 @@ public class GUISupportClasses {
 			/*
 			 * setting up the Button and ComboBox
 			 */
-			
-			sendButton = new DesignButton(new Insets(0,10,0,10),10,ratio*15,ratio*120);
+
+			sendButton = new DesignButton(new Insets(0, 10, 0, 10), 10, ratio * 15, ratio * 120);
 			sendButton.setText("SEND");
-			
-			names.setPrefWidth(ratio*120);
-			//TODO add names or change them with a foreach
-			names.getItems().addAll("Name1","Name2","Name3");
+
+			names.setPrefWidth(ratio * 120);
+			// TODO add names or change them with a foreach
+			names.getItems().addAll("Name1", "Name2", "Name3");
 			names.setStyle("-fx-background-color: rgba(225,211,184,0.9); -fx-background-radius: 10 10 10 10");
-			
-			comboAndSend.prefHeight(ratio*100);
-			comboAndSend.prefWidth(ratio*120);
+
+			comboAndSend.prefHeight(ratio * 100);
+			comboAndSend.prefWidth(ratio * 120);
 			comboAndSend.setAlignment(Pos.CENTER);
-			comboAndSend.getChildren().addAll(sendButton,new Spacing(15),names);
-			
+			comboAndSend.getChildren().addAll(sendButton, new Spacing(15), names);
+
 			/*
 			 * setting up textfieldMessage
 			 */
-			textfieldMessage.setMaxHeight(ratio*100);
-			textfieldMessage.setMaxWidth(ratio*400);
-			textfieldMessage.setPrefHeight(ratio*100);
-			textfieldMessage.setPrefWidth(ratio*400);
-			textfieldMessage.setStyle("-fx-background-color: rgba(225,211,184,0.9); -fx-background-radius: 10 10 10 10");
-			textfieldMessage.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 17*ratio));
+			textfieldMessage.setMaxHeight(ratio * 100);
+			textfieldMessage.setMaxWidth(ratio * 400);
+			textfieldMessage.setPrefHeight(ratio * 100);
+			textfieldMessage.setPrefWidth(ratio * 400);
+			textfieldMessage
+					.setStyle("-fx-background-color: rgba(225,211,184,0.9); -fx-background-radius: 10 10 10 10");
+			textfieldMessage.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 17 * ratio));
 			/*
 			 * setting up the textfield with the buttons
 			 */
-			
-			textfieldAndButtons.setPrefHeight(ratio*100);
-			textfieldAndButtons.setPrefWidth(ratio*600);
-			textfieldAndButtons.setMaxHeight(ratio*100);
-			textfieldAndButtons.setMaxWidth(ratio*600);
+
+			textfieldAndButtons.setPrefHeight(ratio * 100);
+			textfieldAndButtons.setPrefWidth(ratio * 600);
+			textfieldAndButtons.setMaxHeight(ratio * 100);
+			textfieldAndButtons.setMaxWidth(ratio * 600);
 			textfieldAndButtons.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 0 0 10 10");
 			textfieldAndButtons.setAlignment(Pos.CENTER_RIGHT);
-			textfieldAndButtons.setPadding(new Insets(20,20,20,20));
-			textfieldAndButtons.getChildren().addAll(textfieldMessage,new Spacing(20),comboAndSend);
-			
-			
-			vBoxMessages.setPrefWidth(ratio*600);
+			textfieldAndButtons.setPadding(new Insets(20, 20, 20, 20));
+			textfieldAndButtons.getChildren().addAll(textfieldMessage, new Spacing(20), comboAndSend);
+			textfieldAndButtons.setPickOnBounds(true);
+
+			vBoxMessages.setPrefWidth(ratio * 600);
+			vBoxMessages.setSpacing(ratio*5);
+			vBoxMessages.setPadding(new Insets(5*ratio,50*ratio,0,5*ratio));
 			vBoxMessages.heightProperty().addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 					chat.setVvalue((Double) newValue);
 				}
-			});			
-			
-			// TODO decide if (host message if needed) stays 
-			
-			HBox hBox = new HBox();
-			hBox.setAlignment(Pos.CENTER_LEFT);
-			hBox.setPadding(new Insets(5, 40, 5, 10));
-			Text text = new Text("host is:");
-			TextFlow textFlow = new TextFlow(text);
-			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
-					+ "-fx-background-radius: 20px;");
-			textFlow.setPadding(new Insets(5, 10, 5, 10));
-			text.setFill(Color.color(0.934, 0.945, 0.996));
-			HBox message = new HBox();
-			message.getChildren().addAll(textFlow, new Spacing(150,20));
-			
-			vBoxMessages.getChildren().add(message);
+			});
+
+			// TODO decide if (host message if needed) stays
+
 			chat.setContent(vBoxMessages);
+
+			/*
+			 * setting up main window Proportions
+			 */
+
+			this.setPrefHeight(ratio * 530);
+			this.setMaxWidth(ratio * 600);
+			this.setAlignment(Pos.CENTER);
+			this.getChildren().addAll(dragArea, chat, textfieldAndButtons);
+		}
+
+		public void actionEventsSetup() {
 			
-			 /*
-			  * event for the button
-			  */
+			dragArea.setOnMousePressed(event -> {
+				xCord = event.getSceneX();
+				yCord = event.getSceneY();
+				dragAreaHover = true;
+				
+			});
 			
+			dragArea.setOnMouseReleased(event -> {
+				dragAreaHover = false;
+				
+			});
+
 			textfieldMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				@Override
 				public void handle(KeyEvent keyEvent) {
 					if (keyEvent.getCode() == KeyCode.ENTER) {
 						sendButton.fire();
-						
+
 					}
 				}
 			});
-			 
+
 			sendButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					
-					String messageToSend = textfieldMessage.getText();
-					if (!messageToSend.isBlank()) {
-						HBox hBox = new HBox();
-						hBox.setAlignment(Pos.CENTER_RIGHT);
-						hBox.setPadding(new Insets(5, 40, 5, 10));
-						Text text = new Text(messageToSend);
+					messageToBeSend = "";
+					messageToBeSend = textfieldMessage.getText();
+					
+					if (!messageToBeSend.isBlank()) {
+						
+						Text text = new Text(messageToBeSend);
+						text.setFill(Color.WHITE);
+						text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
+						
 						TextFlow textFlow = new TextFlow(text);
 						textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
 								+ "-fx-background-radius: 20px;");
-						textFlow.setPadding(new Insets(5, 10, 5, 10));
-						text.setFill(Color.color(0.934, 0.945, 0.996));
-						
-						hBox.getChildren().addAll(new Spacing(150,20),textFlow);
+						textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
 
-						vBoxMessages.getChildren().add(hBox);
+						HBox message = new HBox();
+						message.setAlignment(Pos.CENTER_RIGHT);
+						message.getChildren().addAll(new Spacing(200*ratio,1*ratio), textFlow);
+						HBox.setHgrow(message, Priority.ALWAYS);
+
+						vBoxMessages.getChildren().add(message);
 
 						textfieldMessage.clear();
+						textfieldMessage.requestFocus();
 
 					}
 				}
 			});
 			
-			/*
-			 * setting up main window Proportions
-			 */
-			
-			this.setMaxHeight(ratio*530);
-			this.setMaxWidth(ratio*600);
-			this.getChildren().addAll(dragArea, chat, textfieldAndButtons);
-		}
-		
-		public static void addLabel(String messageFromCLient, VBox vBox) {
-			HBox hBox = new HBox();
-			hBox.setAlignment(Pos.CENTER_LEFT);
-			hBox.setPadding(new Insets(5, 5, 5, 10));
-
-			Text text = new Text(messageFromCLient);
-			TextFlow textFlow = new TextFlow(text);
-			textFlow.setStyle("-fx-color: rgb(239,242,255); " + "-fx-background-color: rgb(233,233,235); "
-					+ "-fx-background-radius: 20px;");
-			textFlow.setPadding(new Insets(5, 10, 5, 10));
-			hBox.getChildren().addAll(textFlow, new Spacing(150,20));
-
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					vBox.getChildren().add(hBox);
+			this.setOnMouseDragged(event -> {
+				if(this.isDragAreaHover()) {
+					
+				this.setTranslateX(this.getTranslateX() + event.getSceneX()-this.getxCord());
+				this.setTranslateY(this.getTranslateY() + event.getSceneY()-this.getyCord());
+				this.setxCord(event.getSceneX());
+				this.setyCord(event.getSceneY());
+				System.out.println("durpai");
+				
 				}
 			});
+			
 
 		}
+		
+		/*
+		 * adds the incomming message from other users
+		 */
+
+		public void addLabel(String messageFromCLient) {
+			
+			Text text = new Text("host is test");
+			text.setFill(Color.WHITE);
+			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
+
+			TextFlow textFlow = new TextFlow(text);
+			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
+					+ "-fx-background-radius: 20px;");
+			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
+			
+			HBox message = new HBox();
+			message.setAlignment(Pos.CENTER_LEFT);
+			message.getChildren().addAll(textFlow, new Spacing(150*ratio,1*ratio));
+			HBox.setHgrow(message, Priority.ALWAYS);
+			
+			vBoxMessages.getChildren().add(message);
+			
+		}
+		
+		public void addLabel(String messageFromCLient, String profile) {
+			
+			Text text = new Text(profile + ": " + messageFromCLient);
+			text.setFill(Color.WHITE);
+			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
+
+			TextFlow textFlow = new TextFlow(text);
+			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
+					+ "-fx-background-radius: 20px;");
+			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
+			
+			HBox message = new HBox();
+			message.setAlignment(Pos.CENTER_LEFT);
+			message.getChildren().addAll(textFlow, new Spacing(150*ratio,1*ratio));
+			HBox.setHgrow(message, Priority.ALWAYS);
+			
+			vBoxMessages.getChildren().add(message);
+			
+		}
+		
+		public void setxCord(double xCord) {
+			this.xCord = xCord;
+		}
+
+		public double getxCord() {
+			return xCord;
+		}
+
+		public void setyCord(double yCord) {
+			this.yCord = yCord;
+		}
+		
+		public double getyCord() {
+			return yCord;
+		}
+		
+		public boolean isDragAreaHover() {
+			return dragAreaHover;
+		}
+
+		public String getMessageToSend() {
+			return messageToBeSend;
+		}
+		
 	}
 }

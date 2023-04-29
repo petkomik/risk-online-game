@@ -58,30 +58,29 @@ public class ServerMainWindowController extends StackPane {
 	static int counter = 0;
 	private double ratio;
 	
-	private VBox scrollAndMenu;
-	private HBox backgroundPic;					//background
-	private HBox backgroundColor;				//*
-	private ImageView imgBackground;			//*
-	private ImageViewPane imgBackgroundPane;	//*
+	private VBox menuAndScrollAndButtons;
+	private HBox backgroundPic;						//background
+	private HBox backgroundColor;					//*
+	private ImageView imgBackground;				//*
+	private ImageViewPane imgBackgroundPane;		//*
 
-	private HBox topBannerParent;				//banner
-	private HBox topBannerContent;				//*
-	private Label lobbyTextBanner;				//*
-	private ArrowButton backButton;				//*
+	private HBox topBannerParent;					//banner
+	private HBox topBannerContent;					//*
+	private Label lobbyTextBanner;					//*
+	private ArrowButton backButton;					//*
 
-
-	private HBox menu;							//menu
-	private HBox searchBar;						//searchField + Button
-	private TextField searchField;				//*
-	private DesignButton searchButton;			//*
+	private HBox menu;								//menu
+	private HBox searchBar;							//searchField + Button
+	private TextField searchField;					//*
+	private DesignButton searchButton;				//*
 	
-	private HBox buttonsHBox;					//Join and Host buttons
-	private DesignButton hostGameButton;		//*
-	private DesignButton joinGameButton;		//*
-	private Button refreshButton;
+	private HBox buttonsHBox;						//Join and Host buttons
+	private DesignButton hostGameButton;			//*
+	private DesignButton joinGameButton;			//*
+	private Button refreshButton;					//*
 	
-	private ScrollPane lobbyListContainer;		//ScrollPane that will include the Lobbies
-	private VBox vbox;							//Lobbies in the scrollPane
+	private ScrollPane lobbyListContainer;			//ScrollPane that will include the Lobbies
+	private VBox vbox;								//Lobbies in the scrollPane
 	private HashMap<String, LobbyGUI> lobbyGUIList;	//Hashmap with all the Lobbies
 	private HashMap<String, Lobby> lobbyList;
 	private Lobby selectedLobby;				
@@ -102,7 +101,7 @@ public class ServerMainWindowController extends StackPane {
 		 */
 		backgroundPic = new HBox();					
 
-		scrollAndMenu = new VBox();
+		menuAndScrollAndButtons = new VBox();
 		lobbyListContainer = new ScrollPane();		
 		lobbyGUIList = new HashMap<String, LobbyGUI>(); 
 		menu = new HBox();							
@@ -372,16 +371,16 @@ public class ServerMainWindowController extends StackPane {
 		buttonsHBox.setPadding(new Insets(30*ratio,0,0,0));
 
 
-		scrollAndMenu.getChildren().addAll(menu, lobbyListContainer, buttonsHBox);
-		scrollAndMenu.setAlignment(Pos.CENTER);
-		scrollAndMenu.setPadding(new Insets(50 * ratio, 0, 0, 0));
+		menuAndScrollAndButtons.getChildren().addAll(menu, lobbyListContainer, buttonsHBox);
+		menuAndScrollAndButtons.setAlignment(Pos.CENTER);
+		menuAndScrollAndButtons.setPadding(new Insets(50 * ratio, 0, 0, 0));
 
 		/*
 		 * adding elements to the main container
 		 */
 
 		
-		this.getChildren().addAll(backgroundPic, backgroundColor, scrollAndMenu, topBannerParent);
+		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent);
 	}
 	
 	public static void initServer() {

@@ -40,7 +40,7 @@ public class SinglePlayerHandler {
 		//max is the number of troops that the player has left
 		// min is 1 (i think)
 		//this.gamePaneController.setNumTroops(country.toString(), max); Idee
-		this.gamePaneController.showChoosingTroopsPane(country, min, max);
+		//this.gamePaneController.showChoosingTroopsPane(country, min, max);
 	}
 	
 	public void addTroopsToCountry(CountryName country,int troops) {
