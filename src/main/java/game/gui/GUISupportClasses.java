@@ -3,6 +3,7 @@ package game.gui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import database.Profile;
 import game.PlayerInLobby;
 import game.models.Player;
 import general.AppController;
@@ -50,6 +51,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
+import network.Client;
+import network.ClientHandler;
 import network.messages.MessageToPerson;
 
 public class GUISupportClasses {
@@ -180,7 +183,7 @@ public class GUISupportClasses {
 			this.setMaxSize(k, k);
 			this.setMinSize(k, k);
 			this.setPrefSize(k, k);
-			
+
 			ImageView img = new ImageView();
 			img.setImage(new Image(new FileInputStream(Parameter.buttonArrow)));
 			img.setFitHeight(k / 1.7);
@@ -190,31 +193,22 @@ public class GUISupportClasses {
 			this.setGraphic(img);
 			this.setAlignment(Pos.CENTER);
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: #b87331;" 
-				+ "-fx-background-insets: 1 1 1 1;" 
-				+ "-fx-background-radius: 12;"
-				+ "-fx-border-radius: 12;" 
-				+ "-fx-border-color: #b87331;" 
-				+ "-fx-border-width: " + k / 12 + "px;");
+			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;"
+					+ "-fx-background-radius: 12;" + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
+					+ "-fx-border-width: " + k / 12 + "px;");
 
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 				if (newValue) {
-					this.setStyle("-fx-background-color: #b87331;" 
-							+ "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: 12;" 
-							+ "-fx-border-radius: 12;" 
-							+ "-fx-border-color: #ffffff;"
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: 12;" + "-fx-border-radius: 12;" + "-fx-border-color: #ffffff;"
 							+ "-fx-border-width: " + k / 12 + "px;");
 				} else {
-					this.setStyle("-fx-background-color: #b87331;" 
-							+ "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-background-radius: 12;" 
-							+ "-fx-border-radius: 12;" 
-							+ "-fx-border-color: #b87331;"
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: 12;" + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
 							+ "-fx-border-width: " + k / 12 + "px;");
 				}
 			});
-			
+
 		}
 	}
 
@@ -415,22 +409,31 @@ public class GUISupportClasses {
 		}
 	}
 
-	static class ChatWindow extends VBox {
+	public static class ChatWindow extends VBox {
 
-		ScrollPane chat;
-		VBox vBoxMessages;
-		HBox textfieldAndButtons;
-		TextField textfieldMessage;
-		VBox comboAndSend;
-		DesignButton sendButton;
-		ComboBox<String> names;
-		HBox dragArea;
-		String messageToBeSend;			//message to be send, should used by client
-		
-		boolean dragAreaHover = false;
-		double ratio;
-		double xCord;
-		double yCord;
+		private ScrollPane chat;
+		private VBox vBoxMessages;
+		private HBox textfieldAndButtons;
+		private TextField textfieldMessage;
+		private VBox comboAndSend;
+		private DesignButton sendButton;
+		private ComboBox<String> names;
+		private HBox dragArea;
+		private String messageToBeSend;
+		// message to be send, should used by client
+		private Client client ;
+		public Client getClient() {
+			return client;
+		}
+
+		public void setClient(Client client) {
+			this.client = client;
+		}
+
+		private boolean dragAreaHover = false;
+		private double ratio;
+		private double xCord;
+		private double yCord;
 
 		public ChatWindow() {
 
@@ -443,6 +446,7 @@ public class GUISupportClasses {
 		}
 
 		public void setup() {
+			
 			chat = new ScrollPane();
 			vBoxMessages = new VBox();
 			textfieldAndButtons = new HBox();
@@ -510,8 +514,8 @@ public class GUISupportClasses {
 			textfieldAndButtons.setPickOnBounds(true);
 
 			vBoxMessages.setPrefWidth(ratio * 600);
-			vBoxMessages.setSpacing(ratio*5);
-			vBoxMessages.setPadding(new Insets(5*ratio,50*ratio,0,5*ratio));
+			vBoxMessages.setSpacing(ratio * 5);
+			vBoxMessages.setPadding(new Insets(5 * ratio, 50 * ratio, 0, 5 * ratio));
 			vBoxMessages.heightProperty().addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -536,17 +540,17 @@ public class GUISupportClasses {
 		}
 
 		public void actionEventsSetup() {
-			
+
 			dragArea.setOnMousePressed(event -> {
 				xCord = event.getSceneX();
 				yCord = event.getSceneY();
 				dragAreaHover = true;
-				
+
 			});
-			
+
 			dragArea.setOnMouseReleased(event -> {
 				dragAreaHover = false;
-				
+
 			});
 
 			textfieldMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -562,16 +566,16 @@ public class GUISupportClasses {
 			sendButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
+
 					
-					messageToBeSend = "";
 					messageToBeSend = textfieldMessage.getText();
-					
+
 					if (!messageToBeSend.isBlank()) {
-						
+
 						Text text = new Text(messageToBeSend);
 						text.setFill(Color.WHITE);
-						text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
-						
+						text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
+
 						TextFlow textFlow = new TextFlow(text);
 						textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
 								+ "-fx-background-radius: 20px;");
@@ -579,97 +583,108 @@ public class GUISupportClasses {
 
 						HBox message = new HBox();
 						message.setAlignment(Pos.CENTER_RIGHT);
-						message.getChildren().addAll(new Spacing(200*ratio,1*ratio), textFlow);
+						message.getChildren().addAll(new Spacing(200 * ratio, 1 * ratio), textFlow);
 						HBox.setHgrow(message, Priority.ALWAYS);
 
 						vBoxMessages.getChildren().add(message);
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								System.out.println("Run of Host sworks, this is what it starts with ");
+								if (messageToBeSend.contains(":")) {
+
+									System.out.println(messageToBeSend.substring(0, messageToBeSend.indexOf(":")));
+									String username = messageToBeSend.substring(0, messageToBeSend.indexOf(":"));
+									// send the message to the specified user
+									client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
+											findProfileFromString(username)));
+
+								} else if (!messageToBeSend.equals(null)) {
+									// send the message to the general chat
+									System.out.println( client.getProfile());
+									client.sendMessage(messageToBeSend);
+								}
+							}
+						});
 
 						textfieldMessage.clear();
 						textfieldMessage.requestFocus();
-
 					}
 				}
 			});
-			
+
 			this.setOnMouseDragged(event -> {
-				if(this.isDragAreaHover()) {
-					
-				this.setTranslateX(this.getTranslateX() + event.getSceneX()-this.getxCord());
-				this.setTranslateY(this.getTranslateY() + event.getSceneY()-this.getyCord());
-				this.setxCord(event.getSceneX());
-				this.setyCord(event.getSceneY());
-				System.out.println("durpai");
-				
+				if (this.isDragAreaHover()) {
+
+					this.setTranslateX(this.getTranslateX() + event.getSceneX() - this.getxCord());
+					this.setTranslateY(this.getTranslateY() + event.getSceneY() - this.getyCord());
+					this.setxCord(event.getSceneX());
+					this.setyCord(event.getSceneY());
+					System.out.println("durpai");
+
 				}
 			});
-			
 
 		}
-		
+
 		/*
 		 * adds the incomming message from other users
 		 */
 
 		public void addLabel(String messageFromCLient) {
-			
-			Text text = new Text("host is test");
+
+			Text text = new Text(messageFromCLient);
 			text.setFill(Color.WHITE);
-			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
+			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
 			TextFlow textFlow = new TextFlow(text);
 			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
 					+ "-fx-background-radius: 20px;");
 			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
-			
+
 			HBox message = new HBox();
 			message.setAlignment(Pos.CENTER_LEFT);
-			message.getChildren().addAll(textFlow, new Spacing(150*ratio,1*ratio));
+			message.getChildren().addAll(textFlow, new Spacing(150 * ratio, 1 * ratio));
 			HBox.setHgrow(message, Priority.ALWAYS);
-			
-			vBoxMessages.getChildren().add(message);
-			
+
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					vBoxMessages.getChildren().add(message);	
+				}
+			});
+
 		}
-		
+
 		public void addLabel(String messageFromCLient, String profile) {
-			
+
 			Text text = new Text(profile + ": " + messageFromCLient);
 			text.setFill(Color.WHITE);
-			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
+			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
 			TextFlow textFlow = new TextFlow(text);
 			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
 					+ "-fx-background-radius: 20px;");
 			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
-			
+
 			HBox message = new HBox();
 			message.setAlignment(Pos.CENTER_LEFT);
-			message.getChildren().addAll(textFlow, new Spacing(150*ratio,1*ratio));
+			message.getChildren().addAll(textFlow, new Spacing(150 * ratio, 1 * ratio));
 			HBox.setHgrow(message, Priority.ALWAYS);
-			
+
 			vBoxMessages.getChildren().add(message);
-			
+
 		}
-		
-//		public void addLabel(MessageToPerson p) {
-//			
-//			Text text = new Text(profile + ": " + messageFromCLient);
-//			text.setFill(Color.WHITE);
-//			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
-//			
-//			TextFlow textFlow = new TextFlow(text);
-//			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
-//					+ "-fx-background-radius: 20px;");
-//			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
-//			
-//			HBox message = new HBox();
-//			message.setAlignment(Pos.CENTER_LEFT);
-//			message.getChildren().addAll(textFlow, new Spacing(150*ratio,1*ratio));
-//			HBox.setHgrow(message, Priority.ALWAYS);
-//			
-//			vBoxMessages.getChildren().add(message);
-//			
-//		}
-		
+
+		private Profile findProfileFromString(String username) {
+			for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
+				if (clientHandler.getClientUsername().equalsIgnoreCase(username)) {
+					return clientHandler.getProfile();
+				}
+			}
+			return null;
+		}
+
 		public void setxCord(double xCord) {
 			this.xCord = xCord;
 		}
@@ -681,11 +696,11 @@ public class GUISupportClasses {
 		public void setyCord(double yCord) {
 			this.yCord = yCord;
 		}
-		
+
 		public double getyCord() {
 			return yCord;
 		}
-		
+
 		public boolean isDragAreaHover() {
 			return dragAreaHover;
 		}
@@ -693,6 +708,6 @@ public class GUISupportClasses {
 		public String getMessageToSend() {
 			return messageToBeSend;
 		}
-		
+
 	}
 }

@@ -144,8 +144,8 @@ public class ClientHandler implements Runnable {
 				messageFromClient = (Message) objectInputStream.readObject();
 				switch (messageFromClient.getMessageType()) {
 				case MessageSend:
-					broadcastMessage(messageFromClient);
 					System.out.println("case MessageSend in Handler Success 0");
+					broadcastMessage(messageFromClient);
 					break;
 				case Connect:
 					// all clients send their profile to the new Client

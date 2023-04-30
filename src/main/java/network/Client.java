@@ -9,8 +9,10 @@ import java.util.Scanner;
 
 import database.Profile;
 import game.Lobby;
+import game.gui.GUISupportClasses;
 import game.gui.HostServerMessengerController;
 import game.gui.JoinClientMessengerController;
+import game.gui.ServerMainWindowController;
 import game.models.Player;
 import game.models.PlayerMP;
 import general.AppController;
@@ -31,6 +33,7 @@ public class Client {
 	private String userName;
 	private Player player;
 	public static ArrayList<Profile> profiles = new ArrayList<>();
+	GUISupportClasses.ChatWindow chat;
 
 	public Client(Socket socket, Profile profile) {
 		this.profile = profile;
@@ -42,9 +45,10 @@ public class Client {
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
+			
 			// this.sendMessage(new MessageConnect(profile));
 			// newlineofCode
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("DSICONNECT");
 			// System.out.println(
 			// "Player " + (((MessageConnect) message).getPlayername()) + " has been
@@ -55,6 +59,9 @@ public class Client {
 			e.printStackTrace();
 		}
 
+	}
+	public void setChat(GUISupportClasses.ChatWindow serverMainWindowController){
+		chat = serverMainWindowController;	
 	}
 
 	public Client(Socket socket, Player player) {
@@ -180,7 +187,7 @@ public class Client {
 		}
 	}
 
-	public void listenForMessage(VBox vBoxMessages) {
+	public void listenForMessage() {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -193,6 +200,7 @@ public class Client {
 
 							System.out.println("case MessageSend in Clinet Success 0 ");
 							System.out.println(((MessageSend) message).getMessage());
+							chat.addLabel(((MessageSend) message).getMessage());
 							// HostServerMessengerController.addLabel(((MessageSend) message).getMessage(),
 							// vBoxMessages);
 							// System.out.println(((MessageSend) message).getMessage());
@@ -213,27 +221,27 @@ public class Client {
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
-							HostServerMessengerController.addLabel(
-									"Player " + ((MessageDisconnect) message).getPlayername() + " has disconnected",
-									vBoxMessages);
+//							HostServerMessengerController.addLabel(
+//									"Player " + ((MessageDisconnect) message).getPlayername() + " has disconnected",
+//									vBoxMessages);
 							closeEverything();
 							break;
 						case MessageServerCloseConnection:
 							System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
 //							JoinClientMessengerController
 //									.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);	
-							JoinClientMessengerController.addLabel("Host has disconnected, please reconnect",
-									vBoxMessages);
+//							JoinClientMessengerController.addLabel("Host has disconnected, please reconnect",
+//									vBoxMessages);
 							closeEverything(socket, inputStream, outputStream);
 							Server.closeServerSocket();
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Handler");
-							JoinClientMessengerController.addLabel(
-									((MessageToPerson) message).getFromProfile().getLastName()
-											+ ((MessageToPerson) message).getMsg()
-													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
-									vBoxMessages);
+//							JoinClientMessengerController.addLabel(
+//									((MessageToPerson) message).getFromProfile().getLastName()
+//											+ ((MessageToPerson) message).getMsg()
+//													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
+//									vBoxMessages);
 							break;
 						case MessageProfile:
 							// ithe new client adds the other clients in his list and db
