@@ -41,8 +41,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -139,7 +141,7 @@ public class GamePaneController implements Initializable{
 		map.setTranslateY(translateY);
 		
 		double layoutX = (w - scaleX * map.getPrefWidth()) / 2.0;
-		double layoutY = (h - scaleY * map.getPrefHeight()) / 2.0;
+		double layoutY = ((h - scaleY * map.getPrefHeight()) / 2.0) - 20.0;
 		map.setLayoutX(layoutX);
 		map.setLayoutY(layoutY);
 		
@@ -165,6 +167,12 @@ public class GamePaneController implements Initializable{
 		setUpChoosingTroopsPane();
 	}
 	
+	private double getRelativeHorz(double x) {
+		return (x / 1536.0) * w;
+	}
+	private double getRelativeVer(double y) {
+		return (y / 864.0) * h;
+	}
 	public void initSinglePlayer(SinglePlayerHandler singlePlayerHandler) {
 		gameType = GameType.SinglePlayer;
 		this.singlePlayerHandler = singlePlayerHandler;
@@ -309,13 +317,13 @@ public class GamePaneController implements Initializable{
 	
 	public void setUpPhaseBoard() {
 		phaseBoard = new Pane();
-		phaseBoard.setPrefSize(800, 130);
+		phaseBoard.setPrefSize(getRelativeHorz(800.0), getRelativeVer(130.0));
 		
 		vbPhase = new VBox();
-		vbPhase.setPrefSize(250, 130);
-		vbPhase.setLayoutX(341);
+		vbPhase.setPrefSize(getRelativeHorz(250.0), getRelativeVer(130.0));
+		vbPhase.setLayoutX(getRelativeHorz(341.0));
 		
-		rectPhase = new Rectangle(300, 70);
+		rectPhase = new Rectangle(getRelativeHorz(300.0), getRelativeVer(70.0));
 		rectPhase.setArcWidth(5.0);
         rectPhase.setFill(Color.WHITE);
         rectPhase.setStrokeType(StrokeType.INSIDE);
@@ -323,33 +331,33 @@ public class GamePaneController implements Initializable{
 
         // Erstelle eine Fortschrittsleiste
         pB = new ProgressBar();
-        pB.setPrefHeight(60.0);
-        pB.setPrefWidth(300.0);
+        pB.setPrefHeight(getRelativeVer(60.0));
+        pB.setPrefWidth(getRelativeHorz(300.0));
         pB.setProgress(1.0);
         
         vbPhase.getChildren().addAll(rectPhase, pB);
         
         cirPhase = new Circle();
-        cirPhase.setRadius(42.0);
+        cirPhase.setRadius(getRelativeHorz(42.0));
         cirPhase.setStroke(Color.WHITE);
         cirPhase.setStrokeType(StrokeType.INSIDE);
         cirPhase.setStrokeWidth(3.0);
 
         // Erstelle ein ImageView mit einem Bild
         ivPhase = new ImageView();
-        ivPhase.setFitHeight(80.0);
-        ivPhase.setFitWidth(80.0);
+        ivPhase.setFitHeight(getRelativeHorz(80.0));
+        ivPhase.setFitWidth(getRelativeHorz(80.0));
         ivPhase.setPickOnBounds(true);
         ivPhase.setPreserveRatio(true);
         
         // Füge den Kreis und das ImageView in ein StackPane
         spPhase = new StackPane();
-        spPhase.setLayoutX(282.0);
-        spPhase.setLayoutY(23.0);
+        spPhase.setLayoutX(getRelativeHorz(282.0));
+        spPhase.setLayoutY(getRelativeVer(23.0));
         spPhase.getChildren().addAll(cirPhase, ivPhase);
         
         cirNum = new Circle();
-        cirNum.setRadius(20.0);
+        cirNum.setRadius(getRelativeHorz(20.0));
         cirNum.setStroke(Color.WHITE);
         cirNum.setStrokeType(StrokeType.INSIDE);
         cirNum.setStrokeWidth(3.0);
@@ -359,55 +367,55 @@ public class GamePaneController implements Initializable{
 
         // Füge den Kreis und das Label in ein StackPane
         spNum = new StackPane();
-        spNum.setLayoutX(340.0);
-        spNum.setLayoutY(11.0);
-        spNum.setPrefHeight(20.0);
-        spNum.setPrefWidth(20.0);
+        spNum.setLayoutX(getRelativeHorz(340.0));
+        spNum.setLayoutY(getRelativeVer(11.0));
+        spNum.setPrefHeight(getRelativeHorz(20.0));
+        spNum.setPrefWidth(getRelativeHorz(20.0));
         spNum.getChildren().addAll(cirNum, labNum);
         
         labPhase = new Label("CLAIM");
-        labPhase.setPrefSize(245, 40);
-        labPhase.setLayoutX(378);
-        labPhase.setLayoutY(81);
+        labPhase.setPrefSize(getRelativeHorz(245.0), getRelativeVer(40.0));
+        labPhase.setLayoutX(getRelativeHorz(378.0));
+        labPhase.setLayoutY(getRelativeVer(81.0));
         labPhase.setAlignment(Pos.CENTER);
         labPhase.setStyle("-fx-font-family: \"Helvetica\";"
         		+ "    -fx-font-weight: bold;"
         		+ "    -fx-font-size: 30px;");
 
         firstPhaseLogo = new ImageView(Parameter.phaseLogosdir + "reinforce.png"); 
-        firstPhaseLogo.setFitHeight(27.0);
-        firstPhaseLogo.setFitWidth(32.0);
-        firstPhaseLogo.setLayoutX(400.0);
-        firstPhaseLogo.setLayoutY(27.0);
+        firstPhaseLogo.setFitHeight(getRelativeVer(27.0));
+        firstPhaseLogo.setFitWidth(getRelativeHorz(32.0));
+        firstPhaseLogo.setLayoutX(getRelativeHorz(400.0));
+        firstPhaseLogo.setLayoutY(getRelativeVer(27.0));
         firstPhaseLogo.setPickOnBounds(true);
         firstPhaseLogo.setPreserveRatio(true);
         firstPhaseLogo.setVisible(false);
         
         // Erstelle ein ImageView mit einem Bild
         middlePhaseLogo = new ImageView(Parameter.phaseLogosdir + "claim.png"); 
-        middlePhaseLogo.setFitHeight(27.0);
-        middlePhaseLogo.setFitWidth(32.0);
-        middlePhaseLogo.setLayoutX(474.0);
-        middlePhaseLogo.setLayoutY(27.0);
+        middlePhaseLogo.setFitHeight(getRelativeVer(27.0));
+        middlePhaseLogo.setFitWidth(getRelativeHorz(32.0));
+        middlePhaseLogo.setLayoutX(getRelativeHorz(474.0));
+        middlePhaseLogo.setLayoutY(getRelativeVer(27.0));
         middlePhaseLogo.setPickOnBounds(true);
         middlePhaseLogo.setPreserveRatio(true);
         
         lastPhaseLogo = new ImageView(Parameter.phaseLogosdir + "fortify.png"); 
-        lastPhaseLogo.setFitHeight(27.0);
-        lastPhaseLogo.setFitWidth(32.0);
-        lastPhaseLogo.setLayoutX(548.0);
-        lastPhaseLogo.setLayoutY(27.0);
+        lastPhaseLogo.setFitHeight(getRelativeVer(27.0));
+        lastPhaseLogo.setFitWidth(getRelativeHorz(32.0));
+        lastPhaseLogo.setLayoutX(getRelativeHorz(548.0));
+        lastPhaseLogo.setLayoutY(getRelativeVer(27.0));
         lastPhaseLogo.setPickOnBounds(true);
         lastPhaseLogo.setPreserveRatio(true);
         lastPhaseLogo.setVisible(false);
         
         nextPhaseButton = new Button("✓");
         nextPhaseButton.setId("nextPhaseButton");
-        nextPhaseButton.setLayoutX(676.0);
-        nextPhaseButton.setLayoutY(52.0);
+        nextPhaseButton.setLayoutX(getRelativeHorz(676.0));
+        nextPhaseButton.setLayoutY(getRelativeVer(52.0));
         nextPhaseButton.setMnemonicParsing(false);
-        nextPhaseButton.setPrefHeight(72.0);
-        nextPhaseButton.setPrefWidth(72.0);
+        nextPhaseButton.setPrefHeight(getRelativeHorz(72.0));
+        nextPhaseButton.setPrefWidth(getRelativeHorz(72.0));
         
         nextPhaseButton.setVisible(false);
 
@@ -415,12 +423,12 @@ public class GamePaneController implements Initializable{
         rectCards.setArcHeight(5.0);
         rectCards.setArcWidth(5.0);
 		rectCards.setOpacity(0.44);
-        rectCards.setHeight(84.0);
-        rectCards.setLayoutX(99.0);
-        rectCards.setLayoutY(23.0);
+        rectCards.setHeight(getRelativeVer(84.0));
+        rectCards.setLayoutX(getRelativeHorz(99.0));
+        rectCards.setLayoutY(getRelativeVer(23.0));
         rectCards.setStrokeType(StrokeType.INSIDE);
         rectCards.setStrokeWidth(0.0);
-        rectCards.setWidth(150.0);
+        rectCards.setWidth(getRelativeHorz(150.0));
         BoxBlur boxBlur = new BoxBlur();
         boxBlur.setHeight(0.0);
         boxBlur.setWidth(38.25);
@@ -429,13 +437,13 @@ public class GamePaneController implements Initializable{
 
         cardsPane = new Pane();
         cardsPane.setId("cardsPane");
-        cardsPane.setLayoutX(10.0);
-        cardsPane.setLayoutY(7.0);
-        cardsPane.setPrefHeight(115.0);
-        cardsPane.setPrefWidth(110.0);
+        cardsPane.setLayoutX(getRelativeHorz(10.0));
+        cardsPane.setLayoutY(getRelativeVer(7.0));
+        cardsPane.setPrefHeight(getRelativeVer(115.0));
+        cardsPane.setPrefWidth(getRelativeHorz(110.0));
         cardsImageView = new ImageView(new Image(Parameter.phaseLogosdir + "cards.png"));
-        cardsImageView.setFitHeight(115.0);
-        cardsImageView.setFitWidth(110.0);
+        cardsImageView.setFitHeight(getRelativeVer(115.0));
+        cardsImageView.setFitWidth(getRelativeHorz(110.0));
         cardsImageView.setPickOnBounds(true);
         cardsImageView.setPreserveRatio(true);
         ColorAdjust colorAdjust = new ColorAdjust();
@@ -447,61 +455,61 @@ public class GamePaneController implements Initializable{
         cardsPane.setVisible(false);
         
         numCardsLabel = new Label("Label");
-        numCardsLabel.setLayoutX(138.0);
-        numCardsLabel.setLayoutY(45.0);
-        numCardsLabel.setPrefHeight(50.0);
-        numCardsLabel.setPrefWidth(92.0);
+        numCardsLabel.setLayoutX(getRelativeHorz(138.0));
+        numCardsLabel.setLayoutY(getRelativeVer(45.0));
+        numCardsLabel.setPrefHeight(getRelativeVer(50.0));
+        numCardsLabel.setPrefWidth(getRelativeHorz(92.0));
         numCardsLabel.setVisible(false);
 
         // nextPhaseLabel
         nextPhaseLabel = new Label("Label");
-        nextPhaseLabel.setLayoutX(682.0);
-        nextPhaseLabel.setLayoutY(6.0);
-        nextPhaseLabel.setPrefHeight(34.0);
-        nextPhaseLabel.setPrefWidth(60.0);
+        nextPhaseLabel.setLayoutX(getRelativeHorz(682.0));
+        nextPhaseLabel.setLayoutY(getRelativeVer(6.0));
+        nextPhaseLabel.setPrefHeight(getRelativeVer(34.0));
+        nextPhaseLabel.setPrefWidth(getRelativeHorz(60.0));
         nextPhaseLabel.setVisible(false);
         
         phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo, middlePhaseLogo, lastPhaseLogo,nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseLabel);
-        phaseBoard.setScaleX(0.8 * w / 1536.0);
-        phaseBoard.setScaleY(0.8 * h / 864.0);
         
         phaseBoard.setLayoutX((w - phaseBoard.getPrefWidth() * phaseBoard.getScaleX()) / 2.0);
-        phaseBoard.setLayoutY((720.0 / 864.0) * h);
+        phaseBoard.setLayoutY((700.0 / 864.0) * h);
         
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
 	public void setUpChoosingTroopsPane() {
 		choosingTroopsPane = new Pane();
-		choosingTroopsPane.setPrefSize(1536.0, 864.0);
+		choosingTroopsPane.setPrefSize(w, h);
 		choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
 
 		Rectangle rectangle = new Rectangle();
 		rectangle.setArcHeight(5.0);
 		rectangle.setArcWidth(5.0);
 		rectangle.setFill(Color.web("#ecd9c6"));
-		rectangle.setHeight(61.0);
-		rectangle.setLayoutX(622.0);
-		rectangle.setLayoutY(613.0);
 		rectangle.setStrokeWidth(0.0);
-		rectangle.setWidth(284.0);
-
+		rectangle.setWidth(getRelativeHorz(284.0));
+		rectangle.setHeight(getRelativeVer(72.0));
+		
 		falseButtonChoosingTroops = new Button("x");
-		falseButtonChoosingTroops.setLayoutX(586.0);
-		falseButtonChoosingTroops.setLayoutY(608.0);
+		falseButtonChoosingTroops.setLayoutX(getRelativeHorz(586.0));
+		falseButtonChoosingTroops.setLayoutY(getRelativeVer(608.0));
 		falseButtonChoosingTroops.setMnemonicParsing(false);
-		falseButtonChoosingTroops.setPrefSize(72.0, 72.0);
+		falseButtonChoosingTroops.setPrefSize(getRelativeHorz(72.0), getRelativeHorz(72.0));
 
 		trueButtonChoosingTroops = new Button("✓");
-		trueButtonChoosingTroops.setLayoutX(879.0);
-		trueButtonChoosingTroops.setLayoutY(608.0);
+		trueButtonChoosingTroops.setLayoutX(getRelativeHorz(879.0));
+		trueButtonChoosingTroops.setLayoutY(getRelativeVer(608.0));
 		trueButtonChoosingTroops.setMnemonicParsing(false);
-		trueButtonChoosingTroops.setPrefSize(72.0, 72.0);
+		trueButtonChoosingTroops.setPrefSize(getRelativeHorz(72.0), getRelativeHorz(72.0));
 	
 		choosingTroopsPhaseLabel = new Label();
-		choosingTroopsPhaseLabel.setLayoutX(661.0);
-		choosingTroopsPhaseLabel.setLayoutY(614.0);
-		choosingTroopsPhaseLabel.setPrefSize(206.0, 60.0);
+		choosingTroopsPhaseLabel.setPrefSize(getRelativeHorz(204.0), getRelativeVer(72.0));
+		
+		StackPane confirmationSP = new StackPane();
+		confirmationSP.getChildren().addAll(rectangle, choosingTroopsPhaseLabel);
+		confirmationSP.setLayoutX(getRelativeHorz(622.0));
+		confirmationSP.setLayoutY(getRelativeVer(608.0));
+		
 		
 		lessBtn = new DesignButton();
 		moreBtn = new DesignButton();
@@ -509,25 +517,25 @@ public class GamePaneController implements Initializable{
 		
 		lessBtn.setText("<");
 		moreBtn.setText(">");
-		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 34));
+		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, getRelativeHorz(34)));
 		numberLabel.setTextFill(Color.web("#b87331"));
 		numberLabel.textOverrunProperty().set(OverrunStyle.CLIP);
-		numberLabel.setMinWidth(50);
 		numberLabel.setAlignment(Pos.CENTER);
 		
-		HBox numOfTroopsHBox = new HBox();
+		BorderPane numTroopsBP = new BorderPane();
+		numTroopsBP.setLeft(lessBtn);
+		numTroopsBP.setCenter(numberLabel);
+		numTroopsBP.setRight(moreBtn);
+		numTroopsBP.setPrefSize(getRelativeHorz(300.0), getRelativeVer(60.0));
+		numTroopsBP.setLayoutX((w - numTroopsBP.getPrefWidth()) / 2.0);
+		numTroopsBP.setLayoutY(getRelativeVer(514.0));
 		
-		numOfTroopsHBox.setSpacing(25);
-		numOfTroopsHBox.setPrefSize(200, 60);
-		numOfTroopsHBox.getChildren().addAll(lessBtn, numberLabel, moreBtn);
-		numOfTroopsHBox.setLayoutX((1536.0 - numOfTroopsHBox.getPrefHeight()) / 2.0);
-		numOfTroopsHBox.setLayoutY(514.0);
-		
-		choosingTroopsPane.setScaleX(w / 1536.0);
-		choosingTroopsPane.setScaleY(h / 864.0);
-		choosingTroopsPane.getChildren().addAll(rectangle, falseButtonChoosingTroops, trueButtonChoosingTroops, choosingTroopsPhaseLabel, numOfTroopsHBox);
-		choosingTroopsPane.setVisible(false);
+		choosingTroopsPane.getChildren().addAll(confirmationSP, trueButtonChoosingTroops, falseButtonChoosingTroops, numTroopsBP);
+		choosingTroopsPane.setVisible(true);
 		gameBoard.getChildren().add(choosingTroopsPane);
+		
+
+		
 	}
 	
 	public void decreaseProgressbar() {
@@ -644,7 +652,7 @@ public class GamePaneController implements Initializable{
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	//singlePlayerHandler.confirmDeployNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()));
+		    	singlePlayerHandler.confirmNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()), choosePane);
 		    }
 		});
         
