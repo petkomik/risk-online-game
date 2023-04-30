@@ -451,7 +451,7 @@ public class GUISupportClasses {
 			names = new ComboBox<String>();
 			dragArea = new HBox();
 
-			dragArea.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0");
+			dragArea.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0;");
 			dragArea.setPrefHeight(30 * ratio);
 			dragArea.getChildren().add(new Spacing(1));
 			HBox.setHgrow(dragArea, Priority.ALWAYS);
@@ -503,7 +503,7 @@ public class GUISupportClasses {
 			textfieldAndButtons.setPrefWidth(ratio * 600);
 			textfieldAndButtons.setMaxHeight(ratio * 100);
 			textfieldAndButtons.setMaxWidth(ratio * 600);
-			textfieldAndButtons.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 0 0 10 10");
+			textfieldAndButtons.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 0 0 10 10;");
 			textfieldAndButtons.setAlignment(Pos.CENTER_RIGHT);
 			textfieldAndButtons.setPadding(new Insets(20, 20, 20, 20));
 			textfieldAndButtons.getChildren().addAll(textfieldMessage, new Spacing(20), comboAndSend);
@@ -528,8 +528,10 @@ public class GUISupportClasses {
 			 */
 
 			this.setPrefHeight(ratio * 530);
+			this.setMaxHeight(ratio * 570);
 			this.setMaxWidth(ratio * 600);
 			this.setAlignment(Pos.CENTER);
+			this.setPickOnBounds(true);
 			this.getChildren().addAll(dragArea, chat, textfieldAndButtons);
 		}
 
@@ -647,6 +649,26 @@ public class GUISupportClasses {
 			vBoxMessages.getChildren().add(message);
 			
 		}
+		
+//		public void addLabel(MessageToPerson p) {
+//			
+//			Text text = new Text(profile + ": " + messageFromCLient);
+//			text.setFill(Color.WHITE);
+//			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio*15));
+//			
+//			TextFlow textFlow = new TextFlow(text);
+//			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
+//					+ "-fx-background-radius: 20px;");
+//			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
+//			
+//			HBox message = new HBox();
+//			message.setAlignment(Pos.CENTER_LEFT);
+//			message.getChildren().addAll(textFlow, new Spacing(150*ratio,1*ratio));
+//			HBox.setHgrow(message, Priority.ALWAYS);
+//			
+//			vBoxMessages.getChildren().add(message);
+//			
+//		}
 		
 		public void setxCord(double xCord) {
 			this.xCord = xCord;

@@ -326,6 +326,10 @@ public class EndGamePodiumController extends Application {
 
 		vBoxIcons.getChildren().addAll(caption, avatars, place);
 		
+		/*
+		 * initializing the chat
+		 */
+		
 		chatPane = new ChatWindow();
 		chatPane.setVisible(false);
 		chatPane.setPickOnBounds(true);

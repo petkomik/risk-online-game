@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
+import game.gui.GUISupportClasses.ChatButton;
 import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
@@ -58,7 +59,7 @@ public class ServerMainWindowController extends StackPane {
 	static int counter = 0;
 	private double ratio;
 	
-	private VBox menuAndScrollAndButtons;
+	private VBox menuAndScrollAndButtons;			//top level container
 	private HBox backgroundPic;						//background
 	private HBox backgroundColor;					//*
 	private ImageView imgBackground;				//*
@@ -68,6 +69,10 @@ public class ServerMainWindowController extends StackPane {
 	private HBox topBannerContent;					//*
 	private Label lobbyTextBanner;					//*
 	private ArrowButton backButton;					//*
+	
+	private HBox chatDiv;							//chatdiv with button
+	private ChatButton chatButton;					//*
+	private ChatWindow chatPane;					//chatPane
 
 	private HBox menu;								//menu
 	private HBox searchBar;							//searchField + Button
@@ -92,6 +97,7 @@ public class ServerMainWindowController extends StackPane {
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(1, this.ratio + 0.2);
 		this.setup();
+		this.actionEventsSetup();
 	}
 
 	public void setup() throws Exception {
@@ -130,7 +136,7 @@ public class ServerMainWindowController extends StackPane {
 		backgroundPic.getChildren().add(imgBackgroundPane);
 
 		/*
-		 * setting up banner layer
+		 * setting up banner layer with chat button
 		 */
 
 		topBannerParent = new HBox(); 
@@ -163,9 +169,29 @@ public class ServerMainWindowController extends StackPane {
 		Spacing bannerSpacing = new Spacing();
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
+		
+		chatButton = new ChatButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio, 170 * ratio, true);
+		chatButton.setAlignment(Pos.CENTER);
+		chatDiv = new HBox();
+		chatDiv.getChildren().add(chatButton);
+		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
+		chatDiv.maxHeightProperty().bind(chatDiv.prefHeightProperty());
+		chatDiv.setPrefHeight(100 * ratio);
+		chatDiv.setPadding(new Insets(0, 50 * ratio, 0, 0));
+		chatDiv.setAlignment(Pos.CENTER);
 			
+		backButton = new ArrowButton(45);
+		
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
-		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing);
+		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing,chatDiv);
+		
+		/*
+		 * initializing the chat
+		 */
+		
+		chatPane = new ChatWindow();
+		chatPane.setVisible(false);
+		chatPane.setPickOnBounds(true);
 
 		/*
 		 * setting up ScrollPane
@@ -192,14 +218,6 @@ public class ServerMainWindowController extends StackPane {
 		menu.setAlignment(Pos.CENTER_LEFT);
 		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
 		menu.setMaxWidth(ScrollPane.USE_PREF_SIZE);
-
-		/*
-		 * Setting up the buttons in the Menu
-		 */
-
-		backButton = new ArrowButton(45);
-
-	
 
 		/*
 		 * setting up button & text
@@ -261,6 +279,66 @@ public class ServerMainWindowController extends StackPane {
 				+ "radius 75% , #b87331, #64441f);" + "-fx-background-insets: 1 1 1 1;"
 				+ "-fx-background-radius: 0 12 12 0;" + "-fx-border-radius: 0 12 12 0;"
 				+ "-fx-border-color: transparent;" + "-fx-border-width: 4px;");
+
+		searchBar = new HBox();
+		searchBar.setAlignment(Pos.CENTER);
+		searchBar.getChildren().addAll(searchField, searchButton);
+
+		/*
+		 * assembling the menu
+		 */
+
+		menu.getChildren().addAll(searchBar, new Spacing(1), refreshButton);
+		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
+
+		/*
+		 * assemblingthe host and join buttons
+		 */
+		
+		buttonsHBox = new HBox();
+		buttonsHBox.setAlignment(Pos.CENTER);
+		buttonsHBox.getChildren().addAll(hostGameButton,joinGameButton);
+		buttonsHBox.setSpacing(20*ratio);
+		buttonsHBox.setPadding(new Insets(30*ratio,0,0,0));
+
+		/*
+		 * assembling menu and scrollpane with lobbies
+		 */
+		
+		menuAndScrollAndButtons.getChildren().addAll(menu, lobbyListContainer, buttonsHBox);
+		menuAndScrollAndButtons.setAlignment(Pos.CENTER);
+		menuAndScrollAndButtons.setPadding(new Insets(50 * ratio, 0, 0, 0));
+
+		/*
+		 * adding elements to the main container
+		 */
+
+		
+		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane);
+	}
+	
+	
+	/*
+	 * setting up buttons action events
+	 */
+	
+	public void actionEventsSetup() {
+		
+		chatButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				(new GameSound()).buttonClickForwardSound();
+				
+				if (!chatButton.isSelected()) {
+					chatButton.setSelected(false);
+					chatPane.setVisible(false);
+				} else {
+					chatButton.setSelected(true);
+					chatPane.setVisible(true);
+				}
+			}
+		});
+		
 		searchButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -284,15 +362,7 @@ public class ServerMainWindowController extends StackPane {
 						+ "-fx-border-color: transparent;" + "-fx-border-width: 4px;");
 			}
 		});
-
-		searchBar = new HBox();
-		searchBar.setAlignment(Pos.CENTER);
-		searchBar.getChildren().addAll(searchField, searchButton);
-
-		/*
-		 * setting up buttons action events
-		 */
-
+		
 		hostGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -351,36 +421,6 @@ public class ServerMainWindowController extends StackPane {
 			}
 		});
 		
-		
-
-		/*
-		 * assembling the menu
-		 */
-
-		menu.getChildren().addAll(searchBar, new Spacing(1), refreshButton);
-		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
-
-		/*
-		 * assembling menu and scrollpane with lobbies
-		 */
-		
-		buttonsHBox = new HBox();
-		buttonsHBox.setAlignment(Pos.CENTER);
-		buttonsHBox.getChildren().addAll(hostGameButton,joinGameButton);
-		buttonsHBox.setSpacing(20*ratio);
-		buttonsHBox.setPadding(new Insets(30*ratio,0,0,0));
-
-
-		menuAndScrollAndButtons.getChildren().addAll(menu, lobbyListContainer, buttonsHBox);
-		menuAndScrollAndButtons.setAlignment(Pos.CENTER);
-		menuAndScrollAndButtons.setPadding(new Insets(50 * ratio, 0, 0, 0));
-
-		/*
-		 * adding elements to the main container
-		 */
-
-		
-		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent);
 	}
 	
 	public static void initServer() {
