@@ -422,6 +422,8 @@ public class ServerMainWindowController extends StackPane {
 
 				stage.show();
 			}
+			
+			//TODO disconnect from server
 		});
 
 		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
