@@ -478,7 +478,7 @@ public class GUISupportClasses {
 			names.setPrefWidth(ratio * 120);
 			// TODO add names or change them with a foreach
 			names.getItems().addAll("Name1", "Name2", "Name3");
-			names.setStyle("-fx-background-color: rgba(225,211,184,0.9); -fx-background-radius: 10 10 10 10");
+			names.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 
 			comboAndSend.prefHeight(ratio * 100);
 			comboAndSend.prefWidth(ratio * 120);

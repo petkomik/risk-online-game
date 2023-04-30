@@ -8,7 +8,7 @@
 }
 
 .plainBackground {
-		-fx-background-color: #4287f5;
+	-fx-background-color: #4287f5;
 	
 }
 .mapBackground {
@@ -55,6 +55,29 @@
 	-fx-pref-height: 20;
 	-fx-pref-width: 20;
 }
+
+.combo-box{
+	-fx-background-color: rgba(225,211,184);
+	-fx-background-radius: 10 10 10 10;
+	-fx-text-fill: black;
+}
+
+.combo-box .list-cell{
+	-fx-background-color: rgba(225,211,184);
+	-fx-text-fill: black;
+}
+
+.combo-box .list-cell:selected{
+	-fx-background-color: rgba(225,211,184);
+	-fx-background-radius: 10 0 0 10;
+	-fx-text-fill: black;
+}
+
+.combo-box .list-cell:hover{
+	-fx-background-color:rgba(92,64,51);
+	-fx-text-fill: white;
+}
+
 #gameBoard{
 	-fx-background-color: #ecd9c6;
 }

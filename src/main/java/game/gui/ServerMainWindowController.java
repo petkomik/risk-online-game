@@ -1,6 +1,7 @@
 package game.gui;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -58,6 +60,7 @@ public class ServerMainWindowController extends StackPane {
 	 */
 	static int counter = 0;
 	private double ratio;
+	private Stage stage;
 	
 	private VBox menuAndScrollAndButtons;			//top level container
 	private HBox backgroundPic;						//background
@@ -111,9 +114,8 @@ public class ServerMainWindowController extends StackPane {
 		lobbyListContainer = new ScrollPane();		
 		lobbyGUIList = new HashMap<String, LobbyGUI>(); 
 		menu = new HBox();							
-		vbox = new VBox();	
-		vbox.setAlignment(Pos.CENTER);
-		vbox.setSpacing(15);
+
+		
 		
 		/*
 		 * setting up background image
@@ -198,8 +200,8 @@ public class ServerMainWindowController extends StackPane {
 		 */
 		
 		lobbyListContainer.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
+		lobbyListContainer.setPrefSize(ratio * 900, ratio * 500);
 		lobbyListContainer.setMaxSize(ratio * 900, ratio * 500);
-		lobbyListContainer.setMinSize(ratio * 900, ratio * 500);
 		lobbyListContainer.setHbarPolicy(ScrollBarPolicy.NEVER);
 		lobbyListContainer.setCache(true);
 		lobbyListContainer.setMaxWidth(ScrollPane.USE_PREF_SIZE);
@@ -207,7 +209,9 @@ public class ServerMainWindowController extends StackPane {
 		lobbyListContainer.setPadding(new Insets(20 * ratio, 20 * ratio, 20 * ratio, 20 * ratio));
 		lobbyListContainer.setFitToWidth(true);
 
-
+		vbox = new VBox();	
+		vbox.setAlignment(Pos.CENTER);
+		vbox.setSpacing(15);
 		/*
 		 * Setting up the menu visuals
 		 */
@@ -246,17 +250,6 @@ public class ServerMainWindowController extends StackPane {
 		refreshButton.setGraphic(img);	
 		refreshButton.setStyle("-fx-background-color: transparent");
 		
-		refreshButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				refreshButton.setRotate(refreshButton.getRotate() + 90);
-				
-				//client.sendMessage(new MessageRefresh())
-				// return HashMap<String, Lobby>
-			}
-			
-			
-		});
 		
 		/*
 		 * setting up the searchBar and Button
@@ -363,6 +356,18 @@ public class ServerMainWindowController extends StackPane {
 			}
 		});
 		
+		refreshButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				refreshButton.setRotate(refreshButton.getRotate() + 90);
+				
+				//client.sendMessage(new MessageRefresh())
+				// return HashMap<String, Lobby>
+			}
+			
+			
+		});
+		
 		hostGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -382,8 +387,8 @@ public class ServerMainWindowController extends StackPane {
 				for (String key : lobbyGUIList.keySet()) {
 					vbox.getChildren().add(lobbyGUIList.get(key));
 				}
+				
 				lobbyListContainer.setContent(vbox);
-
 				
 				lobbyEntry.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
@@ -409,8 +414,19 @@ public class ServerMainWindowController extends StackPane {
 			@Override
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickBackwardSound();
-				// TODO has to return the player to the Host/Join Window and disconnect from the server
-			}
+				
+				Node node = (Node) event.getSource();
+				stage = (Stage)node.getScene().getWindow();
+				
+				try {
+					MultplayerHostJoinController mlt = new MultplayerHostJoinController();
+					stage.getScene().setRoot(mlt);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				stage.show();
+		    }
 		});
 		
 		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
