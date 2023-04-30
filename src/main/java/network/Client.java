@@ -157,6 +157,18 @@ public class Client {
 		}
 	}
 
+	public void sendDirectMessage(Message message, int id) {
+		try {
+			outputStream.flush();
+			outputStream.writeObject(message);
+			outputStream.flush();
+		} catch (IOException e) {
+			closeEverything(socket, inputStream, outputStream);
+			e.printStackTrace();
+		}
+
+	}
+
 	public void sendMessage(Message message) {
 		try {
 			outputStream.flush();
@@ -178,27 +190,26 @@ public class Client {
 						message = (Message) inputStream.readObject();
 						switch (message.getMessageType()) {
 						case MessageSend:
+
 							System.out.println("case MessageSend in Clinet Success 0 ");
-							HostServerMessengerController.addLabel(((MessageSend) message).getMessage(), vBoxMessages);
+							System.out.println(((MessageSend) message).getMessage());
+							// HostServerMessengerController.addLabel(((MessageSend) message).getMessage(),
+							// vBoxMessages);
 							// System.out.println(((MessageSend) message).getMessage());
 
 							break;
 						case Connect:
+							// all clients profile of New connected client and send their profile only to
+							// this one clinet
 							System.out.println("case MessageConnect Success 1 ");
-							sendMessage(new MessageConnect(profile));
 							Profile profilee = ((MessageConnect) message).getProfile();
+							// Add Label that this client connected to the server
 							if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
 								AppController.dbH.createProfileData(profilee);
 							}
-
 							profiles.add(profilee);
-
-							sendMessage(new MessageProfile(profile));
-							HostServerMessengerController.addLabel(
-									"Player " + ((MessageConnect) message).getPlayername() + " has been connected",
-									vBoxMessages);
-							// Imporatant for different pcs communication
-							// sendMessage(new MessageConnect(((MessageConnect)message).getProfile()));
+							// The client who received the new Connected Client sends own profile
+							sendMessage(new MessageConnect(getProfile(), profilee.getId()));
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
@@ -225,12 +236,19 @@ public class Client {
 									vBoxMessages);
 							break;
 						case MessageProfile:
+							// ithe new client adds the other clients in his list and db
 							if (!profiles.contains(((MessageProfile) message).getProfile())) {
 								profiles.add(((MessageProfile) message).getProfile());
 							}
+							Profile profilee1 = ((MessageProfile) message).getProfile();
+							if (AppController.dbH.getProfileByID(profilee1.getId()) == null) {
+								AppController.dbH.createProfileData(profilee1);
+								System.out.println("profileadding works");
+							}
+							System.out.println("MessageProfile");
 							break;
 						case MessageCreateLobby:
-							
+
 							break;
 						case MessageJoinLobby:
 							break;

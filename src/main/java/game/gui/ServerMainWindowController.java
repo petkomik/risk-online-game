@@ -406,7 +406,7 @@ public class ServerMainWindowController extends StackPane {
 	public void initClient( ) {
 		Client client = AppController.getClient();
 		client.listenForMessage(new VBox());
-		client.sendMessage(new MessageConnect(AppController.getProfile()));
+		//client.sendMessage(new MessageConnect(AppController.getProfile()));
 		
 	}
 

@@ -50,12 +50,8 @@ public class ClientHandler implements Runnable {
 			this.profile = ((MessageProfile) clientIdentifierMessage).getProfile();
 			this.clientUsername = profile.getUserName();
 			clientHandlers.add(this);
-
-			for (ClientHandler clientHandler : clientHandlers) {
-				System.out.println(clientHandler.getProfile().getUserName());
-			}
+			clients.add(profile);
 			broadcastMessage(new MessageConnect(profile));
-
 		} catch (IOException | ClassNotFoundException e) {
 			MessageDisconnect disconnect = new MessageDisconnect(profile);
 			broadcastMessage(disconnect);
@@ -118,7 +114,7 @@ public class ClientHandler implements Runnable {
 				if (clientHandler.getProfile().getId() == playerId) {
 					System.out.println("that is what TO is: ");
 
-					clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
+					clientHandler.objectOutputStream.writeObject(message);
 					clientHandler.objectOutputStream.flush();
 
 				}
@@ -152,11 +148,12 @@ public class ClientHandler implements Runnable {
 					System.out.println("case MessageSend in Handler Success 0");
 					break;
 				case Connect:
-					// MessageConnect connectionConfirmed = new MessageConnect(profile);
-					System.out.println("kur,ur");
-					System.out.println(((MessageConnect)messageFromClient).getPlayername());
-					broadcastMessage(new MessageSend("dd"));
-					System.out.println("case MessageConnect in Handler Succes 1 ");
+					// all clients send their profile to the new Client
+					System.out.println("MessageConnect on Handler works)");
+					// personal message with (iDTO , Profile of the sender with MessageProfile )
+					personalMessage(((MessageConnect) messageFromClient).getIdTo(),
+							new MessageProfile(((MessageConnect) messageFromClient).getProfile()));
+					// change connect to case
 					break;
 				case Disconnect:
 					System.out.println("case MessageDisconnect Server Success 3 ");
