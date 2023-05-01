@@ -186,6 +186,7 @@ public class GamePaneController implements Initializable{
 			playerIDs.add(p.getID());
 		}
 		numOfPlayer = this.singlePlayerHandler.getLobby().getPlayerList().size();
+		setUpThrowDicePeriod();
 		setUpPlayerList();
 		for(int i = 0; i < numOfPlayer; i++) {
 			circles[i].setFill(Color.web(playerColors.get(i)));
@@ -214,6 +215,52 @@ public class GamePaneController implements Initializable{
         cirNum.setFill(Color.web(playerColors.get(0)));
         
         this.setCurrentPlayer(playerIDs.get(0));
+	}
+	
+	private void setUpThrowDicePeriod() {
+		ImageView diceIV = new ImageView(Parameter.dicedir + "dice1.png");
+		diceIV.setFitWidth(getRelativeHorz(60.0));
+		diceIV.setFitHeight(getRelativeHorz(60.0));
+		diceIV.setLayoutX((w - diceIV.getFitWidth()) / 2.0);
+		diceIV.setLayoutY(getRelativeVer(695.0));
+		
+		Button throwDiceButton = new Button("THROW DICE");
+		throwDiceButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+		throwDiceButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+        		throwDiceButton.setStyle("-fx-background-color: #ac7339; "
+        				+ "-fx-background-radius: 15px; ");
+            } else {
+            	throwDiceButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+            }
+	        });
+		throwDiceButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
+		throwDiceButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
+		throwDiceButton.setLayoutX((w - throwDiceButton.getPrefWidth()) / 2.0);
+		throwDiceButton.setLayoutY(getRelativeVer(760.0));
+		throwDiceButton.setOnAction(e -> {
+			throwDiceButton.setDisable(true);
+			Thread thread = new Thread(() -> {
+				int i = 1;
+				while(i < 7) {
+					diceIV.setImage(new Image(Parameter.dicedir + "dice"+ i +".png"));
+					i++;
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			});
+			thread.start();
+			System.out.println("Test");
+			diceIV.setImage(new Image(Parameter.dicedir + "dice" 
+					+ singlePlayerHandler.getInitialThrowDice(singlePlayerHandler.getGameHandler().getGameState().getCurrentPlayer()) + ".png")); // how to get the player
+			throwDiceButton.setDisable(false);
+		});
+		gameBoard.getChildren().addAll(diceIV, throwDiceButton);
 	}
 	
 	private void getComponents() {
@@ -473,7 +520,7 @@ public class GamePaneController implements Initializable{
         
         phaseBoard.setLayoutX((w - phaseBoard.getPrefWidth() * phaseBoard.getScaleX()) / 2.0);
         phaseBoard.setLayoutY((700.0 / 864.0) * h);
-        
+        phaseBoard.setVisible(false);
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
@@ -531,7 +578,7 @@ public class GamePaneController implements Initializable{
 		numTroopsBP.setLayoutY(getRelativeVer(514.0));
 		
 		choosingTroopsPane.getChildren().addAll(confirmationSP, trueButtonChoosingTroops, falseButtonChoosingTroops, numTroopsBP);
-		choosingTroopsPane.setVisible(true);
+		choosingTroopsPane.setVisible(false);
 		gameBoard.getChildren().add(choosingTroopsPane);
 		
 
@@ -564,26 +611,32 @@ public class GamePaneController implements Initializable{
 	
 	
 	public void claimCountry(CountryName countryName, int id) {
-		Player player = singlePlayerHandler.getGameHandler().getGameState().getPlayers().get(id);
+		for(Player p : singlePlayerHandler.getLobby().getPlayerList()) {
+			if(p.getID() == id) {
+				circleTroopsDisplay.get(countryName.toString()).setFill(Color.web(p.getColor()));
+				for(SVGPath s : countries) {
+					if(s.getId().equals(countryName.toString())) {
+		            	s.setStyle("-fx-fill: "+ p.getColor() +";");
+						s.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+				        	if (newValue) {
+				            	s.setStyle("-fx-fill: "+ makeColorHexDarker(Color.web(p.getColor())) +";");
+				            } else {
+				            	s.setStyle("-fx-fill: "+ p.getColor() +";");
+				            }
+					        });
+						break;
+					}
+				}
+			}
+			
+		}
 		for(StackPane sp : spTroopsDisplay) {
 			if(sp.getId().equals("sp"+countryName.toString())) {
 				sp.setVisible(true);
 			}
 		}
 		labelTroopsDisplay.get(countryName.toString()).setText(String.valueOf(1));
-		circleTroopsDisplay.get(countryName.toString()).setFill(Color.web(player.getColor()));
-		for(SVGPath s : countries) {
-			if(s.getId().equals(countryName.toString())) {
-            	s.setStyle("-fx-fill: "+ player.getColor() +";");
-				s.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-		        	if (newValue) {
-		            	s.setStyle("-fx-fill: "+ makeColorHexDarker(Color.web(player.getColor())) +";");
-		            } else {
-		            	s.setStyle("-fx-fill: "+ player.getColor() +";");
-		            }
-			        });
-			}
-		}
+		
 	}
 	public void setCurrentPlayer(int id) {
 		Player player = singlePlayerHandler.getGameHandler().getGameState().getPlayers().get(id);
@@ -603,7 +656,6 @@ public class GamePaneController implements Initializable{
 		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
 		rectCards.setFill(Color.web(playerColors.get(turn)));
 		cardsPane.setStyle(null);
-		numCardsLabel.setText(String.valueOf(player.getCards().size()));
 	}
 	
 	public void setNumTroops(CountryName countryName, int numTroops) {
