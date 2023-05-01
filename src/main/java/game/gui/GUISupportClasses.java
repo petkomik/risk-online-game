@@ -701,6 +701,11 @@ public class GUISupportClasses {
 			items.add(profile.getUserName());
 			
 		}
+		public void removeItemsInComboBox(Profile profile){
+			
+			items.remove(profile.getUserName());
+			
+		}	
 
 		public void setxCord(double xCord) {
 			this.xCord = xCord;

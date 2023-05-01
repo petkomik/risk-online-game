@@ -220,6 +220,7 @@ public class Client {
 							profiles.add(profilee);
 							chat.addItemsInComboBox(profilee);
 							// The client who received the new Connected Client sends own profile
+							chat.addLabel(((MessageConnect) message).getProfile().getUserName() + " has joined the server");
 							sendMessage(new MessageConnect(getProfile(), profilee.getId()));
 							break;
 						case Disconnect:
@@ -229,7 +230,7 @@ public class Client {
 //							HostServerMessengerController.addLabel(
 //									"Player " + ((MessageDisconnect) message).getPlayername() + " has disconnected",
 //									vBoxMessages);
-							
+							chat.removeItemsInComboBox(((MessageDisconnect) message).getProfile());
 							break;
 						case MessageServerCloseConnection:
 							System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
