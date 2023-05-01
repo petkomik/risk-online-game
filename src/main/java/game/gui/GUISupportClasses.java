@@ -421,7 +421,8 @@ public class GUISupportClasses {
 		private HBox dragArea;
 		private String messageToBeSend;
 		// message to be send, should used by client
-		private Client client ;
+		private Client client;
+
 		public Client getClient() {
 			return client;
 		}
@@ -446,7 +447,7 @@ public class GUISupportClasses {
 		}
 
 		public void setup() {
-			
+
 			chat = new ScrollPane();
 			vBoxMessages = new VBox();
 			textfieldAndButtons = new HBox();
@@ -567,7 +568,6 @@ public class GUISupportClasses {
 				@Override
 				public void handle(ActionEvent event) {
 
-					
 					messageToBeSend = textfieldMessage.getText();
 
 					if (!messageToBeSend.isBlank()) {
@@ -596,12 +596,15 @@ public class GUISupportClasses {
 									System.out.println(messageToBeSend.substring(0, messageToBeSend.indexOf(":")));
 									String username = messageToBeSend.substring(0, messageToBeSend.indexOf(":"));
 									// send the message to the specified user
-									client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
+									System.out.println(client.getProfile().getUserName() +  " e izprashtach i prashta na  "
+									+findProfileFromString(username).getUserName() 
+									+ " subshtenieto e " + messageToBeSend.substring(messageToBeSend.indexOf(":")+1) );
+									client.sendMessage(new MessageToPerson(messageToBeSend.substring(messageToBeSend.indexOf(":")+1), client.getProfile(),
 											findProfileFromString(username)));
 
 								} else if (!messageToBeSend.equals(null)) {
 									// send the message to the general chat
-									System.out.println( client.getProfile());
+									System.out.println(client.getProfile());
 									client.sendMessage(messageToBeSend);
 								}
 							}
@@ -625,6 +628,19 @@ public class GUISupportClasses {
 				}
 			});
 
+		}
+		private Profile findProfileFromString(String username) {
+			
+			int i = 0;
+			for (Profile profile  : Client.profiles) {
+				
+				System.out.println(profile.getUserName() + " "+  ++i);
+				if (profile.getUserName().equalsIgnoreCase(username)) {
+					
+					return profile;
+				}
+			}
+			return null;
 		}
 
 		/*
@@ -650,7 +666,7 @@ public class GUISupportClasses {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					vBoxMessages.getChildren().add(message);	
+					vBoxMessages.getChildren().add(message);
 				}
 			});
 
@@ -672,17 +688,14 @@ public class GUISupportClasses {
 			message.getChildren().addAll(textFlow, new Spacing(150 * ratio, 1 * ratio));
 			HBox.setHgrow(message, Priority.ALWAYS);
 
-			vBoxMessages.getChildren().add(message);
-
-		}
-
-		private Profile findProfileFromString(String username) {
-			for (ClientHandler clientHandler : ClientHandler.clientHandlers) {
-				if (clientHandler.getClientUsername().equalsIgnoreCase(username)) {
-					return clientHandler.getProfile();
+			
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					vBoxMessages.getChildren().add(message);
 				}
-			}
-			return null;
+			});
+
 		}
 
 		public void setxCord(double xCord) {

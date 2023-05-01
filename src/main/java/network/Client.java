@@ -43,7 +43,7 @@ public class Client {
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
-			
+
 			// this.sendMessage(new MessageConnect(profile));
 			// newlineofCode
 		} catch (Exception e) {
@@ -58,8 +58,9 @@ public class Client {
 		}
 
 	}
-	public void setChat(GUISupportClasses.ChatWindow serverMainWindowController){
-		chat = serverMainWindowController;	
+
+	public void setChat(GUISupportClasses.ChatWindow serverMainWindowController) {
+		chat = serverMainWindowController;
 	}
 
 	public Client(Socket socket, Player player) {
@@ -234,12 +235,15 @@ public class Client {
 							Server.closeServerSocket();
 							break;
 						case MessageToPerson:
-							System.out.println("case 4 in Handler");
+							System.out.println("case 4 in Client");
 //							JoinClientMessengerController.addLabel(
 //									((MessageToPerson) message).getFromProfile().getLastName()
 //											+ ((MessageToPerson) message).getMsg()
 //													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
 //									vBoxMessages);
+							chat.addLabel(((MessageToPerson)message).getStringMessage(),((MessageToPerson)message).getFromProfile().getUserName()  );
+							System.out.println();
+							//chat.addLabel(((MessageToPerson)message).getFromProfile().getUserName()+" : " + ((MessageToPerson)message).getStringMessage());
 							break;
 						case MessageProfile:
 							// ithe new client adds the other clients in his list and db

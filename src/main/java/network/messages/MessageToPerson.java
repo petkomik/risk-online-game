@@ -9,10 +9,11 @@ public class MessageToPerson extends Message {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	Client from;
+	
 	String to;
 	Message message;
-	String msg;
+	String strinMessage;
+	
 	private Profile fromProfile;
 	private Profile toProfile;
 	public Message getMessage() {
@@ -23,7 +24,7 @@ public class MessageToPerson extends Message {
 	}
 	public MessageToPerson(Message message ,String to) {
 		super(MessageType.MessageToPerson);
-		this.from = from;
+		
 		this.to = to;
 		this.message = message;
 	}
@@ -31,26 +32,25 @@ public class MessageToPerson extends Message {
 		super(MessageType.MessageToPerson);
 		this.fromProfile = fromProfile;
 		this.toProfile = toProfile;
-		this.msg = message;
+		this.strinMessage = message;
 	}
 	
-	public MessageToPerson(String msg, String username) {
+	public MessageToPerson(String stringMessage, String username) {
 		super(MessageType.MessageToPerson);
-		this.msg=msg;
+		this.strinMessage =  stringMessage;
 		to=username;
 	}
 	
 	public String getTo() {
 		return to;
 	}
-	public Client getFrom() {
-		return from;
-	}
+
+	
 	public void setTo(String to) {
 		this.to = to;
 	}
-	public String getMsg() {
-		return msg;
+	public String getStringMessage() {
+		return strinMessage;
 	}
 	public Profile getFromProfile() {
 		return fromProfile;
