@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import game.gui.HostServerMessengerController;
 import general.AppController;
 import network.messages.Message;
 import network.messages.MessageConnect;

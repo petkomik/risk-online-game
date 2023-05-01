@@ -7,7 +7,6 @@ import java.util.HashMap;
 import game.Lobby;
 import game.gui.BattleFrameController;
 import game.gui.GamePaneController;
-import game.logic.GameLogic;
 import game.logic.GameType;
 import game.models.Card;
 import game.models.Continent;
@@ -21,26 +20,30 @@ public class GameState {
 	/**
 	 * Class for the gameState for client-logic/representation
 	 * 
-	 * @author petko,jo ,majd,petar & dignatov
+	 * @author petko,jo , majd, petar & dignatov
 	 *
 	 */
 	private HashMap<CountryName, Territory> territories;
 	private HashMap<Continent, ArrayList<CountryName>> continents;
 	private HashMap<Integer, Player> players;
-	private ArrayList<Card> cards;
 	private int numberOfCardsTurnedIn;
 	private boolean gameIsOver;
 	private ArrayList<Player> alivePlayers;
-//	private int dicesAttacker[];
-//	private int dicesDefender[];
-
-//	private LocalDateTime gameTimer;
 	private Player currentPlayer;
 	private Phase currentTurnPhase;
 	private Period currentGamePeriod;
 	private HashMap<Player, Integer> playersDiceThrown;
 	private HashMap<Player, Integer> playerTroopsLeft;
+	private ArrayList<Card> cards;
 	private HashMap<Player, ArrayList<Card>> riskCardsInPlayers;
+	private CountryName lastAttackingCountry;
+	private CountryName lastFortifyingCounty;
+
+//	private int dicesAttacker[];
+//	private int dicesDefender[];
+	
+//	private LocalDateTime gameTimer;
+
 
 
 
@@ -57,6 +60,8 @@ public class GameState {
 		currentTurnPhase = null;
 		currentGamePeriod = Period.COUNTRYPOSESSION;
 		gameIsOver = false;
+		lastAttackingCountry = null;
+		lastFortifyingCounty = null;  
 		
 		SetTerritories.createCardDeck(cards);
 		SetTerritories.createTerritories(territories);
@@ -70,6 +75,7 @@ public class GameState {
 		
 	}
 	
+
 	public HashMap<Player, Integer> getPlayersDiceThrown() {
 		return playersDiceThrown;
 	}
@@ -172,16 +178,11 @@ public class GameState {
 	}
 
 	public void setNextPlayer() {
-		this.currentPlayer = this.alivePlayers.get((this.alivePlayers.indexOf(currentPlayer)+1)%this.alivePlayers.size());
+		this.currentPlayer = this.alivePlayers.get(
+				(this.alivePlayers.indexOf(currentPlayer)+1) % this.alivePlayers.size());
 	}
 	
-	public int playerTurnsInCard(ArrayList<Card> cardsFromPlayer) {
-		for(Card card : this.cards) {
-			if(cards.contains(card) && cardsFromPlayer.contains(card)) {
-				this.cards.get(this.cards.indexOf(card)).setOwnedBy(null);
-			}
-		}
-		
+	public int playerTurnsInCard() {
 		this.numberOfCardsTurnedIn++;
 		switch (this.numberOfCardsTurnedIn) {
 		case 1:
@@ -211,6 +212,25 @@ public class GameState {
 	}
 	
 	public void editRiskCardsInPlayers(ArrayList<Card> cards, int idOfPlayer) {
+		this.cards.addAll(this.riskCardsInPlayers.get(this.players.get(idOfPlayer)));
 		this.riskCardsInPlayers.replace(this.players.get(idOfPlayer), cards);
+		this.cards.removeAll(this.riskCardsInPlayers.get(this.players.get(idOfPlayer)));
 	}
+	
+	public CountryName getLastAttackingCountry() {
+		return lastAttackingCountry;
+	}
+
+	public void setLastAttackingCountry(CountryName lastAttackingCountry) {
+		this.lastAttackingCountry = lastAttackingCountry;
+	}
+	
+	public CountryName getLastFortifyingCounty() {
+		return lastFortifyingCounty;
+	}
+
+	public void setLastFortifyingCounty(CountryName lastFortifyingCounty) {
+		this.lastFortifyingCounty = lastFortifyingCounty;
+	}
+	
 }

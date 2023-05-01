@@ -1,5 +1,6 @@
 package game.logic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -98,17 +99,17 @@ public class Logic {
 		return true;
 	}
 	// click on Country , check if u can deploy troops , if yes, return number of troops, if not allowed -1
-	public static int canDeployTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
+	public static boolean canInitialDeployTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
 		if (gameState.getCurrentPlayer().equals(player)) {
 			if (gameState.getCurrentGamePeriod().equals(Period.INITIALDEPLOY)) {
 				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
 					if (gameState.getPlayerTroopsLeft().get(player) >= 1) {
-						return gameState.getPlayerTroopsLeft().get(player);
+						return true;
 					}
 				}
 			}
 		}
-		return -1;
+		return false;
 	}
 	
 	public static int canReinforceTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
@@ -152,7 +153,7 @@ public class Logic {
 			throw new WrongPhaseException("You are not in Deploy Phase. Can't turn in cards in the moment");
 		} else if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
 			throw new WrongPeriodException("You are not in Main Period.");
-		} else if (!player.getCards().containsAll(cards)) {
+		} else if (!gameState.getRiskCardsInPlayers().get(player).containsAll(cards)) {
 			throw new WrongCardsException("You do not own all the cards that you tried to turn in.");
 		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
 				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)))) {
@@ -218,5 +219,67 @@ public class Logic {
 			}
 		}
 		return troops;
+	}
+
+	public static boolean playerEndsPhase(Phase phase, int idOfPlayer, GameState gameState) {
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
+			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
+				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+					if(gameState.getCurrentTurnPhase().equals(phase)) {
+						return true;	
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	public static boolean playerAttackingFromCountry(CountryName country, int idOfPlayer, GameState gameState) {
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
+			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
+				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+					if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
+						if(gameState.getTerritories().get(country).getOwnedByPlayer()
+								.equals(gameState.getCurrentPlayer())) {
+							if(gameState.getTerritories().get(country).getNumberOfTroops() > 1) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	public static boolean playerAttackingCountry(CountryName country, int idOfPlayer, GameState gameState) {
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
+			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
+				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+					if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
+						if(!gameState.getTerritories().get(country).getOwnedByPlayer()
+								.equals(gameState.getCurrentPlayer())) {
+							
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	public static ArrayList<CountryName> getUnreachableTerritories(CountryName country, int idOfPlayer,
+			GameState gameState) {
+		ArrayList<CountryName> unreachableCountries = new ArrayList<CountryName>();
+		unreachableCountries.addAll(gameState.getTerritories().keySet());
+		unreachableCountries.removeIf(x -> 
+		gameState.getTerritories().get(x).getOwnedByPlayer()
+		.equals(gameState.getPlayers().get(idOfPlayer)) ||
+		gameState.getTerritories().get(x).getNeighboringTerritories()
+		.contains(gameState.getTerritories().get(x)));		
+		return unreachableCountries;
 	}
 }

@@ -6,8 +6,6 @@ import java.util.Arrays;
 import database.PlayerProfileHandler;
 import database.Profile;
 import game.exceptions.WrongTextFieldInputException;
-import game.logic.GameLogic;
-import game.stateClient.GameStateClient;
 import network.Client;
 import network.Server;
 
@@ -26,10 +24,7 @@ public class AppController {
 	private static String host = Parameter.hostDefault;
 	private static Client client;
 	private static Server server;
-	
-	private static GameStateClient gameStateClient;
-	private static GameLogic gameLogic;
-	// private static GameMultiplayerLogic multiplayerGameLogic;
+
 	
 	/**
 	 * @param firstName
@@ -167,8 +162,7 @@ public class AppController {
 	public static void logoutAndSetValuesToNull() {
 		profile = null;
 		client = null;
-		gameStateClient = null;
-		gameLogic = null;
+
 	}
 	
 	public static AppController getInstance() {
@@ -202,22 +196,7 @@ public class AppController {
 	public static void setClient(Client client) {
 		AppController.client = client;
 	}
-	
-	public static GameStateClient getGameStateClient() {
-		return gameStateClient;
-	}
 
-	public static void setGameStateClient(GameStateClient gameStateClient) {
-		AppController.gameStateClient = gameStateClient;
-	}
-
-	public static GameLogic getGameLogic() {
-		return gameLogic;
-	}
-
-	public static void setGameLogic(GameLogic gameLogic) {
-		AppController.gameLogic = gameLogic;
-	}
 
 	public static Server getServer() {
 		return server;

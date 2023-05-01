@@ -8,11 +8,9 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
-import game.logic.GameSingleplayerLogic;
 import game.logic.GameType;
 import game.models.Player;
 import game.models.PlayerSingle;
-import game.stateClient.GameStateClient;
 import gameState.SinglePlayerHandler;
 import general.Parameter;
 import general.AppController;
@@ -575,8 +573,6 @@ public class LobbyMenuController extends StackPane {
 		    		
 		    		if(lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1) {
 		    			System.out.println("start game");
-		    			//Setting up the gameServerlogic
-		    			AppController.setGameLogic(new GameSingleplayerLogic((ArrayList<Player>) lobby.getPlayerList()));
 						try {
 					    	Node node = (Node) event.getSource();
 							Stage stage = (Stage) node.getScene().getWindow();

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.Lobby;
+import game.exceptions.WrongCardsException;
+import game.exceptions.WrongCardsSetException;
+import game.exceptions.WrongCountryException;
+import game.exceptions.WrongPeriodException;
+import game.exceptions.WrongPhaseException;
+import game.exceptions.WrongTroopsCountException;
 import game.gui.GamePaneController;
 import game.models.Card;
 import game.models.Continent;
@@ -15,7 +21,7 @@ public class SinglePlayerHandler {
 	
 	private GameHandler gameHandler;
 	private Lobby lobby;
-	GamePaneController gamePaneController;
+	private GamePaneController gamePaneController;
 
 	public SinglePlayerHandler(Lobby lobby, GamePaneController gamePaneController) {
 		this.gameHandler = new GameHandler(lobby);
@@ -23,7 +29,7 @@ public class SinglePlayerHandler {
 		this.lobby = lobby;
 		
 	}
-	
+	// TODO delete
 	public GameHandler getGameHandler() {
 		return gameHandler;
 	}
@@ -45,7 +51,7 @@ public class SinglePlayerHandler {
 	 */
 	
 	public void confirmNumberOfTroops(CountryName country, int troops, ChoosePane choosePane) {
-		//this.gameHandler.addTroopsToCountry(country, troops, choosePane);
+		this.gameHandler.confirmTroopsToCountry(country, troops, choosePane);
 	}
 	
 	/*
@@ -53,8 +59,12 @@ public class SinglePlayerHandler {
 	 * REINFORCE Phase
 	 */
 
-	public void turnInRiskCards(List<Card> cards, int idOfPlayer) {
-		//this.gameHandler.turnInRiskCards(cards, idOfPlayer);
+	public void turnInRiskCards(ArrayList<Card> cards, int idOfPlayer) {
+		try {
+			this.gameHandler.turnInRiskCards(cards, idOfPlayer);
+		} catch (Exception e) {
+			this.showExeceptionOnGUI(e);
+		}
 	}
 	
 	/*
@@ -64,7 +74,7 @@ public class SinglePlayerHandler {
 	 */
 	
 	public void endPhase(Phase phase, int idOfPlayer) {
-		//this.gameHandler.endPhase(phase, idOfPlayer);
+		this.gameHandler.endPhase(phase, idOfPlayer);
 	}
 	
 	/*
@@ -75,7 +85,7 @@ public class SinglePlayerHandler {
 	 * ATTACK Phase
 	 */
 	
-	public void battleDiceThrow(int idOfPlayer) {
+	public void battleDiceThrow(int[] numberOfDices) {
 		// TODO
 	}
 	
@@ -94,30 +104,62 @@ public class SinglePlayerHandler {
 		return this.gameHandler.getInitialThrowDice(player);
 	}
 	
+	public void showExeceptionOnGUI(Exception e) {
+		this.gamePaneController.showException(e.toString());
+	}
+	
 	/*
+	 * Sets the the given period on the GUI. Based on the period
+	 * the bottom pane displays different info / buttons
 	 * 
+	 * @param period the period to be set
 	 */
 	
 	public void setPeriodOnGUI(Period period) {
 		this.gamePaneController.setPeriod(period);
 	}
 	
+	/*
+	 * Sets the the given phase on the GUI. Phases are relevant only during
+	 * MAINPERIOD, follow a specific order
+	 * 
+	 * @param phase the phase to be set
+	 */
+	
 	public void setPhaseOnGUI(Phase phase) {
 		this.gamePaneController.setPhase(phase);
 	}
+	
+	/*
+	 * Paint the country in the color of player with id and places 
+	 * one troop on it. 
+	 * 
+	 * @param country the CountryName enum of the territory to be claimed
+	 * @param id 	  the id of player that has claimed territory
+	 */
 	
 	public void possesCountryOnGUI(CountryName country, int id) {
 		this.gamePaneController.claimCountry(country, id);
 	}
 	
 	/*
-	 * gives the GUI the current Player
+	 * Changes the current player on the GUI by swapping to the correct
+	 * color and avatar, and setting the corrct number of troops
+	 * 
+	 * @param id id of the player
+	 * @param troopsLeft the amount of troops the player has to deploy
 	 */
 	public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
 		this.gamePaneController.setCurrentPlayer(id);
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
 	}
 
+	/*
+	 * Opens a menu where the player chooses how many troops to deploy
+	 * 
+	 * @param 
+	 */
+	
 
 	public void chooseNumberOfTroopsOnGUI(CountryName country,int min, int max, ChoosePane choosePane) {
 		this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
@@ -134,11 +176,10 @@ public class SinglePlayerHandler {
 	}
 	
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
-		// remove risk cards from player, update troops to deploy
 	}
 	
 	public void playerCanAttackFromCountryOnGUI(CountryName countryName, 
-			ArrayList<CountryName> attackableCountries) {
+			ArrayList<CountryName> unreachableCountries) {
 		
 	}
 	
@@ -178,8 +219,12 @@ public class SinglePlayerHandler {
 	}
 	
 	public void movingTroopsConfirmedOnGUI(CountryName countryFrom, CountryName countryTo,
-			int min, int max) {
+			int troops) {
 		
+	}
+	
+	public void endBattleOnGUI() {
+		//makes battle screne invisible
 	}
 	
 	public Lobby getLobby() {

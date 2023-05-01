@@ -46,7 +46,9 @@ import network.Client;
 import network.ClientHandler;
 import network.Server;
 import network.messages.MessageConnect;
+import network.messages.MessageDisconnect;
 import network.messages.MessageSend;
+import network.messages.MessageServerCloseConnection;
 
 /**
  * 
@@ -96,6 +98,7 @@ public class ServerMainWindowController extends StackPane {
 
 	static Server server;
 	static Client client;
+	private static boolean hostView;
 
 	public ServerMainWindowController() throws Exception {
 		super();
@@ -421,9 +424,15 @@ public class ServerMainWindowController extends StackPane {
 				}
 
 				stage.show();
-			}
 			
-			//TODO disconnect from server
+//				TODO disconnect from server
+//				if(hostView) {
+//					client.sendMessage(new MessageServerCloseConnection());
+//				} else {
+//					client.sendMessage(new MessageDisconnect(client.getProfile()));
+//					client.closeEverything();
+//				}
+			}
 		});
 
 		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -439,8 +448,6 @@ public class ServerMainWindowController extends StackPane {
 
 	public static void initServer() {
 
-		ClientHandler handler;
-		Socket socket;
 		int port = AppController.getPortNumber();
 		String host = AppController.getHost();
 		try {
@@ -455,13 +462,15 @@ public class ServerMainWindowController extends StackPane {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		hostView = true;
 	}
 
 	public void initClient() {
-		Client client = AppController.getClient();
+		client = AppController.getClient();
 		client.listenForMessage();
 		chatPane.setClient(client);
 		client.setChat(chatPane);
+		this.hostView = false;
 		// client.sendMessage(new MessageConnect(AppController.getProfile()));
 
 	}

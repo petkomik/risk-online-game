@@ -10,11 +10,9 @@ import java.util.Scanner;
 import database.Profile;
 import game.Lobby;
 import game.gui.GUISupportClasses;
-import game.gui.HostServerMessengerController;
-import game.gui.JoinClientMessengerController;
+
 import game.gui.ServerMainWindowController;
 import game.models.Player;
-import game.models.PlayerMP;
 import general.AppController;
 import javafx.scene.layout.VBox;
 import network.messages.Message;

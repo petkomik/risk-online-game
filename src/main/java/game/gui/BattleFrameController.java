@@ -14,6 +14,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Random;
+
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -109,6 +111,9 @@ public class BattleFrameController extends VBox {
 	
 	private double ratio;
 	private double menuRatio;
+	
+	private Timeline timeline;
+	private int cyclesCompleted;
 
 
 	public BattleFrameController() throws Exception {
@@ -133,6 +138,8 @@ public class BattleFrameController extends VBox {
 		this.defendingAvatar = Parameter.avatarsdir + "ginger-girl.png";
 		this.attackerColor = Parameter.blueColor;
 		this.defenderColor = Parameter.greenColor;
+		this.cyclesCompleted = 0;
+		this.gameType = GameType.SinglePlayer;
 		setup();
 	
 	}
@@ -140,7 +147,8 @@ public class BattleFrameController extends VBox {
 	public BattleFrameController(Continent continentAt, CountryName countryNameAt, 
 								Continent continentDf, CountryName countryNameDf,
 								Player playerAt, Player playerDf, boolean attackerGui,
-								int troopsAt, int troopsDf) throws Exception {
+								int troopsAt, int troopsDf, GameType gameType, 
+								SinglePlayerHandler singlePlayerHandler) throws Exception {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * 
 				 Screen.getPrimary().getVisualBounds().getHeight() 
@@ -160,8 +168,11 @@ public class BattleFrameController extends VBox {
 		this.defendingAvatar = playerDf.getAvatar();
 		this.attackerColor = Color.web(playerAt.getColor());
 		this.defenderColor = Color.web(playerDf.getColor());
-		setup();
 		this.throwBtn.setVisible(attackerGui);
+		this.cyclesCompleted = 0;
+		this.gameType = gameType;
+		this.singleplayerHandler = singlePlayerHandler;
+		setup();
 
 	}
 
@@ -196,7 +207,6 @@ public class BattleFrameController extends VBox {
 		imgTerritories = new HBox();
 		
 		imgAttacking = new ImageView();
-//		TODO
 		imgAttacking.setImage(new Image(new FileInputStream(this.attackingPNG)));
 		imgAttacking.setPreserveRatio(true);
 		imgAttacking.setSmooth(true);
@@ -218,7 +228,6 @@ public class BattleFrameController extends VBox {
 		attackingStack.getChildren().addAll(imgAttackingPane, armiesFlowAt);
 		
 		imgDefending = new ImageView();
-//		TODO
 		imgDefending.setImage(new Image(new FileInputStream(this.defendingPNG)));
 		imgDefending.setPreserveRatio(true);
 		imgDefending.setSmooth(true);
@@ -278,7 +287,6 @@ public class BattleFrameController extends VBox {
 		 */
 		
 		circleAt = new Circle(80 * menuRatio);
-//		TODO change to correct collor
 		circleAt.setFill(this.attackerColor);
 		circleAt.setStroke(Color.WHITE);
 		circleAt.setStrokeWidth(6 * menuRatio);
@@ -286,7 +294,6 @@ public class BattleFrameController extends VBox {
 		playerAt.getChildren().add(circleAt);
 		
 		avatarAt = new ImageView();
-//		TODO change to correct avatar
 		avatarAt.setImage(new Image(new FileInputStream(this.attackingAvatar)));
 		avatarAt.setFitWidth(140 * menuRatio);
 		avatarAt.setFitHeight(140 * menuRatio);
@@ -301,7 +308,6 @@ public class BattleFrameController extends VBox {
 		circleTroopsAt.setStroke(Color.WHITE);
 		circleTroopsAt.setStrokeWidth(0);
 		
-//		TODO is this correct troops
 		troopsTextAt = new Label(String.valueOf(this.troopsInAttackAt));
 		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * menuRatio));
 		troopsTextAt.setTextFill(Color.web("#303030"));
@@ -324,7 +330,6 @@ public class BattleFrameController extends VBox {
 		 */
 		
 		circleDf = new Circle(80 * menuRatio);
-//		TODO change to correct collor
 		circleDf.setFill(this.defenderColor);
 		circleDf.setStroke(Color.WHITE);
 		circleDf.setStrokeWidth(6);
@@ -332,7 +337,6 @@ public class BattleFrameController extends VBox {
 		playerDf.getChildren().add(circleDf);
 		
 		avatarDf = new ImageView();
-//		TODO change to correct avatar
 		avatarDf.setImage(new Image(new FileInputStream(this.defendingAvatar)));
 		avatarDf.setFitWidth(140 * menuRatio);
 		avatarDf.setFitHeight(140 * menuRatio);
@@ -347,7 +351,6 @@ public class BattleFrameController extends VBox {
 		circleTroopsDf.setStroke(Color.WHITE);
 		circleTroopsDf.setStrokeWidth(0);
 		
-//		TODO is this correct troops
 		troopsTextDf = new Label(String.valueOf(this.troopsInAttackDf));
 		troopsTextDf.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * menuRatio));
 		troopsTextDf.setTextFill(Color.web("#303030"));
@@ -373,7 +376,6 @@ public class BattleFrameController extends VBox {
 
 		numberOfDiceControls = new HBox();
 		lessBtn = new ArrowButton(60 * menuRatio);
-//		TODO connect from gamestate
 		numberLabel = new Label(String.valueOf(this.maxDiceToThrow));
 		moreBtn = new ArrowButton(60 * menuRatio);
 		
@@ -412,7 +414,6 @@ public class BattleFrameController extends VBox {
 		 * 			  both Attacker + Defender
 		 */
 
-		// TODO get number of dice from gamestate
 		diceImagesAt = diceImageFactory(maxDiceToThrow, true);
 		diceImagesDf = diceImageFactory(defendingDice, false);
 		
@@ -455,12 +456,11 @@ public class BattleFrameController extends VBox {
 		throwBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-				lastThrow = Integer.MAX_VALUE;
-				
+		    	(new GameSound()).buttonClickForwardSound();				
 				switch(gameType) {
 				case SinglePlayer: 
-					//singleplayerHandler.battleDiceThrow();
+					int[] numberOfDices = new int[]{maxDiceToThrow, defendingDice};
+					singleplayerHandler.battleDiceThrow(numberOfDices);
 					break;
 				
 				case Multiplayer:
@@ -471,56 +471,7 @@ public class BattleFrameController extends VBox {
 					// TODO
 					break;
 				}
-		    	throwBtn.setDisable(true);
-                lessBtn.setDisable(true);
-                moreBtn.setDisable(true);
-		    		    	
-		    	Timeline timeline = new Timeline(new KeyFrame(Duration.millis(80.0), e -> {
-		    		
-		    		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
-		    			Random random = new Random();
-		        		int n = random.nextInt(6)+1;
-		                DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
-		                try {
-							dice.setImage(new Image(new FileInputStream(
-									Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
-						} catch (FileNotFoundException e1) {
-							e1.printStackTrace();
-						}
-		                final int m = k;
-                    	diceImagesAt.getChildren().set(m, dice);
-		    		}
-		    		
-		    		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
-		    			Random random = new Random();
-		        		int n = random.nextInt(6)+1;
-		                DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
-		                try {
-							dice.setImage(new Image(new FileInputStream(
-									Parameter.dicedir + "dice" + String.valueOf(n) + "b.png")));
-						} catch (FileNotFoundException e1) {
-							e1.printStackTrace();
-						}
-		                final int m = k;
-                    	diceImagesDf.getChildren().set(m, dice);       
-		    		}
-		    		
-		    		})
-    			);
-    			timeline.setCycleCount(15);
-    			timeline.play();
-		    	while (lastThrow == Integer.MAX_VALUE) {
-		    		timeline.setCycleCount(timeline.getCycleCount() + 1);
-		    	}
-		    	
-                throwBtn.setDisable(false);
-                lessBtn.setDisable(false);
-                moreBtn.setDisable(false);
-    			
-//    			timeline.setOnFinished(new EventHandler<ActionEvent>() {
-//    			      @Override
-//    			      public void handle(ActionEvent evt) {
-//    			    	  
+
 //    			    	  // TODO get logic from game state
 //    			    	  // update dice images based on dices array from gamestate (dicesfactory)
 //    			    	  // update troops
@@ -551,8 +502,7 @@ public class BattleFrameController extends VBox {
 //		              
 //    			      }
 //    			    });            
-            }
-		       
+            }	       
 	    });
 		
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -748,45 +698,113 @@ public class BattleFrameController extends VBox {
             final int m = k;
         	diceImagesDf.getChildren().set(m, dice);       
 		}
+		
+        throwBtn.setDisable(false);
+        lessBtn.setDisable(false);
+        moreBtn.setDisable(false);
 	}
-//		if(this.attacking.getNumberOfTroops() == 2) {
-//			this.maxDiceToThrow = 1;
-//			if (Integer.parseInt(numberLabel.getText()) > 1) {
-//		    	numberLabel.setText("1");
-//		    	dicesAttacker = new int[1];
-//		    	
-//		    	if(diceImagesAt.getChildren().size() == 3) {
-//		    		diceImagesAt.getChildren().remove(1);
-//		    		diceImagesAt.getChildren().remove(1);
-//		    	} else {
-//		    		diceImagesAt.getChildren().remove(1);
-//		    	}
-//			
-//			} 
-//
-//		} else if (this.attacking.getNumberOfTroops() == 3) {
-//			this.maxDiceToThrow = 2;
-//			if (Integer.parseInt(numberLabel.getText()) > 2) {
-//	    		int i = Integer.parseInt(numberLabel.getText()) - 1;
-//		    	numberLabel.setText(String.valueOf(i));
-//		    	dicesAttacker = new int[dicesAttacker.length - 1];
-//		    	diceImagesAt.getChildren().remove(0);
-//	    	}
-//		}
-//		// TODO remove lastthrow logik, add troops lost for at and df, get from gamestate
-//		if(this.lastThrow < 0) {
-//			this.attacking.removeNumberOfTroops(-1 * this.lastThrow);
-//		} else if (this.lastThrow > 0) {
-//			this.defendingPNG.removeNumberOfTroops(this.lastThrow);
-//		} else {
-//			this.attacking.removeNumberOfTroops(1);
-//			this.defendingPNG.removeNumberOfTroops(1);
-//		}
-//		
-//		this.setCorrectTroops();
-//		
-//		troopsTextAt.setText(String.valueOf(attacking.getNumberOfTroops() - 1));
-//		troopsTextDf.setText(String.valueOf(defendingPNG.getNumberOfTroops()));
+	
+	public void startDiceAnimation() {
+    	throwBtn.setDisable(true);
+        lessBtn.setDisable(true);
+        moreBtn.setDisable(true);
+        timeline = new Timeline(new KeyFrame(Duration.millis(80.0), e -> {
+    		
+    		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
+    			Random random = new Random();
+        		int n = random.nextInt(6)+1;
+                DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
+                try {
+					dice.setImage(new Image(new FileInputStream(
+							Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+                final int m = k;
+            	diceImagesAt.getChildren().set(m, dice);
+    		}
+    		
+    		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
+    			Random random = new Random();
+        		int n = random.nextInt(6)+1;
+                DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
+                try {
+					dice.setImage(new Image(new FileInputStream(
+							Parameter.dicedir + "dice" + String.valueOf(n) + "b.png")));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+                final int m = k;
+            	diceImagesDf.getChildren().set(m, dice);       
+    		}
+    		
+    		cyclesCompleted++;
+
+    		
+    		})
+		);
+		timeline.setCycleCount(Animation.INDEFINITE);
+		timeline.play();		
+	}
+	
+	public void setDiceStopAnimation(int[][] diceResults, int[] numberDiceNextThrow,
+			int result) throws InterruptedException, FileNotFoundException {
+		while(this.cyclesCompleted < 15) {
+			Thread.sleep(1000);
+		}
+		if (this.timeline != null) {
+		  timeline.stop();
+		}
+		
+		this.dicesAttacker = diceResults[0];
+		this.dicesAttacker = diceResults[1];
+		this.lastThrow = result;
+		
+		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
+            DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
+            try {
+				dice.setImage(new Image(new FileInputStream(
+						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + ".png")));
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+            final int m = k;
+        	diceImagesAt.getChildren().set(m, dice);
+		}
+		
+		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
+            DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
+            try {
+				dice.setImage(new Image(new FileInputStream(
+						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + "b.png")));
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+            final int m = k;
+        	diceImagesDf.getChildren().set(m, dice);       
+		}
+		
+		if(this.lastThrow < 0) {
+		this.troopsInAttackAt -= 1 * this.lastThrow;
+		} else if (this.lastThrow > 0) {
+			this.troopsInAttackDf -= this.lastThrow;
+		} else {
+			this.troopsInAttackAt--;
+			this.troopsInAttackDf--;
+
+		}
+		
+		this.setCorrectTroops();
+				
+		this.maxDiceToThrow = numberDiceNextThrow[0];
+		this.defendingDice = numberDiceNextThrow[1];
+		
+		troopsTextAt.setText(String.valueOf(this.troopsInAttackAt));
+		troopsTextDf.setText(String.valueOf(this.troopsInAttackDf));
+
+	}
+
+
 //		
 //		if(this.defendingPNG.getNumberOfTroops() == 1 && defendingDice != 1) {
 //			this.defendingDice = 1;

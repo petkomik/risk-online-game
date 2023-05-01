@@ -10,7 +10,6 @@ import java.util.function.BiConsumer;
 
 import database.Profile;
 import game.Lobby;
-import game.gui.HostServerMessengerController;
 import game.gui.MainApp;
 import game.models.Player;
 import gameState.GameHandler;
