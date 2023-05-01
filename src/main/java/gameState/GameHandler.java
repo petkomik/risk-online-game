@@ -62,7 +62,7 @@ public class GameHandler {
 			this.gameState.subtractTroopsToPlayer(this.gameState.getCurrentPlayer(), troops);
 			switch (this.gameType) {
 			case SinglePlayer:
-				this.singlePlayerHandler.reinforceOnGUI(country, 
+				this.singlePlayerHandler.setTroopsOnTerritoryAndLeftOnGUI(country, 
 						this.gameState.getTerritories().get(country).getNumberOfTroops(),
 						this.gameState.getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer()));
 				break;
@@ -97,7 +97,7 @@ public class GameHandler {
 			this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
 			switch (this.gameType) {
 			case SinglePlayer:
-				this.singlePlayerHandler.reinforceOnGUI(country, 
+				this.singlePlayerHandler.setTroopsOnTerritoryAndLeftOnGUI(country, 
 						this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry()).getNumberOfTroops(), 
 						this.gameState.getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer()));
 				break;
@@ -176,7 +176,7 @@ public class GameHandler {
 					this.gameState.getTerritories().get(country).addNumberOfTroops(1);
 					int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
 					this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
-					this.singlePlayerHandler.initialDeployOnGUI(country, 
+					this.singlePlayerHandler.setTroopsOnTerritoryAndLeftOnGUI(country, 
 							gameState.getTerritories().get(country).getNumberOfTroops(), 
 							numTroopsPlayer);
 					if(Logic.isDeployPeriodOver(this.gameState)) {
@@ -235,21 +235,70 @@ public class GameHandler {
 					}
 				}
 				if(Logic.playerAttackingCountry(country, idOfPlayer, this.gameState)) {
-					switch(this.gameType) {
-					case SinglePlayer:
-						this.singlePlayerHandler.playerCanAttackSelectedCountryOnGUI(country, 1, 
-								this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
-								.getNumberOfTroops() - 1, ChoosePane.ATTACK_ATTACK);
-						break;
-					case Multiplayer:
-						break;
-					case Tutorial:
-						break;
+					if(gameState.getLastAttackingCountry() == null) {
+						
+					} else {
+						switch(this.gameType) {
+						case SinglePlayer:
+							this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
+									this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
+									.getNumberOfTroops() - 1, ChoosePane.ATTACK_ATTACK);
+							break;
+						case Multiplayer:
+							break;
+						case Tutorial:
+							break;
+						}					
 					}
 				}
 				
 				break;
 			case FORTIFY:
+				if(Logic.playerFortifyingPosition(country, idOfPlayer, this.gameState)) {
+					if(this.gameState.getLastFortifyingCounty() == null) {
+						if(this.gameState.getTerritories().get(country).getNumberOfTroops() > 1) {
+							ArrayList<CountryName> fortifiableCountries = new ArrayList<CountryName>();
+							fortifiableCountries.addAll(this.gameState.getTerritories().keySet());
+							fortifiableCountries.removeIf(x -> !this.gameState.getTerritories().get(x)
+									.getOwnedByPlayer().equals(player));
+							switch(this.gameType) {
+							case SinglePlayer:
+								this.singlePlayerHandler.playerCanFortifyFromCountryOnGUI(country, fortifiableCountries);
+								break;
+							case Multiplayer:
+								break;
+							case Tutorial:
+								break;
+							}
+						}
+					} else if(this.gameState.getLastFortifyingCounty() == country){
+						switch(this.gameType) {
+						case SinglePlayer:
+							this.singlePlayerHandler.resetFortifyingPhaseOnGUI();
+							this.gameState.setLastFortifyingCounty(null);						
+							break;
+						case Multiplayer:
+							break;
+						case Tutorial:
+							break;
+						}
+			
+
+					} else {
+						switch(this.gameType) {
+						case SinglePlayer:
+							this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
+									this.gameState.getTerritories().get(this.gameState
+											.getLastFortifyingCounty()).getNumberOfTroops() - 1,
+									ChoosePane.FORTIFY);
+							break;
+						case Multiplayer:
+							break;
+						case Tutorial:
+							break;
+						}
+					}
+				}
 				break;
 			}
 			break;

@@ -261,7 +261,7 @@ public class Logic {
 					if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
 						if(!gameState.getTerritories().get(country).getOwnedByPlayer()
 								.equals(gameState.getCurrentPlayer())) {
-							
+							return true;
 						}
 					}
 				}
@@ -281,5 +281,22 @@ public class Logic {
 		gameState.getTerritories().get(x).getNeighboringTerritories()
 		.contains(gameState.getTerritories().get(x)));		
 		return unreachableCountries;
+	}
+
+	public static boolean playerFortifyingPosition(CountryName country, int idOfPlayer, GameState gameState) {
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
+			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
+				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+					if(gameState.getCurrentTurnPhase().equals(Phase.FORTIFY)) {
+						if(gameState.getTerritories().get(country).getOwnedByPlayer()
+								.equals(gameState.getCurrentPlayer())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 }

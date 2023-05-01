@@ -22,6 +22,5 @@ public class PlayerSingle extends Player {
 		this.setColor(profile.getColor());
 		this.setAvatar(Parameter.avatarsdir + profile.getPhoto());
 	}
-	
 
 }

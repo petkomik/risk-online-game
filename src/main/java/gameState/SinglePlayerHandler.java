@@ -165,15 +165,11 @@ public class SinglePlayerHandler {
 		this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
 	}
 	
-	public void initialDeployOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
+	public void setTroopsOnTerritoryAndLeftOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
 		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
-	public void reinforceOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
-		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
-		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
-	}
 	
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
 	}
@@ -183,10 +179,6 @@ public class SinglePlayerHandler {
 		
 	}
 	
-	public void playerCanAttackSelectedCountryOnGUI(CountryName country,int min, int max, ChoosePane choosePane) {
-		this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
-	}
-	
 	public void openBattleFrameOnGUI(Continent continentAt, CountryName countryNameAt, 
 								Continent continentDf, CountryName countryNameDf,
 								Player playerAt, Player playerDf, boolean attackerGui,
@@ -194,15 +186,6 @@ public class SinglePlayerHandler {
 		// sets the battle visible and initiates it with these parameters
 	}
 	
-	public void successfulAttackOnGUI(CountryName countryFrom, CountryName countryTo,
-			int min, int max, ChoosePane choosePane) {
-		
-	}
-	
-	public void failedAttackOnGUI(CountryName countryAt, CountryName countryDf, 
-			int troopsInAttacking, int troopsInDefender) {
-		
-	}
 	
 	public void receiveRiskCardOnGUI(Card card, int idOfPlayer) {
 		
@@ -213,15 +196,6 @@ public class SinglePlayerHandler {
 		
 	}
 	
-	public void playerCanFortifySelectedCountryOnGUI(CountryName countryFrom, CountryName countryTo,
-			int min, int max, ChoosePane choosePane) {
-		//this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
-	}
-	
-	public void movingTroopsConfirmedOnGUI(CountryName countryFrom, CountryName countryTo,
-			int troops) {
-		
-	}
 	
 	public void endBattleOnGUI() {
 		//makes battle screne invisible
@@ -229,5 +203,14 @@ public class SinglePlayerHandler {
 	
 	public Lobby getLobby() {
 		return lobby;
+	}
+	
+	public void resetFortifyingPhaseOnGUI() {
+//		The player decided not to fortify from this country, or clicked cancel in the choose pane
+//		reset phase
+	}
+	
+	public void resetAttackingPhaseOnGUI() {
+		
 	}
 }
