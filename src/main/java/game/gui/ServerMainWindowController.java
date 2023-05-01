@@ -419,6 +419,13 @@ public class ServerMainWindowController extends StackPane {
 				try {
 					MultplayerHostJoinController mlt = new MultplayerHostJoinController();
 					stage.getScene().setRoot(mlt);
+					if(!client.isHost()){
+						client.sendMessage(new MessageDisconnect(client.getProfile()));
+						client.closeEverything();
+					}else{
+						client.sendMessage(new MessageServerCloseConnection());
+					}
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -459,6 +466,7 @@ public class ServerMainWindowController extends StackPane {
 			chatPane.setClient(client);
 			client.setChat(chatPane);
 			chatPane.addLabel(host);
+			client.setHost(true);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -471,6 +479,7 @@ public class ServerMainWindowController extends StackPane {
 		chatPane.setClient(client);
 		client.setChat(chatPane);
 		this.hostView = false;
+		client.setHost(false);
 		// client.sendMessage(new MessageConnect(AppController.getProfile()));
 
 	}

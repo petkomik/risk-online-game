@@ -30,8 +30,10 @@ public class Client {
 	private Profile profile;
 	private String userName;
 	private Player player;
+	private Thread clientThread;
 	public static ArrayList<Profile> profiles = new ArrayList<>();
 	GUISupportClasses.ChatWindow chat;
+	private boolean host ;
 
 	public Client(Socket socket, Profile profile) {
 		this.profile = profile;
@@ -43,7 +45,6 @@ public class Client {
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
-			
 
 			// this.sendMessage(new MessageConnect(profile));
 			// newlineofCode
@@ -111,6 +112,7 @@ public class Client {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		clientThread.interrupt();
 
 	}
 
@@ -152,7 +154,7 @@ public class Client {
 		Client client;
 		socket = new Socket(host, port);
 		client = new Client(socket, profile);
-
+		
 		return client;
 	}
 
@@ -188,7 +190,7 @@ public class Client {
 	}
 
 	public void listenForMessage() {
-		new Thread(new Runnable() {
+		clientThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				Message message;
@@ -222,13 +224,17 @@ public class Client {
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
+							
+							chat.addLabel(((MessageDisconnect) message).getProfile().getUserName()+ " has left ");
 //							HostServerMessengerController.addLabel(
 //									"Player " + ((MessageDisconnect) message).getPlayername() + " has disconnected",
 //									vBoxMessages);
-							closeEverything();
+							
 							break;
 						case MessageServerCloseConnection:
 							System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
+							chat.addLabel("Host has left, please reconnect to a new server ");
+							
 //							JoinClientMessengerController
 //									.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);	
 //							JoinClientMessengerController.addLabel("Host has disconnected, please reconnect",
@@ -243,9 +249,11 @@ public class Client {
 //											+ ((MessageToPerson) message).getMsg()
 //													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
 //									vBoxMessages);
-							chat.addLabel(((MessageToPerson)message).getStringMessage(),((MessageToPerson)message).getFromProfile().getUserName()  );
+							chat.addLabel(((MessageToPerson) message).getStringMessage(),
+									((MessageToPerson) message).getFromProfile().getUserName());
 							System.out.println();
-							//chat.addLabel(((MessageToPerson)message).getFromProfile().getUserName()+" : " + ((MessageToPerson)message).getStringMessage());
+							// chat.addLabel(((MessageToPerson)message).getFromProfile().getUserName()+" : "
+							// + ((MessageToPerson)message).getStringMessage());
 							break;
 						case MessageProfile:
 							// ithe new client adds the other clients in his list and db
@@ -277,7 +285,9 @@ public class Client {
 				}
 			}
 
-		}).start();
+		});
+		clientThread.start();
+
 	}
 
 	/**
@@ -295,6 +305,13 @@ public class Client {
 	public Profile getProfile() {
 		return profile;
 	}
-	
+
+	public boolean isHost() {
+		return host;
+	}
+
+	public void setHost(boolean host) {
+		this.host = host;
+	}
 
 }

@@ -31,6 +31,7 @@ public class Server {
 						clientHandler = new ClientHandler(socket);
 
 						Thread player = new Thread(clientHandler);
+						clientHandler.setClieantHandlerThread(player);
 						player.start();
 
 					}

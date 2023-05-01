@@ -481,6 +481,7 @@ public class GUISupportClasses {
 			names.setPrefWidth(ratio * 120);
 			// TODO add names or change them with a foreach
 			names.getItems().add("All");
+			names.setValue("All");
 			names.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 
 			comboAndSend.prefHeight(ratio * 100);

@@ -13,6 +13,7 @@ import game.Lobby;
 import game.gui.MainApp;
 import game.models.Player;
 import gameState.GameHandler;
+import javafx.application.Platform;
 import network.messages.Message;
 import network.messages.MessageAttack;
 import network.messages.MessageConnect;
@@ -38,6 +39,7 @@ public class ClientHandler implements Runnable {
 	private ObjectOutputStream objectOutputStream;
 	private Profile profile;
 	private String clientUsername;
+	private Thread clieantHandlerThread;
 
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
@@ -154,16 +156,23 @@ public class ClientHandler implements Runnable {
 					// change connect to case
 					break;
 				case Disconnect:
-					System.out.println("case MessageDisconnect Server Success 3 ");
-					broadcastMessage(messageFromClient);
-					removeClient(((MessageDisconnect) messageFromClient).getProfile());
+				
+				    System.out.println("case MessageDisconnect in Handler Success 3 ");
+				    broadcastMessage(messageFromClient);
+//				    try {
+//				        Thread.sleep(1000); // wait for the broadcast to finish
+//				    } catch (InterruptedException e) {
+//				        e.printStackTrace();
+//				    }
+//				    removeClient(((MessageDisconnect) messageFromClient).getProfile());
+//				    closeEverything();
+				    break;
 
-					break;
 				case MessageServerCloseConnection:
 					System.out.println("case MessageDisconnect Server Success 3 ");
 					broadcastMessage(messageFromClient);
 					closeEverything(socket, objectInputStream, objectOutputStream);
-
+					Server.closeServerSocket();
 //					JoinClientMessengerController
 //							.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);
 					break;
@@ -259,6 +268,8 @@ public class ClientHandler implements Runnable {
 			if (objectInputStream2 != null) {
 				objectInputStream2.close();
 			}
+			System.out.println("Pepi pita stiga li do tam");
+			clieantHandlerThread.interrupt();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -267,12 +278,30 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void removeClient(Profile profile) {
+	
 		for (ClientHandler clientHandler : clientHandlers) {
+		
 			if (clientHandler.getProfile().equals(profile)) {
-				clientHandler.removeClient(profile);
+				clientHandlers.remove(clientHandler);
+				clieantHandlerThread.interrupt();
+			
+			}
+		}
+		for (Profile profile2 : clients) {
+			if (profile2.equals(profile)) {
+				clients.remove(profile2);
+				
 			}
 		}
 
+	}
+
+	public Thread getClieantHandlerThread() {
+		return clieantHandlerThread;
+	}
+
+	public void setClieantHandlerThread(Thread clieantHandlerThread) {
+		this.clieantHandlerThread = clieantHandlerThread;
 	}
 
 }
