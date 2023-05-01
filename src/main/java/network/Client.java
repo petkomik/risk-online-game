@@ -43,6 +43,7 @@ public class Client {
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
+			
 
 			// this.sendMessage(new MessageConnect(profile));
 			// newlineofCode
@@ -215,6 +216,7 @@ public class Client {
 								AppController.dbH.createProfileData(profilee);
 							}
 							profiles.add(profilee);
+							chat.addItemsInComboBox(profilee);
 							// The client who received the new Connected Client sends own profile
 							sendMessage(new MessageConnect(getProfile(), profilee.getId()));
 							break;
@@ -255,6 +257,7 @@ public class Client {
 								AppController.dbH.createProfileData(profilee1);
 								System.out.println("profileadding works");
 							}
+							chat.addItemsInComboBox(profilee1);
 							System.out.println("MessageProfile");
 							break;
 						case MessageCreateLobby:
@@ -292,5 +295,6 @@ public class Client {
 	public Profile getProfile() {
 		return profile;
 	}
+	
 
 }

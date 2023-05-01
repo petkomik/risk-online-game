@@ -2,6 +2,7 @@ package game.gui;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import database.Profile;
 import game.PlayerInLobby;
@@ -14,6 +15,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -423,18 +425,12 @@ public class GUISupportClasses {
 		// message to be send, should used by client
 		private Client client;
 
-		public Client getClient() {
-			return client;
-		}
-
-		public void setClient(Client client) {
-			this.client = client;
-		}
 
 		private boolean dragAreaHover = false;
 		private double ratio;
 		private double xCord;
 		private double yCord;
+		private ObservableList<String> items;
 
 		public ChatWindow() {
 
@@ -455,7 +451,9 @@ public class GUISupportClasses {
 			comboAndSend = new VBox();
 			names = new ComboBox<String>();
 			dragArea = new HBox();
-
+			items = names.getItems();
+			
+			
 			dragArea.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0;");
 			dragArea.setPrefHeight(30 * ratio);
 			dragArea.getChildren().add(new Spacing(1));
@@ -482,7 +480,7 @@ public class GUISupportClasses {
 
 			names.setPrefWidth(ratio * 120);
 			// TODO add names or change them with a foreach
-			names.getItems().addAll("Name1", "Name2", "Name3");
+			names.getItems().add("All");
 			names.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 
 			comboAndSend.prefHeight(ratio * 100);
@@ -539,6 +537,7 @@ public class GUISupportClasses {
 			this.setPickOnBounds(true);
 			this.getChildren().addAll(dragArea, chat, textfieldAndButtons);
 		}
+		
 
 		public void actionEventsSetup() {
 
@@ -591,18 +590,17 @@ public class GUISupportClasses {
 							@Override
 							public void run() {
 								System.out.println("Run of Host sworks, this is what it starts with ");
-								if (messageToBeSend.contains(":")) {
+								if (!names.getValue().equals("All")) {
 
-									System.out.println(messageToBeSend.substring(0, messageToBeSend.indexOf(":")));
-									String username = messageToBeSend.substring(0, messageToBeSend.indexOf(":"));
+									String username = names.getValue();
 									// send the message to the specified user
 									System.out.println(client.getProfile().getUserName() +  " e izprashtach i prashta na  "
 									+findProfileFromString(username).getUserName() 
-									+ " subshtenieto e " + messageToBeSend.substring(messageToBeSend.indexOf(":")+1) );
-									client.sendMessage(new MessageToPerson(messageToBeSend.substring(messageToBeSend.indexOf(":")+1), client.getProfile(),
+									+ " subshtenieto e " + username );
+									client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
 											findProfileFromString(username)));
 
-								} else if (!messageToBeSend.equals(null)) {
+								} else if (!messageToBeSend.equals(null) && names.getValue().equals("All")) {
 									// send the message to the general chat
 									System.out.println(client.getProfile());
 									client.sendMessage(messageToBeSend);
@@ -631,10 +629,10 @@ public class GUISupportClasses {
 		}
 		private Profile findProfileFromString(String username) {
 			
-			int i = 0;
+		
 			for (Profile profile  : Client.profiles) {
 				
-				System.out.println(profile.getUserName() + " "+  ++i);
+			
 				if (profile.getUserName().equalsIgnoreCase(username)) {
 					
 					return profile;
@@ -697,6 +695,11 @@ public class GUISupportClasses {
 			});
 
 		}
+		public void addItemsInComboBox(Profile profile){
+			
+			items.add(profile.getUserName());
+			
+		}
 
 		public void setxCord(double xCord) {
 			this.xCord = xCord;
@@ -722,5 +725,12 @@ public class GUISupportClasses {
 			return messageToBeSend;
 		}
 
+		public Client getClient() {
+			return client;
+		}
+		
+		public void setClient(Client client) {
+			this.client = client;
+		}
 	}
 }
