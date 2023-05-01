@@ -673,13 +673,19 @@ public class GUISupportClasses {
 
 		public void addLabel(String messageFromCLient, String profile) {
 
-			Text text = new Text(profile + ": " + messageFromCLient);
-			text.setFill(Color.WHITE);
+			Text text = new Text(messageFromCLient);
+			text.setFill(Color.YELLOW);
 			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
+			
+			Text username =  new Text(profile + ": ");
+			username.setFill(Color.YELLOW);
+			username.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
-			TextFlow textFlow = new TextFlow(text);
+			TextFlow textFlow = new TextFlow();
+			textFlow.getChildren().addAll(username, text);
 			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
 					+ "-fx-background-radius: 20px;");
+			textFlow.setLineSpacing(ratio*5);
 			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
 
 			HBox message = new HBox();
