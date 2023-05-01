@@ -55,7 +55,6 @@ public class ClientHandler implements Runnable {
 		} catch (IOException | ClassNotFoundException e) {
 			MessageDisconnect disconnect = new MessageDisconnect(profile);
 			broadcastMessage(disconnect);
-			System.out.println("case CLientHandler Ecxeptions ");
 			closeEverything(socket, objectInputStream, objectOutputStream);
 			e.printStackTrace();
 		}

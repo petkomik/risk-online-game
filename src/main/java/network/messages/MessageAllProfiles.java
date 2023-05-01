@@ -1,10 +1,8 @@
-package game.gui;
+package network.messages;
 
 import java.util.ArrayList;
 
 import database.Profile;
-import network.messages.Message;
-import network.messages.MessageType;
 
 public class MessageAllProfiles extends Message {
 	private ArrayList<Profile> profiles ;
