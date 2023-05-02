@@ -144,6 +144,10 @@ public class GamePaneController implements Initializable{
 	private ArrayList<Card> cardsPlayerOnGUI;
 	
 	private Pane cardsPopUp;
+	private Button tradeButton;
+	private Pane dropOnPane1;
+	private Pane dropOnPane2;
+	private Pane dropOnPane3;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -178,7 +182,7 @@ public class GamePaneController implements Initializable{
 		leaveGameButton.setLayoutX((40.0/1536.0) * w);
 		leaveGameButton.setLayoutY((40.0/864.0) * h);
 		leaveGameButton.setPickOnBounds(true);
-	
+
 		gameBoard.getChildren().add(leaveGameButton);
 		
 		setUpPhaseBoard();
@@ -254,7 +258,7 @@ public class GamePaneController implements Initializable{
 		diceIV.setLayoutX((w - diceIV.getFitWidth()) / 2.0);
 		diceIV.setLayoutY(getRelativeVer(695.0));
 		diceIV.setPickOnBounds(true);
-		
+
 		throwDiceButton = new Button("THROW DICE");
 		throwDiceButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
 		throwDiceButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
@@ -382,14 +386,12 @@ public class GamePaneController implements Initializable{
 			panes[i] = new Pane(rectangles[i], stackPanes[i], labTimer[i], ivTimer[i]);
 			
 		}
-		
 		vbPlayerList.getChildren().addAll(panes);
 		vbPlayerList.setScaleX(w / 1536.0);
 		vbPlayerList.setScaleY(h / 864.0);
 		vbPlayerList.setLayoutX((1335.0/1536.0) * w);
 		vbPlayerList.setLayoutY((h - vbPlayerList.getPrefHeight() * vbPlayerList.getScaleY()) / 2.0);
 		vbPlayerList.setSpacing(24);
-		vbPlayerList.setPickOnBounds(true);
 		
 		gameBoard.getChildren().add(vbPlayerList);
 	}
@@ -409,10 +411,11 @@ public class GamePaneController implements Initializable{
 		    	(new GameSound()).buttonClickForwardSound();
 		    	System.out.println("ends turn / phase " + playerOnGUI.getName() + " " + playerOnGUI.getID());
 		    	singlePlayerHandler.endPhaseTurn(currentPeriod, currentPhase, playerOnGUI.getID());
+
 		    }
 		});
         
-        gameBoard.getChildren().addAll(nextPhaseButton);
+        gameBoard.getChildren().add(nextPhaseButton);
 	}
 	
 	public void setUpPhaseBoard() {
@@ -542,6 +545,9 @@ public class GamePaneController implements Initializable{
         colorAdjust.setSaturation(-0.18);
         cardsPane.getChildren().add(cardsImageView);
         cardsPane.setEffect(colorAdjust);
+        cardsPane.setOnMouseClicked(e -> {
+        	showCardsPopUp();
+        });
 //        cardsPane.setVisible(false);
         
         numCardsLabel = new Label("");
@@ -621,8 +627,6 @@ public class GamePaneController implements Initializable{
 		gameBoard.getChildren().add(choosingTroopsPane);
 		
 
-
-
 		
 	}
 	
@@ -631,8 +635,24 @@ public class GamePaneController implements Initializable{
 		cardsPopUp.setPrefSize(w, h);
 		cardsPopUp.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
 		cardsPopUp.setVisible(false);
-
-		Button tradeButton = new Button("NO TRADE");
+		
+		Button cancelButton = new Button("CANCEL");
+		cancelButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
+		cancelButton.setLayoutX(getRelativeHorz(1185.0));
+		cancelButton.setLayoutY(getRelativeVer(90.0));
+		cancelButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+		cancelButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+        		cancelButton.setStyle("-fx-background-color: #ac7339; "
+        				+ "-fx-background-radius: 15px; ");
+            } else {
+            	cancelButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+            }
+	        });
+		cancelButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
+		cancelButton.setOnAction(e -> cardsPopUp.setVisible(false));
+		
+		tradeButton = new Button("NO TRADE");
 		tradeButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
 		tradeButton.setLayoutX((w - tradeButton.getPrefWidth()) / 2.0);
 		tradeButton.setLayoutY((h - tradeButton.getPrefHeight()) / 2.0);
@@ -647,6 +667,8 @@ public class GamePaneController implements Initializable{
 	        });
 		tradeButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
 		tradeButton.setDisable(true);
+		
+
 		
 		Rectangle dropOnCard1 = new Rectangle();
 		Rectangle dropOnCard2 = new Rectangle();
@@ -682,9 +704,28 @@ public class GamePaneController implements Initializable{
 		dropOnCard3.setLayoutX(getRelativeHorz(901.0));
 		dropOnCard3.setLayoutY(getRelativeVer(125.0));
 		
-		cardsPopUp.getChildren().addAll(tradeButton, dropOnCard1, dropOnCard2, dropOnCard3);
+		dropOnPane1 = new Pane();
+		dropOnPane1.setPrefWidth(getRelativeHorz(200.0));
+		dropOnPane1.setPrefHeight(getRelativeVer(270.0));
+		dropOnPane1.setLayoutX(getRelativeHorz(435.0));
+		dropOnPane1.setLayoutY(getRelativeVer(125.0));
+		
+		dropOnPane2 = new Pane();
+		dropOnPane2.setPrefWidth(getRelativeHorz(200.0));
+		dropOnPane2.setPrefHeight(getRelativeVer(270.0));
+		dropOnPane2.setLayoutX(getRelativeHorz(668.0));
+		dropOnPane2.setLayoutY(getRelativeVer(77.0));
+		
+		dropOnPane3 = new Pane();
+		dropOnPane3.setPrefWidth(getRelativeHorz(200.0));
+		dropOnPane3.setPrefHeight(getRelativeVer(270.0));
+		dropOnPane3.setLayoutX(getRelativeHorz(901.0));
+		dropOnPane3.setLayoutY(getRelativeVer(125.0));
+		
+		cardsPopUp.getChildren().addAll(tradeButton, dropOnCard1, dropOnCard2, dropOnCard3, cancelButton, dropOnPane1, dropOnPane2, dropOnPane3);
 		cardsPopUp.setPickOnBounds(true);
 		gameBoard.getChildren().add(cardsPopUp);
+		
 	}
 	
 	public void decreaseProgressbar() {
@@ -835,6 +876,106 @@ public class GamePaneController implements Initializable{
 		});
 	}
 	
+	public void showCardsPopUp() {
+		ArrayList<Card> cards = this.cardsPlayerOnGUI;
+		HBox hbCards = new HBox();
+		hbCards.setPrefHeight(getRelativeVer(270.0));
+		hbCards.setLayoutX(getRelativeHorz(435.0));
+		hbCards.setLayoutY(getRelativeVer(510.0));
+		for(Card c : cards) {
+			VBox vbCard = new VBox();
+			vbCard.setMinSize(200, 270);
+			vbCard.setPrefSize(getRelativeHorz(200.0), getRelativeVer(270.0));
+			vbCard.setOnMouseClicked(e -> {
+				if(!(dropOnPane1.getChildren().contains(e.getSource())
+						|| dropOnPane2.getChildren().contains(e.getSource())
+						|| dropOnPane3.getChildren().contains(e.getSource()))) {
+					if(dropOnPane1.getChildren().size() == 0) {
+						hbCards.getChildren().remove(e.getSource());
+						dropOnPane1.getChildren().add((VBox)e.getSource());
+					}
+					else if(dropOnPane2.getChildren().size() == 0) {
+						hbCards.getChildren().remove(e.getSource());
+						dropOnPane2.getChildren().add((VBox)e.getSource());
+					}
+					else if(dropOnPane3.getChildren().size() == 0) {
+						hbCards.getChildren().remove(e.getSource());
+						dropOnPane3.getChildren().add((VBox)e.getSource());
+					}
+				}
+				else if(dropOnPane1.getChildren().contains(e.getSource())) {
+					dropOnPane1.getChildren().remove(e.getSource());
+					hbCards.getChildren().add((VBox)e.getSource());
+				}
+				else if(dropOnPane2.getChildren().contains(e.getSource())) {
+					dropOnPane2.getChildren().remove(e.getSource());
+					hbCards.getChildren().add((VBox)e.getSource());
+				}
+				else if(dropOnPane3.getChildren().contains(e.getSource())) {
+					dropOnPane3.getChildren().remove(e.getSource());
+					hbCards.getChildren().add((VBox)e.getSource());
+				}
+				
+				if(dropOnPane1.getChildren().size() != 0 
+						&& dropOnPane2.getChildren().size() != 0 
+						&& dropOnPane3.getChildren().size() != 0) {
+					tradeButton.setDisable(false);
+					tradeButton.setText("TRADE");
+				}
+				else {
+					tradeButton.setDisable(true);
+					tradeButton.setText("NO TRADE");
+				}
+			});
+			Pane countryNamePane = new Pane();
+			Pane countryArmyPane = new Pane();
+			
+			countryNamePane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(70.0));
+			countryArmyPane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(200.0));
+
+			Label countryNameLabel = new Label(c.getName().toString());
+			countryNameLabel.setAlignment(Pos.CENTER);
+			countryNameLabel.setPadding(new Insets(10, 10, 10, 10));
+			
+			countryNamePane.getChildren().add(countryNameLabel);
+			
+			ImageView countryIV = new ImageView(); // I need to get the right name of the file
+			
+			String path = null;
+			switch (c.getCardSymbol()) {
+			case 1:
+				path = Parameter.infantry;
+				break;
+			case 5:
+				path = Parameter.cavalry;
+				break;
+			case 10:
+				path = Parameter.artillery;
+				break;
+			default:
+				break;
+			}
+			ImageView armyIV = new ImageView(path);
+			
+			countryIV.setFitWidth(countryArmyPane.getPrefWidth() - 30.0);
+			countryIV.setFitHeight(countryArmyPane.getPrefHeight() - 50.0);
+			countryIV.setLayoutX((countryArmyPane.getPrefWidth() - countryIV.getFitWidth()) / 2.0);
+			countryIV.setLayoutY((countryArmyPane.getPrefHeight() - countryIV.getFitHeight()) / 2.0);
+			
+			armyIV.setFitWidth(55.0);
+			armyIV.setFitHeight(80.0);
+			armyIV.setLayoutX(15.0);
+			armyIV.setLayoutY(110.0);
+			
+			countryArmyPane.getChildren().addAll(countryIV, armyIV);
+			
+			vbCard.getChildren().addAll(countryNamePane, countryArmyPane);
+			hbCards.getChildren().add(vbCard);
+		}
+		cardsPopUp.getChildren().add(hbCards);
+		cardsPopUp.setVisible(true);
+	}
+	
 	public void setPhase(Phase phase) {
 		firstPhaseLogo.setVisible(phase == Phase.REINFORCE);
 		middlePhaseLogo.setVisible(phase == Phase.ATTACK);
@@ -868,8 +1009,9 @@ public class GamePaneController implements Initializable{
 		this.currentPeriod = period;
 	}
 	
-	public void setPlayerOnGUI(int idOfPlayer, List<Card> cards) {
+	public void setPlayerOnGUI(int idOfPlayer, ArrayList<Card> cards) {
 		this.playerOnGUI = this.playerIdHash.get(idOfPlayer);
+		this.cardsPlayerOnGUI = cards;
 		for(int i = 0; i < playerIDs.size(); i++) {
 			if(playerIDs.get(i) == idOfPlayer) {
 				rectCards.setFill(Color.web(playerColors.get(i)));
@@ -880,8 +1022,7 @@ public class GamePaneController implements Initializable{
 		// TODO
 		numCardsLabel.setText("4");
 	}
-	
-	
+		
 	public void showCardsSymbol() {
 		rectCards.setVisible(true);
 		cardsPane.setVisible(true);
