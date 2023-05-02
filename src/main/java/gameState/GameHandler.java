@@ -10,11 +10,13 @@ import game.exceptions.WrongCountryException;
 import game.exceptions.WrongPeriodException;
 import game.exceptions.WrongPhaseException;
 import game.exceptions.WrongTroopsCountException;
+import game.logic.AILogic;
 import game.logic.GameType;
 import game.logic.Logic;
 import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
+import game.models.PlayerAI;
 
 public class GameHandler {
 	// Gamelogic Ausführung der Methoden
@@ -161,6 +163,27 @@ public class GameHandler {
 					gameState.setNextPlayer();
 					this.singlePlayerHandler.setCurrentPlayerOnGUI(
 							gameState.getCurrentPlayer().getID(), numTroopsPlayer);
+					if(this.gameState.getCurrentPlayer().isAI()){
+						PlayerAI playerAI = ((PlayerAI)gameState.getCurrentPlayer());
+						country = AILogic.chooseTerritoryToInitialClaim(gameState, playerAI);
+						this.simulateHumanAction();
+						if(Logic.claimTerritory(playerAI, this.gameState, country)) {
+							this.gameState.setOwnedByTerritory(country, playerAI);
+							this.gameState.updateTroopsOnTerritory(country, 1);
+							
+							numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(playerAI) - 1; 
+							this.gameState.getPlayerTroopsLeft().replace(playerAI, numTroopsPlayer);
+							this.singlePlayerHandler.possesCountryOnGUI(country, playerAI.getID());
+							if(Logic.allTerritoriesClaimed(gameState)) {
+								gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
+								this.singlePlayerHandler.setPeriodOnGUI(Period.INITIALDEPLOY);
+							}
+							gameState.setNextPlayer();
+							this.singlePlayerHandler.setCurrentPlayerOnGUI(
+									gameState.getCurrentPlayer().getID(), numTroopsPlayer);
+		
+						}
+					}
 					break;
 				case Multiplayer:
 					break;
@@ -362,6 +385,19 @@ public class GameHandler {
 			case Tutorial:
 				break;
 		}
+		}
+	}
+	
+	public void simulateHumanAction() {
+		boolean flag = true;
+		while(flag) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			flag = false;
 		}
 	}
 	

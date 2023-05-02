@@ -22,7 +22,8 @@ public class Player implements Serializable {
 	private String username;
 	private String color;
 	private String avatar;
-	private int id;
+	protected int id;
+	protected boolean isAI;
 	private int rank;
 	private LocalDateTime gameEndTime;
 
@@ -84,6 +85,11 @@ public class Player implements Serializable {
 	
 	public void setAvatar(String imagePath) {
 		this.avatar = imagePath;
+	}
+
+	public boolean isAI() {
+		// TODO Auto-generated method stub
+		return this.isAI;
 	}
 
 }
