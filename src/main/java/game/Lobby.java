@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,8 +20,64 @@ import general.Parameter;
  * To Implement: Player score -> Lobby Rank
  */
 
-public class Lobby {
-	static Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
+public class Lobby implements Serializable{
+	public static void setColors(Color[] colors) {
+		Lobby.colors = colors;
+	}
+
+
+	public void setAvatars(String[] avatars) {
+		Lobby.avatars = avatars;
+	}
+
+
+	public void setAiNames(String[] aiNames) {
+		Lobby.aiNames = aiNames;
+	}
+
+
+	public void setPlayersJoined(ArrayList<Player> playersJoined) {
+		this.playersJoined = playersJoined;
+	}
+
+
+	public void setAvaiableColors(ArrayList<Color> avaiableColors) {
+		this.avaiableColors = avaiableColors;
+	}
+
+
+	public void setAvaiableAvatars(ArrayList<String> avaiableAvatars) {
+		this.avaiableAvatars = avaiableAvatars;
+	}
+
+
+	public void setAvaiableAINames(ArrayList<String> avaiableAINames) {
+		this.avaiableAINames = avaiableAINames;
+	}
+
+
+	public void setReadyHashMap(HashMap<Player, Boolean> readyHashMap) {
+		this.readyHashMap = readyHashMap;
+	}
+
+
+	public void setLobbyRank(int lobbyRank) {
+		this.lobbyRank = lobbyRank;
+	}
+
+
+	public void setDifficultyOfAI(int difficultyOfAI) {
+		this.difficultyOfAI = difficultyOfAI;
+	}
+
+
+	public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
+		this.maxNumberOfPlayers = maxNumberOfPlayers;
+	}
+
+
+
+	static  Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
 			Parameter.orangeColor, Parameter.purpleColor, 
 			Parameter.redColor, Parameter.yellowColor};
 	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
@@ -34,8 +91,14 @@ public class Lobby {
 	private ArrayList<String> avaiableAvatars;
 	private ArrayList<String> avaiableAINames;
 	private HashMap<Player, Boolean> readyHashMap;
-
+	
 	private String lobbyName;
+	public static Color[] getColors() {
+		return colors;
+	}
+
+
+
 	public int lobbyRank;
 	public int difficultyOfAI;
 	public int maxNumberOfPlayers;
@@ -63,7 +126,7 @@ public class Lobby {
 	
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
-			//this.updateScore();
+			this.updateScore();
 			playersJoined.add(this.addColorAvatar(toAdd));
 			this.setReady(toAdd, false);
 			
@@ -232,6 +295,50 @@ public class Lobby {
 	
 	public void setLobbyName(String lobbyName) {
 		this.lobbyName = lobbyName;
+	}
+
+	public static String[] getAvatars() {
+		return avatars;
+	}
+
+
+	public static String[] getAiNames() {
+		return aiNames;
+	}
+
+
+	public ArrayList<Player> getPlayersJoined() {
+		return playersJoined;
+	}
+
+
+	public ArrayList<Color> getAvaiableColors() {
+		return avaiableColors;
+	}
+
+
+	public ArrayList<String> getAvaiableAvatars() {
+		return avaiableAvatars;
+	}
+
+
+	public ArrayList<String> getAvaiableAINames() {
+		return avaiableAINames;
+	}
+
+
+	public HashMap<Player, Boolean> getReadyHashMap() {
+		return readyHashMap;
+	}
+
+
+	public int getDifficultyOfAI() {
+		return difficultyOfAI;
+	}
+
+
+	public int getMaxNumberOfPlayers() {
+		return maxNumberOfPlayers;
 	}
 }
 

@@ -10,8 +10,10 @@ import java.util.function.BiConsumer;
 
 import database.Profile;
 import game.Lobby;
+import game.gui.LobbyGUI;
 import game.gui.MainApp;
 import game.models.Player;
+import game.models.PlayerSingle;
 import gameState.GameHandler;
 import javafx.application.Platform;
 import network.messages.Message;
@@ -21,6 +23,7 @@ import network.messages.MessageCreateLobby;
 import network.messages.MessageDiceThrow;
 import network.messages.MessageDisconnect;
 import network.messages.MessageFortifyTroops;
+import network.messages.MessageFullLobby;
 import network.messages.MessageJoinLobby;
 import network.messages.MessagePlaceTroops;
 import network.messages.MessagePlayerTurn;
@@ -218,7 +221,9 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageCreateLobby:
 
+					PlayerSingle singlePlayer = new PlayerSingle(this.profile);
 					Lobby aLobby = new Lobby();
+					
 					BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
 						int i = 1;
 						String newUsername = clientUsername;
@@ -230,7 +235,8 @@ public class ClientHandler implements Runnable {
 						lobby.setLobbyName(newUsername);
 					};
 					addLobby.accept(clientUsername, aLobby);
-					broadcastMessage(new MessageCreateLobby(this.getProfile().getId(), aLobby));
+					System.out.println(aLobby.getLobbyName());
+					broadcastMessage(new MessageCreateLobby(new MessageFullLobby(aLobby.getPlayersJoined(), aLobby.getAvaiableAvatars(), aLobby.getAvaiableAINames(), aLobby.getReadyHashMap(), aLobby.getLobbyName(), aLobby.getLobbyRank(), aLobby.getDifficultyOfAI(), aLobby.getMaxNumberOfPlayers())));
 
 					break;
 

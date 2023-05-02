@@ -1,11 +1,13 @@
 package game.gui;
 
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
 import database.Profile;
 import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.PlayerSingle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -22,13 +24,19 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class LobbyGUI extends ToggleButton {
+public class LobbyGUI extends ToggleButton implements Serializable {
 
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private double ratio;
 	private int numberOfPlayersJoined;
 	private int maxNumberOfPlayers;
 	private String lobbyNameString;
-	private String ratingString;
+	private int ratingString;
 	private Lobby lobby;
 
 	private HBox hBox;
@@ -42,8 +50,7 @@ public class LobbyGUI extends ToggleButton {
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
-		this.lobbyNameString = "LobbyName";
-		this.ratingString = String.valueOf((int) (Math.random() * 100));
+		this.ratingString = (int) (Math.random() * 100);
 		this.numberOfPlayersJoined = 1;
 		this.maxNumberOfPlayers = 6;
 		setup();
@@ -51,17 +58,16 @@ public class LobbyGUI extends ToggleButton {
 		
 	}
 	
-	public LobbyGUI(Profile profile) {
+	public LobbyGUI(Lobby lobby) {
 		super();
 		this.lobby = lobby;
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
-		this.lobbyNameString = profile.getUserName();
-		//this.ratingString = profile.getRating();
-		//this.participantsString = lobby...
+		this.ratingString = lobby.getLobbyRank();
 		this.numberOfPlayersJoined = 1;
 		this.maxNumberOfPlayers = 6;
+		this.lobbyNameString = lobby.getLobbyName();
 		setup();
 	}
 	
@@ -144,5 +150,12 @@ public class LobbyGUI extends ToggleButton {
 	public Lobby getLobby() {
 		return lobby;
 	}
-	
+
+	public void setLobbyName(String newUsername) {
+		lobbyNameString = newUsername;
+		
+	}
+	public String getLobbyNameString() {
+		return lobbyNameString;
+	}
 }

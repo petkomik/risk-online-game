@@ -5,19 +5,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import database.Profile;
 import game.Lobby;
 import game.gui.GUISupportClasses;
-
+import game.gui.GameSound;
+import game.gui.LobbyGUI;
 import game.gui.ServerMainWindowController;
 import game.models.Player;
 import general.AppController;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.VBox;
 import network.messages.Message;
 import network.messages.MessageConnect;
+import network.messages.MessageCreateLobby;
 import network.messages.MessageDisconnect;
+import network.messages.MessageFullLobby;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
@@ -32,8 +38,10 @@ public class Client {
 	private Player player;
 	private Thread clientThread;
 	public static ArrayList<Profile> profiles = new ArrayList<>();
+	private HashMap<String, Lobby> lobbies = new HashMap<>();
+	private Lobby clientsLobby;
 	GUISupportClasses.ChatWindow chat;
-	private boolean host ;
+	private boolean host;
 
 	public Client(Socket socket, Profile profile) {
 		this.profile = profile;
@@ -154,7 +162,7 @@ public class Client {
 		Client client;
 		socket = new Socket(host, port);
 		client = new Client(socket, profile);
-		
+
 		return client;
 	}
 
@@ -220,13 +228,14 @@ public class Client {
 							profiles.add(profilee);
 							chat.addItemsInComboBox(profilee);
 							// The client who received the new Connected Client sends own profile
-							chat.addLabel(((MessageConnect) message).getProfile().getUserName() + " has joined the server");
+							chat.addLabel(
+									((MessageConnect) message).getProfile().getUserName() + " has joined the server");
 							sendMessage(new MessageConnect(getProfile(), profilee.getId()));
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
-							
-							chat.addLabel(((MessageDisconnect) message).getProfile().getUserName()+ " has left ");
+
+							chat.addLabel(((MessageDisconnect) message).getProfile().getUserName() + " has left ");
 //							HostServerMessengerController.addLabel(
 //									"Player " + ((MessageDisconnect) message).getPlayername() + " has disconnected",
 //									vBoxMessages);
@@ -235,7 +244,7 @@ public class Client {
 						case MessageServerCloseConnection:
 							System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
 							chat.addLabel("Host has left, please reconnect to a new server ");
-							
+
 //							JoinClientMessengerController
 //									.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);	
 //							JoinClientMessengerController.addLabel("Host has disconnected, please reconnect",
@@ -245,11 +254,7 @@ public class Client {
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Client");
-//							JoinClientMessengerController.addLabel(
-//									((MessageToPerson) message).getFromProfile().getLastName()
-//											+ ((MessageToPerson) message).getMsg()
-//													.substring(((MessageToPerson) message).getMsg().indexOf(':')),
-//									vBoxMessages);
+
 							chat.addLabel(((MessageToPerson) message).getStringMessage(),
 									((MessageToPerson) message).getFromProfile().getUserName());
 							System.out.println();
@@ -270,7 +275,42 @@ public class Client {
 							System.out.println("MessageProfile");
 							break;
 						case MessageCreateLobby:
+							MessageCreateLobby mCL = (MessageCreateLobby) message;
+							MessageFullLobby messageFull = (MessageFullLobby) mCL.getMessage();
+							String nameOfLobby = messageFull.getLobbyName();
+							Lobby lobby = new Lobby();
+							lobby.setAvaiableAINames(messageFull.getAvaiableAINames());
+							lobby.setPlayersJoined(messageFull.getPlayersJoined());
+							lobby.setAvaiableAvatars(messageFull.getAvaiableAvatars());
+							lobby.setReadyHashMap(messageFull.getReadyHashMap());
+							lobby.setLobbyRank(messageFull.getLobbyRank());
+							lobby.setDifficultyOfAI(messageFull.getDifficultyOfAI());
+							lobby.setMaxNumberOfPlayers(messageFull.getMaxNumberOfPlayers());
+							lobby.setLobbyName(nameOfLobby);
+							clientsLobby = lobby;
+							
+							System.out.println("lobby name is " + nameOfLobby);
+							lobbies.put(nameOfLobby, lobby);
+							System.out.println("Let see if it works");
+							
+							LobbyGUI lobbyGUI = new LobbyGUI(lobby);
+							
+							lobbyGUI.setOnAction(new EventHandler<ActionEvent>() {
+								@Override
+								public void handle(ActionEvent event) {
+									(new GameSound()).buttonClickBackwardSound();
+									ServerMainWindowController.selectedLobby = lobbyGUI.getLobby();
+									for (LobbyGUI lobbyEnt : ServerMainWindowController.lobbyGUIList.values()) {
+										lobbyEnt.setSelected(false);
+									}
 
+									lobbyGUI.setSelected(true);
+
+								}
+							});
+							
+							ServerMainWindowController.lobbyGUIList.put(nameOfLobby, lobbyGUI);
+							ServerMainWindowController.drawLobbies();
 							break;
 						case MessageJoinLobby:
 							break;
@@ -305,6 +345,10 @@ public class Client {
 
 	public Profile getProfile() {
 		return profile;
+	}
+
+	public Lobby getClientsLobby() {
+		return clientsLobby;
 	}
 
 	public boolean isHost() {

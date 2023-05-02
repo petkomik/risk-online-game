@@ -46,7 +46,9 @@ import network.Client;
 import network.ClientHandler;
 import network.Server;
 import network.messages.MessageConnect;
+import network.messages.MessageCreateLobby;
 import network.messages.MessageDisconnect;
+import network.messages.MessageJoinLobby;
 import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
 
@@ -90,11 +92,11 @@ public class ServerMainWindowController extends StackPane {
 	private DesignButton joinGameButton; // *
 	private Button refreshButton; // *
 
-	private ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
-	private VBox vbox; // Lobbies in the scrollPane
-	private HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
+	private static ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
+	private static volatile VBox vbox; // Lobbies in the scrollPane
+	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
 	private HashMap<String, Lobby> lobbyList;
-	private Lobby selectedLobby;
+	public static Lobby selectedLobby;
 
 	static Server server;
 	static Client client;
@@ -367,47 +369,6 @@ public class ServerMainWindowController extends StackPane {
 
 		});
 
-		hostGameButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
-
-				LobbyGUI lobbyEntry = new LobbyGUI();
-
-				try {
-					lobbyGUIList.put("avatars_name " + counter, lobbyEntry);
-					counter++;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
-				vbox.getChildren().clear();
-
-				for (String key : lobbyGUIList.keySet()) {
-					vbox.getChildren().add(lobbyGUIList.get(key));
-				}
-
-				lobbyListContainer.setContent(vbox);
-
-				lobbyEntry.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent event) {
-						(new GameSound()).buttonClickBackwardSound();
-						selectedLobby = lobbyEntry.getLobby();
-						for (LobbyGUI lobbyEnt : lobbyGUIList.values()) {
-							lobbyEnt.setSelected(false);
-						}
-
-						lobbyEntry.setSelected(true);
-
-					}
-				});
-
-			}
-
-			// TODO send message to CLientHandler to create a lobby
-		});
-
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -419,19 +380,19 @@ public class ServerMainWindowController extends StackPane {
 				try {
 					MultplayerHostJoinController mlt = new MultplayerHostJoinController();
 					stage.getScene().setRoot(mlt);
-					if(!client.isHost()){
+					if (!client.isHost()) {
 						client.sendMessage(new MessageDisconnect(client.getProfile()));
 						client.closeEverything();
-					}else{
+					} else {
 						client.sendMessage(new MessageServerCloseConnection());
 					}
-					
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 
 				stage.show();
-			
+
 //				TODO disconnect from server
 //				if(hostView) {
 //					client.sendMessage(new MessageServerCloseConnection());
@@ -441,16 +402,53 @@ public class ServerMainWindowController extends StackPane {
 //				}
 			}
 		});
+		hostGameButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				(new GameSound()).buttonClickForwardSound();
+				// send profile createLobby message
+				client.sendMessage(new MessageCreateLobby());
+				
+				Node node = (Node) event.getSource();
+				stage = (Stage)node.getScene().getWindow();
+				
+				try {
+					LobbyMenuController lobbyPane = new LobbyMenuController(client.getClientsLobby(),false);
+					stage.getScene().setRoot(lobbyPane);
+
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+
+			}
+
+			// TODO send message to CLientHandler to create a lobby
+		});
 
 		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickBackwardSound();
+				client.sendMessage(new MessageJoinLobby(selectedLobby));
 				// TODO join the lobby and send a message to the server so that the lobby knows
 				// who the new paticipant is
 			}
 		});
 
+	}
+
+	public static void drawLobbies() {
+
+	    Platform.runLater(() -> {
+	        vbox.getChildren().clear();
+	        for (String key : lobbyGUIList.keySet()) {
+	            vbox.getChildren().add(lobbyGUIList.get(key));
+	        }
+	        System.out.println(lobbyGUIList.size());
+	        lobbyListContainer.setContent(vbox);
+	    });
 	}
 
 	public static void initServer() {

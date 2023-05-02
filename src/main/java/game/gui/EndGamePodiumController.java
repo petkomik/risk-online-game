@@ -369,7 +369,8 @@ public class EndGamePodiumController extends Application {
 				try {
 					ServerMainWindowController serverMenu = new ServerMainWindowController();
 					stage.getScene().setRoot(serverMenu);
-
+					 String string = Parameter.orangeColor.toString();
+					 System.out.println(string);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
