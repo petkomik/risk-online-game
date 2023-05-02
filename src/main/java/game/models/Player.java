@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
  * @author jorohr
  */
 
-public class Player implements Serializable {
+public abstract class Player implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	

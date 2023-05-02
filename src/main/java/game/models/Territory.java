@@ -33,7 +33,7 @@ public class Territory implements Serializable {
 	
 	/**constructor for defensive copying*/
 	public Territory(Territory territory) {
-		this.ownedByPlayer = territory.getOwnedByPlayer() != null ? new Player(territory.getOwnedByPlayer()) : null;
+		this.ownedByPlayer = territory.getOwnedByPlayer() != null ? new PlayerSingle(territory.getOwnedByPlayer()) : null;
 		this.continent = territory.getContinent();
 		this.numberOfTroops = territory.getNumberOfTroops();
 		this.countryName = territory.getCountryName();
