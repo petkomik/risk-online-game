@@ -53,6 +53,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -137,6 +139,8 @@ public class GamePaneController implements Initializable{
 	private Player playerOnGUI;
 	private ArrayList<Card> cardsPlayerOnGUI;
 	
+	private Pane cardsPopUp;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		double scaleX = (0.7 * w)/map.getPrefWidth();
@@ -175,6 +179,7 @@ public class GamePaneController implements Initializable{
 		setUpNextPhaseSymbol();
 		setUpPhaseBoard();
 		setUpChoosingTroopsPane();
+		setUpCardsPopUp();
 	}
 	
 	private double getRelativeHorz(double x) {
@@ -611,6 +616,67 @@ public class GamePaneController implements Initializable{
 		gameBoard.getChildren().add(choosingTroopsPane);
 		
 
+		
+	}
+	
+	private void setUpCardsPopUp() {
+		cardsPopUp = new Pane();
+		cardsPopUp.setPrefSize(w, h);
+		cardsPopUp.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		cardsPopUp.setVisible(false);
+
+		Button tradeButton = new Button("NO TRADE");
+		tradeButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
+		tradeButton.setLayoutX((w - tradeButton.getPrefWidth()) / 2.0);
+		tradeButton.setLayoutY((h - tradeButton.getPrefHeight()) / 2.0);
+		tradeButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+		tradeButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+        		tradeButton.setStyle("-fx-background-color: #ac7339; "
+        				+ "-fx-background-radius: 15px; ");
+            } else {
+            	tradeButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+            }
+	        });
+		tradeButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
+		tradeButton.setDisable(true);
+		
+		Rectangle dropOnCard1 = new Rectangle();
+		Rectangle dropOnCard2 = new Rectangle();
+		Rectangle dropOnCard3 = new Rectangle();
+		
+		dropOnCard1.setStroke(Color.BLACK);
+		dropOnCard1.setStrokeType(StrokeType.OUTSIDE);
+		dropOnCard1.setStrokeWidth(3);
+		dropOnCard1.getStrokeDashArray().addAll(10d, 10d);
+		dropOnCard1.setFill(Color.TRANSPARENT);
+		dropOnCard1.setWidth(getRelativeHorz(200.0));
+		dropOnCard1.setHeight(getRelativeVer(270.0));
+		dropOnCard1.setLayoutX(getRelativeHorz(435.0));
+		dropOnCard1.setLayoutY(getRelativeVer(125.0));
+		
+		dropOnCard2.setStroke(Color.BLACK);
+		dropOnCard2.setStrokeType(StrokeType.OUTSIDE);
+		dropOnCard2.setStrokeWidth(3);
+		dropOnCard2.getStrokeDashArray().addAll(10d, 10d);
+		dropOnCard2.setFill(Color.TRANSPARENT);
+		dropOnCard2.setWidth(getRelativeHorz(200.0));
+		dropOnCard2.setHeight(getRelativeVer(270.0));
+		dropOnCard2.setLayoutX(getRelativeHorz(668.0));
+		dropOnCard2.setLayoutY(getRelativeVer(77.0));
+		
+		dropOnCard3.setStroke(Color.BLACK);
+		dropOnCard3.setStrokeType(StrokeType.OUTSIDE);
+		dropOnCard3.setStrokeWidth(3);
+		dropOnCard3.getStrokeDashArray().addAll(10d, 10d);
+		dropOnCard3.setFill(Color.TRANSPARENT);
+		dropOnCard3.setWidth(getRelativeHorz(200.0));
+		dropOnCard3.setHeight(getRelativeVer(270.0));
+		dropOnCard3.setLayoutX(getRelativeHorz(901.0));
+		dropOnCard3.setLayoutY(getRelativeVer(125.0));
+		
+		cardsPopUp.getChildren().addAll(tradeButton, dropOnCard1, dropOnCard2, dropOnCard3);
+		gameBoard.getChildren().add(cardsPopUp);
 		
 	}
 	
