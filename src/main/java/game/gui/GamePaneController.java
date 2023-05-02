@@ -3,11 +3,12 @@ package game.gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.ResourceBundle;
 
+import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
+import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
 import gameState.ChoosePane;
@@ -118,15 +119,22 @@ public class GamePaneController implements Initializable{
 	private Button falseButtonChoosingTroops;
 	private Label choosingTroopsPhaseLabel;
 	
-	private GameType gameType;
+	private Button throwDiceButton;
+	private ImageView diceIV;
+	
 	private SinglePlayerHandler singlePlayerHandler;
+	private Lobby lobby;
 	private ArrayList<String> playerColors;
 	private ArrayList<String> playerAvatar;
 	private ArrayList<Integer> playerIDs;
+	private HashMap<Integer, Player> playerIdHash;
 	
+	private GameType gameType;
 	private Phase currentPhase;
 	private Period currentPeriod;
 	
+	private Player playerOnGUI;
+	private ArrayList<Card> cardsPlayerOnGUI;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -173,21 +181,28 @@ public class GamePaneController implements Initializable{
 	private double getRelativeVer(double y) {
 		return (y / 864.0) * h;
 	}
-	public void initSinglePlayer(SinglePlayerHandler singlePlayerHandler) {
-		gameType = GameType.SinglePlayer;
+	public void initSinglePlayer(SinglePlayerHandler singlePlayerHandler, Lobby lobby) {
+		this.gameType = GameType.SinglePlayer;
+		this.currentPeriod = Period.DICETHROW;
 		this.singlePlayerHandler = singlePlayerHandler;
-		playerColors = new ArrayList<>();
-		playerAvatar = new ArrayList<>();
-		playerIDs = new ArrayList<>();
+		this.lobby = lobby;
+		this.playerColors = new ArrayList<>();
+		this.playerAvatar = new ArrayList<>();
+		this.playerIDs = new ArrayList<>();
+		this.playerIdHash = new HashMap<>();
+		this.cardsPlayerOnGUI = new ArrayList<>();
 		
-		for(Player p : this.singlePlayerHandler.getLobby().getPlayerList()) {
+		for(Player p : this.lobby.getPlayerList()) {
 			playerColors.add(p.getColor());
 			playerAvatar.add(p.getAvatar());
 			playerIDs.add(p.getID());
+			playerIdHash.put(p.getID(), p);
 		}
-		numOfPlayer = this.singlePlayerHandler.getLobby().getPlayerList().size();
+		
+		numOfPlayer = this.lobby.getPlayerList().size();
 		setUpThrowDicePeriod();
 		setUpPlayerList();
+		
 		for(int i = 0; i < numOfPlayer; i++) {
 			circles[i].setFill(Color.web(playerColors.get(i)));
 			rectangles[i].setFill(Color.web(playerColors.get(i)));
@@ -214,17 +229,18 @@ public class GamePaneController implements Initializable{
         rectCards.setFill(Color.web(playerColors.get(0)));
         cirNum.setFill(Color.web(playerColors.get(0)));
         
+        this.playerOnGUI = this.playerIdHash.get(playerIDs.get(0));
         this.setCurrentPlayer(playerIDs.get(0));
 	}
 	
 	private void setUpThrowDicePeriod() {
-		ImageView diceIV = new ImageView(Parameter.dicedir + "dice1.png");
+		diceIV = new ImageView(Parameter.dicedir + "dice1.png");
 		diceIV.setFitWidth(getRelativeHorz(60.0));
 		diceIV.setFitHeight(getRelativeHorz(60.0));
 		diceIV.setLayoutX((w - diceIV.getFitWidth()) / 2.0);
 		diceIV.setLayoutY(getRelativeVer(695.0));
 		
-		Button throwDiceButton = new Button("THROW DICE");
+		throwDiceButton = new Button("THROW DICE");
 		throwDiceButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
 		throwDiceButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
         	if (newValue) {
@@ -240,27 +256,26 @@ public class GamePaneController implements Initializable{
 		throwDiceButton.setLayoutY(getRelativeVer(760.0));
 		throwDiceButton.setOnAction(e -> {
 			throwDiceButton.setDisable(true);
-			Thread thread = new Thread(() -> {
-				int i = 1;
-				while(i < 7) {
-					diceIV.setImage(new Image(Parameter.dicedir + "dice"+ i +".png"));
-					i++;
-					try {
-						Thread.sleep(50);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-				
-			});
-			thread.start();
-			System.out.println("Test");
-			diceIV.setImage(new Image(Parameter.dicedir + "dice" 
-					+ singlePlayerHandler.getInitialThrowDice(singlePlayerHandler.getGameHandler().getGameState().getCurrentPlayer()) + ".png")); // how to get the player
-			throwDiceButton.setDisable(false);
+			this.singlePlayerHandler.playerThrowsInitialDice(this.playerOnGUI.getID());
 		});
 		gameBoard.getChildren().addAll(diceIV, throwDiceButton);
+	}
+	
+	public void rollInitialDice(int idOfPlayer, int finalValue) {
+		Thread thread = new Thread(() -> {
+			for(int i = 0; i < 15; i++) {
+				int k = (i * 7) % 6 + 1;
+				diceIV.setImage(new Image(Parameter.dicedir + "dice"+ k +".png"));
+				try {
+					Thread.sleep(150);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+			diceIV.setImage(new Image(Parameter.dicedir + "dice" + finalValue + ".png")); 
+			throwDiceButton.setDisable(false);
+		});
+		thread.start();
 	}
 	
 	private void getComponents() {
@@ -463,8 +478,14 @@ public class GamePaneController implements Initializable{
         nextPhaseButton.setMnemonicParsing(false);
         nextPhaseButton.setPrefHeight(getRelativeHorz(72.0));
         nextPhaseButton.setPrefWidth(getRelativeHorz(72.0));
-        
-        nextPhaseButton.setVisible(false);
+        nextPhaseButton.setVisible(true);
+        nextPhaseButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+		    }
+		});
 
         rectCards = new Rectangle();
         rectCards.setArcHeight(5.0);
@@ -520,7 +541,7 @@ public class GamePaneController implements Initializable{
         
         phaseBoard.setLayoutX((w - phaseBoard.getPrefWidth() * phaseBoard.getScaleX()) / 2.0);
         phaseBoard.setLayoutY((700.0 / 864.0) * h);
-        phaseBoard.setVisible(false);
+        phaseBoard.setVisible(true);
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
@@ -591,11 +612,11 @@ public class GamePaneController implements Initializable{
 	
 	public void clickCountry(MouseEvent e) {
 		String countryName = ((SVGPath) e.getSource()).getId();
-		int idOfPlayer = singlePlayerHandler.getGameHandler().getGameState().getCurrentPlayer().getID();
+		int idOfPlayer = this.playerOnGUI.getID();
 		CountryName country = CountryName.valueOf(countryName);
 		switch (gameType) {
 		case SinglePlayer:
-			singlePlayerHandler.getGameHandler().clickCountry(idOfPlayer, country);
+			singlePlayerHandler.clickCountry(idOfPlayer, country);
 			break;
 
 		case Tutorial:
@@ -611,7 +632,7 @@ public class GamePaneController implements Initializable{
 	
 	
 	public void claimCountry(CountryName countryName, int id) {
-		for(Player p : singlePlayerHandler.getLobby().getPlayerList()) {
+		for(Player p : this.lobby.getPlayerList()) {
 			if(p.getID() == id) {
 				circleTroopsDisplay.get(countryName.toString()).setFill(Color.web(p.getColor()));
 				for(SVGPath s : countries) {
@@ -639,7 +660,7 @@ public class GamePaneController implements Initializable{
 		
 	}
 	public void setCurrentPlayer(int id) {
-		Player player = singlePlayerHandler.getGameHandler().getGameState().getPlayers().get(id);
+		Player player = this.playerIdHash.get(id);
 		for(int i = 0; i < playerIDs.size(); i++) {
 			if(player.getID() == playerIDs.get(i)) {
 				turn = i;
@@ -828,7 +849,7 @@ public class GamePaneController implements Initializable{
 		labNum.setText(String.valueOf(number));
 	}
 	
-	public void endGame(LinkedList<Player> playersByRank) {
+	public void endGame(ArrayList<Player> playersByRank) {
 		
 	}
 	

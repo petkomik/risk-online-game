@@ -299,4 +299,26 @@ public class Logic {
 		
 		return false;
 	}
+
+	public static boolean canThrowInitialDice(int idOfPlayer, GameState gamestate) {
+		if(gamestate.getCurrentPlayer().getID() == idOfPlayer) {
+			System.out.println("test dice 3");
+			if(gamestate.getCurrentGamePeriod().equals(Period.DICETHROW)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean playerEndsTurn(Period period, int idOfPlayer, GameState gameState) {
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
+			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
+				if(!gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+					return true;		
+				}
+			}
+		}
+		
+		return false;
+	}
 }

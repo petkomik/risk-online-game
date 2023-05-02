@@ -25,15 +25,12 @@ public class SinglePlayerHandler {
 
 	public SinglePlayerHandler(Lobby lobby, GamePaneController gamePaneController) {
 		this.gameHandler = new GameHandler(lobby);
+		this.gameHandler.initSingleplayer(this);
 		this.gamePaneController = gamePaneController;
 		this.lobby = lobby;
 		
 	}
-	// TODO delete
-	public GameHandler getGameHandler() {
-		return gameHandler;
-	}
-
+	
 	/*
 	 * COUNTRYPOSESSION  Period
 	 * INITIALREINFORCEMENT Period
@@ -73,8 +70,8 @@ public class SinglePlayerHandler {
 	 * REINFORCE, ATTACK, FORTIFY
 	 */
 	
-	public void endPhase(Phase phase, int idOfPlayer) {
-		this.gameHandler.endPhase(phase, idOfPlayer);
+	public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
+		this.gameHandler.endPhaseTurn(period, phase, idOfPlayer);
 	}
 	
 	/*
@@ -100,10 +97,14 @@ public class SinglePlayerHandler {
 	 * INPUT + OUTPUT to GUI
 	 */
 	
-	public int getInitialThrowDice(Player player) {
-		return this.gameHandler.getInitialThrowDice(player);
+	public void playerThrowsInitialDice(int idOfPlayer) {
+		this.gameHandler.playerThrowsInitialDice(idOfPlayer);
 	}
 	
+	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
+		this.gamePaneController.rollInitialDice(idOfPlayer, i);
+	}
+
 	public void showExeceptionOnGUI(Exception e) {
 		this.gamePaneController.showException(e.toString());
 	}
@@ -201,9 +202,6 @@ public class SinglePlayerHandler {
 		//makes battle screne invisible
 	}
 	
-	public Lobby getLobby() {
-		return lobby;
-	}
 	
 	public void resetFortifyingPhaseOnGUI() {
 //		The player decided not to fortify from this country, or clicked cancel in the choose pane
@@ -213,4 +211,5 @@ public class SinglePlayerHandler {
 	public void resetAttackingPhaseOnGUI() {
 		
 	}
+
 }

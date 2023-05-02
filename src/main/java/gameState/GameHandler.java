@@ -10,13 +10,11 @@ import game.exceptions.WrongCountryException;
 import game.exceptions.WrongPeriodException;
 import game.exceptions.WrongPhaseException;
 import game.exceptions.WrongTroopsCountException;
-import game.logic.AILogic;
 import game.logic.GameType;
 import game.logic.Logic;
 import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
-import game.models.PlayerAI;
 
 public class GameHandler {
 	// Gamelogic Ausführung der Methoden
@@ -36,6 +34,11 @@ public class GameHandler {
 		determineInitialDice();
 		gameState.setInitialTroops(Logic.setInitialTroopsSize(this.gameState));
 		gameState.setCurrentPlayer(lobby.getPlayerList().get(0));
+		
+		System.out.println("Dices Decide");
+		for(Player p : this.gameState.getPlayersDiceThrown().keySet()) {
+			System.out.println(p.getName() + " " + this.gameState.getPlayersDiceThrown().get(p));
+		}
 	}
 	
 	public void initSingleplayer(SinglePlayerHandler singlePlayerHandler) {
@@ -124,8 +127,22 @@ public class GameHandler {
 	 * you get the first and then continiue down the ArrayList 
 	 */
 	
-	public int getInitialThrowDice(Player player) {
-		return this.gameState.getPlayersDiceThrown().get(player);
+	public void playerThrowsInitialDice(int idOfPlayer) {
+		System.out.println("test dice");
+		if(Logic.canThrowInitialDice(idOfPlayer, this.gameState)) {
+			int i = this.gameState.getPlayersDiceThrown().get(this.gameState.getPlayers().get(idOfPlayer));			
+			switch (this.gameType) {
+			case SinglePlayer:
+				this.singlePlayerHandler.rollInitialDiceOnGUI(idOfPlayer, i);
+				System.out.println(this.gameState.getPlayers().get(idOfPlayer).getName());
+				System.out.println("test dice2 " + i);
+				break;
+			case Multiplayer:
+				break;
+			case Tutorial:
+				break;
+			}
+		}
 	}
 	
 	public void changeTurnAfterDiceThrow(Player player) {
@@ -147,6 +164,7 @@ public class GameHandler {
 		Player player = this.gameState.getPlayers().get(idOfPlayer);
 		switch (this.gameState.getCurrentGamePeriod()) {
 		case DICETHROW: //Map should be disabled during DICETHROW
+			break;
 		case COUNTRYPOSESSION: 
 			if(Logic.claimTerritory(player, this.gameState, country)) {
 				this.gameState.setOwnedByTerritory(country, player);
@@ -163,27 +181,6 @@ public class GameHandler {
 					gameState.setNextPlayer();
 					this.singlePlayerHandler.setCurrentPlayerOnGUI(
 							gameState.getCurrentPlayer().getID(), numTroopsPlayer);
-					if(this.gameState.getCurrentPlayer().isAI()){
-						PlayerAI playerAI = ((PlayerAI)gameState.getCurrentPlayer());
-						country = AILogic.chooseTerritoryToInitialClaim(gameState, playerAI);
-						this.simulateHumanAction();
-						if(Logic.claimTerritory(playerAI, this.gameState, country)) {
-							this.gameState.setOwnedByTerritory(country, playerAI);
-							this.gameState.updateTroopsOnTerritory(country, 1);
-							
-							numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(playerAI) - 1; 
-							this.gameState.getPlayerTroopsLeft().replace(playerAI, numTroopsPlayer);
-							this.singlePlayerHandler.possesCountryOnGUI(country, playerAI.getID());
-							if(Logic.allTerritoriesClaimed(gameState)) {
-								gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
-								this.singlePlayerHandler.setPeriodOnGUI(Period.INITIALDEPLOY);
-							}
-							gameState.setNextPlayer();
-							this.singlePlayerHandler.setCurrentPlayerOnGUI(
-									gameState.getCurrentPlayer().getID(), numTroopsPlayer);
-		
-						}
-					}
 					break;
 				case Multiplayer:
 					break;
@@ -332,37 +329,71 @@ public class GameHandler {
 		return this.gameState;
 	}
 
-	public void endPhase(Phase phase, int idOfPlayer) {
-		if(Logic.playerEndsPhase(phase, idOfPlayer, this.gameState)) {
-			switch (phase) {
-			case FORTIFY:
-				this.gameState.setCurrentTurnPhase(Phase.ATTACK);
-				switch(this.gameType) {
+	public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
+		if(period.equals(Period.MAINPERIOD)) {
+			if(Logic.playerEndsPhase(phase, idOfPlayer, this.gameState)) {
+				switch (phase) {
+				case FORTIFY:
+					this.gameState.setCurrentTurnPhase(Phase.ATTACK);
+					switch(this.gameType) {
+						case SinglePlayer:
+							this.singlePlayerHandler.setPhaseOnGUI(Phase.ATTACK);
+							break;
+						case Multiplayer:
+							break;
+						case Tutorial:
+							break;
+					}
+					break;
+				case ATTACK:
+					this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
+					switch(this.gameType) {
 					case SinglePlayer:
-						this.singlePlayerHandler.setPhaseOnGUI(Phase.ATTACK);
+						this.singlePlayerHandler.setPhaseOnGUI(Phase.REINFORCE);
 						break;
 					case Multiplayer:
 						break;
 					case Tutorial:
 						break;
+					}
+					break;
+				case REINFORCE:
+					break;
 				}
-				break;
-			case ATTACK:
-				this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
-				switch(this.gameType) {
-				case SinglePlayer:
-					this.singlePlayerHandler.setPhaseOnGUI(Phase.REINFORCE);
-					break;
-				case Multiplayer:
-					break;
-				case Tutorial:
-					break;
 			}
-				break;
-			case REINFORCE:
-				break;
+		} else {
+			if(Logic.playerEndsTurn(period, idOfPlayer, this.gameState)) {
+				switch(period) {
+				case DICETHROW:
+					this.gameState.setNextPlayer();
+					switch(this.gameType) {
+					case SinglePlayer:
+						this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+						if(this.gameState.getCurrentPlayer().isAI()) {
+							// calls the AI 
+						} else {
+							// chnages player on GUI
+						}
+						
+						break;
+					case Multiplayer:
+						break;
+					case Tutorial:
+						break;
+					}
+					break;
+				case COUNTRYPOSESSION:
+					break;
+				case INITIALDEPLOY:
+					break;
+				case MAINPERIOD:
+					break;
+				default:
+					break;
+				}
 			}
 		}
+		
 	}
 
 	public void turnInRiskCards(ArrayList<Card> cards, int idOfPlayer) 
@@ -388,19 +419,4 @@ public class GameHandler {
 		}
 	}
 	
-	public void simulateHumanAction() {
-		boolean flag = true;
-		while(flag) {
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			flag = false;
-		}
-	}
-	
 }
-
-

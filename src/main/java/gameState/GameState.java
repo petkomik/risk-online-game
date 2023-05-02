@@ -58,7 +58,7 @@ public class GameState {
 		playersDiceThrown = new HashMap<Player, Integer>();
 		numberOfCardsTurnedIn = 0;
 		currentTurnPhase = null;
-		currentGamePeriod = Period.COUNTRYPOSESSION;
+		currentGamePeriod = Period.DICETHROW;
 		gameIsOver = false;
 		lastAttackingCountry = null;
 		lastFortifyingCounty = null;  
