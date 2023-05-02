@@ -10,10 +10,12 @@ public class PlayerSingle extends Player {
 
 	public PlayerSingle(String name, int id) {
 		super(name, id);
+		this.isAI = false;
 	}
 	
 	public PlayerSingle(Player player) {
 		super(player);
+		this.isAI = false;
 	}
 	
 	public PlayerSingle(Profile profile) {

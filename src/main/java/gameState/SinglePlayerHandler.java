@@ -154,6 +154,10 @@ public class SinglePlayerHandler {
 		this.gamePaneController.setCurrentPlayer(id);
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
 	}
+	
+	public void chnagePlayerOnGUI(int id, ArrayList<Card> cards) {
+		this.gamePaneController.setPlayerOnGUI(id, cards);
+	}
 
 	/*
 	 * Opens a menu where the player chooses how many troops to deploy

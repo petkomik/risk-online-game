@@ -302,7 +302,6 @@ public class Logic {
 
 	public static boolean canThrowInitialDice(int idOfPlayer, GameState gamestate) {
 		if(gamestate.getCurrentPlayer().getID() == idOfPlayer) {
-			System.out.println("test dice 3");
 			if(gamestate.getCurrentGamePeriod().equals(Period.DICETHROW)) {
 				return true;
 			}
@@ -319,6 +318,21 @@ public class Logic {
 			}
 		}
 		
+		return false;
+	}
+
+	public static boolean isDiceThrowPeriodOver(GameState gameState, int idOfPlayer) {
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
+			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
+				if(gameState.getCurrentGamePeriod().equals(Period.DICETHROW)) {
+					if(gameState.getAlivePlayers().get(gameState.getAlivePlayers().size() - 1).getID() == idOfPlayer) {
+						return true;		
+
+					}
+				}
+			}
+		}
+				
 		return false;
 	}
 }

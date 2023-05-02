@@ -161,8 +161,8 @@ public class GameState {
 		this.currentTurnPhase = currentTurnPhase;
 	}
 
-	public void setCurrentPlayer(Player currentPlayer) {
-		this.currentPlayer = currentPlayer;
+	public void setCurrentPlayer(int id) {
+		this.currentPlayer = this.players.get(id);
 	}
 
 	public Period getCurrentGamePeriod() {
