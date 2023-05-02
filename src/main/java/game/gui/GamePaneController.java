@@ -3,6 +3,7 @@ package game.gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import game.Lobby;
@@ -81,7 +82,7 @@ public class GamePaneController implements Initializable{
 			Color.BROWN, Color.YELLOW};
 	
 	
-	private VBox vb;
+	private VBox vbPlayerList;
 	private Pane[] panes;
 	private Rectangle[] rectangles;
 	private ImageView[] ivTimer;
@@ -171,6 +172,7 @@ public class GamePaneController implements Initializable{
 		
 		gameBoard.getChildren().add(leaveGameButton);
 		
+		setUpNextPhaseSymbol();
 		setUpPhaseBoard();
 		setUpChoosingTroopsPane();
 	}
@@ -227,6 +229,7 @@ public class GamePaneController implements Initializable{
             }
 	        });
         rectCards.setFill(Color.web(playerColors.get(0)));
+        cardsPane.setStyle("-fx-background-color: " + playerColors.get(0) + ";");
         cirNum.setFill(Color.web(playerColors.get(0)));
         
         this.playerOnGUI = this.playerIdHash.get(playerIDs.get(0));
@@ -258,6 +261,8 @@ public class GamePaneController implements Initializable{
 			throwDiceButton.setDisable(true);
 			this.singlePlayerHandler.playerThrowsInitialDice(this.playerOnGUI.getID());
 		});
+		
+		
 		gameBoard.getChildren().addAll(diceIV, throwDiceButton);
 	}
 	
@@ -308,9 +313,9 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	public void setUpPlayerList() {
-		vb = new VBox();
-		vb.setPrefWidth(192);
-		vb.setPrefHeight(numOfPlayer * 100);
+		vbPlayerList = new VBox();
+		vbPlayerList.setPrefWidth(192);
+		vbPlayerList.setPrefHeight(numOfPlayer * 100);
 		panes = new Pane[numOfPlayer];
 		rectangles = new Rectangle[numOfPlayer];
 		stackPanes = new StackPane[numOfPlayer];
@@ -365,16 +370,41 @@ public class GamePaneController implements Initializable{
 			panes[i] = new Pane(rectangles[i], stackPanes[i], labTimer[i], ivTimer[i]);
 			
 		}
-		vb.getChildren().addAll(panes);
-		vb.setScaleX(w / 1536.0);
-		vb.setScaleY(h / 864.0);
+		vbPlayerList.getChildren().addAll(panes);
+		vbPlayerList.setScaleX(w / 1536.0);
+		vbPlayerList.setScaleY(h / 864.0);
+		vbPlayerList.setLayoutX((1335.0/1536.0) * w);
+		vbPlayerList.setLayoutY((h - vbPlayerList.getPrefHeight() * vbPlayerList.getScaleY()) / 2.0);
+		vbPlayerList.setSpacing(24);
 		
-		vb.setLayoutX((1335.0/1536.0) * w);
-		vb.setLayoutY((h - vb.getPrefHeight() * vb.getScaleY()) / 2.0);
-		
-		vb.setSpacing(24);
-		
-		gameBoard.getChildren().add(vb);
+		gameBoard.getChildren().add(vbPlayerList);
+	}
+	
+	private void setUpNextPhaseSymbol() {
+		nextPhaseButton = new Button("✓");
+        nextPhaseButton.setId("nextPhaseButton");
+        nextPhaseButton.setLayoutX(getRelativeHorz(972.0));
+        nextPhaseButton.setLayoutY(getRelativeVer(750.0));
+        nextPhaseButton.setMnemonicParsing(false);
+        nextPhaseButton.setPrefHeight(getRelativeHorz(72.0));
+        nextPhaseButton.setPrefWidth(getRelativeHorz(72.0));
+        nextPhaseButton.setVisible(true);
+        nextPhaseButton.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	
+		    }
+		});
+        
+        // nextPhaseLabel
+        nextPhaseLabel = new Label("NEXT PHASE");
+        nextPhaseLabel.setLayoutX(getRelativeHorz(968.0));
+        nextPhaseLabel.setLayoutY(getRelativeVer(700.0));
+        nextPhaseLabel.setPrefHeight(getRelativeVer(34.0));
+        nextPhaseLabel.setPrefWidth(getRelativeHorz(60.0));
+        
+        gameBoard.getChildren().addAll(nextPhaseButton, nextPhaseLabel);
 	}
 	
 	public void setUpPhaseBoard() {
@@ -470,22 +500,6 @@ public class GamePaneController implements Initializable{
         lastPhaseLogo.setPickOnBounds(true);
         lastPhaseLogo.setPreserveRatio(true);
         lastPhaseLogo.setVisible(false);
-        
-        nextPhaseButton = new Button("✓");
-        nextPhaseButton.setId("nextPhaseButton");
-        nextPhaseButton.setLayoutX(getRelativeHorz(676.0));
-        nextPhaseButton.setLayoutY(getRelativeVer(52.0));
-        nextPhaseButton.setMnemonicParsing(false);
-        nextPhaseButton.setPrefHeight(getRelativeHorz(72.0));
-        nextPhaseButton.setPrefWidth(getRelativeHorz(72.0));
-        nextPhaseButton.setVisible(true);
-        nextPhaseButton.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-		    	
-		    }
-		});
 
         rectCards = new Rectangle();
         rectCards.setArcHeight(5.0);
@@ -520,28 +534,22 @@ public class GamePaneController implements Initializable{
         colorAdjust.setSaturation(-0.18);
         cardsPane.getChildren().add(cardsImageView);
         cardsPane.setEffect(colorAdjust);
-        cardsPane.setVisible(false);
+//        cardsPane.setVisible(false);
         
-        numCardsLabel = new Label("Label");
+        numCardsLabel = new Label("");
         numCardsLabel.setLayoutX(getRelativeHorz(138.0));
         numCardsLabel.setLayoutY(getRelativeVer(45.0));
         numCardsLabel.setPrefHeight(getRelativeVer(50.0));
         numCardsLabel.setPrefWidth(getRelativeHorz(92.0));
-        numCardsLabel.setVisible(false);
+//        numCardsLabel.setVisible(false);
 
-        // nextPhaseLabel
-        nextPhaseLabel = new Label("Label");
-        nextPhaseLabel.setLayoutX(getRelativeHorz(682.0));
-        nextPhaseLabel.setLayoutY(getRelativeVer(6.0));
-        nextPhaseLabel.setPrefHeight(getRelativeVer(34.0));
-        nextPhaseLabel.setPrefWidth(getRelativeHorz(60.0));
-        nextPhaseLabel.setVisible(false);
+
         
-        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo, middlePhaseLogo, lastPhaseLogo,nextPhaseButton, rectCards, cardsPane, numCardsLabel, nextPhaseLabel);
+        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo, middlePhaseLogo, lastPhaseLogo, rectCards, cardsPane, numCardsLabel);
         
         phaseBoard.setLayoutX((w - phaseBoard.getPrefWidth() * phaseBoard.getScaleX()) / 2.0);
-        phaseBoard.setLayoutY((700.0 / 864.0) * h);
-        phaseBoard.setVisible(true);
+        phaseBoard.setLayoutY(getRelativeVer(700.0));
+        phaseBoard.setVisible(false);
         gameBoard.getChildren().add(phaseBoard);
 	}
 	
@@ -675,8 +683,7 @@ public class GamePaneController implements Initializable{
 		ivPhase.setImage(new Image(playerAvatar.get(turn)));
 		cirNum.setFill(Color.web(playerColors.get(turn)));
 		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
-		rectCards.setFill(Color.web(playerColors.get(turn)));
-		cardsPane.setStyle(null);
+		
 	}
 	
 	public void setNumTroops(CountryName countryName, int numTroops) {
@@ -781,15 +788,30 @@ public class GamePaneController implements Initializable{
 			break;
 		}
 		middlePhaseLogo.setImage(new Image(path));
+		diceIV.setVisible(period == Period.DICETHROW);
+		throwDiceButton.setVisible(period == Period.DICETHROW);
+		phaseBoard.setVisible(period != Period.DICETHROW);
+		
 		this.currentPeriod = period;
 	}
 	
+	public void setPlayerOnGUI(int idOfPlayer, List<Card> cards) {
+		this.playerOnGUI = this.playerIdHash.get(idOfPlayer);
+		for(int i = 0; i < playerIDs.size(); i++) {
+			if(playerIDs.get(i) == idOfPlayer) {
+				rectCards.setFill(Color.web(playerColors.get(i)));
+				cardsPane.setStyle("-fx-background-color: " + playerColors.get(i) + ";");
+				break;
+			}
+		}
+		numCardsLabel.setText(String.valueOf(cards.size()));
+	}
 	
 	public void showNextPhaseButton() {
 		nextPhaseButton.setVisible(true);
 	}
 	
-	public void showCards() {
+	public void showCardsSymbol() {
 		rectCards.setVisible(true);
 		cardsPane.setVisible(true);
 	}
