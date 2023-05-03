@@ -1,8 +1,10 @@
 package game.exceptions;
 
-import java.util.ArrayList;
-
-import game.models.Card;
+/**
+ * Exception class for wrong period
+ * @author srogalsk
+ *
+ */
 
 public class WrongPeriodException extends Exception {
 

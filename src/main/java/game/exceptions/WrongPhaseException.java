@@ -1,5 +1,11 @@
 package game.exceptions;
 
+/**
+ * Exception class for wrong phase
+ * @author srogalsk
+ *
+ */
+
 public class WrongPhaseException extends Exception {
 
 	private static final long serialVersionUID = 1L;

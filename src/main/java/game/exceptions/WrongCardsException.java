@@ -1,8 +1,13 @@
 package game.exceptions;
 
 import java.util.ArrayList;
-
 import game.models.Card;
+
+/**
+ * Exception class for wrong cards
+ * @author srogalsk
+ *
+ */
 
 public class WrongCardsException extends Exception {
 

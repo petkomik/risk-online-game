@@ -2,6 +2,12 @@ package game.exceptions;
 
 import game.models.CountryName;
 
+/**
+ * Exception class for wrong country
+ * @author srogalsk
+ *
+ */
+
 public class WrongCountryException extends Exception {
 
 	/**
