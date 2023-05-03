@@ -23,7 +23,6 @@ import network.messages.MessageCreateLobby;
 import network.messages.MessageDiceThrow;
 import network.messages.MessageDisconnect;
 import network.messages.MessageFortifyTroops;
-import network.messages.MessageFullLobby;
 import network.messages.MessageJoinLobby;
 import network.messages.MessagePlaceTroops;
 import network.messages.MessagePlayerTurn;
@@ -72,6 +71,20 @@ public class ClientHandler implements Runnable {
 					clientHandler.objectOutputStream.writeObject(message);
 					clientHandler.objectOutputStream.flush();
 				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void broadcastMessageToAllIncludingMe(Message message) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+
+				clientHandler.objectOutputStream.writeObject(message);
+				clientHandler.objectOutputStream.flush();
+
 			} catch (IOException e) {
 				closeEverything(socket, objectInputStream, objectOutputStream);
 				e.printStackTrace();
@@ -220,32 +233,11 @@ public class ClientHandler implements Runnable {
 
 					break;
 				case MessageCreateLobby:
-
-					PlayerSingle singlePlayer = new PlayerSingle(this.profile);
-					Lobby aLobby = new Lobby();
-					System.out.println("CLIENT HANDLER " + profile.getUserName());
-
-					BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
-						int i = 1;
-						String newUsername = clientUsername;
-						while (lobbies.containsKey(newUsername)) {
-							newUsername = clientUsername + i;
-							i++;
-						}
-						lobbies.put(newUsername, lobby);
-						lobby.setLobbyName(newUsername);
-					};
-					addLobby.accept(clientUsername, aLobby);
-					System.out.println(aLobby.getLobbyName());
-					broadcastMessage(new MessageCreateLobby(new MessageFullLobby(aLobby.getPlayersJoined(),
-							aLobby.getAvaiableAvatars(), aLobby.getAvaiableAINames(), aLobby.getReadyHashMap(),
-							aLobby.getLobbyName(), aLobby.getLobbyRank(), aLobby.getDifficultyOfAI(),
-							aLobby.getMaxNumberOfPlayers())));
-
+					broadcastMessage(messageFromClient);
 					break;
 
 				case MessageJoinLobby:
-
+					
 					broadcastMessage(((MessageJoinLobby) messageFromClient));
 					break;
 

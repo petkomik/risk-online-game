@@ -18,9 +18,9 @@ public class MessageCreateLobby extends Message {
 		this.lobby = aLobby;
 	}
 
-	public MessageCreateLobby(Message message) {
+	public MessageCreateLobby(Lobby aLobby) {
 		super(MessageType.MessageCreateLobby);
-		this.message = message;
+		lobby = aLobby;
 	}
 
 	public MessageCreateLobby() {

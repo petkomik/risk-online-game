@@ -23,7 +23,8 @@ import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageCreateLobby;
 import network.messages.MessageDisconnect;
-import network.messages.MessageFullLobby;
+
+import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
@@ -278,24 +279,8 @@ public class Client {
 							System.out.println("CLIENT " + profile.getUserName());
 
 							MessageCreateLobby mCL = (MessageCreateLobby) message;
-							MessageFullLobby messageFull = (MessageFullLobby) mCL.getMessage();
-							String nameOfLobby = messageFull.getLobbyName();
-							Lobby lobby = new Lobby();
-							lobby.setAvaiableAINames(messageFull.getAvaiableAINames());
-							lobby.setPlayersJoined(messageFull.getPlayersJoined());
-							lobby.setAvaiableAvatars(messageFull.getAvaiableAvatars());
-							lobby.setReadyHashMap(messageFull.getReadyHashMap());
-							lobby.setLobbyRank(messageFull.getLobbyRank());
-							lobby.setDifficultyOfAI(messageFull.getDifficultyOfAI());
-							lobby.setMaxNumberOfPlayers(messageFull.getMaxNumberOfPlayers());
-							lobby.setLobbyName(nameOfLobby);
-							clientsLobby = lobby;
 							
-							System.out.println("lobby name is " + nameOfLobby);
-							lobbies.put(nameOfLobby, lobby);
-							System.out.println("Let see if it works");
-							
-							LobbyGUI lobbyGUI = new LobbyGUI(lobby);
+							LobbyGUI lobbyGUI = new LobbyGUI(mCL.getLobby());
 							
 							lobbyGUI.setOnAction(new EventHandler<ActionEvent>() {
 								@Override
@@ -311,10 +296,15 @@ public class Client {
 								}
 							});
 							
-							ServerMainWindowController.lobbyGUIList.put(nameOfLobby, lobbyGUI);
+							ServerMainWindowController.lobbyGUIList.put(mCL.getLobby().getLobbyName(), lobbyGUI);
 							ServerMainWindowController.drawLobbies();
+							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
 							break;
 						case MessageJoinLobby:
+							MessageJoinLobby mJL = (MessageJoinLobby) message;
+							lobbies.replace(mJL.getLobby().getLobbyName(),mJL.getLobby());
+							// update
+							System.out.println(mJL.getLobby().getLobbyName());
 							break;
 						default:
 							break;
@@ -359,6 +349,14 @@ public class Client {
 
 	public void setHost(boolean host) {
 		this.host = host;
+	}
+
+	public HashMap<String, Lobby> getLobbies() {
+		return lobbies;
+	}
+
+	public void setLobbies(HashMap<String, Lobby> lobbies) {
+		this.lobbies = lobbies;
 	}
 
 }

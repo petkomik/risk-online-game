@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.sql.ClientInfoStatus;
 import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
@@ -14,6 +15,7 @@ import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.PlayerSingle;
 import general.*;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -65,6 +67,7 @@ public class ServerMainWindowController extends StackPane {
 	 */
 	static int counter = 0;
 	private double ratio;
+	private double ratioBanner;
 	private Stage stage;
 
 	private VBox menuAndScrollAndButtons; // top level container
@@ -107,21 +110,23 @@ public class ServerMainWindowController extends StackPane {
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(1, this.ratio + 0.2);
+		this.ratioBanner = Math.min(1, this.ratio + 0.1);
 		this.setup();
 		this.actionEventsSetup();
 	}
 
 	public void setup() throws Exception {
 
+		lobbyGUIList = new HashMap<String, LobbyGUI>();
+		lobbyList = new HashMap<String, Lobby>();
 		/*
 		 * to be returned StackPane
 		 */
 		backgroundPic = new HBox();
 
+		menu = new HBox();
 		menuAndScrollAndButtons = new VBox();
 		lobbyListContainer = new ScrollPane();
-		lobbyGUIList = new HashMap<String, LobbyGUI>();
-		menu = new HBox();
 
 		/*
 		 * setting up background image
@@ -149,43 +154,43 @@ public class ServerMainWindowController extends StackPane {
 
 		topBannerParent = new HBox();
 		topBannerParent.setAlignment(Pos.TOP_LEFT);
-		StackPane.setMargin(topBannerParent, new Insets(50 * ratio, 0, 0, 0));
+		StackPane.setMargin(topBannerParent, new Insets(50 * ratioBanner, 0, 0, 0));
 		topBannerParent.setPickOnBounds(false);
 
 		topBannerContent = new HBox();
 		topBannerContent.setAlignment(Pos.CENTER);
 		topBannerContent.setStyle("-fx-background-color: " + "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
 				+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
-		topBannerContent.setMaxWidth(1000 * ratio);
-		topBannerContent.setMinWidth(800 * ratio);
-		topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
+		topBannerContent.setMaxWidth(1000 * ratioBanner);
+		topBannerContent.setMinWidth(800 * ratioBanner);
+		topBannerContent.setPadding(new Insets(10 * ratioBanner, 150 * ratioBanner, 10 * ratioBanner, 30 * ratioBanner));
 		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
-		topBannerContent.setPrefHeight(100 * ratio);
+		topBannerContent.setPrefHeight(100 * ratioBanner);
 		HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 
-		backButton = new ArrowButton(60 * ratio);
+		backButton = new ArrowButton(60 * ratioBanner);
 
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
 
 		lobbyTextBanner = new Label("SERVER MENU");
-		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
+		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratioBanner));
 		lobbyTextBanner.setTextFill(Color.WHITE);
 
 		Spacing bannerSpacing = new Spacing();
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
 
-		chatButton = new ChatButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio,
+		chatButton = new ChatButton(new Insets(10 * ratioBanner, 20 * ratioBanner, 10 * ratioBanner, 20 * ratioBanner), 30, 28 * ratioBanner,
 				170 * ratio, true);
 		chatButton.setAlignment(Pos.CENTER);
 		chatDiv = new HBox();
 		chatDiv.getChildren().add(chatButton);
 		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
 		chatDiv.maxHeightProperty().bind(chatDiv.prefHeightProperty());
-		chatDiv.setPrefHeight(100 * ratio);
-		chatDiv.setPadding(new Insets(0, 50 * ratio, 0, 0));
+		chatDiv.setPrefHeight(100 * ratioBanner);
+		chatDiv.setPadding(new Insets(0, 50 * ratioBanner, 0, 0));
 		chatDiv.setAlignment(Pos.CENTER);
 
 		backButton = new ArrowButton(45);
@@ -407,23 +412,40 @@ public class ServerMainWindowController extends StackPane {
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickForwardSound();
 				// send profile createLobby message
-				//TODO have to set the my lobby here
-				// the lobby in that we get in client and set as myLobby(clientsLobby) is the lobby of the other person
-				client.sendMessage(new MessageCreateLobby());
+				// TODO have to set the my lobby here
+				// the lobby in that we get in client and set as myLobby(clientsLobby) is the
+				// lobby of the other person
+				
+				Lobby aLobby = new Lobby();
+				
+				aLobby.joinLobby(new PlayerSingle(client.getProfile()));
+				BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
+					int i = 1;
+					String newUsername = clientUsername;
+					while (lobbyList.containsKey(newUsername)) {
+						newUsername = clientUsername + i;
+						i++;
+					}
+					lobbyList.put(newUsername, lobby);
+					lobby.setLobbyName(newUsername);
+				};
+				addLobby.accept(client.getProfile().getUserName(), aLobby);
+				System.out.println(aLobby.getLobbyName());
+				
+				client.sendMessage(new MessageCreateLobby(aLobby));
+				client.getLobbies().put(aLobby.getLobbyName(), aLobby);
 				
 				Node node = (Node) event.getSource();
-				stage = (Stage)node.getScene().getWindow();
-				
-				try {
-					LobbyMenuController lobbyPane = new LobbyMenuController(client.getClientsLobby(),false);
-					System.out.println("im in lobby " + client.getClientsLobby().getLobbyName());
-					stage.getScene().setRoot(lobbyPane);
+				stage = (Stage) node.getScene().getWindow();
 
+				try {
+					LobbyMenuController lobbyPane = new LobbyMenuController(aLobby, false);
+					System.out.println("im in lobby " + aLobby.getLobbyName());
+					stage.getScene().setRoot(lobbyPane);
 
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 
 			}
 
@@ -433,22 +455,29 @@ public class ServerMainWindowController extends StackPane {
 		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				//TODO add if the lobby is full not joining
+				// TODO add if the lobby is full not joining
 				(new GameSound()).buttonClickForwardSound();
-				
+				Node node = (Node) event.getSource();
+				stage = (Stage) node.getScene().getWindow();
+
 				for (LobbyGUI lobbyEnt : lobbyGUIList.values()) {
-					if(lobbyEnt.isSelected()) {
+					if (lobbyEnt.isSelected()) {
 						selectedLobby = lobbyEnt.getLobby();
 					}
 				}
+				if ((selectedLobby != null) && (selectedLobby.getPlayerList().size() < 6)) {
+					
+					selectedLobby.joinLobby(new PlayerSingle(client.getProfile()));
+					client.sendMessage(new MessageJoinLobby(selectedLobby));
 				
-				client.sendMessage(new MessageJoinLobby(selectedLobby));
-				
+				}
+	
+
 				try {
-					LobbyMenuController lobbyPane = new LobbyMenuController(selectedLobby,false);
+					LobbyMenuController lobbyPane = new LobbyMenuController(selectedLobby, false);
+
 					System.out.println("i joined lobby " + selectedLobby.getLobbyName());
 					stage.getScene().setRoot(lobbyPane);
-
 
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -463,14 +492,14 @@ public class ServerMainWindowController extends StackPane {
 
 	public static void drawLobbies() {
 
-	    Platform.runLater(() -> {
-	        vbox.getChildren().clear();
-	        for (String key : lobbyGUIList.keySet()) {
-	            vbox.getChildren().add(lobbyGUIList.get(key));
-	        }
-	        System.out.println(lobbyGUIList.size());
-	        lobbyListContainer.setContent(vbox);
-	    });
+		Platform.runLater(() -> {
+			vbox.getChildren().clear();
+			for (String key : lobbyGUIList.keySet()) {
+				vbox.getChildren().add(lobbyGUIList.get(key));
+			}
+			System.out.println(lobbyGUIList.size());
+			lobbyListContainer.setContent(vbox);
+		});
 	}
 
 	public static void initServer() {

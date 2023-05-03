@@ -23,9 +23,8 @@ import general.Parameter;
 public class Lobby implements Serializable{
 
 
-	static  Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
-			Parameter.orangeColor, Parameter.purpleColor, 
-			Parameter.redColor, Parameter.yellowColor};
+	static String[] colors = new String[] {"#c1272d", "#0071bc",
+			"#26d124", "#d9e021", "#f28a3a", "#c73af2"};
 	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
 			Parameter.bruntetteBoy, Parameter.mustacheMan,
 			Parameter.earringsGirl, Parameter.hatBoy};
@@ -33,13 +32,13 @@ public class Lobby implements Serializable{
 			"Maria (AI)", "Tosho (AI)"};
 	
 	private ArrayList<Player> playersJoined;
-	private ArrayList<Color> avaiableColors;
+	private ArrayList<String> avaiableColors;
 	private ArrayList<String> avaiableAvatars;
 	private ArrayList<String> avaiableAINames;
 	private HashMap<Player, Boolean> readyHashMap;
 	
 	private String lobbyName;
-	public static Color[] getColors() {
+	public static String[] getColors() {
 		return colors;
 	}
 
@@ -54,8 +53,8 @@ public class Lobby implements Serializable{
 		this.lobbyRank = 0;
 		this.difficultyOfAI = 0;
 		this.maxNumberOfPlayers = 6;
-		this.avaiableColors = new ArrayList<Color>();
-		for (Color k : colors) {
+		this.avaiableColors = new ArrayList<String>();
+		for (String k : colors) {
 			this.avaiableColors.add(k);
 		}
 		this.avaiableAvatars = new ArrayList<String>();
@@ -72,8 +71,8 @@ public class Lobby implements Serializable{
 	
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
-			this.updateScore();
 			playersJoined.add(this.addColorAvatar(toAdd));
+			this.updateScore();
 			this.setReady(toAdd, false);
 			
 		}
@@ -134,17 +133,17 @@ public class Lobby implements Serializable{
 	
 	private Player addColorAvatar(Player ply) {
 		// TODO
-		Color prefC;					
+		String prefC;					
 		String prefAv;
 		
 		if(ply instanceof PlayerSingle) {
-			prefC = Color.web(((PlayerSingle) ply).getColor());
+			prefC = ply.getColor();
 			prefAv = ((PlayerSingle) ply).getAvatar();
 		}else {
-			prefC = Parameter.blueColor;
+			prefC = this.colorToHexCode(Parameter.blueColor);
 			prefAv = Parameter.blondBoy;
 		}
-		Color realC;
+		String realC;
 		String realAv;
 		
 		if(this.avaiableColors.contains(prefC)) {
@@ -153,7 +152,7 @@ public class Lobby implements Serializable{
 		} else {
 			realC = this.avaiableColors.get(0);
 			this.avaiableColors.remove(0);
-			ply.setColor(colorToHexCode(realC));;
+			ply.setColor(realC);
 		}
 		
 		if(this.avaiableAvatars.contains(prefAv)) {
@@ -170,7 +169,7 @@ public class Lobby implements Serializable{
 	
 	private void removeColorAvatar(Player toLeave) {
 		this.avaiableAvatars.add(toLeave.getAvatar());
-		this.avaiableColors.add(Color.web(toLeave.getColor()));
+		this.avaiableColors.add(toLeave.getColor());
 	}
 
 	
@@ -181,13 +180,13 @@ public class Lobby implements Serializable{
 	public void addAI() {
 		String aiN = avaiableAINames.get(this.avaiableAINames.size() - 1);
 		this.avaiableAINames.remove(aiN);
-		Color aiC = avaiableColors.get(this.avaiableColors.size() - 1);
+		String aiC = avaiableColors.get(this.avaiableColors.size() - 1);
 		this.avaiableColors.remove(aiC);
 		String aiA = avaiableAvatars.get(this.avaiableAvatars.size() - 1);
 		this.avaiableAvatars.remove(aiA);
 	
 		PlayerAI aiP = new PlayerAI(aiN, 3000, this.difficultyOfAI);
-		aiP.setColor(colorToHexCode(aiC));
+		aiP.setColor(aiC);
 		aiP.setAvatar(aiA);
 		this.getPlayerList().add(aiP);
 		this.setReady(aiP, true);
@@ -201,7 +200,7 @@ public class Lobby implements Serializable{
 			this.playersJoined.remove(k);
 			this.avaiableAINames.add(k.getName());
 			this.avaiableAvatars.add(k.getAvatar());
-			this.avaiableColors.add(Color.web(k.getColor()));
+			this.avaiableColors.add(k.getColor());
 				System.out.println(this.avaiableAINames.size() + " " + this.avaiableColors.size() + " " + this.avaiableAvatars.size());
 		}
 	}
@@ -258,7 +257,7 @@ public class Lobby implements Serializable{
 	}
 
 
-	public ArrayList<Color> getAvaiableColors() {
+	public ArrayList<String> getAvaiableColors() {
 		return avaiableColors;
 	}
 
@@ -287,7 +286,7 @@ public class Lobby implements Serializable{
 		return maxNumberOfPlayers;
 	}
 	
-	public static void setColors(Color[] colors) {
+	public static void setColors(String[] colors) {
 		Lobby.colors = colors;
 	}
 
@@ -307,7 +306,7 @@ public class Lobby implements Serializable{
 	}
 
 
-	public void setAvaiableColors(ArrayList<Color> avaiableColors) {
+	public void setAvaiableColors(ArrayList<String> avaiableColors) {
 		this.avaiableColors = avaiableColors;
 	}
 
