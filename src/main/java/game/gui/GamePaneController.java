@@ -740,7 +740,7 @@ public class GamePaneController implements Initializable{
 		CountryName country = CountryName.valueOf(countryName);
 		switch (gameType) {
 		case SinglePlayer:
-			System.out.println(this.playerOnGUI.getName() + " " + idOfPlayer + " clicked " + country.toString());
+			System.out.println(this.playerOnGUI.getName() + " " + idOfPlayer + " clicked " + country.toString() + " " + ((currentPhase == null) ? "" : currentPhase.toString()) + " " + currentPeriod.toString());
 			singlePlayerHandler.clickCountry(idOfPlayer, country);
 			break;
 

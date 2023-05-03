@@ -129,7 +129,25 @@ public class Logic {
 			if (gameState.getCurrentGamePeriod().equals(Period.INITIALDEPLOY)) {
 				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
 					if (gameState.getPlayerTroopsLeft().get(player) >= 1) {
-						return true;
+						if(gameState.getAlivePlayers().get((gameState.getAlivePlayers().indexOf(player) + 
+								gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).
+								equals(Logic.getFirstPlayer(gameState))) {
+							if(gameState.getPlayerTroopsLeft().get(player) > 
+									gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
+											(gameState.getAlivePlayers().indexOf(player) + 
+													gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+								)) {
+								return true;
+							}
+						} else {
+							if(gameState.getPlayerTroopsLeft().get(player) ==
+									gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
+											(gameState.getAlivePlayers().indexOf(player) + 
+													gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+								)) {
+								return true;
+							}
+						}		
 					}
 				}
 			}
@@ -137,17 +155,19 @@ public class Logic {
 		return false;
 	}
 	
-	public static int canReinforceTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
+	public static boolean canReinforceTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
 		if (gameState.getCurrentPlayer().equals(player)) {
 			if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
 				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
-					if (gameState.getPlayerTroopsLeft().get(player) >= 1) {
-						return gameState.getPlayerTroopsLeft().get(player);
+					if(gameState.getPlayerTroopsLeft().get(player) > 0) {
+						if(gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
+							return true;							
+						}
 					}
 				}
 			}
 		}
-		return -1;
+		return false;
 	}
 
 

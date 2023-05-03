@@ -234,4 +234,9 @@ public class GameState {
 		this.lastFortifyingCounty = lastFortifyingCounty;
 	}
 	
+	public int getTroopsLeftForCurrent() {
+		return this.playerTroopsLeft.get(this.currentPlayer);
+		
+	}
+	
 }

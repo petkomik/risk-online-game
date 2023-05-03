@@ -139,8 +139,9 @@ public class SinglePlayerHandler {
 	 * @param id 	  the id of player that has claimed territory
 	 */
 	
-	public void possesCountryOnGUI(CountryName country, int id) {
+	public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
 		this.gamePaneController.claimCountry(country, id);
+		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
 	}
 	
 	/*
@@ -166,7 +167,8 @@ public class SinglePlayerHandler {
 	 */
 	
 
-	public void chooseNumberOfTroopsOnGUI(CountryName country,int min, int max, ChoosePane choosePane) {
+	public void chooseNumberOfTroopsOnGUI(CountryName country, int min, int max, ChoosePane choosePane) {
+		System.out.println("Opening choose troops with " +  country.toString() + " " + choosePane.toString());
 		this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
 	}
 	
