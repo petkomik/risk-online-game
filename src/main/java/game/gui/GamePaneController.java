@@ -933,6 +933,9 @@ public class GamePaneController implements Initializable{
 			Pane countryNamePane = new Pane();
 			Pane countryArmyPane = new Pane();
 			
+			countryNamePane.setStyle("-fx-background-color: " + this.playerOnGUI.getColor() + ";");
+			countryArmyPane.setStyle("-fx-background-color: #ecd9c6;");
+			
 			countryNamePane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(70.0));
 			countryArmyPane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(200.0));
 
