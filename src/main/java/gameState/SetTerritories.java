@@ -50,49 +50,15 @@ public class SetTerritories {
 		
 	}
 
-	public static void createCardDeck(ArrayList<Card> cards) {
-		cards.add(new Card(CountryName.Alaska, 1));
-		cards.add(new Card(CountryName.NorthwestTerritory, 10));
-		cards.add(new Card(CountryName.Alberta, 1));
-		cards.add(new Card(CountryName.WesternUnitedStates, 1));
-		cards.add(new Card(CountryName.CentralAmerica, 5));
-		cards.add(new Card(CountryName.Greenland, 5));
-		cards.add(new Card(CountryName.Ontario, 5));
-		cards.add(new Card(CountryName.Quebec, 10));
-		cards.add(new Card(CountryName.EasternUnitedStates, 10));
-		cards.add(new Card(CountryName.Venezuela, 10));
-		cards.add(new Card(CountryName.Peru, 5));
-		cards.add(new Card(CountryName.Brazil, 10));
-		cards.add(new Card(CountryName.Argentina, 1));
-		cards.add(new Card(CountryName.Iceland, 1));
-		cards.add(new Card(CountryName.Scandinavia, 10));
-		cards.add(new Card(CountryName.GreatBritain, 5));
-		cards.add(new Card(CountryName.NorthernEurope, 5));
-		cards.add(new Card(CountryName.WesternEurope, 1));
-		cards.add(new Card(CountryName.SouthernEurope, 5));
-		cards.add(new Card(CountryName.NorthAfrica, 1));
-		cards.add(new Card(CountryName.Egypt, 1));
-		cards.add(new Card(CountryName.Congo, 5));
-		cards.add(new Card(CountryName.EastAfrica, 10));
-		cards.add(new Card(CountryName.SouthAfrica, 10));
-		cards.add(new Card(CountryName.Madagascar, 1));
-		cards.add(new Card(CountryName.Siberia, 10));
-		cards.add(new Card(CountryName.Ural, 5));
-		cards.add(new Card(CountryName.China, 5));
-		cards.add(new Card(CountryName.Afghanistan, 1));
-		cards.add(new Card(CountryName.MiddleEast, 10));
-		cards.add(new Card(CountryName.India, 1));
-		cards.add(new Card(CountryName.Siam, 10));
-		cards.add(new Card(CountryName.Yakutsk, 5));
-		cards.add(new Card(CountryName.Irkutsk, 1));
-		cards.add(new Card(CountryName.Mongolia, 10));
-		cards.add(new Card(CountryName.Japan, 1));
-		cards.add(new Card(CountryName.Kamchatka, 5));
-		cards.add(new Card(CountryName.Indonesia, 5));
-		cards.add(new Card(CountryName.NewGuinea, 5));
-		cards.add(new Card(CountryName.WesternAustralia, 10));
-		cards.add(new Card(CountryName.EasternAustralia, 1));
-		;
+	public static void createCardDeck(ArrayList<Card> cards, HashMap<CountryName, Territory> territories) {
+		int i = 1;
+		for (CountryName countryName : CountryName.values()) { 
+			cards.add(new Card(countryName, i, territories.get(countryName).getAddressToPNG()));
+			i++;
+		}
+		cards.add(new Card(true, i));
+		i++;
+		cards.add(new Card(true, i));
 	}
 
 	public static void createTerritories(HashMap<CountryName, Territory> territories) {

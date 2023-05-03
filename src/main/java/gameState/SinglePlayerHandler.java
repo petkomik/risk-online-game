@@ -203,6 +203,7 @@ public class SinglePlayerHandler {
 	
 	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 
 			ArrayList<CountryName> unreachableCountries) {
+		
 		// for attack and fortify phase when player clicks on the "from" territory
 	}
 	

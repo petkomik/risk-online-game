@@ -296,7 +296,6 @@ public class Logic {
 				}
 			}
 		}
-		
 		return false;
 	}
 
@@ -305,10 +304,8 @@ public class Logic {
 		ArrayList<CountryName> unreachableCountries = new ArrayList<CountryName>();
 		unreachableCountries.addAll(gameState.getTerritories().keySet());
 		unreachableCountries.removeIf(x -> 
-		gameState.getTerritories().get(x).getOwnedByPlayer()
-		.equals(gameState.getPlayers().get(idOfPlayer)) ||
-		gameState.getTerritories().get(x).getNeighboringTerritories()
-		.contains(gameState.getTerritories().get(x)));		
+		gameState.getTerritories().get(x).getOwnedByPlayer().equals(gameState.getPlayers().get(idOfPlayer)) ||
+		gameState.getTerritories().get(x).getNeighboringTerritories().contains(gameState.getTerritories().get(x)));		
 		return unreachableCountries;
 	}
 
@@ -374,10 +371,10 @@ public class Logic {
 		return false;
 	}
 	
-	public static boolean playerReinforceConfirmedIsOk(GameState gameState, Player player, 
+	public static boolean playerForitfyConfirmedIsOk(GameState gameState, Player player, 
 			CountryName from, CountryName to, int troopsNumber) {
 		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
-			if(gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
+			if(gameState.getCurrentTurnPhase().equals(Phase.FORTIFY)) {
 				if(gameState.getCurrentPlayer().getID() == player.getID()) {
 					if(gameState.getTerritories().get(from).getOwnedByPlayer()
 							.equals(gameState.getCurrentPlayer()) ) {
@@ -434,10 +431,10 @@ public class Logic {
 		return false;
 	}
 	
-	public static boolean playerFortifyConfirmedIsOk(GameState gameState, int idPlayer, 
+	public static boolean playerReinforceConfirmedIsOk(GameState gameState, int idPlayer, 
 			CountryName country, int numTroops) {
 		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
-			if(gameState.getCurrentTurnPhase().equals(Phase.FORTIFY)) {
+			if(gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
 				if(gameState.getCurrentPlayer().getID() == idPlayer) {
 					if(gameState.getTerritories().get(country).getOwnedByPlayer()
 							.equals(gameState.getCurrentPlayer()) ) {

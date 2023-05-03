@@ -64,10 +64,11 @@ public class GameState {
 		lastAttackingCountry = null;
 		lastFortifyingCounty = null;  
 		
-		SetTerritories.createCardDeck(cards);
 		SetTerritories.createTerritories(territories);
 		SetTerritories.setNeighboringCountrys(territories);
 		SetTerritories.createContinents(continents, territories);
+		SetTerritories.createCardDeck(cards, territories);
+
 
 		for (Player player : lobby.getPlayerList()) {
 			this.players.put(player.getID(), player);
