@@ -628,6 +628,12 @@ public class GUISupportClasses {
 			});
 
 		}
+		
+		/*
+		 * finds the username from the send message
+		 * so that it can be a private message
+		 */
+		
 		private Profile findProfileFromString(String username) {
 			
 		
@@ -643,7 +649,7 @@ public class GUISupportClasses {
 		}
 
 		/*
-		 * adds the incomming message from other users
+		 * adds to the GUI the incomming message from other users to all users
 		 */
 
 		public void addLabel(String messageFromCLient) {
@@ -670,6 +676,10 @@ public class GUISupportClasses {
 			});
 
 		}
+		
+		/*
+		 * method for the GUI to display the personal message
+		 */
 
 		public void addLabel(String messageFromCLient, String profile) {
 
@@ -702,6 +712,32 @@ public class GUISupportClasses {
 			});
 
 		}
+		
+		public void addLabelFromSystem(String messageFromCLient) {
+
+			Text text = new Text(messageFromCLient);
+			text.setFill(Color.YELLOW);
+			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
+
+			TextFlow textFlow = new TextFlow(text);
+			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
+					+ "-fx-background-radius: 20px;");
+			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
+
+			HBox message = new HBox();
+			message.setAlignment(Pos.CENTER_LEFT);
+			message.getChildren().addAll(textFlow, new Spacing(150 * ratio, 1 * ratio));
+			HBox.setHgrow(message, Priority.ALWAYS);
+
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					vBoxMessages.getChildren().add(message);
+				}
+			});
+
+		}
+		
 		public void addItemsInComboBox(Profile profile){
 			
 			items.add(profile.getUserName());

@@ -275,6 +275,8 @@ public class Client {
 							System.out.println("MessageProfile");
 							break;
 						case MessageCreateLobby:
+							System.out.println("CLIENT " + profile.getUserName());
+
 							MessageCreateLobby mCL = (MessageCreateLobby) message;
 							MessageFullLobby messageFull = (MessageFullLobby) mCL.getMessage();
 							String nameOfLobby = messageFull.getLobbyName();

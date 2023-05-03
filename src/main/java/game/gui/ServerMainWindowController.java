@@ -407,6 +407,8 @@ public class ServerMainWindowController extends StackPane {
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickForwardSound();
 				// send profile createLobby message
+				//TODO have to set the my lobby here
+				// the lobby in that we get in client and set as myLobby(clientsLobby) is the lobby of the other person
 				client.sendMessage(new MessageCreateLobby());
 				
 				Node node = (Node) event.getSource();
@@ -414,6 +416,7 @@ public class ServerMainWindowController extends StackPane {
 				
 				try {
 					LobbyMenuController lobbyPane = new LobbyMenuController(client.getClientsLobby(),false);
+					System.out.println("im in lobby " + client.getClientsLobby().getLobbyName());
 					stage.getScene().setRoot(lobbyPane);
 
 
@@ -430,8 +433,27 @@ public class ServerMainWindowController extends StackPane {
 		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickBackwardSound();
+				//TODO add if the lobby is full not joining
+				(new GameSound()).buttonClickForwardSound();
+				
+				for (LobbyGUI lobbyEnt : lobbyGUIList.values()) {
+					if(lobbyEnt.isSelected()) {
+						selectedLobby = lobbyEnt.getLobby();
+					}
+				}
+				
 				client.sendMessage(new MessageJoinLobby(selectedLobby));
+				
+				try {
+					LobbyMenuController lobbyPane = new LobbyMenuController(selectedLobby,false);
+					System.out.println("i joined lobby " + selectedLobby.getLobbyName());
+					stage.getScene().setRoot(lobbyPane);
+
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 				// TODO join the lobby and send a message to the server so that the lobby knows
 				// who the new paticipant is
 			}

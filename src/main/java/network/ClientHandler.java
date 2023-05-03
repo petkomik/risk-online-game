@@ -159,9 +159,9 @@ public class ClientHandler implements Runnable {
 					// change connect to case
 					break;
 				case Disconnect:
-				
-				    System.out.println("case MessageDisconnect in Handler Success 3 ");
-				    broadcastMessage(messageFromClient);
+
+					System.out.println("case MessageDisconnect in Handler Success 3 ");
+					broadcastMessage(messageFromClient);
 //				    try {
 //				        Thread.sleep(1000); // wait for the broadcast to finish
 //				    } catch (InterruptedException e) {
@@ -169,7 +169,7 @@ public class ClientHandler implements Runnable {
 //				    }
 //				    removeClient(((MessageDisconnect) messageFromClient).getProfile());
 //				    closeEverything();
-				    break;
+					break;
 
 				case MessageServerCloseConnection:
 					System.out.println("case MessageDisconnect Server Success 3 ");
@@ -223,7 +223,8 @@ public class ClientHandler implements Runnable {
 
 					PlayerSingle singlePlayer = new PlayerSingle(this.profile);
 					Lobby aLobby = new Lobby();
-					
+					System.out.println("CLIENT HANDLER " + profile.getUserName());
+
 					BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
 						int i = 1;
 						String newUsername = clientUsername;
@@ -236,12 +237,16 @@ public class ClientHandler implements Runnable {
 					};
 					addLobby.accept(clientUsername, aLobby);
 					System.out.println(aLobby.getLobbyName());
-					broadcastMessage(new MessageCreateLobby(new MessageFullLobby(aLobby.getPlayersJoined(), aLobby.getAvaiableAvatars(), aLobby.getAvaiableAINames(), aLobby.getReadyHashMap(), aLobby.getLobbyName(), aLobby.getLobbyRank(), aLobby.getDifficultyOfAI(), aLobby.getMaxNumberOfPlayers())));
+					broadcastMessage(new MessageCreateLobby(new MessageFullLobby(aLobby.getPlayersJoined(),
+							aLobby.getAvaiableAvatars(), aLobby.getAvaiableAINames(), aLobby.getReadyHashMap(),
+							aLobby.getLobbyName(), aLobby.getLobbyRank(), aLobby.getDifficultyOfAI(),
+							aLobby.getMaxNumberOfPlayers())));
 
 					break;
 
 				case MessageJoinLobby:
 
+					broadcastMessage(((MessageJoinLobby) messageFromClient));
 					break;
 
 				default:
@@ -284,19 +289,19 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void removeClient(Profile profile) {
-	
+
 		for (ClientHandler clientHandler : clientHandlers) {
-		
+
 			if (clientHandler.getProfile().equals(profile)) {
 				clientHandlers.remove(clientHandler);
 				clieantHandlerThread.interrupt();
-			
+
 			}
 		}
 		for (Profile profile2 : clients) {
 			if (profile2.equals(profile)) {
 				clients.remove(profile2);
-				
+
 			}
 		}
 

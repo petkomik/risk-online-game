@@ -21,60 +21,6 @@ import general.Parameter;
  */
 
 public class Lobby implements Serializable{
-	public static void setColors(Color[] colors) {
-		Lobby.colors = colors;
-	}
-
-
-	public void setAvatars(String[] avatars) {
-		Lobby.avatars = avatars;
-	}
-
-
-	public void setAiNames(String[] aiNames) {
-		Lobby.aiNames = aiNames;
-	}
-
-
-	public void setPlayersJoined(ArrayList<Player> playersJoined) {
-		this.playersJoined = playersJoined;
-	}
-
-
-	public void setAvaiableColors(ArrayList<Color> avaiableColors) {
-		this.avaiableColors = avaiableColors;
-	}
-
-
-	public void setAvaiableAvatars(ArrayList<String> avaiableAvatars) {
-		this.avaiableAvatars = avaiableAvatars;
-	}
-
-
-	public void setAvaiableAINames(ArrayList<String> avaiableAINames) {
-		this.avaiableAINames = avaiableAINames;
-	}
-
-
-	public void setReadyHashMap(HashMap<Player, Boolean> readyHashMap) {
-		this.readyHashMap = readyHashMap;
-	}
-
-
-	public void setLobbyRank(int lobbyRank) {
-		this.lobbyRank = lobbyRank;
-	}
-
-
-	public void setDifficultyOfAI(int difficultyOfAI) {
-		this.difficultyOfAI = difficultyOfAI;
-	}
-
-
-	public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
-		this.maxNumberOfPlayers = maxNumberOfPlayers;
-	}
-
 
 
 	static  Color[] colors = new Color[] {Parameter.blueColor, Parameter.greenColor, 
@@ -340,5 +286,61 @@ public class Lobby implements Serializable{
 	public int getMaxNumberOfPlayers() {
 		return maxNumberOfPlayers;
 	}
+	
+	public static void setColors(Color[] colors) {
+		Lobby.colors = colors;
+	}
+
+
+	public void setAvatars(String[] avatars) {
+		Lobby.avatars = avatars;
+	}
+
+
+	public void setAiNames(String[] aiNames) {
+		Lobby.aiNames = aiNames;
+	}
+
+
+	public void setPlayersJoined(ArrayList<Player> playersJoined) {
+		this.playersJoined = playersJoined;
+	}
+
+
+	public void setAvaiableColors(ArrayList<Color> avaiableColors) {
+		this.avaiableColors = avaiableColors;
+	}
+
+
+	public void setAvaiableAvatars(ArrayList<String> avaiableAvatars) {
+		this.avaiableAvatars = avaiableAvatars;
+	}
+
+
+	public void setAvaiableAINames(ArrayList<String> avaiableAINames) {
+		this.avaiableAINames = avaiableAINames;
+	}
+
+
+	public void setReadyHashMap(HashMap<Player, Boolean> readyHashMap) {
+		this.readyHashMap = readyHashMap;
+	}
+
+
+	public void setLobbyRank(int lobbyRank) {
+		this.lobbyRank = lobbyRank;
+	}
+
+
+	public void setDifficultyOfAI(int difficultyOfAI) {
+		this.difficultyOfAI = difficultyOfAI;
+	}
+
+
+	public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
+		this.maxNumberOfPlayers = maxNumberOfPlayers;
+	}
+
+
 }
 
