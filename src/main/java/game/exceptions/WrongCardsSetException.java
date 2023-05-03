@@ -6,6 +6,7 @@ package game.exceptions;
  *
  */
 
+
 public class WrongCardsSetException extends Exception {
 	private static final long serialVersionUID = 1L;
 	private String message;
