@@ -23,10 +23,9 @@ import gameState.Phase;
 import general.AppController;
 
 public class Logic {
-	// playerDiceThrown back to GameHandler, to Gui/ Messanger
+	
 	public static int setInitialTroopsSize(GameState gamestate) {
 		int troopsSize = 0;
-		/** set available troopsize */
 		switch (gamestate.getPlayers().size()) {
 		case 2:
 			troopsSize = 40;
@@ -73,16 +72,42 @@ public class Logic {
 		return firstPlayer;
 	}
 
+	public static boolean canThrowInitialDice(int idOfPlayer, GameState gamestate) {
+		if(gamestate.getCurrentPlayer().getID() == idOfPlayer) {
+			if(gamestate.getCurrentGamePeriod().equals(Period.DICETHROW)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static int getRandomDiceNumber() {
 		return (int) (Math.random() * 6) + 1;
 	}
 
 	public static boolean claimTerritory(Player player, GameState gameState, CountryName territory) {
-
 		if (gameState.getCurrentPlayer().equals(player)) {
 			if (gameState.getCurrentGamePeriod().equals(Period.COUNTRYPOSESSION)) {
-				if (gameState.getTerritories().get(territory).getOwnedByPlayer() == null) {
-					return true;
+				if(gameState.getTerritories().get(territory).getOwnedByPlayer() == null) {
+					if(gameState.getAlivePlayers().get((gameState.getAlivePlayers().indexOf(player) + 
+							gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).
+							equals(Logic.getFirstPlayer(gameState))) {
+						if(gameState.getPlayerTroopsLeft().get(player) > 
+								gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
+										(gameState.getAlivePlayers().indexOf(player) + 
+												gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+							)) {
+							return true;
+						}
+					} else {
+						if(gameState.getPlayerTroopsLeft().get(player) ==
+								gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
+										(gameState.getAlivePlayers().indexOf(player) + 
+												gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+							)) {
+							return true;
+						}
+					}		
 				}
 			}
 		}
@@ -125,9 +150,6 @@ public class Logic {
 		return -1;
 	}
 
-	public static boolean isGameOver(GameState gameState) {
-		return gameState.getAlivePlayers().size() == 1;
-	}
 
 	public static boolean canAttack(GameState gameState, Territory attacker, Territory defender) {
 		if (gameState.getTerritories().get(attacker.getCountryName()).getNeighboringTerritories().contains(defender)) {
@@ -221,22 +243,6 @@ public class Logic {
 		return troops;
 	}
 
-	public static boolean playerEndsPhase(Phase phase, int idOfPlayer, GameState gameState) {
-		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
-			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
-				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
-					if(gameState.getCurrentTurnPhase().equals(phase)) {
-						if(phase.equals(Phase.REINFORCE)) {
-							return gameState.getPlayerTroopsLeft().get(gameState.getCurrentPlayer()) == 0;
-						}
-						return true;	
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
 
 	public static boolean playerAttackingFromCountry(CountryName country, int idOfPlayer, GameState gameState) {
 		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
@@ -303,12 +309,21 @@ public class Logic {
 		return false;
 	}
 
-	public static boolean canThrowInitialDice(int idOfPlayer, GameState gamestate) {
-		if(gamestate.getCurrentPlayer().getID() == idOfPlayer) {
-			if(gamestate.getCurrentGamePeriod().equals(Period.DICETHROW)) {
-				return true;
+
+	public static boolean playerEndsPhase(Phase phase, int idOfPlayer, GameState gameState) {
+		if(gameState.getCurrentPlayer().equals(gameState.getPlayers().get(idOfPlayer))) {
+			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
+				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+					if(gameState.getCurrentTurnPhase().equals(phase)) {
+						if(phase.equals(Phase.REINFORCE)) {
+							return gameState.getPlayerTroopsLeft().get(gameState.getCurrentPlayer()) == 0;
+						}
+						return true;	
+					}
+				}
 			}
 		}
+		
 		return false;
 	}
 
@@ -356,7 +371,69 @@ public class Logic {
 				}
 			}
 		}
-		
 		return false;
+	}
+	
+	public static boolean playerAttackAttackConfirmedIsOK(GameState gameState, int idOfPLayer, 
+			CountryName attacking, CountryName attacked, int numTroops) {
+		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
+			if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
+				if(gameState.getCurrentPlayer().getID() == idOfPLayer) {
+					if(gameState.getTerritories().get(attacking).getOwnedByPlayer()
+							.equals(gameState.getCurrentPlayer()) ) {
+						if(!gameState.getTerritories().get(attacked).getOwnedByPlayer()
+								.equals(gameState.getCurrentPlayer())) {
+							if(gameState.getTerritories().get(attacking).getNumberOfTroops() >= numTroops) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean playerAttackColoniseConfirmedIsOK(GameState gameState, int idOfPLayer, 
+			CountryName attacking, CountryName attacked, int numTroops) {
+		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
+			if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
+				if(gameState.getCurrentPlayer().getID() == idOfPLayer) {
+					if(gameState.getTerritories().get(attacking).getOwnedByPlayer()
+							.equals(gameState.getCurrentPlayer()) ) {
+						if(gameState.getTerritories().get(attacked).getOwnedByPlayer()
+								.equals(gameState.getCurrentPlayer())) {
+							if(gameState.getTerritories().get(attacking).getNumberOfTroops() >= numTroops) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static boolean playerFortifyConfirmedIsOk(GameState gameState, int idPlayer, 
+			CountryName country, int numTroops) {
+		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
+			if(gameState.getCurrentTurnPhase().equals(Phase.FORTIFY)) {
+				if(gameState.getCurrentPlayer().getID() == idPlayer) {
+					if(gameState.getTerritories().get(country).getOwnedByPlayer()
+							.equals(gameState.getCurrentPlayer()) ) {
+						if(gameState.getPlayerTroopsLeft().get(gameState.getPlayers()
+								.get(idPlayer)) >= numTroops) {
+							return true;
+						}
+					}
+				}
+			}
+		}	
+		return false;
+	}
+	
+
+	public static boolean isGameOver(GameState gameState) {
+		return gameState.getAlivePlayers().size() == 1;
 	}
 }

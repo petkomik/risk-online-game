@@ -182,9 +182,10 @@ public class SinglePlayerHandler {
 	
 	public void openBattleFrameOnGUI(Continent continentAt, CountryName countryNameAt, 
 								Continent continentDf, CountryName countryNameDf,
-								Player playerAt, Player playerDf, boolean attackerGui,
+								Player playerAt, Player playerDf,
 								int troopsAt, int troopsDf) {
 		// sets the battle visible and initiates it with these parameters
+		// boolean attackerGui playerAt == playerOnGUI
 	}
 	
 	public void endBattleOnGUI() {

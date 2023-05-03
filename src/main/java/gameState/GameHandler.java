@@ -57,60 +57,65 @@ public class GameHandler {
 	public void confirmTroopsToCountry(CountryName country, int troops, ChoosePane choosePane, int idOfPlayer) {
 		switch(choosePane) {
 		case FORTIFY: 
-			this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
-			this.gameState.subtractTroopsToPlayer(this.gameState.getCurrentPlayer(), troops);
-			switch (this.gameType) {
-			case SinglePlayer:
-				this.singlePlayerHandler.setTroopsOnTerritoryAndLeftOnGUI(country, 
-						this.gameState.getTerritories().get(country).getNumberOfTroops(),
-						this.gameState.getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer()));
-				break;
-			case Multiplayer:
-				break;
-			case Tutorial:
-				break;
+			if(Logic.playerFortifyConfirmedIsOk(this.gameState, idOfPlayer, country, troops)) {
+				this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
+				this.gameState.subtractTroopsToPlayer(this.gameState.getCurrentPlayer(), troops);
+				switch (this.gameType) {
+				case SinglePlayer:
+					this.singlePlayerHandler.setTroopsOnTerritoryAndLeftOnGUI(country, 
+							this.gameState.getTerritories().get(country).getNumberOfTroops(),
+							this.gameState.getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer()));
+					break;
+				case Multiplayer:
+					break;
+				case Tutorial:
+					break;
+				}
 			}
 			break;
 		case ATTACK_ATTACK: //open battle frame
-			switch (this.gameType) {
-			case SinglePlayer:
-				this.singlePlayerHandler.openBattleFrameOnGUI(this.gameState.getTerritories()
-						.get(this.gameState.getLastAttackingCountry()).getContinent(), 
-						this.gameState.getLastAttackingCountry(),
-						this.gameState.getTerritories().get(country).getContinent(), country, 
-						this.gameState.getCurrentPlayer(),
-						this.gameState.getTerritories().get(country).getOwnedByPlayer(), true, 
-						troops, this.gameState.getTerritories().get(country).getNumberOfTroops());
-				break;
-			case Multiplayer:
-				break;
-			case Tutorial:
-				break;
+			if(Logic.playerAttackAttackConfirmedIsOK(this.gameState, idOfPlayer, 
+					this.gameState.getLastAttackingCountry(), country, troops )) {
+				switch (this.gameType) {
+				case SinglePlayer:	
+					this.singlePlayerHandler.openBattleFrameOnGUI(this.gameState.getTerritories()
+							.get(this.gameState.getLastAttackingCountry()).getContinent(), 
+							this.gameState.getLastAttackingCountry(),
+							this.gameState.getTerritories().get(country).getContinent(), country, 
+							this.gameState.getCurrentPlayer(),
+							this.gameState.getTerritories().get(country).getOwnedByPlayer(), 
+							troops, this.gameState.getTerritories().get(country).getNumberOfTroops());
+					break;
+				case Multiplayer:
+					break;
+				case Tutorial:
+					break;
+				}
 			}
 			break;
 		case ATTACK_COLONISE: //move troops form x to y
-			this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
+			if(Logic.playerAttackColoniseConfirmedIsOK(this.gameState, idOfPlayer, 
+					this.gameState.getLastAttackingCountry(), country, troops )) {
+				this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
 				.removeNumberOfTroops(troops);
-			this.gameState.getTerritories().get(country).setOwnedByPlayer(
-					this.gameState.getPlayers().get(idOfPlayer));
-			this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
-			switch (this.gameType) {
-			case SinglePlayer:
-				this.singlePlayerHandler.possesCountryOnGUI(country, 0);
-				this.singlePlayerHandler.moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastAttackingCountry(), 
-						country, troops);
-				break;
-			case Multiplayer:
-				break;
-			case Tutorial:
-				break;
+				this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
+				switch (this.gameType) {
+				case SinglePlayer:
+					this.singlePlayerHandler.moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastAttackingCountry(), 
+							country, troops);
+					break;
+				case Multiplayer:
+					break;
+				case Tutorial:
+					break;
+				}
 			}
 			this.gameState.setLastAttackingCountry(null);
 			break;
 		case REINFORCE: //move troops from own territory x to own y
-			if(Logic.playerReinforceConfirmedIsOk(gameState, gameState.getPlayers().get(idOfPlayer), gameState.getLastAttackingCountry(), 
-					country, troops)) {
-				this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
+			if(Logic.playerReinforceConfirmedIsOk(gameState, gameState.getPlayers().get(idOfPlayer), 
+					gameState.getLastAttackingCountry(), country, troops)) {
+				this.gameState.getTerritories().get(this.gameState.getLastFortifyingCounty())
 					.removeNumberOfTroops(troops);
 				this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
 				switch (this.gameType) {
