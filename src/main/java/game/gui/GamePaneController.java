@@ -849,6 +849,7 @@ public class GamePaneController implements Initializable{
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
+		    	choosingTroopsPane.setVisible(false);
 		    	singlePlayerHandler.confirmNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()), choosePane, playerOnGUI.getID());
 		    }
 		});
