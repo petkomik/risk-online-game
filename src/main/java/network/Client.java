@@ -303,7 +303,10 @@ public class Client {
 						case MessageJoinLobby:
 							MessageJoinLobby mJL = (MessageJoinLobby) message;
 							lobbies.replace(mJL.getLobby().getLobbyName(),mJL.getLobby());
+							
 							// update
+							ServerMainWindowController.drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
+							
 							System.out.println(mJL.getLobby().getLobbyName());
 							break;
 						default:

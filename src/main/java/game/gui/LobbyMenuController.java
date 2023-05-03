@@ -127,6 +127,10 @@ public class LobbyMenuController extends StackPane {
 	double ratio;
 	boolean singleplayerLobby;
 	
+	public LobbyMenuController() {
+		
+	}
+	
 	public LobbyMenuController(Lobby lobby, boolean singleplayerLobby) throws FileNotFoundException {
 		this.lobby = lobby;
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);

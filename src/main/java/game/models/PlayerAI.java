@@ -17,22 +17,24 @@ public class PlayerAI extends Player {
 	public PlayerAI(Player player, Difficulty level) {
 		super(player.getName(), player.getID());
 		this.level = level;
-		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", "").replace("T", "").substring(15,24));
 		this.isAI = true;
+		this.id = (int)Math.round((int)Math.random()*10000);
 	}
 	
 	public PlayerAI(String name, int id, Difficulty setLevel) {
 		super(name, id);
 		this.level = setLevel;
-		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", "").replace("T", "").substring(15,24));
 		this.isAI = true;
+		this.id = (int)Math.round((int)Math.random()*10000);
+
 	}
 	
 	public PlayerAI(String name, int id, int setLevel) {
 		super(name, id);
 		this.level = Difficulty.values()[setLevel];
-		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", "").replace("T", "").substring(15,24));
 		this.isAI = true;
+		this.id = (int)Math.round((int)Math.random()*10000);
+
 	}
 	
 	public int getRank() {

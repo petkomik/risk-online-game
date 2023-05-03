@@ -94,7 +94,10 @@ public class ServerMainWindowController extends StackPane {
 	private DesignButton hostGameButton; // *
 	private DesignButton joinGameButton; // *
 	private Button refreshButton; // *
-
+	
+	private static LobbyMenuController lobbyMenuController;
+	private static VBox vBoxLobbyMenuController;
+	
 	private static ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
 	private static volatile VBox vbox; // Lobbies in the scrollPane
 	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
@@ -314,8 +317,14 @@ public class ServerMainWindowController extends StackPane {
 		/*
 		 * adding elements to the main container
 		 */
+		lobbyMenuController = new LobbyMenuController();
+		vBoxLobbyMenuController = new VBox();
+		
+		vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
+		vBoxLobbyMenuController.setVisible(false);
+		vBoxLobbyMenuController.setPickOnBounds(true);
 
-		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane);
+		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane, vBoxLobbyMenuController);
 	}
 
 	/*
@@ -437,15 +446,12 @@ public class ServerMainWindowController extends StackPane {
 				
 				Node node = (Node) event.getSource();
 				stage = (Stage) node.getScene().getWindow();
-
-				try {
-					LobbyMenuController lobbyPane = new LobbyMenuController(aLobby, false);
+				
+				drawLobbyMenu(aLobby);
+					
 					System.out.println("im in lobby " + aLobby.getLobbyName());
-					stage.getScene().setRoot(lobbyPane);
+					//stage.getScene().setRoot(lobbyMenuController);
 
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 
 			}
 
@@ -489,7 +495,22 @@ public class ServerMainWindowController extends StackPane {
 		});
 
 	}
-
+	
+	public static void drawLobbyMenu(Lobby lobby) {
+		Platform.runLater(() -> {
+			
+			try {
+				lobbyMenuController = new LobbyMenuController(lobby, false);
+				vBoxLobbyMenuController.getChildren().clear();
+				vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
+				vBoxLobbyMenuController.setVisible(true);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		});
+	}
 	public static void drawLobbies() {
 
 		Platform.runLater(() -> {
