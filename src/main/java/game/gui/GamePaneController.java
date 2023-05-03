@@ -528,7 +528,7 @@ public class GamePaneController implements Initializable{
         boxBlur.setHeight(0.0);
         boxBlur.setWidth(38.25);
         rectCards.setEffect(boxBlur);
-        rectCards.setVisible(false);
+//        rectCards.setVisible(false);
 
         cardsPane = new Pane();
         cardsPane.setId("cardsPane");
