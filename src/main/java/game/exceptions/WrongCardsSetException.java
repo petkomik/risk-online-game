@@ -19,3 +19,4 @@ public class WrongCardsSetException extends Exception {
 		return message;
 	}
 }
+
