@@ -10,11 +10,13 @@ import game.exceptions.WrongCountryException;
 import game.exceptions.WrongPeriodException;
 import game.exceptions.WrongPhaseException;
 import game.exceptions.WrongTroopsCountException;
+import game.logic.AILogic;
 import game.logic.GameType;
 import game.logic.Logic;
 import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
+import game.models.PlayerAI;
 
 public class GameHandler {
 	// Gamelogic Ausführung der Methoden
@@ -503,5 +505,55 @@ public class GameHandler {
 			}
 		}
 	}
+	
+	public void simulateAI(GameState gameState, PlayerAI player) {
+        while(true) {
+            switch(gameState.getCurrentGamePeriod()) {
+            case DICETHROW:
+            	try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+            	this.playerThrowsInitialDice(player.getID());
+            	this.gameState.setNextPlayer();
+            	this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+            	return;
+            case COUNTRYPOSESSION:
+            	try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+            	CountryName country = AILogic.chooseTerritoryToInitialClaim(gameState, player);
+            	if(Logic.claimTerritory(player, this.gameState, country)) {
+    				this.gameState.setOwnedByTerritory(country, player);
+    				this.gameState.updateTroopsOnTerritory(country, 1);
+    				int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
+    				this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
+    				switch (this.gameType) {
+    				case SinglePlayer:
+    					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID(), this.gameState.getPlayerTroopsLeft().get(player));
+    					break;
+    				case Multiplayer:
+    					break;
+    				case Tutorial:
+    					break;
+    				}
+    			}
+            	this.gameState.setNextPlayer();
+            	this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+            	return;
+            case INITIALDEPLOY:
+            case MAINPERIOD:
+                switch(gameState.getCurrentTurnPhase()) {
+                case FORTIFY:
+                case ATTACK:
+                case REINFORCE:
+                }
+
+            }
+        }
+    }
 	
 }
