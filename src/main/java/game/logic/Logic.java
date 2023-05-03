@@ -50,23 +50,23 @@ public class Logic {
 		return troopsSize;
 	}
 	
-	public static HashMap<Player, Integer> diceThrowToDetermineTheBeginner(GameState gameState) {
-		HashMap<Player, Integer> playersDiceThrown = new HashMap<Player, Integer>();
-		for (Player p : gameState.getPlayers().values()) {
+	public static HashMap<Integer, Integer> diceThrowToDetermineTheBeginner(GameState gameState) {
+		HashMap<Integer, Integer> playersDiceThrown = new HashMap<Integer, Integer>();
+		for (int idPlayer : gameState.getPlayers().keySet()) {
 			int diceNumber = getRandomDiceNumber();
-			playersDiceThrown.put(p, diceNumber);
+			playersDiceThrown.put(idPlayer, diceNumber);
 		}
 		return playersDiceThrown;
 	}
 
-	public static Player getFirstPlayer(GameState gameState) {
-		HashMap<Player, Integer> playerDice = gameState.getPlayersDiceThrown();
-		Player firstPlayer = null;
+	public static Integer getFirstPlayer(GameState gameState) {
+		HashMap<Integer, Integer> playerDice = gameState.getPlayersDiceThrown();
+		Integer firstPlayer = null;
 		int maxDice = 0;
-		for (Player p : playerDice.keySet()) {
-			if (playerDice.get(p) > maxDice) {
-				firstPlayer = p;
-				maxDice = playerDice.get(p);
+		for (Integer playerId : playerDice.keySet()) {
+			if (playerDice.get(playerId) > maxDice) {
+				firstPlayer = playerId;
+				maxDice = playerDice.get(playerId);
 			}
 		}
 		return firstPlayer;
@@ -90,20 +90,20 @@ public class Logic {
 			if (gameState.getCurrentGamePeriod().equals(Period.COUNTRYPOSESSION)) {
 				if(gameState.getTerritories().get(territory).getOwnedByPlayer() == null) {
 					if(gameState.getAlivePlayers().get((gameState.getAlivePlayers().indexOf(player) + 
-							gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).
-							equals(Logic.getFirstPlayer(gameState))) {
-						if(gameState.getPlayerTroopsLeft().get(player) > 
+							gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
+							== Logic.getFirstPlayer(gameState)) {
+						if(gameState.getPlayerTroopsLeft().get(player.getID()) > 
 								gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
 										(gameState.getAlivePlayers().indexOf(player) + 
-												gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+												gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
 							)) {
 							return true;
 						}
 					} else {
-						if(gameState.getPlayerTroopsLeft().get(player) ==
+						if(gameState.getPlayerTroopsLeft().get(player.getID()) ==
 								gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
 										(gameState.getAlivePlayers().indexOf(player) + 
-												gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+												gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
 							)) {
 							return true;
 						}
@@ -125,25 +125,25 @@ public class Logic {
 	}
 	// click on Country , check if u can deploy troops , if yes, return number of troops, if not allowed -1
 	public static boolean canInitialDeployTroopsToTerritory(GameState gameState, Player player, CountryName territory) {
-		if (gameState.getCurrentPlayer().equals(player)) {
+		if (gameState.getCurrentPlayer().getID() == player.getID()) {
 			if (gameState.getCurrentGamePeriod().equals(Period.INITIALDEPLOY)) {
 				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
-					if (gameState.getPlayerTroopsLeft().get(player) >= 1) {
+					if (gameState.getPlayerTroopsLeft().get(player.getID()) >= 1) {
 						if(gameState.getAlivePlayers().get((gameState.getAlivePlayers().indexOf(player) + 
-								gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).
-								equals(Logic.getFirstPlayer(gameState))) {
-							if(gameState.getPlayerTroopsLeft().get(player) > 
+								gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
+								== Logic.getFirstPlayer(gameState)) {
+							if(gameState.getPlayerTroopsLeft().get(player.getID()) > 
 									gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
 											(gameState.getAlivePlayers().indexOf(player) + 
-													gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+													gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
 								)) {
 								return true;
 							}
 						} else {
-							if(gameState.getPlayerTroopsLeft().get(player) ==
+							if(gameState.getPlayerTroopsLeft().get(player.getID()) ==
 									gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
 											(gameState.getAlivePlayers().indexOf(player) + 
-													gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+													gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
 								)) {
 								return true;
 							}
@@ -159,7 +159,7 @@ public class Logic {
 		if (gameState.getCurrentPlayer().equals(player)) {
 			if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
 				if (gameState.getTerritories().get(territory).getOwnedByPlayer().getID() == player.getID()) {
-					if(gameState.getPlayerTroopsLeft().get(player) > 0) {
+					if(gameState.getPlayerTroopsLeft().get(player.getID()) > 0) {
 						if(gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
 							return true;							
 						}
@@ -195,7 +195,7 @@ public class Logic {
 			throw new WrongPhaseException("You are not in Deploy Phase. Can't turn in cards in the moment");
 		} else if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
 			throw new WrongPeriodException("You are not in Main Period.");
-		} else if (!gameState.getRiskCardsInPlayers().get(player).containsAll(cards)) {
+		} else if (!gameState.getRiskCardsInPlayers().get(player.getID()).containsAll(cards)) {
 			throw new WrongCardsException("You do not own all the cards that you tried to turn in.");
 		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
 				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)))) {
@@ -215,24 +215,24 @@ public class Logic {
 		return true;
 	}
 
-	public static HashMap<Player, Integer> getTroopsReinforce(GameState gameState) {
-		HashMap<Player, Integer> troops = gameState.getPlayerTroopsLeft();
+	public static HashMap<Integer, Integer> getTroopsReinforce(GameState gameState) {
+		HashMap<Integer, Integer> troops = gameState.getPlayerTroopsLeft();
 		
 		for(Territory territory : gameState.getTerritories().values()) {
-			troops.put(territory.getOwnedByPlayer(), troops.get(territory.getOwnedByPlayer()) + 1);
+			troops.put(territory.getOwnedByPlayer().getID(), troops.get(territory.getOwnedByPlayer().getID()) + 1);
 		}
 		
-		for(Player player : troops.keySet()) {
-			troops.replace(player, Math.max((troops.get(player) - troops.get(player) % 3) / 3, 3));
+		for(Integer idPlayer : troops.keySet()) {
+			troops.replace(idPlayer, Math.max((troops.get(idPlayer) - troops.get(idPlayer) % 3) / 3, 3));
 		}
 		
 		for(Continent continent : gameState.getContinents().keySet()) {
-			Player continentOwner = gameState.getTerritories()
-					.get(gameState.getContinents().get(continent).get(0)).getOwnedByPlayer();
+			int continentOwner = gameState.getTerritories()
+					.get(gameState.getContinents().get(continent).get(0)).getOwnedByPlayer().getID();
 			boolean success = true;
 			for(CountryName countryName : gameState.getContinents().get(continent)) {
 				Territory territory = gameState.getTerritories().get(countryName);
-				if(!continentOwner.equals(territory.getOwnedByPlayer())) {
+				if(continentOwner != territory.getOwnedByPlayer().getID()) {
 					success = false;
 					break;
 				}
@@ -333,7 +333,7 @@ public class Logic {
 				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
 					if(gameState.getCurrentTurnPhase().equals(phase)) {
 						if(phase.equals(Phase.REINFORCE)) {
-							return gameState.getPlayerTroopsLeft().get(gameState.getCurrentPlayer()) == 0;
+							return gameState.getPlayerTroopsLeft().get(idOfPlayer) == 0;
 						}
 						return true;	
 					}
@@ -438,8 +438,7 @@ public class Logic {
 				if(gameState.getCurrentPlayer().getID() == idPlayer) {
 					if(gameState.getTerritories().get(country).getOwnedByPlayer()
 							.equals(gameState.getCurrentPlayer()) ) {
-						if(gameState.getPlayerTroopsLeft().get(gameState.getPlayers()
-								.get(idPlayer)) >= numTroops) {
+						if(gameState.getPlayerTroopsLeft().get(idPlayer) >= numTroops) {
 							return true;
 						}
 					}

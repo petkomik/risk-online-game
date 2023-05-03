@@ -81,13 +81,13 @@ public class AILogic {
 	}
 	
 	public static Pair<CountryName, Integer> chooseTerritoryToReinforce(GameState gameState, PlayerAI player) {
-		HashMap<Player, Integer> troopsLeft = gameState.getPlayerTroopsLeft();
+		HashMap<Integer, Integer> troopsLeft = gameState.getPlayerTroopsLeft();
 		switch(player.getLevel()) {
 			case EASY:
-				int randNumbTroops = (int) (Math.random()*troopsLeft.get(player));
+				int randNumbTroops = (int) (Math.random()*troopsLeft.get(player.getID()));
 				return new Pair(mostInnerCountry(gameState, player), randNumbTroops);
 			case CASUAL:
-				int randomNumTroops = (int) (Math.random()*troopsLeft.get(player));
+				int randomNumTroops = (int) (Math.random()*troopsLeft.get(player.getID()));
 				List<Territory> list = new ArrayList<>();
 				for(Territory t : gameState.getTerritories().values()) {
 					if(t.getOwnedByPlayer().getID() == player.getID()) {
@@ -106,7 +106,7 @@ public class AILogic {
 						minCountryName = t.getCountryName();
 					}
 				}
-				return new Pair<CountryName, Integer>(minCountryName, troopsLeft.get(player));
+				return new Pair<CountryName, Integer>(minCountryName, troopsLeft.get(player.getID()));
 			default:
 				return null;
 		}

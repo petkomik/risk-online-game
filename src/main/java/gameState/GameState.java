@@ -32,10 +32,10 @@ public class GameState {
 	private Player currentPlayer;
 	private Phase currentTurnPhase;
 	private Period currentGamePeriod;
-	private HashMap<Player, Integer> playersDiceThrown;
-	private HashMap<Player, Integer> playerTroopsLeft;
+	private HashMap<Integer, Integer> playersDiceThrown;
+	private HashMap<Integer, Integer> playerTroopsLeft;
+	private HashMap<Integer, ArrayList<Card>> riskCardsInPlayers;
 	private ArrayList<Card> cards;
-	private HashMap<Player, ArrayList<Card>> riskCardsInPlayers;
 	private CountryName lastAttackingCountry;
 	private CountryName lastFortifyingCounty;
 
@@ -54,9 +54,9 @@ public class GameState {
 		territories = new HashMap<CountryName, Territory>();
 		players = new HashMap<Integer, Player>();
 		alivePlayers = new ArrayList<Player>();
-		playerTroopsLeft = new HashMap<Player, Integer>();
-		playersDiceThrown = new HashMap<Player, Integer>();
-		riskCardsInPlayers = new HashMap<Player, ArrayList<Card>>();
+		playerTroopsLeft = new HashMap<Integer, Integer>();
+		playersDiceThrown = new HashMap<Integer, Integer>();
+		riskCardsInPlayers = new HashMap<Integer, ArrayList<Card>>();
 		numberOfCardsTurnedIn = 0;
 		currentTurnPhase = null;
 		currentGamePeriod = Period.DICETHROW;
@@ -78,23 +78,23 @@ public class GameState {
 	}
 	
 
-	public HashMap<Player, Integer> getPlayersDiceThrown() {
+	public HashMap<Integer, Integer> getPlayersDiceThrown() {
 		return playersDiceThrown;
 	}
 
-	public void setPlayersDiceThrown(HashMap<Player, Integer> playersDiceThrown) {
+	public void setPlayersDiceThrown(HashMap<Integer, Integer> playersDiceThrown) {
 		this.playersDiceThrown = playersDiceThrown;
 	}
 	
-	public void addTroopsToPlayer(Player player, int numberOfTroops){
-		this.getPlayerTroopsLeft().put(player,
-				this.getPlayerTroopsLeft().get(player) + numberOfTroops);
+	public void addTroopsToPlayer(Integer idPlayer, int numberOfTroops){
+		this.getPlayerTroopsLeft().put(idPlayer,
+				this.getPlayerTroopsLeft().get(idPlayer) + numberOfTroops);
 	}
 	
-	public void subtractTroopsToPlayer(Player player, int numberOfTroops){
-		if(this.playerTroopsLeft.get(player) >= numberOfTroops) {
-		this.getPlayerTroopsLeft().put(player,
-				this.getPlayerTroopsLeft().get(player) - numberOfTroops);
+	public void subtractTroopsToPlayer(Integer idPlayer, int numberOfTroops){
+		if(this.playerTroopsLeft.get(idPlayer) >= numberOfTroops) {
+		this.getPlayerTroopsLeft().put(idPlayer,
+				this.getPlayerTroopsLeft().get(idPlayer) - numberOfTroops);
 		}else {
 			System.out.println("Tried to remove more troops than available");
 		}
@@ -111,11 +111,11 @@ public class GameState {
 	}
 	
 	public void setInitialTroops(int troops) {
-		for(Player player : this.players.values()) {
-			this.playerTroopsLeft.put(player, 0);
+		for(Integer playerId : this.players.keySet()) {
+			this.playerTroopsLeft.put(playerId, 0);
 		}
-		for(Player player : this.players.values()) {
-			this.addTroopsToPlayer(player, troops);
+		for(Integer playerId : this.players.keySet()) {
+			this.addTroopsToPlayer( playerId, troops);
 		}
 	}
 	
@@ -175,7 +175,7 @@ public class GameState {
 		this.currentGamePeriod = currentGamePeriod;
 	}
 
-	public HashMap<Player, Integer> getPlayerTroopsLeft() {
+	public HashMap<Integer, Integer> getPlayerTroopsLeft() {
 		return playerTroopsLeft;
 	}
 
@@ -205,18 +205,18 @@ public class GameState {
 		
 	}
 	
-	public void setPlayerTroopsLeft(HashMap<Player, Integer> playerTroopsLeft) {
+	public void setPlayerTroopsLeft(HashMap<Integer, Integer> playerTroopsLeft) {
 		this.playerTroopsLeft = playerTroopsLeft;
 	}
 
-	public HashMap<Player, ArrayList<Card>> getRiskCardsInPlayers() {
+	public HashMap<Integer, ArrayList<Card>> getRiskCardsInPlayers() {
 		return riskCardsInPlayers;
 	}
 	
 	public void editRiskCardsInPlayers(ArrayList<Card> cards, int idOfPlayer) {
-		this.cards.addAll(this.riskCardsInPlayers.get(this.players.get(idOfPlayer)));
-		this.riskCardsInPlayers.replace(this.players.get(idOfPlayer), cards);
-		this.cards.removeAll(this.riskCardsInPlayers.get(this.players.get(idOfPlayer)));
+		this.cards.addAll(this.riskCardsInPlayers.get(idOfPlayer));
+		this.riskCardsInPlayers.replace(idOfPlayer, cards);
+		this.cards.removeAll(this.riskCardsInPlayers.get(idOfPlayer));
 	}
 	
 	public CountryName getLastAttackingCountry() {
@@ -236,7 +236,7 @@ public class GameState {
 	}
 	
 	public int getTroopsLeftForCurrent() {
-		return this.playerTroopsLeft.get(this.currentPlayer);
+		return this.playerTroopsLeft.get(this.currentPlayer.getID());
 		
 	}
 	
