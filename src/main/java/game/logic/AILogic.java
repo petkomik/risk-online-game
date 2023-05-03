@@ -1,10 +1,15 @@
 package game.logic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
+import java.util.stream.Stream;
 
 import game.models.CountryName;
+import game.models.Player;
 import game.models.PlayerAI;
 import game.models.Territory;
 import gameState.GameState;
@@ -18,16 +23,50 @@ import javafx.util.Pair;
 public class AILogic {
 
 	public static CountryName chooseTerritoryToInitialClaim(GameState gameState, PlayerAI player) {
-				
+		
+		HashMap<CountryName, Territory> territories = gameState.getTerritories();
+		
 		switch(player.getLevel()) {
 			case EASY:
 				return getRandomFreeCountryName(gameState);
+			// TODO this code snippet should be integrated into the main file
+			case HARD:
+				if(getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
+					return getRandomFreeCountryName(null);
+				}
+				for(Territory t : territories.values()) {
+					if(t.getOwnedByPlayer().getID() == player.getID()) {
+						return getNearestTerritory(t.getNeighboringTerritories());
+					}
+				}
 			default:
 				return null;
 		}
 	}
+	private static CountryName getNearestTerritory(Collection<Territory> neighbourTerritories) {
+		for(Territory t : neighbourTerritories) {
+			if(t.getOwnedByPlayer() == null) {
+				return t.getCountryName();
+			}
+		}
+		for(Territory t : neighbourTerritories) {
+			return getNearestTerritory(t.getNeighboringTerritories());
+		}
+		return null;
+	}
 	
+	private static int getNumberOfCountriesOwnedByPlayer(Collection<Territory> territories, Player player) {
+		int i = 0;
+		for(Territory t : territories) {
+			if(t.getOwnedByPlayer().getID() == player.getID()) {
+				i++;
+			}
+		}
+		return i;
+	}
 	public static CountryName chooseTerritoryToInitialReinforce(GameState gameState, PlayerAI player) {
+
+		HashMap<CountryName, Territory> territories = gameState.getTerritories();
 		
 		switch(player.getLevel()) {
 			case EASY:
@@ -35,25 +74,96 @@ public class AILogic {
 			case CASUAL:
 				return null;
 			case HARD:
-				return null;
+				return mostOuterCountry(gameState, player).getCountryName();
 			default:
 				return null;
 		}
 	}
 	
 	public static Pair<CountryName, Integer> chooseTerritoryToReinforce(GameState gameState, PlayerAI player) {
-		
+		HashMap<Player, Integer> troopsLeft = gameState.getPlayerTroopsLeft();
 		switch(player.getLevel()) {
 			case EASY:
-				int randNumbTroops = (int) (Math.random()*gameState.getPlayerTroopsLeft().get(player));
+				int randNumbTroops = (int) (Math.random()*troopsLeft.get(player));
 				return new Pair(mostInnerCountry(gameState, player), randNumbTroops);
 			case CASUAL:
-				return null;
+				int randomNumTroops = (int) (Math.random()*troopsLeft.get(player));
+				List<Territory> list = new ArrayList<>();
+				for(Territory t : gameState.getTerritories().values()) {
+					if(t.getOwnedByPlayer().getID() == player.getID()) {
+						list.add(t);
+					}
+				}
+				int randomCountryIndex = (int) (Math.random()*list.size());
+				return new Pair<CountryName, Integer>(list.get(randomCountryIndex).getCountryName(), randomNumTroops);
 			case HARD:
-				return null;
+				ArrayList<Territory> threeMostOuterCountries = getThreeMostOuterCountries(gameState, player);
+				int min = Integer.MAX_VALUE;
+				CountryName minCountryName = CountryName.Afghanistan;
+				for(Territory t : threeMostOuterCountries) {
+					if(t.getNumberOfTroops() < min) {
+						min = t.getNumberOfTroops();
+						minCountryName = t.getCountryName();
+					}
+				}
+				return new Pair<CountryName, Integer>(minCountryName, troopsLeft.get(player));
 			default:
 				return null;
 		}
+	}
+	
+	private static ArrayList<Territory> getThreeMostOuterCountries(GameState gameState, PlayerAI player) {
+		ArrayList<Territory> list = new ArrayList<>();
+		int min = Integer.MAX_VALUE;
+		int count = 0;
+		Territory terr = null;
+		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
+			if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+				for(Territory neighbour : set.getValue().getNeighboringTerritories()) {
+					if(neighbour.getOwnedByPlayer().getID() == player.getID()) {
+						count++;
+					}
+				}
+				if(count < min) {
+					min = count;
+					terr = set.getValue();
+				}
+			}
+		}
+		list.add(terr);
+		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
+			if(set.getValue().getCountryName() != list.get(0).getCountryName()) {
+				if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+					for(Territory neighbour : set.getValue().getNeighboringTerritories()) {
+						if(neighbour.getOwnedByPlayer().getID() == player.getID()) {
+							count++;
+						}
+					}
+					if(count < min) {
+						min = count;
+						terr = set.getValue();
+					}
+				}
+			}
+		}
+		list.add(terr);
+		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
+			if(set.getValue().getCountryName() != list.get(0).getCountryName() && set.getValue().getCountryName() != list.get(1).getCountryName()) {
+				if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+					for(Territory neighbour : set.getValue().getNeighboringTerritories()) {
+						if(neighbour.getOwnedByPlayer().getID() == player.getID()) {
+							count++;
+						}
+					}
+					if(count < min) {
+						min = count;
+						terr = set.getValue();
+					}
+				}
+			}
+		}
+		list.add(terr);
+		return list;
 	}
 	
 	public static CountryName getRandomFreeCountryName(GameState gameState) {

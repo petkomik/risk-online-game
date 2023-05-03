@@ -958,6 +958,9 @@ public class GamePaneController implements Initializable{
 			case 10:
 				path = Parameter.artillery;
 				break;
+			case -1:
+//				path = Parameter.wildCard;
+				break;
 			default:
 				break;
 			}
@@ -1126,6 +1129,6 @@ public class GamePaneController implements Initializable{
 		
 	}
 	private void clickFalseButtonChoosingTroops(ActionEvent e) {
-
+		choosingTroopsPane.setVisible(false);
 	}
 }
