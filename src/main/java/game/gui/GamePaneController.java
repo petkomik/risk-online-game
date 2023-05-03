@@ -998,10 +998,10 @@ public class GamePaneController implements Initializable{
 			path += "claim.png";
 			break;
 		case INITIALDEPLOY:
+			labPhase.setText(period.toString());
 			path += "claim.png";
 			break;
 		case MAINPERIOD:
-			labPhase.setText(period.toString());
 			path += "attack.png";
 			break;
 		default:
