@@ -298,14 +298,38 @@ public class Client {
 							
 							ServerMainWindowController.lobbyGUIList.put(mCL.getLobby().getLobbyName(), lobbyGUI);
 							ServerMainWindowController.drawLobbies();
+							ServerMainWindowController.lobbyList.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
+
 							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
+							
 							break;
 						case MessageJoinLobby:
 							MessageJoinLobby mJL = (MessageJoinLobby) message;
-							lobbies.replace(mJL.getLobby().getLobbyName(),mJL.getLobby());
 							
+
 							// update
-							ServerMainWindowController.drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
+							for( Player player_:mJL.getLobby().getPlayersJoined()   ){
+								
+													System.out.println(1+" "+ player_.getName());
+							}	
+								
+								
+								
+							
+							
+							lobbies.replace(mJL.getLobby().getLobbyName(),mJL.getLobby());
+							ServerMainWindowController.lobbyGUIList.replace(mJL.getLobby().getLobbyName(), new LobbyGUI(mJL.getLobby()));
+							for(Player player : mJL.getLobby().getPlayersJoined()){
+								if(profile.getId() == player.getID()){
+									
+									ServerMainWindowController.drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
+									
+								}
+								
+								
+							}
+							ServerMainWindowController.drawLobbies();
+							
 							
 							System.out.println(mJL.getLobby().getLobbyName());
 							break;

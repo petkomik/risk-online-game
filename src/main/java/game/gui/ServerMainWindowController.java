@@ -101,8 +101,10 @@ public class ServerMainWindowController extends StackPane {
 	private static ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
 	private static volatile VBox vbox; // Lobbies in the scrollPane
 	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
-	private HashMap<String, Lobby> lobbyList;
+	public static HashMap<String, Lobby> lobbyList;
 	public static Lobby selectedLobby;
+
+	
 
 	static Server server;
 	static Client client;
@@ -463,8 +465,8 @@ public class ServerMainWindowController extends StackPane {
 			public void handle(ActionEvent event) {
 				// TODO add if the lobby is full not joining
 				(new GameSound()).buttonClickForwardSound();
-				Node node = (Node) event.getSource();
-				stage = (Stage) node.getScene().getWindow();
+//				Node node = (Node) event.getSource();
+//				stage = (Stage) node.getScene().getWindow();
 
 				for (LobbyGUI lobbyEnt : lobbyGUIList.values()) {
 					if (lobbyEnt.isSelected()) {
@@ -475,19 +477,11 @@ public class ServerMainWindowController extends StackPane {
 					
 					selectedLobby.joinLobby(new PlayerSingle(client.getProfile()));
 					client.sendMessage(new MessageJoinLobby(selectedLobby));
+					
+					drawLobbyMenu(selectedLobby);
 				
 				}
 	
-
-				try {
-					LobbyMenuController lobbyPane = new LobbyMenuController(selectedLobby, false);
-
-					System.out.println("i joined lobby " + selectedLobby.getLobbyName());
-					stage.getScene().setRoot(lobbyPane);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 
 				// TODO join the lobby and send a message to the server so that the lobby knows
 				// who the new paticipant is
@@ -557,5 +551,7 @@ public class ServerMainWindowController extends StackPane {
 	public ChatWindow getChatPane() {
 		return chatPane;
 	}
-
+	public static Lobby getSelectedLobby() {
+		return selectedLobby;
+	}
 }
