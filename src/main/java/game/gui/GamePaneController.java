@@ -276,6 +276,7 @@ public class GamePaneController implements Initializable{
 		throwDiceButton.setPickOnBounds(true);
 		throwDiceButton.setOnAction(e -> {
 			throwDiceButton.setDisable(true);
+			System.out.println(this.playerOnGUI.getName() + " throws initial dice");
 			this.singlePlayerHandler.playerThrowsInitialDice(this.playerOnGUI.getID());
 		});
 		
@@ -284,6 +285,7 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void rollInitialDice(int idOfPlayer, int finalValue) {
+		System.out.println(idOfPlayer + " " + finalValue);
 		Thread thread = new Thread(() -> {
 			for(int i = 0; i < 15; i++) {
 				int k = (i * 7) % 6 + 1;
@@ -409,7 +411,7 @@ public class GamePaneController implements Initializable{
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	System.out.println("ends turn / phase " + playerOnGUI.getName() + " " + playerOnGUI.getID());
+		    	System.out.println(playerOnGUI.getName() + " " + playerOnGUI.getID() + "clicked next phase button");
 		    	singlePlayerHandler.endPhaseTurn(currentPeriod, currentPhase, playerOnGUI.getID());
 
 		    }
@@ -738,6 +740,7 @@ public class GamePaneController implements Initializable{
 		CountryName country = CountryName.valueOf(countryName);
 		switch (gameType) {
 		case SinglePlayer:
+			System.out.println(this.playerOnGUI.getName() + " " + idOfPlayer + " clicked " + country.toString());
 			singlePlayerHandler.clickCountry(idOfPlayer, country);
 			break;
 
@@ -846,7 +849,7 @@ public class GamePaneController implements Initializable{
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	singlePlayerHandler.confirmNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()), choosePane);
+		    	singlePlayerHandler.confirmNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()), choosePane, playerOnGUI.getID());
 		    }
 		});
         

@@ -56,6 +56,7 @@ public class GameState {
 		alivePlayers = new ArrayList<Player>();
 		playerTroopsLeft = new HashMap<Player, Integer>();
 		playersDiceThrown = new HashMap<Player, Integer>();
+		riskCardsInPlayers = new HashMap<Player, ArrayList<Card>>();
 		numberOfCardsTurnedIn = 0;
 		currentTurnPhase = null;
 		currentGamePeriod = Period.DICETHROW;

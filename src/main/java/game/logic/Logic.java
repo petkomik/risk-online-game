@@ -226,6 +226,9 @@ public class Logic {
 			if(gameState.getAlivePlayers().contains(gameState.getPlayers().get(idOfPlayer))) {
 				if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
 					if(gameState.getCurrentTurnPhase().equals(phase)) {
+						if(phase.equals(Phase.REINFORCE)) {
+							return gameState.getPlayerTroopsLeft().get(gameState.getCurrentPlayer()) == 0;
+						}
 						return true;	
 					}
 				}
@@ -333,6 +336,27 @@ public class Logic {
 			}
 		}
 				
+		return false;
+	}
+	
+	public static boolean playerReinforceConfirmedIsOk(GameState gameState, Player player, 
+			CountryName from, CountryName to, int troopsNumber) {
+		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
+			if(gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
+				if(gameState.getCurrentPlayer().getID() == player.getID()) {
+					if(gameState.getTerritories().get(from).getOwnedByPlayer()
+							.equals(gameState.getCurrentPlayer()) ) {
+						if(gameState.getTerritories().get(to).getOwnedByPlayer()
+								.equals(gameState.getCurrentPlayer())) {
+							if(gameState.getTerritories().get(from).getNumberOfTroops() >= troopsNumber) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		return false;
 	}
 }

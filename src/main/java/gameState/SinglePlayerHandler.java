@@ -47,8 +47,8 @@ public class SinglePlayerHandler {
 	 * REINFORCE, ATTACK, FORTIFY
 	 */
 	
-	public void confirmNumberOfTroops(CountryName country, int troops, ChoosePane choosePane) {
-		this.gameHandler.confirmTroopsToCountry(country, troops, choosePane);
+	public void confirmNumberOfTroops(CountryName country, int troops, ChoosePane choosePane, int idOfPlayer) {
+		this.gameHandler.confirmTroopsToCountry(country, troops, choosePane, idOfPlayer);
 	}
 	
 	/*
@@ -175,13 +175,9 @@ public class SinglePlayerHandler {
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
-	
-	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
-	}
-	
-	public void playerCanAttackFromCountryOnGUI(CountryName countryName, 
-			ArrayList<CountryName> unreachableCountries) {
-		
+	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int number) {
+		//player should own both already
+		//simply move from one to other
 	}
 	
 	public void openBattleFrameOnGUI(Continent continentAt, CountryName countryNameAt, 
@@ -191,29 +187,27 @@ public class SinglePlayerHandler {
 		// sets the battle visible and initiates it with these parameters
 	}
 	
+	public void endBattleOnGUI() {
+		//makes battle screne invisible
+	}
+	
+	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
+	}
 	
 	public void receiveRiskCardOnGUI(Card card, int idOfPlayer) {
 		
 	}
 	
-	public void playerCanFortifyFromCountryOnGUI(CountryName countryName, 
-			ArrayList<CountryName> fortifiableCountries) {
-		
+	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 
+			ArrayList<CountryName> unreachableCountries) {
+		// for attack and fortify phase when player clicks on the "from" territory
 	}
 	
-	
-	public void endBattleOnGUI() {
-		//makes battle screne invisible
+	public void resetPhaseOnGUI() {
+		//the player clicked cancel in confirm number of troops
+		//for fortify disable all enemy territory, enable all owned, remove selecte
+		//attack other way around
 	}
-	
-	
-	public void resetFortifyingPhaseOnGUI() {
-//		The player decided not to fortify from this country, or clicked cancel in the choose pane
-//		reset phase
-	}
-	
-	public void resetAttackingPhaseOnGUI() {
-		
-	}
+
 
 }

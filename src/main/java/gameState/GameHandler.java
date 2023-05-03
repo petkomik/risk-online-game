@@ -54,8 +54,7 @@ public class GameHandler {
 	 * method addTroopsToCountryFortify will add troops to player and remove from country
 	 */
 	
-	public void confirmTroopsToCountry(CountryName country, int troops, ChoosePane choosePane) {
-
+	public void confirmTroopsToCountry(CountryName country, int troops, ChoosePane choosePane, int idOfPlayer) {
 		switch(choosePane) {
 		case FORTIFY: 
 			this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
@@ -72,7 +71,7 @@ public class GameHandler {
 				break;
 			}
 			break;
-		case ATTACK_ATTACK:
+		case ATTACK_ATTACK: //open battle frame
 			switch (this.gameType) {
 			case SinglePlayer:
 				this.singlePlayerHandler.openBattleFrameOnGUI(this.gameState.getTerritories()
@@ -88,18 +87,18 @@ public class GameHandler {
 			case Tutorial:
 				break;
 			}
-			
-			
 			break;
-		case ATTACK_COLONISE:
+		case ATTACK_COLONISE: //move troops form x to y
 			this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
-			.removeNumberOfTroops(troops);
+				.removeNumberOfTroops(troops);
+			this.gameState.getTerritories().get(country).setOwnedByPlayer(
+					this.gameState.getPlayers().get(idOfPlayer));
 			this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
 			switch (this.gameType) {
 			case SinglePlayer:
-				this.singlePlayerHandler.setTroopsOnTerritoryAndLeftOnGUI(country, 
-						this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry()).getNumberOfTroops(), 
-						this.gameState.getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer()));
+				this.singlePlayerHandler.possesCountryOnGUI(country, 0);
+				this.singlePlayerHandler.moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastAttackingCountry(), 
+						country, troops);
 				break;
 			case Multiplayer:
 				break;
@@ -108,13 +107,27 @@ public class GameHandler {
 			}
 			this.gameState.setLastAttackingCountry(null);
 			break;
-		case REINFORCE:
-			this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
-			this.gameState.subtractTroopsToPlayer(this.gameState.getCurrentPlayer(), troops);
+		case REINFORCE: //move troops from own territory x to own y
+			if(Logic.playerReinforceConfirmedIsOk(gameState, gameState.getPlayers().get(idOfPlayer), gameState.getLastAttackingCountry(), 
+					country, troops)) {
+				this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
+					.removeNumberOfTroops(troops);
+				this.gameState.getTerritories().get(country).addNumberOfTroops(troops);
+				switch (this.gameType) {
+				case SinglePlayer:
+					this.singlePlayerHandler.moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastFortifyingCounty(), 
+							country, troops);
+					break;
+				case Multiplayer:
+					break;
+				case Tutorial:
+					break;
+				}
+			}
+			this.gameState.setLastFortifyingCounty(null);
 			break;
 			
 		}
-
 	}
 	
 	/*
@@ -152,15 +165,11 @@ public class GameHandler {
 			if(Logic.claimTerritory(player, this.gameState, country)) {
 				this.gameState.setOwnedByTerritory(country, player);
 				this.gameState.updateTroopsOnTerritory(country, 1);
+				int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
+				this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
 				switch (this.gameType) {
 				case SinglePlayer:
-					int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
-					this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
 					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID());
-					if(Logic.allTerritoriesClaimed(gameState)) {
-						gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
-						this.singlePlayerHandler.setPeriodOnGUI(Period.INITIALDEPLOY);
-					}
 					break;
 				case Multiplayer:
 					break;
@@ -171,22 +180,14 @@ public class GameHandler {
 			break;
 		case INITIALDEPLOY:
 			if(Logic.canInitialDeployTroopsToTerritory(this.gameState, player, country)) {
+				this.gameState.getTerritories().get(country).addNumberOfTroops(1);
+				int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
+				this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
 				switch (this.gameType) {
 				case SinglePlayer:
-					this.gameState.getTerritories().get(country).addNumberOfTroops(1);
-					int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player) - 1; 
-					this.gameState.getPlayerTroopsLeft().replace(player, numTroopsPlayer);
 					this.singlePlayerHandler.setTroopsOnTerritoryAndLeftOnGUI(country, 
 							gameState.getTerritories().get(country).getNumberOfTroops(), 
 							numTroopsPlayer);
-					if(Logic.isDeployPeriodOver(this.gameState)) {
-						gameState.setCurrentGamePeriod(Period.MAINPERIOD);
-						this.singlePlayerHandler.setPeriodOnGUI(Period.MAINPERIOD);
-						
-						gameState.setCurrentTurnPhase(Phase.REINFORCE);
-						this.singlePlayerHandler.setPhaseOnGUI(Phase.REINFORCE);
-						this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
-					}
 					break;
 				case Multiplayer:
 					break;
@@ -221,7 +222,7 @@ public class GameHandler {
 					this.gameState.setLastAttackingCountry(country);
 					switch(this.gameType) {
 					case SinglePlayer:
-						this.singlePlayerHandler.playerCanAttackFromCountryOnGUI(country, unreachableCountries);
+						this.singlePlayerHandler.selectTerritoryAndSetDisabledTerritoriesOnGUI(country, unreachableCountries);
 						break;
 					case Multiplayer:
 						break;
@@ -258,7 +259,7 @@ public class GameHandler {
 									.getOwnedByPlayer().equals(player));
 							switch(this.gameType) {
 							case SinglePlayer:
-								this.singlePlayerHandler.playerCanFortifyFromCountryOnGUI(country, fortifiableCountries);
+								this.singlePlayerHandler.selectTerritoryAndSetDisabledTerritoriesOnGUI(country, fortifiableCountries);
 								break;
 							case Multiplayer:
 								break;
@@ -269,7 +270,7 @@ public class GameHandler {
 					} else if(this.gameState.getLastFortifyingCounty() == country){
 						switch(this.gameType) {
 						case SinglePlayer:
-							this.singlePlayerHandler.resetFortifyingPhaseOnGUI();
+							this.singlePlayerHandler.resetPhaseOnGUI();;
 							this.gameState.setLastFortifyingCounty(null);						
 							break;
 						case Multiplayer:
@@ -306,23 +307,12 @@ public class GameHandler {
 		if(period.equals(Period.MAINPERIOD)) {
 			if(Logic.playerEndsPhase(phase, idOfPlayer, this.gameState)) {
 				switch (phase) {
-				case FORTIFY:
+				case REINFORCE:
 					this.gameState.setCurrentTurnPhase(Phase.ATTACK);
 					switch(this.gameType) {
-						case SinglePlayer:
-							this.singlePlayerHandler.setPhaseOnGUI(Phase.ATTACK);
-							break;
-						case Multiplayer:
-							break;
-						case Tutorial:
-							break;
-					}
-					break;
-				case ATTACK:
-					this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
-					switch(this.gameType) {
 					case SinglePlayer:
-						this.singlePlayerHandler.setPhaseOnGUI(Phase.REINFORCE);
+						System.out.println("Attack Phase ended for " + idOfPlayer);
+						this.singlePlayerHandler.setPhaseOnGUI(Phase.ATTACK);
 						break;
 					case Multiplayer:
 						break;
@@ -330,17 +320,51 @@ public class GameHandler {
 						break;
 					}
 					break;
-				case REINFORCE:
+				case ATTACK:
+					this.gameState.setCurrentTurnPhase(Phase.FORTIFY);
+					switch(this.gameType) {
+					case SinglePlayer:
+						System.out.println("Attack Phase ended for " + idOfPlayer);
+						this.singlePlayerHandler.setPhaseOnGUI(Phase.FORTIFY);
+						break;
+					case Multiplayer:
+						break;
+					case Tutorial:
+						break;
+					}
+					break;
+				case FORTIFY:
+					this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
+					this.gameState.setNextPlayer();
+					switch(this.gameType) {
+					case SinglePlayer:
+						System.out.println("Fortify Phase ended for " + idOfPlayer);
+						this.singlePlayerHandler.setPhaseOnGUI(Phase.REINFORCE);
+						this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+						if(this.gameState.getCurrentPlayer().isAI()) {
+							// calls the AI 
+						} else {
+							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), null);
+						}
+						break;
+					case Multiplayer:
+						break;
+					case Tutorial:
+						break;
+					}
 					break;
 				}
+			} else {
+				System.out.println("Can't end turn yet " + idOfPlayer);
 			}
+			
 		} else {
 			if(Logic.playerEndsTurn(period, idOfPlayer, this.gameState)) {
 				switch(period) {
 				case DICETHROW:
 					if(Logic.isDiceThrowPeriodOver(this.gameState,  idOfPlayer)) {
-						this.gameState.setCurrentPlayer(Logic.getFirstPlayer(gameState).getID());
 						this.gameState.setCurrentGamePeriod(Period.COUNTRYPOSESSION);
+						this.gameState.setCurrentPlayer(Logic.getFirstPlayer(gameState).getID());
 						switch(this.gameType) {
 						case SinglePlayer:
 							System.out.println("dice throw is over");
@@ -349,10 +373,8 @@ public class GameHandler {
 							if(this.gameState.getCurrentPlayer().isAI()) {
 								// calls the AI 
 							} else {
-								this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), null);
-								
+								this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), null);	
 							}
-							
 							break;
 						case Multiplayer:
 							break;
@@ -379,12 +401,71 @@ public class GameHandler {
 					}
 					break;
 				case COUNTRYPOSESSION:
+					if(Logic.allTerritoriesClaimed(gameState)) {
+						gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
+						switch(this.gameType) {
+						case SinglePlayer:
+							this.singlePlayerHandler.setPeriodOnGUI(Period.INITIALDEPLOY);
+							break;
+						case Multiplayer:
+							break;
+						case Tutorial:
+							break;
+						}
+					} 
+					gameState.setNextPlayer();
+					switch(this.gameType) {
+					case SinglePlayer:
+						this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+						if(this.gameState.getCurrentPlayer().isAI()) {
+							// calls the AI 
+						} else {
+							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), null);
+						}
+						break;
+					case Multiplayer:
+						break;
+					case Tutorial:
+						break;
+					}
 					break;
 				case INITIALDEPLOY:
+					if(Logic.isDeployPeriodOver(this.gameState)) {
+						gameState.setCurrentGamePeriod(Period.MAINPERIOD);						
+						gameState.setCurrentTurnPhase(Phase.REINFORCE);
+						gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
+						switch(this.gameType) {
+						case SinglePlayer:
+							this.singlePlayerHandler.setPeriodOnGUI(Period.MAINPERIOD);
+							this.singlePlayerHandler.setPhaseOnGUI(Phase.REINFORCE);
+							this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
+							break;
+						case Multiplayer:
+							break;
+						case Tutorial:
+							break;
+						}
+					}
+					gameState.setNextPlayer();
+					switch(this.gameType) {
+					case SinglePlayer:
+						this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+						if(this.gameState.getCurrentPlayer().isAI()) {
+							// calls the AI 
+						} else {
+							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
+									this.gameState.getRiskCardsInPlayers().get(this.gameState.getCurrentPlayer()));
+						}
+						break;
+					case Multiplayer:
+						break;
+					case Tutorial:
+						break;
+					}
 					break;
-				case MAINPERIOD:
+				case MAINPERIOD: //not here
 					break;
-				default:
+				default: //no szch case
 					break;
 				}
 			}
