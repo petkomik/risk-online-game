@@ -1,7 +1,9 @@
 package game.gui;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,6 +24,7 @@ import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -1109,27 +1112,50 @@ public class GamePaneController implements Initializable{
 
 	public void openBattleFrame(Continent continentAt, CountryName countryNameAt, 
 			Continent continentDf, CountryName countryNameDf,
-			Player playerAt, Player playerDf, boolean attackerGui,
-			int troopsAt, int troopsDf, GameType gameType) {
+			int playerAt, int playerDf, int troopsAt, int troopsDf, GameType gameType) {
 		battlePane = new Pane();
 		battlePane.setPrefSize(w, h);
 		battlePane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		Player attackerPlayer = this.lobby.getPlayerList().stream()
+				  .filter(player -> playerAt == player.getID())
+				  .findAny()
+				  .orElse(null);
+		Player defenderPlayer = this.lobby.getPlayerList().stream()
+				  .filter(player -> playerDf == player.getID())
+				  .findAny()
+				  .orElse(null);
+		boolean attacker = this.playerOnGUI.getID() == playerAt;
 
 		try {
-			VBox battleFrame = new BattleFrameController(continentAt, countryNameAt, continentDf, countryNameDf, playerAt, 
-					playerDf, attackerGui, troopsAt, troopsDf, gameType, this.singlePlayerHandler);
-			battleFrame.setPrefSize(0.7 * w, 0.7 * h);
-			battleFrame.setLayoutX((w - battleFrame.getPrefWidth()) / 2.0);
-			battleFrame.setLayoutY((h - battleFrame.getPrefHeight()) / 2.0);
+			BattleFrameController battleFrame = new BattleFrameController(continentAt, countryNameAt, continentDf, countryNameDf,
+					attackerPlayer, defenderPlayer, attacker, troopsAt, troopsDf, gameType, this.singlePlayerHandler);
+			battleFrame.setPrefSize(w, h);
 			battlePane.getChildren().add(battleFrame);
 			gameBoard.getChildren().add(battlePane);
+			battleFrame.setCorrectTroops();
+			Stage stage = (Stage)gameBoard.getScene().getWindow();
+			stage.getScene().heightProperty().addListener(new ChangeListener<Number>() {
+			    @Override 
+			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+			    	if(newSceneHeight.doubleValue() != oldSceneHeight.doubleValue()) {
+					try {
+						battleFrame.setCorrectTroops();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+			    	}
+			    }
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	
 	public void closeBattleFrame() {
-		battlePane.setVisible(false);
+		this.battlePane.setVisible(false);
+		this.battlePane.getChildren().removeIf(x -> true);
+		
 	}
 	
 	public void showException(String message) {

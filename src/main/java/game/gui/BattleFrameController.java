@@ -56,8 +56,6 @@ public class BattleFrameController extends VBox {
 	private String defendingPNG;
 	private int troopsInAttackAt;
 	private int troopsInAttackDf;
-	private Player attackingPlayer;
-	private Player defendingPlayer;
 	private String attackingAvatar;
 	private String defendingAvatar;
 	private Color attackerColor;
@@ -132,8 +130,6 @@ public class BattleFrameController extends VBox {
 		this.defendingDice =  Math.min(2, this.troopsInAttackDf);
 		this.dicesAttacker = new int[this.maxDiceToThrow];
 		this.dicesDefender = new int[this.defendingDice];
-		this.attackingPlayer = null;
-		this.defendingPlayer = null;
 		this.attackingAvatar = Parameter.avatarsdir + "blonde-boy.png";
 		this.defendingAvatar = Parameter.avatarsdir + "ginger-girl.png";
 		this.attackerColor = Parameter.blueColor;
@@ -162,17 +158,15 @@ public class BattleFrameController extends VBox {
 		this.defendingDice =  Math.min(2, this.troopsInAttackDf);
 		this.dicesAttacker = new int[this.maxDiceToThrow];
 		this.dicesDefender = new int[this.defendingDice];
-		this.attackingPlayer = playerAt;
-		this.defendingPlayer = playerDf;
 		this.attackingAvatar = playerAt.getAvatar();
 		this.defendingAvatar = playerDf.getAvatar();
 		this.attackerColor = Color.web(playerAt.getColor());
 		this.defenderColor = Color.web(playerDf.getColor());
-		this.throwBtn.setVisible(attackerGui);
 		this.cyclesCompleted = 0;
 		this.gameType = gameType;
 		this.singleplayerHandler = singlePlayerHandler;
 		setup();
+		this.throwBtn.setVisible(attackerGui);
 
 	}
 
@@ -307,7 +301,7 @@ public class BattleFrameController extends VBox {
 		circleTroopsAt.setFill(Color.WHITE);
 		circleTroopsAt.setStroke(Color.WHITE);
 		circleTroopsAt.setStrokeWidth(0);
-		
+
 		troopsTextAt = new Label(String.valueOf(this.troopsInAttackAt));
 		troopsTextAt.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD, 34 * menuRatio));
 		troopsTextAt.setTextFill(Color.web("#303030"));
@@ -578,7 +572,7 @@ public class BattleFrameController extends VBox {
 		Territory territ;
 		int numberTroops;
 		
-		double heightFrame =  this.getHeight();
+		double heightFrame =  MainApp.screenHeight;
 		double multiplier = Math.min(1, heightFrame / 1000);
 		multiplier *= 0.8;
 		

@@ -1,6 +1,7 @@
 package gameState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import game.Lobby;
@@ -243,8 +244,8 @@ public class GameHandler {
 							.get(this.gameState.getLastAttackingCountry()).getContinent(), 
 							this.gameState.getLastAttackingCountry(),
 							this.gameState.getTerritories().get(country).getContinent(), country, 
-							this.gameState.getCurrentPlayer(),
-							this.gameState.getTerritories().get(country).getOwnedByPlayer(), 
+							this.gameState.getCurrentPlayer().getID(),
+							this.gameState.getTerritories().get(country).getOwnedByPlayer().getID(), 
 							troops, this.gameState.getTerritories().get(country).getNumberOfTroops());
 					break;
 				case Multiplayer:

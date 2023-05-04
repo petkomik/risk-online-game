@@ -73,6 +73,7 @@ public class GameState {
 		for (Player player : lobby.getPlayerList()) {
 			this.players.put(player.getID(), player);
 			this.alivePlayers.add(player);
+			this.riskCardsInPlayers.put(player.getID(), new ArrayList<Card>());
 		}
 		
 	}

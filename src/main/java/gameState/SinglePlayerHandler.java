@@ -11,6 +11,7 @@ import game.exceptions.WrongPeriodException;
 import game.exceptions.WrongPhaseException;
 import game.exceptions.WrongTroopsCountException;
 import game.gui.GamePaneController;
+import game.logic.GameType;
 import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
@@ -189,10 +190,10 @@ public class SinglePlayerHandler {
 	
 	public void openBattleFrameOnGUI(Continent continentAt, CountryName countryNameAt, 
 								Continent continentDf, CountryName countryNameDf,
-								Player playerAt, Player playerDf,
+								int playerAt, int playerDf,
 								int troopsAt, int troopsDf) {
-		// sets the battle visible and initiates it with these parameters
-		// boolean attackerGui playerAt == playerOnGUI
+		this.gamePaneController.openBattleFrame(continentAt, countryNameAt, continentDf, countryNameDf, 
+				playerAt, playerDf, troopsAt, troopsDf, GameType.SinglePlayer);
 	}
 	
 	public void endBattleOnGUI() {

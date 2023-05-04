@@ -16,6 +16,7 @@ public class Card implements Serializable{
 	private CountryName countryName;
 	private String pngDir;
 	private boolean isJoker;
+	private int ID;
 	
 	private static CountryName[] infantrySymbol = new CountryName[] {CountryName.Alaska, 
 			CountryName.Afghanistan, CountryName.Alberta, CountryName.Argentina, 
@@ -88,5 +89,9 @@ public class Card implements Serializable{
 		ID = iD;
 	}
 	
-	private int ID;
+    @Override
+    public String toString() {
+        return this.getID() + " " + this.cardValue;
+    }
+	
 }

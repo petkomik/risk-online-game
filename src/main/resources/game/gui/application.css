@@ -2,22 +2,16 @@
 
 /*#backButton, #createProfileButton, #playButton */
 
-.label{
-	-fx-text-fill: white;
-
-}
 
 .plainBackground {
 	-fx-background-color: #4287f5;
 	
 }
-.mapBackground {
-	-fx-background-image:url("world-map.png");
-	-fx-background-size:cover;
-}
+
 .countries{
 	-fx-fill: #cc9966;
 }
+
 .countries:hover{
 	-fx-fill: #ac7339;
 }
