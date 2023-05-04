@@ -32,6 +32,20 @@ public class SinglePlayerHandler {
 	}
 	
 	/*
+	 * gets called from GUI when player throws initial dice to 
+	 * decide who gets to be first 
+	 * returns the value of the dice for the player
+	 * 
+	 * Input DICE_THROW Period 
+	 * 
+	 * INPUT + OUTPUT to GUI
+	 */
+	
+	public void playerThrowsInitialDice(int idOfPlayer) {
+		this.gameHandler.playerThrowsInitialDice(idOfPlayer);
+	}
+
+	/*
 	 * COUNTRYPOSESSION  Period
 	 * INITIALREINFORCEMENT Period
 	 * MAINPERIOD Period
@@ -41,6 +55,9 @@ public class SinglePlayerHandler {
 		this.gameHandler.clickCountry(id, country);
 	}
 	
+	public void cancelNumberOfTroops(CountryName country, ChoosePane choosePane, int idOfPlayer) {
+		this.gameHandler.cancelNumberOfTroops(country, choosePane, idOfPlayer);
+	}
 
 	/*
 	 * Called in the action event of confirm numbe ChoosingTroopsPane
@@ -87,19 +104,6 @@ public class SinglePlayerHandler {
 	}
 	
 	
-	/*
-	 * gets called from GUI when player throws initial dice to 
-	 * decide who gets to be first 
-	 * returns the value of the dice for the player
-	 * 
-	 * Input DICE_THROW Period 
-	 * 
-	 * INPUT + OUTPUT to GUI
-	 */
-	
-	public void playerThrowsInitialDice(int idOfPlayer) {
-		this.gameHandler.playerThrowsInitialDice(idOfPlayer);
-	}
 	
 	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
 		this.gamePaneController.rollInitialDice(idOfPlayer, i);
@@ -151,6 +155,7 @@ public class SinglePlayerHandler {
 	 * @param id id of the player
 	 * @param troopsLeft the amount of troops the player has to deploy
 	 */
+	
 	public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
 		this.gamePaneController.setCurrentPlayer(id);
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
@@ -203,14 +208,17 @@ public class SinglePlayerHandler {
 	
 	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 
 			ArrayList<CountryName> unreachableCountries) {
-		
+		this.gamePaneController.pointUpCountry(countryName);
+		for(CountryName country : unreachableCountries) {
+			this.gamePaneController.deactivateCountry(country);
+		}
 		// for attack and fortify phase when player clicks on the "from" territory
 	}
 	
-	public void resetPhaseOnGUI() {
-		//the player clicked cancel in confirm number of troops
-		//for fortify disable all enemy territory, enable all owned, remove selecte
-		//attack other way around
+	public void resetAllOnGUI() {
+//		sets all countries enableed
+//		all button enabled
+//		no point up
 	}
 
 

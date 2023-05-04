@@ -812,8 +812,8 @@ public class GamePaneController implements Initializable{
 		choosingTroopsPane.setVisible(true);
 		choosingTroopsPhaseLabel.setText(choosePane.toString());
 		this.numberLabel.setText(String.valueOf(minTroops));
-		if(currentPhase == Phase.ATTACK) {
-			falseButtonChoosingTroops.setVisible(false);
+		if(choosePane.equals(ChoosePane.ATTACK_COLONISE)) {
+			falseButtonChoosingTroops.setDisable(true);;
 		}
 		
 		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
@@ -830,7 +830,15 @@ public class GamePaneController implements Initializable{
             			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
             }
 	        });
-		falseButtonChoosingTroops.setOnAction(e -> clickFalseButtonChoosingTroops(e));
+		falseButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+		    	(new GameSound()).buttonClickForwardSound();
+		    	choosingTroopsPane.setVisible(false);
+		    	singlePlayerHandler.cancelNumberOfTroops(countryName, choosePane, playerOnGUI.getID());
+		    }
+		});
+		
 		trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
     			+ "	-fx-font-size: 30px;"
     			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
@@ -844,7 +852,8 @@ public class GamePaneController implements Initializable{
             			+ "	-fx-font-size: 30px;"
             			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
             }
-	        });
+        });
+        
         trueButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
@@ -858,12 +867,9 @@ public class GamePaneController implements Initializable{
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	
-		    	if (Integer.parseInt(numberLabel.getText()) > minTroops) {
-		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
-			    	numberLabel.setText(String.valueOf(i));		    	
-		    	}
-
+		    	int i = Integer.parseInt(numberLabel.getText());
+		    	i = i == minTroops ? maxTroops : --i;
+		    	numberLabel.setText(String.valueOf(i));		    	  
 		    }
 		});
 		
@@ -871,11 +877,9 @@ public class GamePaneController implements Initializable{
 		    @Override
 		    public void handle(ActionEvent event) {
 		    	(new GameSound()).buttonClickForwardSound();
-		    	
-		    	if (Integer.parseInt(numberLabel.getText()) < maxTroops) {
-		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
-		    		numberLabel.setText(String.valueOf(i));
-		    	}
+		    	int i = Integer.parseInt(numberLabel.getText());
+		    	i = i == maxTroops ? minTroops : ++i;
+		    	numberLabel.setText(String.valueOf(i));	
 		    }
 		});
 	}
@@ -1126,10 +1130,5 @@ public class GamePaneController implements Initializable{
 	private void clickLeaveGameButton(ActionEvent e) {
 		
 	}
-	private void clickTrueButtonChoosingTroops(ActionEvent e) {
-		
-	}
-	private void clickFalseButtonChoosingTroops(ActionEvent e) {
-		choosingTroopsPane.setVisible(false);
-	}
+
 }
