@@ -331,6 +331,7 @@ public class Client {
 							System.out.println(mJL.getLobby().getLobbyName());
 							break;
 						case MessageUpdateLobby:
+							System.out.println("new message recieved");
 							MessageUpdateLobby messageUpdateLobby = (MessageUpdateLobby) message;
 							System.out.println(messageUpdateLobby.getLobby().getLobbyName() + "Clinet 325");
 
