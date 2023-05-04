@@ -10,6 +10,7 @@ import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
 import game.models.Card;
+import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
 import gameState.ChoosePane;
@@ -148,6 +149,8 @@ public class GamePaneController implements Initializable{
 	private Pane dropOnPane1;
 	private Pane dropOnPane2;
 	private Pane dropOnPane3;
+	
+	private Pane battlePane;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -1042,6 +1045,8 @@ public class GamePaneController implements Initializable{
 		cardsPane.setVisible(true);
 	}
 	
+	
+	
 	public void turnCountryGrey(CountryName countryName) {
 		for(SVGPath s : countries) {
 			if(s.getId().equals(countryName.toString())) {
@@ -1073,6 +1078,14 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
+	public void resetCountryEffect(CountryName countryName) {
+		for(SVGPath s : countries) {
+			if(s.getId().equals(countryName.toString())) {
+		        s.setEffect(null);
+			}
+		}
+	}
+	
 	public void activateCountry(CountryName countryName) {
 		for(SVGPath s : countries) {
 			if(s.getId().equals(countryName.toString())) {
@@ -1099,6 +1112,30 @@ public class GamePaneController implements Initializable{
 	
 	public void endGame(ArrayList<Player> playersByRank) {
 		
+	}
+
+	public void openBattleFrame(Continent continentAt, CountryName countryNameAt, 
+			Continent continentDf, CountryName countryNameDf,
+			Player playerAt, Player playerDf, boolean attackerGui,
+			int troopsAt, int troopsDf, GameType gameType) {
+		battlePane = new Pane();
+		battlePane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+
+		try {
+			VBox battleFrame = new BattleFrameController(continentAt, countryNameAt, continentDf, countryNameDf, playerAt, 
+					playerDf, attackerGui, troopsAt, troopsDf, gameType, this.singlePlayerHandler);
+			battleFrame.setPrefSize(0.7 * w, 0.7 * h);
+			battleFrame.setLayoutX((w - battleFrame.getPrefWidth()) / 2.0);
+			battleFrame.setLayoutY((h - battleFrame.getPrefHeight()) / 2.0);
+			battlePane.getChildren().add(battleFrame);
+			gameBoard.getChildren().add(battlePane);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void closeBattleFrame() {
+		battlePane.setVisible(false);
 	}
 	
 	public void showException(String message) {
