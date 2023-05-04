@@ -16,6 +16,7 @@ import gameState.SinglePlayerHandler;
 public class Battle implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private final int troopsInAttackAtFinal;
 	private Continent continentAt;
 	private CountryName countryNameAt;
 	private	Continent continentDf;
@@ -30,8 +31,6 @@ public class Battle implements Serializable {
 	private String defenderColor;
 	private int maxDiceToThrow;
 	private int defendingDice;
-	private int[] dicesAttacker;
-	private int[] dicesDefender;
 	private GameType gameType; 
 	private int attackerID;
 	
@@ -46,16 +45,16 @@ public class Battle implements Serializable {
 		this.countryNameDf = countryNameDf;
 		this.attackingPNG = attackingPNG;
 		this.defendingPNG = defendingPNG;
-		this.troopsInAttackAt = troopsInAttackAt;
-		this.troopsInAttackDf = troopsInAttackDf;
 		this.attackingAvatar = attackingAvatar;
 		this.defendingAvatar = defendingAvatar;
 		this.attackerColor = attackerColor;
 		this.defenderColor = defenderColor;
+		this.troopsInAttackAtFinal = troopsInAttackAt;
+		this.troopsInAttackAt = troopsInAttackAt;
+		this.troopsInAttackDf = troopsInAttackDf;
 		this.maxDiceToThrow = maxDiceToThrow;
 		this.defendingDice = defendingDice;
-		this.dicesAttacker = dicesAttacker;
-		this.dicesDefender = dicesDefender;
+
 		this.gameType = gameType;
 		this.attackerID = attackerID;
 	}
@@ -181,21 +180,6 @@ public class Battle implements Serializable {
 		this.defendingDice = defendingDice;
 	}
 
-	public int[] getDicesAttacker() {
-		return dicesAttacker;
-	}
-
-	public void setDicesAttacker(int[] dicesAttacker) {
-		this.dicesAttacker = dicesAttacker;
-	}
-
-	public int[] getDicesDefender() {
-		return dicesDefender;
-	}
-
-	public void setDicesDefender(int[] dicesDefender) {
-		this.dicesDefender = dicesDefender;
-	}
 
 	public GameType getGameType() {
 		return gameType;
@@ -203,6 +187,10 @@ public class Battle implements Serializable {
 
 	public void setGameType(GameType gameType) {
 		this.gameType = gameType;
+	}
+
+	public int getTroopsInAttackAtFinal() {
+		return troopsInAttackAtFinal;
 	}
 
 	

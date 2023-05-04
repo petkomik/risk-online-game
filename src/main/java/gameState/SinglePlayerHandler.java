@@ -1,5 +1,6 @@
 package gameState;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,11 +102,16 @@ public class SinglePlayerHandler {
 	 * ATTACK Phase
 	 */
 	
-	public void battleDiceThrow(int[] numberOfDices) {
-		// TODO
+	public void battleDiceThrow() {
+		this.gameHandler.battleDiceThrow();
 	}
 	
-	
+	public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues,
+			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice)
+					throws FileNotFoundException {
+		this.gamePaneController.rollDiceBattle(attackerDiceValues, defenderDiceValues, 
+				troopsInAttackAt, troopsInAttackDf, numberOfDice);
+	}
 	
 	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
 		this.gamePaneController.rollInitialDice(idOfPlayer, i);
@@ -150,6 +156,10 @@ public class SinglePlayerHandler {
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
 	}
 	
+	public void conquerCountryOnGUI(CountryName country, int id, int troops) {
+		this.gamePaneController.conquerCountry(country, id, troops);
+	}
+	
 	/*
 	 * Changes the current player on the GUI by swapping to the correct
 	 * color and avatar, and setting the corrct number of troops
@@ -179,13 +189,18 @@ public class SinglePlayerHandler {
 		this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
 	}
 	
+	public void setTroopsOnTerritory(CountryName countryName, int numTroopsOfCountry) {
+		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
+	}
+	
 	public void setTroopsOnTerritoryAndLeftOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
 		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
-	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int number) {
-		//player should own both already
+	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom,int numberTo) {
+		this.gamePaneController.setNumTroops(from, numberFrom);		
+		this.gamePaneController.setNumTroops(to, numberTo);
 		//simply move from one to other
 	}
 	
@@ -194,7 +209,7 @@ public class SinglePlayerHandler {
 	}
 	
 	public void endBattleOnGUI() {
-		//makes battle screne invisible
+		this.gamePaneController.closeBattleFrame();
 	}
 	
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import game.Battle;
 import game.Lobby;
 import game.gui.BattleFrameController;
 import game.gui.GamePaneController;
@@ -38,15 +39,7 @@ public class GameState {
 	private ArrayList<Card> cards;
 	private CountryName lastAttackingCountry;
 	private CountryName lastFortifyingCounty;
-
-//	private int dicesAttacker[];
-//	private int dicesDefender[];
-	
-//	private LocalDateTime gameTimer;
-
-
-
-
+	private Battle battle;
 
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
@@ -239,6 +232,15 @@ public class GameState {
 	public int getTroopsLeftForCurrent() {
 		return this.playerTroopsLeft.get(this.currentPlayer.getID());
 		
+	}
+	
+	public Battle getBattle() {
+		return battle;
+	}
+
+
+	public void setBattle(Battle battle) {
+		this.battle = battle;
 	}
 	
 }

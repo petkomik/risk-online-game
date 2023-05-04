@@ -1,11 +1,14 @@
 package game.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import game.Battle;
 import game.exceptions.WrongCardsException;
 import game.exceptions.WrongCardsSetException;
 import game.exceptions.WrongCountryException;
@@ -82,7 +85,7 @@ public class Logic {
 	}
 
 	public static int getRandomDiceNumber() {
-		return (int) (Math.random() * 6) + 1;
+		return (int) (Math.floor(Math.random() * 5) + 1);
 	}
 
 	public static boolean claimTerritory(Player player, GameState gameState, CountryName territory) {
@@ -281,7 +284,6 @@ public class Logic {
 				}
 			}
 		}
-		
 		return false;
 	}
 
@@ -293,7 +295,11 @@ public class Logic {
 						if(!gameState.getTerritories().get(country).getOwnedByPlayer()
 								.equals(gameState.getCurrentPlayer())) {
 							if(!gameState.getLastAttackingCountry().equals(null)) {
-								return true;								
+								if(gameState.getTerritories().get(gameState.getLastAttackingCountry())
+										.getNeighboringTerritories()
+										.contains(gameState.getTerritories().get(country))) {									
+									return true;
+								}						
 							}
 						}
 					}
@@ -417,13 +423,13 @@ public class Logic {
 	
 	public static boolean playerAttackColoniseConfirmedIsOK(GameState gameState, int idOfPLayer, 
 			CountryName attacking, CountryName attacked, int numTroops) {
-		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
-			if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
-				if(gameState.getCurrentPlayer().getID() == idOfPLayer) {
+		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) { 				
+			if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {				
+				if(gameState.getCurrentPlayer().getID() == idOfPLayer) {			
 					if(gameState.getTerritories().get(attacking).getOwnedByPlayer()
-							.equals(gameState.getCurrentPlayer()) ) {
+							.equals(gameState.getCurrentPlayer()) ) {				
 						if(gameState.getTerritories().get(attacked).getOwnedByPlayer()
-								.equals(gameState.getCurrentPlayer())) {
+								.equals(gameState.getCurrentPlayer())) {			
 							if(gameState.getTerritories().get(attacking).getNumberOfTroops() >= numTroops) {
 								return true;
 							}
@@ -452,9 +458,80 @@ public class Logic {
 		return false;
 	}
 	
+	public static boolean battleDiceThrowIsOK(GameState gameState) {
+		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
+			if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
+				if(gameState.getCurrentPlayer().getID() == gameState.getBattle().getAttackerID()) {
+					if(gameState.getBattle().getTroopsInAttackAt() > 0 && 
+							gameState.getBattle().getTroopsInAttackDf() > 0) {
+						return true;
+					}
+				}
+			}
+		}	
+		return false;
+	}
 
 	public static boolean isGameOver(GameState gameState) {
 		return gameState.getAlivePlayers().size() == 1;
+	}
+
+	public static Battle battleDiceRollConfirmed(GameState gameState, 
+			int[] diceValuesAt, int[] diceValuesDf) {
+		Battle battle = gameState.getBattle();
+		int lastThrow = 0;
+		int maxDf = Arrays.stream(diceValuesDf).max().getAsInt();
+		int maxAt = Arrays.stream(diceValuesAt).max().getAsInt();
+		
+		if (maxAt > maxDf) {
+			lastThrow++;  
+		} else {
+			lastThrow--;  
+		}
+		
+		if(diceValuesDf.length == 2 && diceValuesAt.length > 1) {
+			int nextDf = Arrays.stream(diceValuesDf).min().getAsInt();
+			
+			int minAt = Arrays.stream(diceValuesAt).min().getAsInt();
+			int nextAt = Arrays.stream(diceValuesAt).sum() - minAt - maxAt ;
+			
+			if (nextAt > nextDf) {
+				lastThrow++;  
+			} else {
+				lastThrow--;  
+			}
+		}
+				
+		if(lastThrow < 0) {
+			battle.setTroopsInAttackAt(battle.getTroopsInAttackAt() + lastThrow);
+		} else if (lastThrow > 0) {
+			battle.setTroopsInAttackDf(battle.getTroopsInAttackDf() - lastThrow);
+		} else {
+			battle.setTroopsInAttackAt(battle.getTroopsInAttackAt() - 1);
+			battle.setTroopsInAttackDf(battle.getTroopsInAttackDf() - 1);
+		}
+		
+		battle.setMaxDiceToThrow(Math.min(3,  battle.getTroopsInAttackAt()));
+		battle.setDefendingDice(Math.min(2, battle.getTroopsInAttackDf()));
+
+		return battle;
+	}
+
+	public static int[] getBattleDiceValues(GameState gameState, boolean attacker) {
+		int[] values;
+		Random random = new Random();
+		
+		if(attacker) {
+			values = new int[gameState.getBattle().getMaxDiceToThrow()];			
+		} else {
+			values = new int[gameState.getBattle().getDefendingDice()];			
+		}
+		
+		for(int i = 0; i < values.length; i++) {
+			int k = random.nextInt(5)+1;
+			values[i] = k;
+		}		
+		return values;
 	}
 
 

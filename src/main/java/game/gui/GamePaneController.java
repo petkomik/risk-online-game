@@ -160,6 +160,8 @@ public class GamePaneController implements Initializable{
 	private Pane tutorialMainPane;
 	private Label titleLabel;
 	private Label explainationLabel;
+	private BattleFrameController battleFrame;
+
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -855,6 +857,12 @@ public class GamePaneController implements Initializable{
 		labelTroopsDisplay.get(countryName.toString()).setText(String.valueOf(1));
 		
 	}
+	
+	public void conquerCountry(CountryName country, int id, int troops) {
+		this.claimCountry(country, id);
+		labelTroopsDisplay.get(country.toString()).setText(String.valueOf(troops));
+	}
+	
 	public void setCurrentPlayer(int id) {
 		Player player = this.playerIdHash.get(id);
 		for(int i = 0; i < playerIDs.size(); i++) {
@@ -884,7 +892,10 @@ public class GamePaneController implements Initializable{
 		choosingTroopsPhaseLabel.setText(choosePane.toString());
 		this.numberLabel.setText(String.valueOf(minTroops));
 		if(choosePane.equals(ChoosePane.ATTACK_COLONISE)) {
-			falseButtonChoosingTroops.setDisable(true);;
+			falseButtonChoosingTroops.setDisable(true);
+		} else {
+			falseButtonChoosingTroops.setDisable(false);
+
 		}
 		
 		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
@@ -1194,8 +1205,8 @@ public class GamePaneController implements Initializable{
 		boolean attacker = this.playerOnGUI.getID() == battle.getAttackerID();
 
 		try {
-			BattleFrameController battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
-			battleFrame.setPrefSize(w, h);
+			this.battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
+			this.battleFrame.setPrefSize(w, h);
 			battlePane.getChildren().add(battleFrame);
 			gameBoard.getChildren().add(battlePane);
 			battleFrame.setCorrectTroops();
@@ -1217,6 +1228,12 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
+	public void rollDiceBattle(int[] attackerDiceValues, int[] defenderDiceValues,
+			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice)
+					throws FileNotFoundException {
+		this.battleFrame.rollBattleDice(attackerDiceValues, defenderDiceValues, 
+				troopsInAttackAt, troopsInAttackDf, numberOfDice);
+	}
 	
 	public void closeBattleFrame() {
 		this.battlePane.setVisible(false);

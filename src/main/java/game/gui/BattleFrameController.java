@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -46,13 +47,11 @@ import javafx.util.Duration;
 public class BattleFrameController extends VBox {
 	
 	// TODO
+	private int lastThrow;
 	private int maxDiceToThrow;
 	private int defendingDice;
 	private int[] dicesAttacker;
 	private int[] dicesDefender;
-	// negative attacker loses n troops, positive defender loses n,
-	// 0 both lose 1 {-2, -1, 0, 1, 2}
-	private int lastThrow;
 	private String attackingPNG;
 	private String defendingPNG;
 	private int troopsInAttackAt;
@@ -152,8 +151,6 @@ public class BattleFrameController extends VBox {
 		this.troopsInAttackDf = battle.getTroopsInAttackDf();
 		this.maxDiceToThrow = battle.getMaxDiceToThrow();
 		this.defendingDice =  battle.getDefendingDice();
-		this.dicesAttacker = battle.getDicesAttacker();
-		this.dicesDefender = battle.getDicesDefender();
 		this.attackingAvatar = battle.getAttackingAvatar();
 		this.defendingAvatar = battle.getDefendingAvatar();
 		this.attackerColor = Color.web(battle.getAttackerColor());
@@ -404,51 +401,16 @@ public class BattleFrameController extends VBox {
 
 		diceImagesAt = diceImageFactory(maxDiceToThrow, true);
 		diceImagesDf = diceImageFactory(defendingDice, false);
-		
-		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-		    	// TODO get info logic from gamestate
-		    	if (Integer.parseInt(numberLabel.getText()) > 1) {
-		    		int i = Integer.parseInt(numberLabel.getText()) - 1;
-			    	numberLabel.setText(String.valueOf(i));
-			    	dicesAttacker = new int[dicesAttacker.length - 1];
-			    	diceImagesAt.getChildren().remove(0);			    	
-		    	}
 
-		    }
-		});
-		
-		moreBtn.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-		    	// TODO get info logic from gamestate
-		    	if (Integer.parseInt(numberLabel.getText()) < maxDiceToThrow) {
-		    		int i = Integer.parseInt(numberLabel.getText()) + 1;
-			    	numberLabel.setText(String.valueOf(i));
-			    	dicesAttacker = new int[dicesAttacker.length + 1];
-			    	DiceFactory newDice;
-					try {
-						newDice = new DiceFactory((i*29)%6 + 1, true, menuRatio);
-				    	diceImagesAt.getChildren().add(newDice);
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					}
-
-					}
-		    	}
-		});
 
 		throwBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();				
+		    	(new GameSound()).buttonClickForwardSound();
+				throwBtn.setDisable(true);
 				switch(gameType) {
 				case SinglePlayer: 
-					int[] numberOfDices = new int[]{maxDiceToThrow, defendingDice};
-					singleplayerHandler.battleDiceThrow(numberOfDices);
+					singleplayerHandler.battleDiceThrow();
 					break;
 				case Multiplayer:
 					// TODO
@@ -607,60 +569,17 @@ public class BattleFrameController extends VBox {
 				50 * multiplier, 160 * multiplier));
 	}	
 	
-	public void updateWithResultFromThrow(int[] attackerDiceValues, int[] defenderDiceValues,
-			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice, int resultFromThrow) 
+	
+	public void rollBattleDice(int[] attackerDiceValues, int[] defenderDiceValues,
+			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice) 
 					throws FileNotFoundException {
 		this.troopsInAttackAt = troopsInAttackAt;
 		this.troopsInAttackDf = troopsInAttackDf;
-		troopsTextAt.setText(String.valueOf(troopsInAttackAt));
-		troopsTextDf.setText(String.valueOf(troopsInAttackDf));
 		this.maxDiceToThrow = numberOfDice[0];
 		this.defendingDice = numberOfDice[1];
 		this.dicesAttacker = attackerDiceValues;
 		this.dicesDefender = defenderDiceValues;
-		this.lastThrow = resultFromThrow;
-	}
-	
-	public void setupForNextThrow() throws FileNotFoundException {
-		this.numberLabel.setText(String.valueOf(this.maxDiceToThrow));
-		this.diceImagesDf.getChildren().removeIf(x -> true);
-		this.diceImagesDf = diceImageFactory(this.defendingDice, false);
-		this.diceImagesAt.getChildren().removeIf(x -> true);
-		this.diceImagesAt = diceImageFactory(this.maxDiceToThrow, true);
-	
-		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
-            DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
-            try {
-				dice.setImage(new Image(new FileInputStream(
-						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + ".png")));
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
-            final int m = k;
-        	diceImagesAt.getChildren().set(m, dice);
-		}
-		
-		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
-            DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
-            try {
-				dice.setImage(new Image(new FileInputStream(
-						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + "b.png")));
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
-            final int m = k;
-        	diceImagesDf.getChildren().set(m, dice);       
-		}
-		
-        throwBtn.setDisable(false);
-        lessBtn.setDisable(false);
-        moreBtn.setDisable(false);
-	}
-	
-	public void startDiceAnimation() {
-    	throwBtn.setDisable(true);
-        lessBtn.setDisable(true);
-        moreBtn.setDisable(true);
+        
         timeline = new Timeline(new KeyFrame(Duration.millis(80.0), e -> {
     		
     		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
@@ -693,61 +612,56 @@ public class BattleFrameController extends VBox {
     		
     		})
 		);
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.play();		
-	}
-	
-	public void setDiceStopAnimation(int[][] diceResults, int[] numberDiceNextThrow,
-			int result) throws InterruptedException, FileNotFoundException {
-		if (this.timeline != null) {
-		  timeline.stop();
-		}
+		timeline.setCycleCount(12);
+		timeline.play();
 		
-		this.dicesAttacker = diceResults[0];
-		this.dicesAttacker = diceResults[1];
-		this.lastThrow = result;
-		
-		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
-            DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
-            try {
-				dice.setImage(new Image(new FileInputStream(
-						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + ".png")));
+		timeline.setOnFinished(finish -> {
+			try {
+				this.timelineFinished(attackerDiceValues, defenderDiceValues);
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}
-            final int m = k;
-        	diceImagesAt.getChildren().set(m, dice);
+		});
+	}
+	
+	public void timelineFinished(int[] attackerDiceValues, int[] defenderDiceValues) throws FileNotFoundException {
+		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
+			DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
+			try {
+				dice.setImage(new Image(new FileInputStream(
+						Parameter.dicedir + "dice" + String.valueOf(attackerDiceValues[k]) + ".png")));
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+			final int m = k;
+			diceImagesAt.getChildren().set(m, dice);
 		}
 		
 		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
-            DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
-            try {
+			DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
+			try {
 				dice.setImage(new Image(new FileInputStream(
-						Parameter.dicedir + "dice" + String.valueOf(this.dicesAttacker[k]) + "b.png")));
+						Parameter.dicedir + "dice" + String.valueOf(defenderDiceValues[k]) + "b.png")));
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}
-            final int m = k;
-        	diceImagesDf.getChildren().set(m, dice);       
-		}
-		
-		if(this.lastThrow < 0) {
-		this.troopsInAttackAt -= 1 * this.lastThrow;
-		} else if (this.lastThrow > 0) {
-			this.troopsInAttackDf -= this.lastThrow;
-		} else {
-			this.troopsInAttackAt--;
-			this.troopsInAttackDf--;
-
+			final int m = k;
+			diceImagesDf.getChildren().set(m, dice);       
 		}
 		
 		this.setCorrectTroops();
-				
-		this.maxDiceToThrow = numberDiceNextThrow[0];
-		this.defendingDice = numberDiceNextThrow[1];
-		
 		troopsTextAt.setText(String.valueOf(this.troopsInAttackAt));
 		troopsTextDf.setText(String.valueOf(this.troopsInAttackDf));
-
+		
+		
+		while(this.diceImagesAt.getChildren().size() > this.maxDiceToThrow) {
+			this.diceImagesAt.getChildren().remove(0);
+		}
+		if(this.diceImagesDf.getChildren().size() > this.defendingDice) {
+			this.diceImagesDf.getChildren().remove(0);
+		}
+		
+		throwBtn.setDisable(false);
 	}
+	
 }

@@ -1,5 +1,6 @@
 package gameState;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -156,6 +157,7 @@ public class GameHandler {
 				} else if(Logic.playerAttackingCountry(country, idOfPlayer, this.gameState)) {
 					switch(this.gameType) {
 					case SinglePlayer:
+						System.out.println("opens meu");
 						this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
 								this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
 								.getNumberOfTroops() - 1, ChoosePane.ATTACK_ATTACK);
@@ -168,9 +170,11 @@ public class GameHandler {
 					}					
 				} 
 				break;
-			case FORTIFY:
+			case FORTIFY: 
 				if(Logic.playerFortifyingPosition(country, idOfPlayer, this.gameState)) {
 					if(this.gameState.getLastFortifyingCounty() == null) {
+						System.out.println("setting fortifying form " + country.toString());
+						this.gameState.setLastFortifyingCounty(country);						
 						if(this.gameState.getTerritories().get(country).getNumberOfTroops() > 1) {
 							ArrayList<CountryName> enemyCountries = new ArrayList<CountryName>();
 							enemyCountries.addAll(this.gameState.getTerritories().keySet());
@@ -187,10 +191,11 @@ public class GameHandler {
 							}
 						}
 					} else if(this.gameState.getLastFortifyingCounty() == country){
+						this.gameState.setLastFortifyingCounty(null);						
+						System.out.println("setting fortifying form null");
 						switch(this.gameType) {
 						case SinglePlayer:
 //							this.singlePlayerHandler.resetAllOnGUI();
-							this.gameState.setLastFortifyingCounty(null);						
 							break;
 						case Multiplayer:
 							break;
@@ -198,6 +203,7 @@ public class GameHandler {
 							break;
 						}
 					} else {
+						System.out.println("calling choose" + country.toString());
 						switch(this.gameType) {
 						case SinglePlayer:
 							this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
@@ -248,6 +254,7 @@ public class GameHandler {
 						dfTer.getContinent(), dfTer.getCountryName(), atTer.getAddressToPNG(), dfTer.getAddressToPNG(),
 						troops, dfTer.getNumberOfTroops(), atPly.getAvatar(), dfPly.getAvatar(), atPly.getColor(), 
 						dfPly.getColor(), Math.min(3,  troops), Math.min(2, dfTer.getNumberOfTroops()), this.gameType, atPly.getID());
+				this.gameState.setBattle(battle);
 				switch (this.gameType) {
 				case SinglePlayer:	
 					this.singlePlayerHandler.openBattleFrameOnGUI(battle);
@@ -268,7 +275,8 @@ public class GameHandler {
 				switch (this.gameType) {
 				case SinglePlayer:
 					this.singlePlayerHandler.moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastAttackingCountry(), 
-							country, troops);
+							country, this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry()).getNumberOfTroops(),
+							troops);
 					break;
 				case Multiplayer:
 					break;
@@ -287,7 +295,8 @@ public class GameHandler {
 				switch (this.gameType) {
 				case SinglePlayer:
 					this.singlePlayerHandler.moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastFortifyingCounty(), 
-							country, troops);
+							country, this.gameState.getTerritories().get(this.gameState.getLastFortifyingCounty())
+							.getNumberOfTroops(), troops);
 					break;
 				case Multiplayer:
 					break;
@@ -517,6 +526,66 @@ public class GameHandler {
 			case Tutorial:
 				break;
 			}
+		}
+	}
+	
+	public void battleDiceThrow() {
+		if(Logic.battleDiceThrowIsOK(gameState)) {
+			int[] diceValuesAt = Logic.getBattleDiceValues(gameState, true);
+			int[] diceValuesDf = Logic.getBattleDiceValues(gameState, false);
+			Battle changed = Logic.battleDiceRollConfirmed(gameState, 
+					diceValuesAt, diceValuesDf);
+			int[] numberOfDices = new int[] {changed.getMaxDiceToThrow(), changed.getDefendingDice()};
+			boolean overAt = changed.getTroopsInAttackAt() == 0; 
+			boolean overDf = changed.getTroopsInAttackDf() == 0;
+			if(overDf) {
+				this.gameState.getTerritories().get(changed.getCountryNameDf()).setOwnedByPlayer(
+						this.gameState.getPlayers().get(changed.getAttackerID()));
+			}
+			if(overAt || overDf) {
+				this.gameState.setBattle(null);
+				this.gameState.getTerritories().get(changed.getCountryNameAt())
+					.removeNumberOfTroops(changed.getTroopsInAttackAtFinal() - changed.getTroopsInAttackAt());
+				this.gameState.getTerritories().get(changed.getCountryNameDf())
+					.setNumberOfTroops(changed.getTroopsInAttackDf());
+			} else {
+				this.gameState.setBattle(changed);
+			}
+			
+			switch(this.gameType) {
+			case SinglePlayer:
+				try {
+					this.singlePlayerHandler.rollDiceBattleOnGUI(diceValuesAt, diceValuesDf, 
+							changed.getTroopsInAttackAt(), changed.getTroopsInAttackDf(),
+							numberOfDices);
+					if(overAt || overDf) {
+						this.singlePlayerHandler.endBattleOnGUI();
+						this.singlePlayerHandler.setTroopsOnTerritory(changed.getCountryNameAt(),
+								this.gameState.getTerritories().get(changed.getCountryNameAt())
+								.getNumberOfTroops());
+						this.singlePlayerHandler.setTroopsOnTerritory(changed.getCountryNameDf(), 
+								this.gameState.getTerritories().get(changed.getCountryNameDf())
+								.getNumberOfTroops());
+					}
+					if(overDf) {
+						this.singlePlayerHandler.conquerCountryOnGUI(changed.getCountryNameDf(), 
+								this.gameState.getCurrentPlayer().getID(), 0);
+						this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(changed.getCountryNameDf(), 
+								Math.min(Math.min(changed.getTroopsInAttackAtFinal(), 3),		
+										this.gameState.getTerritories().get(changed.getCountryNameAt())
+										.getNumberOfTroops() - 1), 
+								this.gameState.getTerritories().get(changed.getCountryNameAt())
+								.getNumberOfTroops() - 1, ChoosePane.ATTACK_COLONISE);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case Multiplayer:
+				break;
+			case Tutorial:
+				break;
+			}	
 		}
 	}
 	
