@@ -88,7 +88,9 @@ public class LobbyMenuController extends StackPane {
 	
 	private HBox topBannerParent;
 	private HBox topBannerContent;
-	private ArrowButton backButton;
+	private static ArrowButton backButton;
+	
+
 	private Label lobbyTextBanner;
 	private DesignButton chatButton;
 	private HBox chatDiv;
@@ -448,6 +450,7 @@ public class LobbyMenuController extends StackPane {
 					e.printStackTrace();
 				}
 				
+				
 				stage.show();
 	
 		    	}
@@ -656,15 +659,10 @@ public class LobbyMenuController extends StackPane {
 			playerCardsPane.getChildren().add(plyc);
 		}
 	}
+	public static ArrowButton getBackButton() {
+		return backButton;
+	}
 	
-	/**
-     * 
-     * @param fxml, file name without the ending .fxml
-     * @return Parent object, to be set as a root in a Scene object
-     * @throws IOException
-     * 
-     * This method is responsible for loading a fxml file
-     */
 	private static Parent loadFXML(String fxml) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
 		return fxmlLoader.load();

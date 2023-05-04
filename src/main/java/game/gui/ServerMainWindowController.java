@@ -8,6 +8,7 @@ import java.sql.ClientInfoStatus;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
+
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatButton;
@@ -15,6 +16,7 @@ import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Player;
 import game.models.PlayerSingle;
 import general.*;
 import javafx.application.Application;
@@ -53,6 +55,7 @@ import network.messages.MessageDisconnect;
 import network.messages.MessageJoinLobby;
 import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
+import network.messages.MessageUpdateLobby;
 
 /**
  * 
@@ -94,17 +97,15 @@ public class ServerMainWindowController extends StackPane {
 	private DesignButton hostGameButton; // *
 	private DesignButton joinGameButton; // *
 	private Button refreshButton; // *
-	
+
 	private static LobbyMenuController lobbyMenuController;
 	private static VBox vBoxLobbyMenuController;
-	
+
 	private static ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
 	private static volatile VBox vbox; // Lobbies in the scrollPane
 	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
 	public static HashMap<String, Lobby> lobbyList;
 	public static Lobby selectedLobby;
-
-	
 
 	static Server server;
 	static Client client;
@@ -168,7 +169,8 @@ public class ServerMainWindowController extends StackPane {
 				+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
 		topBannerContent.setMaxWidth(1000 * ratioBanner);
 		topBannerContent.setMinWidth(800 * ratioBanner);
-		topBannerContent.setPadding(new Insets(10 * ratioBanner, 150 * ratioBanner, 10 * ratioBanner, 30 * ratioBanner));
+		topBannerContent
+				.setPadding(new Insets(10 * ratioBanner, 150 * ratioBanner, 10 * ratioBanner, 30 * ratioBanner));
 		topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
 		topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
 		topBannerContent.setPrefHeight(100 * ratioBanner);
@@ -187,8 +189,8 @@ public class ServerMainWindowController extends StackPane {
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
 
-		chatButton = new ChatButton(new Insets(10 * ratioBanner, 20 * ratioBanner, 10 * ratioBanner, 20 * ratioBanner), 30, 28 * ratioBanner,
-				170 * ratio, true);
+		chatButton = new ChatButton(new Insets(10 * ratioBanner, 20 * ratioBanner, 10 * ratioBanner, 20 * ratioBanner),
+				30, 28 * ratioBanner, 170 * ratio, true);
 		chatButton.setAlignment(Pos.CENTER);
 		chatDiv = new HBox();
 		chatDiv.getChildren().add(chatButton);
@@ -321,12 +323,13 @@ public class ServerMainWindowController extends StackPane {
 		 */
 		lobbyMenuController = new LobbyMenuController();
 		vBoxLobbyMenuController = new VBox();
-		
+
 		vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
 		vBoxLobbyMenuController.setVisible(false);
 		vBoxLobbyMenuController.setPickOnBounds(true);
 
-		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane, vBoxLobbyMenuController);
+		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane,
+				vBoxLobbyMenuController);
 	}
 
 	/*
@@ -426,9 +429,9 @@ public class ServerMainWindowController extends StackPane {
 				// TODO have to set the my lobby here
 				// the lobby in that we get in client and set as myLobby(clientsLobby) is the
 				// lobby of the other person
-				
+
 				Lobby aLobby = new Lobby();
-				
+
 				aLobby.joinLobby(new PlayerSingle(client.getProfile()));
 				BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
 					int i = 1;
@@ -442,15 +445,14 @@ public class ServerMainWindowController extends StackPane {
 				};
 				addLobby.accept(client.getProfile().getUserName(), aLobby);
 				System.out.println(aLobby.getLobbyName());
-				
+
 				client.sendMessage(new MessageCreateLobby(aLobby));
 				client.getLobbies().put(aLobby.getLobbyName(), aLobby);
-				
-				drawLobbyMenu(aLobby);
-					
-					System.out.println("im in lobby " + aLobby.getLobbyName());
-					//stage.getScene().setRoot(lobbyMenuController);
 
+				drawLobbyMenu(aLobby);
+
+				System.out.println("im in lobby " + aLobby.getLobbyName());
+				// stage.getScene().setRoot(lobbyMenuController);
 
 			}
 
@@ -471,14 +473,13 @@ public class ServerMainWindowController extends StackPane {
 					}
 				}
 				if ((selectedLobby != null) && (selectedLobby.getPlayerList().size() < 6)) {
-					
+
 					selectedLobby.joinLobby(new PlayerSingle(client.getProfile()));
 					client.sendMessage(new MessageJoinLobby(selectedLobby));
-					
+
 					drawLobbyMenu(selectedLobby);
-				
+
 				}
-	
 
 				// TODO join the lobby and send a message to the server so that the lobby knows
 				// who the new paticipant is
@@ -486,12 +487,27 @@ public class ServerMainWindowController extends StackPane {
 		});
 
 	}
-	
+
 	public static void drawLobbyMenu(Lobby lobby) {
 		Platform.runLater(() -> {
-			
+
 			try {
 				lobbyMenuController = new LobbyMenuController(lobby, false);
+				LobbyMenuController.getBackButton().setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						(new GameSound()).buttonClickBackwardSound();
+						vBoxLobbyMenuController.setVisible(false);
+
+						for (Player player : lobby.getHumanPlayerList()) {
+							if (player.getID() == client.getProfile().getId()) {
+								lobby.leaveLobby(player);
+								client.sendMessage(new MessageUpdateLobby(lobby));
+							}
+						}
+					}
+				});
+
 				vBoxLobbyMenuController.getChildren().clear();
 				vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
 				vBoxLobbyMenuController.setVisible(true);
@@ -499,9 +515,10 @@ public class ServerMainWindowController extends StackPane {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		});
 	}
+
 	public static void drawLobbies() {
 
 		Platform.runLater(() -> {
@@ -548,6 +565,7 @@ public class ServerMainWindowController extends StackPane {
 	public ChatWindow getChatPane() {
 		return chatPane;
 	}
+
 	public static Lobby getSelectedLobby() {
 		return selectedLobby;
 	}
