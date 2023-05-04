@@ -247,7 +247,7 @@ public class GamePaneController implements Initializable{
             }
 	        });
         rectCards.setFill(Color.web(playerColors.get(0)));
-        cardsPane.setStyle("-fx-background-color: " + playerColors.get(0) + ";");
+        cardsImageView.setImage(new Image(Parameter.phaseLogosdir + "cards" + getColorAsString(Color.web(playerColors.get(0))) + ".png"));
         cirNum.setFill(Color.web(playerColors.get(0)));
         
         this.playerOnGUI = this.playerIdHash.get(playerIDs.get(0));
@@ -531,40 +531,29 @@ public class GamePaneController implements Initializable{
         boxBlur.setHeight(0.0);
         boxBlur.setWidth(38.25);
         rectCards.setEffect(boxBlur);
-//        rectCards.setVisible(false);
+        rectCards.setVisible(false);
 
-        cardsPane = new Pane();
-        cardsPane.setId("cardsPane");
-        cardsPane.setLayoutX(getRelativeHorz(10.0));
-        cardsPane.setLayoutY(getRelativeVer(7.0));
-        cardsPane.setPrefHeight(getRelativeVer(115.0));
-        cardsPane.setPrefWidth(getRelativeHorz(110.0));
-        cardsImageView = new ImageView(new Image(Parameter.phaseLogosdir + "cards.png"));
+        cardsImageView = new ImageView();
         cardsImageView.setFitHeight(getRelativeVer(115.0));
         cardsImageView.setFitWidth(getRelativeHorz(110.0));
         cardsImageView.setPickOnBounds(true);
         cardsImageView.setPreserveRatio(true);
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setBrightness(0.25);
-        colorAdjust.setContrast(0.1);
-        colorAdjust.setSaturation(-0.18);
-        cardsPane.getChildren().add(cardsImageView);
-        cardsPane.setEffect(colorAdjust);
-        cardsPane.setOnMouseClicked(e -> {
+        cardsImageView.setOnMouseClicked(e -> {
         	showCardsPopUp();
         });
-//        cardsPane.setVisible(false);
+        cardsImageView.setVisible(false);
+
         
         numCardsLabel = new Label("");
         numCardsLabel.setLayoutX(getRelativeHorz(138.0));
         numCardsLabel.setLayoutY(getRelativeVer(45.0));
         numCardsLabel.setPrefHeight(getRelativeVer(50.0));
         numCardsLabel.setPrefWidth(getRelativeHorz(92.0));
-//        numCardsLabel.setVisible(false);
+        numCardsLabel.setVisible(false);
 
 
         
-        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo, middlePhaseLogo, lastPhaseLogo, rectCards, cardsPane, numCardsLabel);
+        phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo, middlePhaseLogo, lastPhaseLogo, rectCards, cardsImageView, numCardsLabel);
         
         phaseBoard.setLayoutX((w - phaseBoard.getPrefWidth() * phaseBoard.getScaleX()) / 2.0);
         phaseBoard.setLayoutY(getRelativeVer(700.0));
@@ -1023,6 +1012,10 @@ public class GamePaneController implements Initializable{
 		throwDiceButton.setVisible(period == Period.DICETHROW);
 		phaseBoard.setVisible(period != Period.DICETHROW);
 		
+		numCardsLabel.setVisible(period == Period.MAINPERIOD);
+		cardsImageView.setVisible(period == Period.MAINPERIOD);
+		rectCards.setVisible(period == Period.MAINPERIOD);
+		
 		this.currentPeriod = period;
 	}
 	
@@ -1032,7 +1025,7 @@ public class GamePaneController implements Initializable{
 		for(int i = 0; i < playerIDs.size(); i++) {
 			if(playerIDs.get(i) == idOfPlayer) {
 				rectCards.setFill(Color.web(playerColors.get(i)));
-				cardsPane.setStyle("-fx-background-color: " + playerColors.get(i) + ";");
+				cardsImageView.setImage(new Image(Parameter.phaseLogosdir + "cards" + getColorAsString(Color.web(playerColors.get(i))) + ".png"));
 				break;
 			}
 		}
@@ -1162,6 +1155,30 @@ public class GamePaneController implements Initializable{
                 (int)( (c.getGreen() * 255 - 20) >= 0 ? c.getGreen() * 255 - 20:0),
                 (int)( (c.getBlue() * 255 - 20) >= 0 ? c.getBlue() * 255 - 20:0));
 		return colorHex;
+	}
+	
+	private String getColorAsString(Color color) {
+		if(color.equals(Parameter.blueColor)) {
+			return "Blue";
+		}
+		else if(color.equals(Parameter.greenColor)) {
+			return "Green";
+		}
+		else if(color.equals(Parameter.orangeColor)) {
+			return "Orange";
+		}
+		else if(color.equals(Parameter.purpleColor)) {
+			return "Purple";
+		}
+		else if(color.equals(Parameter.redColor)) {
+			return "Red";
+		}
+		else if(color.equals(Parameter.yellowColor)) {
+			return "Yellow";
+		}
+		else {
+			return "";
+		}
 	}
 	
 	private void clickLeaveGameButton(ActionEvent e) {
