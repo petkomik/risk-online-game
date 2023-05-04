@@ -3,6 +3,7 @@ package gameState;
 import java.util.ArrayList;
 import java.util.List;
 
+import game.Battle;
 import game.Lobby;
 import game.exceptions.WrongCardsException;
 import game.exceptions.WrongCardsSetException;
@@ -188,12 +189,8 @@ public class SinglePlayerHandler {
 		//simply move from one to other
 	}
 	
-	public void openBattleFrameOnGUI(Continent continentAt, CountryName countryNameAt, 
-								Continent continentDf, CountryName countryNameDf,
-								int playerAt, int playerDf,
-								int troopsAt, int troopsDf) {
-		this.gamePaneController.openBattleFrame(continentAt, countryNameAt, continentDf, countryNameDf, 
-				playerAt, playerDf, troopsAt, troopsDf, GameType.SinglePlayer);
+	public void openBattleFrameOnGUI(Battle battle) {
+		this.gamePaneController.openBattleFrame(battle);
 	}
 	
 	public void endBattleOnGUI() {

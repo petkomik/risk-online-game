@@ -120,15 +120,15 @@ public class GUISupportClasses {
 			this.setPadding(new Insets(10, 20, 10, 20));
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-border-radius: 12;"
-					+ "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;" 
+					+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 				if (newValue) {
-					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-radius: 15;"
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
 							+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
 				} else {
-					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
 							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 				}
 			});

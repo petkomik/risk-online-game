@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import game.Battle;
 import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
@@ -1110,25 +1111,15 @@ public class GamePaneController implements Initializable{
 		
 	}
 
-	public void openBattleFrame(Continent continentAt, CountryName countryNameAt, 
-			Continent continentDf, CountryName countryNameDf,
-			int playerAt, int playerDf, int troopsAt, int troopsDf, GameType gameType) {
+	public void openBattleFrame(Battle battle) {
 		battlePane = new Pane();
 		battlePane.setPrefSize(w, h);
 		battlePane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
-		Player attackerPlayer = this.lobby.getPlayerList().stream()
-				  .filter(player -> playerAt == player.getID())
-				  .findAny()
-				  .orElse(null);
-		Player defenderPlayer = this.lobby.getPlayerList().stream()
-				  .filter(player -> playerDf == player.getID())
-				  .findAny()
-				  .orElse(null);
-		boolean attacker = this.playerOnGUI.getID() == playerAt;
+
+		boolean attacker = this.playerOnGUI.getID() == battle.getAttackerID();
 
 		try {
-			BattleFrameController battleFrame = new BattleFrameController(continentAt, countryNameAt, continentDf, countryNameDf,
-					attackerPlayer, defenderPlayer, attacker, troopsAt, troopsDf, gameType, this.singlePlayerHandler);
+			BattleFrameController battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
 			battleFrame.setPrefSize(w, h);
 			battlePane.getChildren().add(battleFrame);
 			gameBoard.getChildren().add(battlePane);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import game.Battle;
 import game.Lobby;
 import game.exceptions.WrongCardsException;
 import game.exceptions.WrongCardsSetException;
@@ -18,6 +19,7 @@ import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerAI;
+import game.models.Territory;
 
 public class GameHandler {
 	// Gamelogic Ausführung der Methoden
@@ -238,15 +240,17 @@ public class GameHandler {
 		case ATTACK_ATTACK: //open battle frame
 			if(Logic.playerAttackAttackConfirmedIsOK(this.gameState, idOfPlayer, 
 					this.gameState.getLastAttackingCountry(), country, troops )) {
+				Territory atTer = this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry());
+				Territory dfTer = this.gameState.getTerritories().get(country);
+				Player atPly = atTer.getOwnedByPlayer();
+				Player dfPly = dfTer.getOwnedByPlayer();
+				Battle battle = new Battle(atTer.getContinent(), atTer.getCountryName(),
+						dfTer.getContinent(), dfTer.getCountryName(), atTer.getAddressToPNG(), dfTer.getAddressToPNG(),
+						troops, dfTer.getNumberOfTroops(), atPly.getAvatar(), dfPly.getAvatar(), atPly.getColor(), 
+						dfPly.getColor(), Math.min(3,  troops), Math.min(2, dfTer.getNumberOfTroops()), this.gameType, atPly.getID());
 				switch (this.gameType) {
 				case SinglePlayer:	
-					this.singlePlayerHandler.openBattleFrameOnGUI(this.gameState.getTerritories()
-							.get(this.gameState.getLastAttackingCountry()).getContinent(), 
-							this.gameState.getLastAttackingCountry(),
-							this.gameState.getTerritories().get(country).getContinent(), country, 
-							this.gameState.getCurrentPlayer().getID(),
-							this.gameState.getTerritories().get(country).getOwnedByPlayer().getID(), 
-							troops, this.gameState.getTerritories().get(country).getNumberOfTroops());
+					this.singlePlayerHandler.openBattleFrameOnGUI(battle);
 					break;
 				case Multiplayer:
 					break;

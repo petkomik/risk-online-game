@@ -7,6 +7,7 @@ import game.models.CountryName;
 import game.models.Player;
 import game.models.Territory;
 import gameState.SinglePlayerHandler;
+import game.Battle;
 import game.Lobby;
 import general.*;
 
@@ -111,7 +112,6 @@ public class BattleFrameController extends VBox {
 	private double menuRatio;
 	
 	private Timeline timeline;
-	private int cyclesCompleted;
 
 
 	public BattleFrameController() throws Exception {
@@ -134,40 +134,34 @@ public class BattleFrameController extends VBox {
 		this.defendingAvatar = Parameter.avatarsdir + "ginger-girl.png";
 		this.attackerColor = Parameter.blueColor;
 		this.defenderColor = Parameter.greenColor;
-		this.cyclesCompleted = 0;
 		this.gameType = GameType.SinglePlayer;
 		setup();
 	
 	}
 	
-	public BattleFrameController(Continent continentAt, CountryName countryNameAt, 
-								Continent continentDf, CountryName countryNameDf,
-								Player playerAt, Player playerDf, boolean attackerGui,
-								int troopsAt, int troopsDf, GameType gameType, 
-								SinglePlayerHandler singlePlayerHandler) throws Exception {
+	public BattleFrameController(Battle battle, SinglePlayerHandler singlePlayerHandler, boolean attacker) throws Exception {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * 
 				 Screen.getPrimary().getVisualBounds().getHeight() 
 				 / (1846 * 1080);
 		this.menuRatio = Math.min(ratio + 0.3, 1);
-		this.attackingPNG = new Territory(countryNameAt, continentAt).getAddressToPNG();
-		this.defendingPNG = new Territory(countryNameDf, continentDf).getAddressToPNG();
-		this.troopsInAttackAt = troopsAt;
-		this.troopsInAttackDf = troopsDf;
-		this.maxDiceToThrow = Math.min(3, this.troopsInAttackAt);
-		this.defendingDice =  Math.min(2, this.troopsInAttackDf);
-		this.dicesAttacker = new int[this.maxDiceToThrow];
-		this.dicesDefender = new int[this.defendingDice];
-		this.attackingAvatar = playerAt.getAvatar();
-		this.defendingAvatar = playerDf.getAvatar();
-		this.attackerColor = Color.web(playerAt.getColor());
-		this.defenderColor = Color.web(playerDf.getColor());
-		this.cyclesCompleted = 0;
-		this.gameType = gameType;
+		this.menuRatio = Math.min(ratio + 0.3, 1);
+		this.attackingPNG = battle.getAttackingPNG();
+		this.defendingPNG = battle.getDefendingPNG();
+		this.troopsInAttackAt = battle.getTroopsInAttackAt();
+		this.troopsInAttackDf = battle.getTroopsInAttackDf();
+		this.maxDiceToThrow = battle.getMaxDiceToThrow();
+		this.defendingDice =  battle.getDefendingDice();
+		this.dicesAttacker = battle.getDicesAttacker();
+		this.dicesDefender = battle.getDicesDefender();
+		this.attackingAvatar = battle.getAttackingAvatar();
+		this.defendingAvatar = battle.getDefendingAvatar();
+		this.attackerColor = Color.web(battle.getAttackerColor());
+		this.defenderColor = Color.web(battle.getDefenderColor());
+		this.gameType = battle.getGameType();
 		this.singleplayerHandler = singlePlayerHandler;
 		setup();
-		this.throwBtn.setVisible(attackerGui);
-
+		this.throwBtn.setVisible(attacker);
 	}
 
 
@@ -456,46 +450,14 @@ public class BattleFrameController extends VBox {
 					int[] numberOfDices = new int[]{maxDiceToThrow, defendingDice};
 					singleplayerHandler.battleDiceThrow(numberOfDices);
 					break;
-				
 				case Multiplayer:
 					// TODO
 					break;
-					
 				case Tutorial:
 					// TODO
 					break;
 				}
-
-//    			    	  // TODO get logic from game state
-//    			    	  // update dice images based on dices array from gamestate (dicesfactory)
-//    			    	  // update troops
-//    			    	  lastThrow = 0;
-//    			    	  int maxDf = Arrays.stream(dicesDefender).max().getAsInt();
-//    			    	  int maxAt = Arrays.stream(dicesAttacker).max().getAsInt();
-//    			    	  
-//    			    	  if (maxAt > maxDf) {
-//    			    		  lastThrow++;  
-//    			    	  } else {
-//    			    		  lastThrow--;  
-//    			    	  }
-//    			    	  
-//    			    	  if(dicesDefender.length == 2 && dicesAttacker.length > 1) {
-//        			    	  int nextDf = Arrays.stream(dicesDefender).min().getAsInt();
-//        			    	  
-//        			    	  int minAt = Arrays.stream(dicesAttacker).min().getAsInt();
-//        			    	  int nextAt = Arrays.stream(dicesAttacker).sum() - minAt - maxAt;
-//
-//        			    	  if (nextAt > nextDf) {
-//        			    		  lastThrow++;  
-//        			    	  } else {
-//        			    		  lastThrow--;  
-//        			    	  }
-//    			    	  }
-    			    	  
-
-//		              
-//    			      }
-//    			    });            
+          
             }	       
 	    });
 		
@@ -565,9 +527,6 @@ public class BattleFrameController extends VBox {
 		int inf = 0;
 		int cav = 0;
 		int art = 0;
-		
-		// TODO get correct data from gamestate
-		// number of troops (in battle) atta + deff
 		
 		Territory territ;
 		int numberTroops;
@@ -732,9 +691,6 @@ public class BattleFrameController extends VBox {
             	diceImagesDf.getChildren().set(m, dice);       
     		}
     		
-    		cyclesCompleted++;
-
-    		
     		})
 		);
 		timeline.setCycleCount(Animation.INDEFINITE);
@@ -743,9 +699,6 @@ public class BattleFrameController extends VBox {
 	
 	public void setDiceStopAnimation(int[][] diceResults, int[] numberDiceNextThrow,
 			int result) throws InterruptedException, FileNotFoundException {
-		while(this.cyclesCompleted < 15) {
-			Thread.sleep(1000);
-		}
 		if (this.timeline != null) {
 		  timeline.stop();
 		}
@@ -797,47 +750,4 @@ public class BattleFrameController extends VBox {
 		troopsTextDf.setText(String.valueOf(this.troopsInAttackDf));
 
 	}
-
-
-//		
-//		if(this.defendingPNG.getNumberOfTroops() == 1 && defendingDice != 1) {
-//			this.defendingDice = 1;
-//			diceImagesDf.getChildren().remove(1); 
-//		}
-//		
-//		
-//		if(this.attacking.getNumberOfTroops() == 2) {
-//			this.maxDiceToThrow = 1;
-//			if (Integer.parseInt(numberLabel.getText()) > 1) {
-//		    	numberLabel.setText("1");
-//		    	dicesAttacker = new int[1];
-//		    	
-//		    	if(diceImagesAt.getChildren().size() == 3) {
-//		    		diceImagesAt.getChildren().remove(1);
-//		    		diceImagesAt.getChildren().remove(1);
-//		    	} else {
-//		    		diceImagesAt.getChildren().remove(1);
-//		    	}
-//			
-//			} 
-//
-//		} else if (this.attacking.getNumberOfTroops() == 3) {
-//			this.maxDiceToThrow = 2;
-//			if (Integer.parseInt(numberLabel.getText()) > 2) {
-//	    		int i = Integer.parseInt(numberLabel.getText()) - 1;
-//		    	numberLabel.setText(String.valueOf(i));
-//		    	dicesAttacker = new int[dicesAttacker.length - 1];
-//		    	diceImagesAt.getChildren().remove(0);
-//		    	
-//	    	}
-//		}
-//		
-//		if(this.defendingPNG.getNumberOfTroops() == 0) {
-//			// TODO stop decide win
-//		} else if(this.attacking.getNumberOfTroops() == 0) {
-//			// TODO stop decide win
-//
-//		}
-
-	
 }
