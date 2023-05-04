@@ -199,7 +199,7 @@ public class SetTerritories {
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Scandinavia),
 						territories.get(CountryName.NorthernEurope), territories.get(CountryName.SouthernEurope),
 						territories.get(CountryName.Afghanistan), territories.get(CountryName.Ural),
-						territories.get(CountryName.Siberia))));
+						territories.get(CountryName.MiddleEast))));
 		territories.get(CountryName.Ural)
 				.setNeighboringTerritories(new ArrayList<>(
 						Arrays.asList(territories.get(CountryName.Ukraine), territories.get(CountryName.Afghanistan),
@@ -207,14 +207,16 @@ public class SetTerritories {
 		territories.get(CountryName.Siberia)
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Ural),
 						territories.get(CountryName.China), territories.get(CountryName.Mongolia),
-						territories.get(CountryName.Irkutsk), territories.get(CountryName.Yakutsk))));
+						territories.get(CountryName.Irkutsk), territories.get(CountryName.Yakutsk), 
+						territories.get(CountryName.Yakutsk))));
 		territories.get(CountryName.Yakutsk)
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Siberia),
 						territories.get(CountryName.Irkutsk), territories.get(CountryName.Kamchatka))));
 		territories.get(CountryName.Kamchatka)
 				.setNeighboringTerritories(new ArrayList<>(
 						Arrays.asList(territories.get(CountryName.Yakutsk), territories.get(CountryName.Irkutsk),
-								territories.get(CountryName.Mongolia), territories.get(CountryName.Japan))));
+								territories.get(CountryName.Mongolia), territories.get(CountryName.Japan),
+								territories.get(CountryName.Yakutsk))));
 
 		territories.get(CountryName.Irkutsk)
 				.setNeighboringTerritories(new ArrayList<>(
@@ -247,7 +249,8 @@ public class SetTerritories {
 								territories.get(CountryName.India), territories.get(CountryName.EastAfrica),
 								territories.get(CountryName.Egypt), territories.get(CountryName.SouthernEurope))));
 		territories.get(CountryName.Indonesia).setNeighboringTerritories(new ArrayList<>(
-				Arrays.asList(territories.get(CountryName.Siam), territories.get(CountryName.NewGuinea))));
+				Arrays.asList(territories.get(CountryName.Siam), territories.get(CountryName.NewGuinea), 
+						territories.get(CountryName.WesternAustralia))));
 		territories.get(CountryName.NewGuinea)
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.Indonesia),
 						territories.get(CountryName.WesternAustralia), territories.get(CountryName.EasternAustralia))));

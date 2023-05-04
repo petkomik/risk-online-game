@@ -198,7 +198,7 @@ public class SinglePlayerHandler {
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
-	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom,int numberTo) {
+	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom, int numberTo) {
 		this.gamePaneController.setNumTroops(from, numberFrom);		
 		this.gamePaneController.setNumTroops(to, numberTo);
 		//simply move from one to other

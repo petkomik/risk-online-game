@@ -123,7 +123,6 @@ public class GameHandler {
 			case REINFORCE:
 				System.out.println("Reinforce Phase Country Clicked in GameHandler");
 				if(Logic.canReinforceTroopsToTerritory(this.gameState, player, country)) {
-					this.gameState.setLastFortifyingCounty(country);
 					switch(this.gameType) {
 						case SinglePlayer:
 							this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
@@ -174,8 +173,8 @@ public class GameHandler {
 				if(Logic.playerFortifyingPosition(country, idOfPlayer, this.gameState)) {
 					if(this.gameState.getLastFortifyingCounty() == null) {
 						System.out.println("setting fortifying form " + country.toString());
-						this.gameState.setLastFortifyingCounty(country);						
 						if(this.gameState.getTerritories().get(country).getNumberOfTroops() > 1) {
+							this.gameState.setLastFortifyingCounty(country);						
 							ArrayList<CountryName> enemyCountries = new ArrayList<CountryName>();
 							enemyCountries.addAll(this.gameState.getTerritories().keySet());
 							enemyCountries.removeIf(x -> this.gameState.getTerritories().get(x)
@@ -296,7 +295,7 @@ public class GameHandler {
 				case SinglePlayer:
 					this.singlePlayerHandler.moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastFortifyingCounty(), 
 							country, this.gameState.getTerritories().get(this.gameState.getLastFortifyingCounty())
-							.getNumberOfTroops(), troops);
+							.getNumberOfTroops(), this.gameState.getTerritories().get(country).getNumberOfTroops());
 					break;
 				case Multiplayer:
 					break;
@@ -361,6 +360,10 @@ public class GameHandler {
 				case FORTIFY:
 					this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
 					this.gameState.setNextPlayer();
+					if(this.gameState.getCurrentPlayer().getID() == Logic.getFirstPlayer(gameState)) {
+						this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
+						
+					}
 					switch(this.gameType) {
 					case SinglePlayer:
 						System.out.println("Fortify Phase ended for " + idOfPlayer);
