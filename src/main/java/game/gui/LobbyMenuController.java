@@ -501,7 +501,7 @@ public class LobbyMenuController extends StackPane {
 		    	int labelBefore = Integer.parseInt(labelBtnAI.getText());
 		    	if(lobby.getAIPlayerList().size() < 5 &&  lobby.getMaxNumberOfPlayers() > lobby.getPlayerList().size()) {
 		    		lobby.addAI();
-		    		labelBtnAI.setText(String.valueOf(labelBefore + 1));
+		    		labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size() ));
 		    	}
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 
