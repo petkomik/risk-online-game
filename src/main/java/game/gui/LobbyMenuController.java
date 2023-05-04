@@ -573,6 +573,7 @@ public class LobbyMenuController extends StackPane {
 			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 		    	}
 		    	client.sendMessage(new MessageUpdateLobby(lobby));
+		    	System.out.println("last");
 
 		    }
 		});
