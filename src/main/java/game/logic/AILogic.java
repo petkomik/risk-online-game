@@ -269,28 +269,31 @@ public class AILogic {
 	public static Pair<CountryName, CountryName> chooseTerritoryPairAttack(GameState gameState, PlayerAI player) {
 
 		HashMap<CountryName, Territory> territories = gameState.getTerritories();
+		Territory attacker = null;
 		
 		switch(player.getLevel()) {
 			case EASY:
-				Territory defender = mostOuterCountry(gameState, player);
-				return new Pair(defender, getNeighbourWithHighestNumb(defender, player));
-//				for(Entry<CountryName, Territory> att : territories.entrySet()) {
-//					if(att.getValue().getOwnedByPlayer().getID() == player.getID()) {
-//						for(Entry<CountryName, Territory> def : territories.entrySet()) {
-//							if(Logic.canAttack(gameState, att.getValue(), def.getValue())) {
-//								return new Pair(mostOuterCountry(gameState, player), att.getKey());
-//							}
-//						}
-//					}
-//				}
+				attacker = mostOuterCountry(gameState, player);
+				return new Pair(attacker, getNeighbourWithHighestNumb(attacker, player));
 			case CASUAL:
 				return null;
 			case HARD:
-				return null;
+				return new Pair(null, getNeighbourWithLowestNumb(attacker, player));
 			default:
 				return null;
 		}
 	}
+	
+	private static ArrayList<Territory> getAllOwnTerritories(GameState gameState, PlayerAI player) {
+		ArrayList<Territory> list = new ArrayList<Territory>();
+		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
+			if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+				list.add(set.getValue());
+			}
+		}
+		return list;
+	}
+	
 	
 	//gets the neighbour with the highest number of troops
 	public static CountryName getNeighbourWithHighestNumb(Territory territory, PlayerAI player) {
@@ -379,7 +382,25 @@ public class AILogic {
 	}
 	
 	public static Pair<CountryName, CountryName>  chooseTerritoriesPairFortify(GameState gameState, PlayerAI player){
-		return null;
+		switch(player.getLevel()) {
+		case EASY:
+			return new Pair(getRandomOwnedCountryName(gameState, player), getRandomOwnedCountryName(gameState, player));
+		case CASUAL:
+			return null;
+		case HARD:
+			CountryName fromCountry = null;
+			ArrayList<Territory> threeMostOuter = getThreeMostOuterCountries(gameState, player);
+			int max = 0;
+			for(Territory territory : threeMostOuter) {
+				if(territory.getNumberOfTroops() > max) {
+					max = territory.getNumberOfTroops();
+					fromCountry = territory.getCountryName();
+				}
+			}
+			return new Pair(fromCountry, mostOuterCountry(gameState, player));
+		default:
+			return null;
+		}
 	}
 	
 	public static int chooseTroopsToSendFortify(Territory territory, PlayerAI player) {
