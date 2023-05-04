@@ -253,7 +253,7 @@ public class ClientHandler implements Runnable {
 					break;
 				case MessageUpdateLobby:
 					
-					broadcastMessage(((MessageUpdateLobby) messageFromClient));
+					broadcastMessageToAllIncludingMe(((MessageUpdateLobby) messageFromClient));
 					break;
 
 				default:

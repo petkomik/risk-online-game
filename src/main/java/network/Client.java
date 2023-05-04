@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import javafx.application.Platform;
 
 import database.Profile;
 import game.Lobby;
@@ -200,6 +201,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
 
 	public void listenForMessage() {
 		clientThread = new Thread(new Runnable() {
@@ -331,10 +333,9 @@ public class Client {
 							System.out.println(mJL.getLobby().getLobbyName());
 							break;
 						case MessageUpdateLobby:
-							System.out.println("new message recieved");
 							MessageUpdateLobby messageUpdateLobby = (MessageUpdateLobby) message;
+							System.out.println(messageUpdateLobby.getLobby().getMaxNumberOfPlayers() + "Clinet 325");
 							System.out.println(messageUpdateLobby.getLobby().getLobbyName() + "Clinet 325");
-
 							lobbies.replace(messageUpdateLobby.getLobby().getLobbyName(),
 									messageUpdateLobby.getLobby());
 							ServerMainWindowController.lobbyGUIList.replace(
@@ -349,6 +350,7 @@ public class Client {
 								}
 							}
 							ServerMainWindowController.drawLobbies();
+
 							break;
 						default:
 							break;
