@@ -345,10 +345,10 @@ public class Client {
 								if (profile.getId() == player.getID()) {
 									ServerMainWindowController
 											.drawLobbyMenu(lobbies.get(messageUpdateLobby.getLobby().getLobbyName()));
+									System.out.println("newlydrawn");
 								}
 							}
 							ServerMainWindowController.drawLobbies();
-
 							break;
 						default:
 							break;
@@ -376,7 +376,6 @@ public class Client {
 	 * 
 	 * }
 	 */
-
 	public Profile getProfile() {
 		return profile;
 	}
@@ -402,7 +401,5 @@ public class Client {
 	}
 
 	private void updateInLobbyVisual(Message message) {
-
 	}
-
 }
