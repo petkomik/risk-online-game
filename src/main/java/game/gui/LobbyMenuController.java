@@ -128,6 +128,7 @@ public class LobbyMenuController extends StackPane {
 	
 	double ratio;
 	boolean singleplayerLobby;
+	private String dirAvatarOnThisPC;
 	
 	private Client client = AppController.getClient();
 	
@@ -637,7 +638,15 @@ public class LobbyMenuController extends StackPane {
 		Iterator<Player> itt = players.iterator();
 		while(itt.hasNext()) {
 			Player ply = itt.next();
-			PlayerCard plyc = new PlayerCard(ply, ply.getAvatar(), Color.web(ply.getColor()), ratio, lobby.isReady(ply));
+			dirAvatarOnThisPC = new String();
+
+			for(String avatar : Parameter.allAvatars) {
+				if(ply.getAvatar().contains(avatar)) {
+					dirAvatarOnThisPC = Parameter.avatarsdir + avatar;
+				}
+			}
+			
+			PlayerCard plyc = new PlayerCard(ply, dirAvatarOnThisPC, Color.web(ply.getColor()), ratio, lobby.isReady(ply));
 			if (lobby.getAIPlayerList().contains(ply)) {
 				plyc.setReady(true);
 				lobby.setReady(ply, true);
