@@ -502,9 +502,12 @@ public class ServerMainWindowController extends StackPane {
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
 								lobby.leaveLobby(player);
+								
 								client.sendMessage(new MessageUpdateLobby(lobby));
 							}
 						}
+						
+						
 					}
 				});
 

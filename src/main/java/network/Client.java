@@ -348,13 +348,17 @@ public class Client {
 							ServerMainWindowController.lobbyGUIList.replace(
 									messageUpdateLobby.getLobby().getLobbyName(),
 									new LobbyGUI(messageUpdateLobby.getLobby()));
-
+							
 							for (Player player : messageUpdateLobby.getLobby().getPlayersJoined()) {
 								if (profile.getId() == player.getID()) {
 									ServerMainWindowController
 											.drawLobbyMenu(lobbies.get(messageUpdateLobby.getLobby().getLobbyName()));
 									System.out.println("newlydrawn");
 								}
+							}
+								if(messageUpdateLobby.getLobby().getHumanPlayerList().isEmpty()){
+									ServerMainWindowController.lobbyGUIList.remove(messageUpdateLobby.getLobby().getLobbyName());
+									lobbies.remove(messageUpdateLobby.getLobby().getLobbyName());
 							}
 							ServerMainWindowController.drawLobbies();
 
