@@ -42,11 +42,11 @@ public class Lobby implements Serializable{
 		return colors;
 	}
 
-
-
 	public int lobbyRank;
 	public int difficultyOfAI;
-	public int maxNumberOfPlayers;
+	private int  maxNumberOfPlayers;
+	private String currentdifficulty;
+	
 
 	public Lobby() {
 		this.playersJoined = new ArrayList<Player>();
@@ -66,6 +66,7 @@ public class Lobby implements Serializable{
 			this.avaiableAINames.add(k);
 		}
 		this.readyHashMap = new HashMap<Player, Boolean>();
+		setCurrentdifficulty("easy");
 	}
 	
 	
@@ -338,6 +339,16 @@ public class Lobby implements Serializable{
 
 	public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
+	}
+
+
+	public String getCurrentdifficulty() {
+		return currentdifficulty;
+	}
+
+
+	public void setCurrentdifficulty(String currentdifficulty) {
+		this.currentdifficulty = currentdifficulty;
 	}
 
 

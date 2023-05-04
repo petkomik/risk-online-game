@@ -29,6 +29,7 @@ import network.messages.MessageProfile;
 import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
 import network.messages.MessageToPerson;
+import network.messages.MessageUpdateLobby;
 
 public class Client {
 	private Socket socket;
@@ -279,9 +280,9 @@ public class Client {
 							System.out.println("CLIENT " + profile.getUserName());
 
 							MessageCreateLobby mCL = (MessageCreateLobby) message;
-							
+
 							LobbyGUI lobbyGUI = new LobbyGUI(mCL.getLobby());
-							
+
 							lobbyGUI.setOnAction(new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent event) {
@@ -295,47 +296,51 @@ public class Client {
 
 								}
 							});
-							
+
 							ServerMainWindowController.lobbyGUIList.put(mCL.getLobby().getLobbyName(), lobbyGUI);
 							ServerMainWindowController.drawLobbies();
 							ServerMainWindowController.lobbyList.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
 
 							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
-							
+
 							break;
 						case MessageJoinLobby:
 							MessageJoinLobby mJL = (MessageJoinLobby) message;
-							
+							lobbies.replace(mJL.getLobby().getLobbyName(), mJL.getLobby());
+							ServerMainWindowController.lobbyGUIList.replace(mJL.getLobby().getLobbyName(),
+									new LobbyGUI(mJL.getLobby()));
 
-							// update
-							for( Player player_:mJL.getLobby().getPlayersJoined()   ){
-								
-													System.out.println(1+" "+ player_.getName());
-							}	
-								
-								
-								
-							
-							
-							lobbies.replace(mJL.getLobby().getLobbyName(),mJL.getLobby());
-							ServerMainWindowController.lobbyGUIList.replace(mJL.getLobby().getLobbyName(), new LobbyGUI(mJL.getLobby()));
-							for(Player player : mJL.getLobby().getPlayersJoined()){
-								if(profile.getId() == player.getID()){
-									
-									ServerMainWindowController.drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
-									
+							for (Player player : mJL.getLobby().getPlayersJoined()) {
+								if (profile.getId() == player.getID()) {
+									ServerMainWindowController
+											.drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
 								}
-								
-								
+							}
+
+							ServerMainWindowController.drawLobbies();
+							System.out.println(mJL.getLobby().getLobbyName());
+							break;
+						case MessageUpdateLobby:
+							MessageUpdateLobby messageUpdateLobby = (MessageUpdateLobby) message;
+							System.out.println(messageUpdateLobby.getLobby().getLobbyName() + "Clinet 325");
+							
+							lobbies.replace(messageUpdateLobby.getLobby().getLobbyName(),
+									messageUpdateLobby.getLobby());
+							ServerMainWindowController.lobbyGUIList.replace(
+									messageUpdateLobby.getLobby().getLobbyName(),
+									new LobbyGUI(messageUpdateLobby.getLobby()));
+
+							for (Player player : messageUpdateLobby.getLobby().getPlayersJoined()) {
+								if (profile.getId() == player.getID()) {
+									ServerMainWindowController
+											.drawLobbyMenu(lobbies.get(messageUpdateLobby.getLobby().getLobbyName()));
+								}
 							}
 							ServerMainWindowController.drawLobbies();
-							
-							
-							System.out.println(mJL.getLobby().getLobbyName());
+
 							break;
 						default:
 							break;
-
 						}
 					} catch (Exception e) {
 						closeEverything(socket, inputStream, outputStream);
@@ -347,7 +352,6 @@ public class Client {
 
 		});
 		clientThread.start();
-
 	}
 
 	/**
@@ -384,6 +388,10 @@ public class Client {
 
 	public void setLobbies(HashMap<String, Lobby> lobbies) {
 		this.lobbies = lobbies;
+	}
+
+	private void updateInLobbyVisual(Message message) {
+
 	}
 
 }

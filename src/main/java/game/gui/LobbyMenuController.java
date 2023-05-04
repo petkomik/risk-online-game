@@ -63,6 +63,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import network.Client;
+import network.messages.MessageUpdateLobby;
 
 /*
  * Class for the Battle Frame
@@ -126,6 +128,8 @@ public class LobbyMenuController extends StackPane {
 	
 	double ratio;
 	boolean singleplayerLobby;
+	
+	private Client client = AppController.getClient();
 	
 	public LobbyMenuController() {
 		
@@ -286,6 +290,7 @@ public class LobbyMenuController extends StackPane {
 		numberOfAiControls = new HBox();
 		lessBtnAI = new ArrowButton(30 * ratio);
 		labelBtnAI= new Label("0");
+		//TODO
 		moreBtnAI = new ArrowButton(30 * ratio);
 		
 		AIDifficultyDiv = new VBox();
@@ -353,13 +358,13 @@ public class LobbyMenuController extends StackPane {
 		moreBtnPlayers.setRotate(180);
 		labelBtnPlayers.setText(String.valueOf(this.singleplayerLobby ? 
 				this.lobby.getHumanPlayerList().size() : 
-				this.lobby.maxNumberOfPlayers));
+				this.lobby.getMaxNumberOfPlayers()));
 
 		moreBtnAI.setRotate(180);
 		labelBtnAI.setText(String.valueOf(this.lobby.getAIPlayerList().size()));
 
 		moreBtnDiff.setRotate(180);
-		labelBtnDiff.setText(String.valueOf(this.aiDifficultyLevels[this.lobby.difficultyOfAI]));
+		labelBtnDiff.setText(lobby.getCurrentdifficulty());
 
 		labelBtnPlayers.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
 		labelBtnPlayers.textOverrunProperty().set(OverrunStyle.CLIP);
@@ -453,13 +458,17 @@ public class LobbyMenuController extends StackPane {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	String current = labelBtnDiff.getText();
 		    	if(current.equals(aiDifficultyLevels[0])) {
-		    		labelBtnDiff.setText(aiDifficultyLevels[1]);
+		    		lobby.setCurrentdifficulty(aiDifficultyLevels[1]);
+		    		labelBtnDiff.setText(lobby.getCurrentdifficulty());
 		    	} else if(current.equals(aiDifficultyLevels[1])) { 
-		    		labelBtnDiff.setText(aiDifficultyLevels[2]);
+		    		lobby.setCurrentdifficulty(aiDifficultyLevels[2]);
+		    		labelBtnDiff.setText(lobby.getCurrentdifficulty());
+
 		    	} else {}
 		    	
 		    	lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());
-
+		    	
+		    	client.sendMessage(new MessageUpdateLobby(lobby));
 	    	}
 		});
 		
@@ -469,12 +478,16 @@ public class LobbyMenuController extends StackPane {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	String current = labelBtnDiff.getText();
 		    	if(current.equals(aiDifficultyLevels[2])) {
-		    		labelBtnDiff.setText(aiDifficultyLevels[1]);
+		    		lobby.setCurrentdifficulty(aiDifficultyLevels[1]);
+		    		labelBtnDiff.setText(lobby.getCurrentdifficulty());
+
 		    	} else if(current.equals(aiDifficultyLevels[1])) { 
-		    		labelBtnDiff.setText(aiDifficultyLevels[0]);
+		    		lobby.setCurrentdifficulty(aiDifficultyLevels[0]);
+		    		labelBtnDiff.setText(lobby.getCurrentdifficulty());
 		    	} else {}
 		    	
 		    	lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());; 	    	
+		    	client.sendMessage(new MessageUpdateLobby(lobby));
 
 	    	}
 		});
@@ -485,13 +498,14 @@ public class LobbyMenuController extends StackPane {
 		    	(new GameSound()).buttonClickForwardSound();
 		    	// TODO
 		    	int labelBefore = Integer.parseInt(labelBtnAI.getText());
-		    	if(lobby.getAIPlayerList().size() < 5 &&  lobby.maxNumberOfPlayers > lobby.getPlayerList().size()) {
+		    	if(lobby.getAIPlayerList().size() < 5 &&  lobby.getMaxNumberOfPlayers() > lobby.getPlayerList().size()) {
 		    		lobby.addAI();
 		    		labelBtnAI.setText(String.valueOf(labelBefore + 1));
 		    	}
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 
 		    	// TODO add remove ai players
+		    	client.sendMessage(new MessageUpdateLobby(lobby));
 
 	    	}
 		});
@@ -505,7 +519,8 @@ public class LobbyMenuController extends StackPane {
 		    		labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size()));
 		    	}
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
-	    	
+		    	client.sendMessage(new MessageUpdateLobby(lobby));
+
 	    	}
 		});
 		
@@ -525,11 +540,13 @@ public class LobbyMenuController extends StackPane {
 			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 		    		
 		    	} else {
-		    		if(lobby.maxNumberOfPlayers < 6) {
-			    		labelBtnPlayers.setText(String.valueOf(++lobby.maxNumberOfPlayers));
+		    		if(lobby.getMaxNumberOfPlayers()< 6) {
+		    			lobby.setMaxNumberOfPlayers(lobby.getMaxNumberOfPlayers() +1 );
+			    		labelBtnPlayers.setText(String.valueOf(lobby.getMaxNumberOfPlayers()));
 			    	}
 			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 		    	}
+		    	client.sendMessage(new MessageUpdateLobby(lobby));
 
 	    	}
 		});
@@ -548,11 +565,13 @@ public class LobbyMenuController extends StackPane {
 		    		
 		    	} else {
 		        	// TODO number of players joined lobby
-			    	if(lobby.maxNumberOfPlayers > 2 && lobby.maxNumberOfPlayers > lobby.getPlayerList().size()) {
-			    		labelBtnPlayers.setText(String.valueOf(--lobby.maxNumberOfPlayers));
-			    	}
+			    	if(lobby.getMaxNumberOfPlayers() > 2 && lobby.getMaxNumberOfPlayers()> lobby.getPlayerList().size()) {
+			    		lobby.setMaxNumberOfPlayers(lobby.getMaxNumberOfPlayers() -1 );
+			    		labelBtnPlayers.setText(String.valueOf(lobby.getMaxNumberOfPlayers()));			    	
+			    		}
 			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 		    	}
+		    	client.sendMessage(new MessageUpdateLobby(lobby));
 
 		    }
 		});
@@ -593,6 +612,8 @@ public class LobbyMenuController extends StackPane {
 
 		    		}
 		    	}
+		    	client.sendMessage(new MessageUpdateLobby(lobby));
+
 		    }
 		});
 		

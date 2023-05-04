@@ -28,7 +28,8 @@ public enum MessageType {
 	MessageJoinLobby,
 	MessageCreateLobby,
 	MessageAllProfiles,
-	MessageFullLobby,
+	
+	MessageUpdateLobby,
 	MessageDiceThrowRequest; // was an dem server gesendet wird (nicht wirklich viel)
 
 	// MessageJoinGame Nachricht

@@ -446,9 +446,6 @@ public class ServerMainWindowController extends StackPane {
 				client.sendMessage(new MessageCreateLobby(aLobby));
 				client.getLobbies().put(aLobby.getLobbyName(), aLobby);
 				
-				Node node = (Node) event.getSource();
-				stage = (Stage) node.getScene().getWindow();
-				
 				drawLobbyMenu(aLobby);
 					
 					System.out.println("im in lobby " + aLobby.getLobbyName());

@@ -30,6 +30,7 @@ import network.messages.MessagePossessCountry;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
 import network.messages.MessageToPerson;
+import network.messages.MessageUpdateLobby;
 
 public class ClientHandler implements Runnable {
 
@@ -239,6 +240,10 @@ public class ClientHandler implements Runnable {
 				case MessageJoinLobby:
 					
 					broadcastMessage(((MessageJoinLobby) messageFromClient));
+					break;
+				case MessageUpdateLobby:
+					
+					broadcastMessage(((MessageUpdateLobby) messageFromClient));
 					break;
 
 				default:
