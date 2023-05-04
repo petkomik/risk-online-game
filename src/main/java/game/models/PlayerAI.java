@@ -13,6 +13,7 @@ import network.ClientHandler;
 
 public class PlayerAI extends Player {
 	Difficulty level;
+	private static final long serialVersionUID = 123456789L;
 	
 	public PlayerAI(Player player, Difficulty level) {
 		super(player.getName(), player.getID());
