@@ -2,7 +2,9 @@ package game.logic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -29,10 +31,23 @@ public class AILogic {
 		switch(player.getLevel()) {
 			case EASY:
 				return getRandomFreeCountryName(gameState);
-			// TODO this code snippet should be integrated into the main file
+			case CASUAL:
+				if(Math.random() < 0.5) {
+					return getRandomFreeCountryName(gameState);
+				}
+				else {
+					if(getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
+						return getRandomFreeCountryName(gameState);
+					}
+					for(Territory t : territories.values()) {
+						if(t.getOwnedByPlayer().getID() == player.getID()) {
+							return getNearestTerritory(t.getNeighboringTerritories());
+						}
+					}
+				}
 			case HARD:
 				if(getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
-					return getRandomFreeCountryName(null);
+					return getRandomFreeCountryName(gameState);
 				}
 				for(Territory t : territories.values()) {
 					if(t.getOwnedByPlayer().getID() == player.getID()) {
@@ -72,7 +87,12 @@ public class AILogic {
 			case EASY:
 				return getRandomOwnedCountryName(gameState, player);
 			case CASUAL:
-				return null;
+				if(Math.random() < 0.5) {
+					return getRandomOwnedCountryName(gameState, player);
+				}
+				else {
+					return mostOuterCountry(gameState, player).getCountryName();
+				}
 			case HARD:
 				return mostOuterCountry(gameState, player).getCountryName();
 			default:
@@ -243,7 +263,16 @@ public class AILogic {
 				return false;
 			}
 		case CASUAL:
-			return false;
+			if(Math.random() < 0.5) {
+				if(Math.random() < 0.5) {
+					return true;
+				}else {
+					return false;
+				}
+			}
+			else {
+				return isNeighbourWithLessTroops(gameState, player);
+			}
 		case HARD:
 			return isNeighbourWithLessTroops(gameState, player);
 		default:
@@ -274,11 +303,21 @@ public class AILogic {
 		switch(player.getLevel()) {
 			case EASY:
 				attacker = mostOuterCountry(gameState, player);
-				return new Pair(attacker, getNeighbourWithHighestNumb(attacker, player));
+				return new Pair(attacker.getCountryName(), getNeighbourWithHighestNumb(attacker, player));
 			case CASUAL:
 				return null;
 			case HARD:
-				return new Pair(null, getNeighbourWithLowestNumb(attacker, player));
+				ArrayList<Territory> ownTerritories = getAllOwnTerritories(gameState, player);
+				Collections.sort(ownTerritories, (t1, t2) -> t2.getNumberOfTroops() - t1.getNumberOfTroops());
+				A: for(Territory t : ownTerritories) {
+					for(Territory tN : t.getNeighboringTerritories()) {
+						if(tN.getOwnedByPlayer().getID() != player.getID()) {
+							attacker = tN;
+							break A;
+						}
+					}
+				}
+				return new Pair(attacker.getCountryName(), getNeighbourWithLowestNumb(attacker, player));
 			default:
 				return null;
 		}
@@ -325,14 +364,52 @@ public class AILogic {
 		return territory.getNumberOfTroops();
 	}
 	
-	public static int chooseTroopsToSendToConqueredTerritory(Territory winner, PlayerAI player) {
+	private static int chooseTroopsToSendToConqueredTerritoryHard(Territory oldTerritory, Territory newTerritory, PlayerAI player) {
+		int numNeighbourOldTerritories = 0;
+		int numNeighbourNewTerritories = 0;
+		
+		int numTroopsNeighbourOldTerritories = 0;
+		int numTroopsNeighbourNewTerritories = 0;
+		for(Territory t : oldTerritory.getNeighboringTerritories()) {
+			if(t.getOwnedByPlayer().getID() != player.getID()) {
+				numNeighbourOldTerritories++;
+				numTroopsNeighbourOldTerritories += t.getNumberOfTroops();
+			}
+		}
+		for(Territory t : newTerritory.getNeighboringTerritories()) {
+			if(t.getOwnedByPlayer().getID() != player.getID()) {
+				numNeighbourNewTerritories++;
+				numTroopsNeighbourNewTerritories += t.getNumberOfTroops();
+			}
+		}
+		if(numNeighbourOldTerritories == 0 && numNeighbourNewTerritories != 0) {
+			return oldTerritory.getNumberOfTroops() - 1;
+		}
+		else if(numNeighbourOldTerritories != 0 && numNeighbourNewTerritories == 0) {
+			return 1;
+		}
+		else if(numNeighbourOldTerritories != 0 && numNeighbourNewTerritories != 0) {
+			double sum = numTroopsNeighbourOldTerritories + numTroopsNeighbourNewTerritories;
+			double oldRatio = numTroopsNeighbourOldTerritories / sum;
+			double newRatio = 1 - oldRatio;
+			return (int) (newRatio * oldTerritory.getNumberOfTroops());
+		}
+		return 0;
+	}
+	
+	public static int chooseTroopsToSendToConqueredTerritory(Territory oldTerritory, Territory newTerritory, PlayerAI player) {
 		switch(player.getLevel()) {
 		case EASY:
-			return (int)(Math.random() * winner.getNumberOfTroops()-1) + 1;
+			return (int)(Math.random() * oldTerritory.getNumberOfTroops()-1) + 1;
 		case CASUAL:
-			return 0;
+			if(Math.random() < 0.5) {
+				return (int)(Math.random() * oldTerritory.getNumberOfTroops()-1) + 1;
+			}
+			else {
+				return chooseTroopsToSendToConqueredTerritoryHard(oldTerritory, newTerritory, player);
+			}
 		case HARD:
-			return 0;
+			return chooseTroopsToSendToConqueredTerritoryHard(oldTerritory, newTerritory, player);
 		default:
 			return 0;
 		}
@@ -348,7 +425,24 @@ public class AILogic {
 				return false;
 			}
 		case CASUAL:
-			return false;
+			if(Math.random() < 0.5) {
+				if(Math.random() < 0.5) {
+					return true;
+				}else {
+					return false;
+				}
+			}
+			else {
+				ArrayList<Territory> territoriesOwnedByOwn = countriesSurroundedByOwnedCountries(gameState, player);
+				if(territoriesOwnedByOwn != null) {
+					for(Territory territory : territoriesOwnedByOwn) {
+						if(territory.getNumberOfTroops() > 1) {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
 		// search for a country that is owned by the playerAI and is surrounded by its own territories only
 		case HARD:
 			ArrayList<Territory> territoriesOwnedByOwn = countriesSurroundedByOwnedCountries(gameState, player);
@@ -381,23 +475,32 @@ public class AILogic {
 		return list;
 	}
 	
+	private static Pair<CountryName, CountryName>  chooseTerritoriesPairFortifyHard(GameState gameState, PlayerAI player){
+		CountryName fromCountry = null;
+		ArrayList<Territory> threeMostOuter = getThreeMostOuterCountries(gameState, player);
+		int max = 0;
+		for(Territory territory : threeMostOuter) {
+			if(territory.getNumberOfTroops() > max) {
+				max = territory.getNumberOfTroops();
+				fromCountry = territory.getCountryName();
+			}
+		}
+		return new Pair(fromCountry, mostOuterCountry(gameState, player));
+	}
+	
 	public static Pair<CountryName, CountryName>  chooseTerritoriesPairFortify(GameState gameState, PlayerAI player){
 		switch(player.getLevel()) {
 		case EASY:
 			return new Pair(getRandomOwnedCountryName(gameState, player), getRandomOwnedCountryName(gameState, player));
 		case CASUAL:
-			return null;
-		case HARD:
-			CountryName fromCountry = null;
-			ArrayList<Territory> threeMostOuter = getThreeMostOuterCountries(gameState, player);
-			int max = 0;
-			for(Territory territory : threeMostOuter) {
-				if(territory.getNumberOfTroops() > max) {
-					max = territory.getNumberOfTroops();
-					fromCountry = territory.getCountryName();
-				}
+			if(Math.random() < 0.5) {
+				return new Pair(getRandomOwnedCountryName(gameState, player), getRandomOwnedCountryName(gameState, player));
 			}
-			return new Pair(fromCountry, mostOuterCountry(gameState, player));
+			else {
+				return chooseTerritoriesPairFortifyHard(gameState, player);
+			}
+		case HARD:
+			return chooseTerritoriesPairFortifyHard(gameState, player);
 		default:
 			return null;
 		}
@@ -408,7 +511,12 @@ public class AILogic {
 		case EASY:
 			return (int) (Math.random() * territory.getNumberOfTroops()) + 1;
 		case CASUAL:
-			return 0;
+			if(Math.random() < 0.5) {
+				return (int) (Math.random() * territory.getNumberOfTroops()) + 1;
+			}
+			else {
+				return territory.getNumberOfTroops();
+			}
 		case HARD:
 			return territory.getNumberOfTroops();
 		default:
