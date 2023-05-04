@@ -19,6 +19,7 @@ import game.models.Player;
 import gameState.ChoosePane;
 import gameState.GameHandler;
 import gameState.GameState;
+import gameState.Hint;
 import gameState.Period;
 import gameState.Phase;
 import gameState.SinglePlayerHandler;
@@ -156,6 +157,10 @@ public class GamePaneController implements Initializable{
 	
 	private Pane battlePane;
 	
+	private Pane tutorialMainPane;
+	private Label titleLabel;
+	private Label explainationLabel;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		double scaleX = (0.7 * w)/map.getPrefWidth();
@@ -196,7 +201,7 @@ public class GamePaneController implements Initializable{
 		setUpChoosingTroopsPane();
 		setUpCardsPopUp();
 		setUpNextPhaseSymbol();
-
+		setUpTutorialsPane();
 	}
 	
 	private double getRelativeHorz(double x) {
@@ -330,6 +335,7 @@ public class GamePaneController implements Initializable{
 					if(node instanceof Label) {
 						Label labTmp = (Label)  node;
 						labTmp.setAlignment(Pos.CENTER);
+						labTmp.setTextFill(Color.WHITE);
 						labTmp.setStyle("-fx-font-weight: bold;"
 								+ "-fx-font-size: 100px;");
 						labelTroopsDisplay.put(tmp.getId().substring(2), labTmp);
@@ -724,6 +730,75 @@ public class GamePaneController implements Initializable{
 		cardsPopUp.setPickOnBounds(true);
 		gameBoard.getChildren().add(cardsPopUp);
 		
+	}
+	
+	private void setUpTutorialsPane() {
+		tutorialMainPane = new Pane();
+		tutorialMainPane.setPrefSize(w, h);
+		tutorialMainPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		
+		Pane tutorialTextPane = new Pane();
+		tutorialTextPane.setPrefSize(getRelativeHorz(800.0), getRelativeVer(600.0));
+		tutorialTextPane.setStyle("-fx-background-color: #ecd9c6;");
+		
+		Button cancelButton = new Button("CANCEL");
+		cancelButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
+		cancelButton.setLayoutX(getRelativeHorz(1265.0));
+		cancelButton.setLayoutY(getRelativeVer(101.0));
+		cancelButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+		cancelButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+        	if (newValue) {
+        		cancelButton.setStyle("-fx-background-color: #ac7339; "
+        				+ "-fx-background-radius: 15px; ");
+            } else {
+            	cancelButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
+            }
+	        });
+		cancelButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
+		cancelButton.setOnAction(e -> tutorialMainPane.setVisible(false));
+		
+		Rectangle titleRect = new Rectangle();
+		titleRect.setArcHeight(5.0);
+        titleRect.setArcWidth(5.0);
+		titleRect.setOpacity(0.44);
+        titleRect.setHeight(getRelativeVer(84.0));
+        titleRect.setLayoutX(getRelativeHorz(76.0));
+        titleRect.setLayoutY(getRelativeVer(21.0));
+        titleRect.setStrokeType(StrokeType.INSIDE);
+        titleRect.setStrokeWidth(0.0);
+        titleRect.setWidth(getRelativeHorz(648.0));
+        titleRect.setFill(Color.WHITE);
+        BoxBlur boxBlur = new BoxBlur();
+        boxBlur.setHeight(0.0);
+        boxBlur.setWidth(38.25);
+        titleRect.setEffect(boxBlur);
+        
+		titleLabel = new Label();
+		titleLabel.setPrefSize(getRelativeHorz(606.0), getRelativeVer(62.0));
+		titleLabel.setLayoutX(getRelativeHorz(97.0));
+		titleLabel.setLayoutY(getRelativeVer(32.0));
+		titleLabel.setAlignment(Pos.CENTER);
+		titleLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(40.0)));
+		titleLabel.setTextFill(Color.web("#5C4033"));
+		
+		explainationLabel = new Label();
+		explainationLabel.setPrefSize(getRelativeHorz(766.0), getRelativeVer(415.0));
+		explainationLabel.setLayoutX(getRelativeHorz(17.0));
+		explainationLabel.setLayoutY(getRelativeVer(147.0));
+		explainationLabel.setFont(Font.font("Cooper Black", 25));
+		explainationLabel.setWrapText(true);
+		
+		tutorialTextPane.getChildren().addAll(titleRect, titleLabel, explainationLabel);
+		tutorialMainPane.getChildren().addAll(tutorialTextPane, cancelButton);
+		tutorialMainPane.setVisible(false);
+		
+		gameBoard.getChildren().add(tutorialMainPane);
+	}
+	
+	public void showTutorialsPane(String title, Hint hint) {
+		titleLabel.setText(title);
+		explainationLabel.setText(hint.toString());
+		tutorialMainPane.setVisible(true);
 	}
 	
 	public void decreaseProgressbar() {
