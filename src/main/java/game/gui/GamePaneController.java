@@ -1112,6 +1112,7 @@ public class GamePaneController implements Initializable{
 			Player playerAt, Player playerDf, boolean attackerGui,
 			int troopsAt, int troopsDf, GameType gameType) {
 		battlePane = new Pane();
+		battlePane.setPrefSize(w, h);
 		battlePane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
 
 		try {
