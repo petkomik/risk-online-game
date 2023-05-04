@@ -133,7 +133,7 @@ public class LobbyMenuController extends StackPane {
 	double ratio;
 	boolean singleplayerLobby;
 	private String dirAvatarOnThisPC;
-	private ChatWindow chatWindow ; 
+	private ChatWindow chatWindow; 
 	private Client client = AppController.getClient();
 	
 	public LobbyMenuController() {
@@ -431,7 +431,7 @@ public class LobbyMenuController extends StackPane {
 		settingsPane.getChildren().addAll(settingsBanner, settingsControlPane);
 		
 		settingsReadyPane.getChildren().addAll(settingsPane, readyButtonPane);
-		chatWindow= ServerMainWindowController.getChatPane();
+		chatWindow = ServerMainWindowController.getChatPane();
 		mainContent.getChildren().addAll(playerCardsPane, settingsReadyPane);
 		contentVBox.getChildren().addAll(mainContent);
 
@@ -640,7 +640,12 @@ public class LobbyMenuController extends StackPane {
 				}
 			});
 		
-		this.getChildren().addAll(contentVBox, topBannerParent, chatWindow);
+		this.getChildren().addAll(contentVBox, topBannerParent);
+		if(!this.singleplayerLobby) {
+			this.getChildren().add(chatWindow);
+
+		}
+	
 	}
 	
 	

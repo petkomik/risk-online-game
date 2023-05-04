@@ -472,9 +472,6 @@ public class Logic {
 		return false;
 	}
 
-	public static boolean isGameOver(GameState gameState) {
-		return gameState.getAlivePlayers().size() == 1;
-	}
 
 	public static Battle battleDiceRollConfirmed(GameState gameState, 
 			int[] diceValuesAt, int[] diceValuesDf) {
@@ -534,5 +531,13 @@ public class Logic {
 		return values;
 	}
 
+	public static boolean playerIsAlive(GameState gameState, int defenderID) {
+		return gameState.getTerritories().values().stream()
+				.anyMatch(x -> x.getOwnedByPlayer().getID() == defenderID);
+	}
+
+	public static boolean isGameOver(GameState gameState) {
+		return gameState.getAlivePlayers().size() == 1;
+	}
 
 }

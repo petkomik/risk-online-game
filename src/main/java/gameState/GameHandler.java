@@ -252,7 +252,8 @@ public class GameHandler {
 				Battle battle = new Battle(atTer.getContinent(), atTer.getCountryName(),
 						dfTer.getContinent(), dfTer.getCountryName(), atTer.getAddressToPNG(), dfTer.getAddressToPNG(),
 						troops, dfTer.getNumberOfTroops(), atPly.getAvatar(), dfPly.getAvatar(), atPly.getColor(), 
-						dfPly.getColor(), Math.min(3,  troops), Math.min(2, dfTer.getNumberOfTroops()), this.gameType, atPly.getID());
+						dfPly.getColor(), Math.min(3,  troops), Math.min(2, dfTer.getNumberOfTroops()), this.gameType, atPly.getID(),
+						dfPly.getID());
 				this.gameState.setBattle(battle);
 				switch (this.gameType) {
 				case SinglePlayer:	
@@ -544,6 +545,13 @@ public class GameHandler {
 			if(overDf) {
 				this.gameState.getTerritories().get(changed.getCountryNameDf()).setOwnedByPlayer(
 						this.gameState.getPlayers().get(changed.getAttackerID()));
+				if(!Logic.playerIsAlive(gameState, changed.getDefenderID())) {
+					this.gameState.removeDeadPlayer(changed.getDefenderID());
+					System.out.println("player died left are" + gameState.getAlivePlayers().size());
+					if(Logic.isGameOver(gameState)) {
+						System.out.println("game ended " + this.gameState.getCurrentPlayer().getID() + " is winner");
+					}
+				}
 			}
 			if(overAt || overDf) {
 				this.gameState.setBattle(null);

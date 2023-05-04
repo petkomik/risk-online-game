@@ -148,6 +148,10 @@ public class GameState {
 	public ArrayList <Player> getAlivePlayers() {
 		return alivePlayers;
 	}
+	
+	public void removeDeadPlayer(int id) {
+		this.alivePlayers.removeIf(x -> x.getID() == id);
+	}
 
 	public Phase getCurrentTurnPhase() {
 		return currentTurnPhase;

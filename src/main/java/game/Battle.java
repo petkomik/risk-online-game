@@ -33,11 +33,12 @@ public class Battle implements Serializable {
 	private int defendingDice;
 	private GameType gameType; 
 	private int attackerID;
-	
+	private int defenderID;
+
 	public Battle(Continent continentAt, CountryName countryNameAt, Continent continentDf, CountryName countryNameDf,
 			String attackingPNG, String defendingPNG, int troopsInAttackAt, int troopsInAttackDf,
 			String attackingAvatar, String defendingAvatar, String attackerColor, String defenderColor, 
-			int maxDiceToThrow, int defendingDice, GameType gameType, int attackerID) {
+			int maxDiceToThrow, int defendingDice, GameType gameType, int attackerID, int defenderID) {
 		super();
 		this.continentAt = continentAt;
 		this.countryNameAt = countryNameAt;
@@ -57,8 +58,13 @@ public class Battle implements Serializable {
 
 		this.gameType = gameType;
 		this.attackerID = attackerID;
+		this.defenderID = defenderID;
 	}
 	
+	public int getDefenderID() {
+		return defenderID;
+	}
+
 	public int getAttackerID() {
 		return attackerID;
 	}
