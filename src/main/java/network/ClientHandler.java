@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.BiConsumer;
 
 import database.Profile;
@@ -155,10 +157,18 @@ public class ClientHandler implements Runnable {
 	public void run() {
 		Message messageFromClient;
 
+		    BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
+
+		   
+
 		while (socket.isConnected()) {
 			try {
-
-				messageFromClient = (Message) objectInputStream.readObject();
+			      if (!messageQueue.isEmpty()) {
+		                messageFromClient = messageQueue.take();
+		            } else {
+		                // Otherwise, wait for a message from the client
+		                messageFromClient = (Message) objectInputStream.readObject();
+		            }
 				switch (messageFromClient.getMessageType()) {
 				case MessageSend:
 					System.out.println("case MessageSend in Handler Success 0");

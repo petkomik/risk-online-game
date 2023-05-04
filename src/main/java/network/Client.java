@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import database.Profile;
 import game.Lobby;
@@ -204,9 +206,17 @@ public class Client {
 			@Override
 			public void run() {
 				Message message;
+				BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
 				while (socket.isConnected()) {
 					try {
-						message = (Message) inputStream.readObject();
+
+						if (!messageQueue.isEmpty()) {
+							message = messageQueue.take();
+						} else {
+							// Otherwise, wait for a message from the client
+							message = (Message) inputStream.readObject();
+						}
+
 						switch (message.getMessageType()) {
 						case MessageSend:
 
@@ -323,7 +333,7 @@ public class Client {
 						case MessageUpdateLobby:
 							MessageUpdateLobby messageUpdateLobby = (MessageUpdateLobby) message;
 							System.out.println(messageUpdateLobby.getLobby().getLobbyName() + "Clinet 325");
-							
+
 							lobbies.replace(messageUpdateLobby.getLobby().getLobbyName(),
 									messageUpdateLobby.getLobby());
 							ServerMainWindowController.lobbyGUIList.replace(
