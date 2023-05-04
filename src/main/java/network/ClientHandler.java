@@ -33,6 +33,7 @@ import network.messages.MessageProfile;
 import network.messages.MessageSend;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
+import network.messages.MessageUpdateLobbyList;
 
 public class ClientHandler implements Runnable {
 
@@ -254,6 +255,10 @@ public class ClientHandler implements Runnable {
 				case MessageUpdateLobby:
 					
 					broadcastMessageToAllIncludingMe(((MessageUpdateLobby) messageFromClient));
+					break;
+				case MessageUpdateLobbyList:
+					
+				broadcastMessageToAllIncludingMe(messageFromClient);
 					break;
 
 				default:

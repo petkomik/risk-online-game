@@ -28,7 +28,7 @@ public enum MessageType {
 	MessageJoinLobby,
 	MessageCreateLobby,
 	MessageAllProfiles,
-	
+	MessageUpdateLobbyList,
 	MessageUpdateLobby,
 	MessageDiceThrowRequest; // was an dem server gesendet wird (nicht wirklich viel)
 

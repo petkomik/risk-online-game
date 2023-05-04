@@ -4,6 +4,8 @@ import game.Lobby;
 import game.PlayerInLobby;
 import game.exceptions.WrongTextFieldInputException;
 import game.gui.GUISupportClasses.ArrowButton;
+import game.gui.GUISupportClasses.ChatButton;
+import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.PlayerCard;
@@ -92,7 +94,7 @@ public class LobbyMenuController extends StackPane {
 	
 
 	private Label lobbyTextBanner;
-	private DesignButton chatButton;
+	private ChatButton chatButton;
 	private HBox chatDiv;
 
 	private HBox mainContent;
@@ -131,7 +133,7 @@ public class LobbyMenuController extends StackPane {
 	double ratio;
 	boolean singleplayerLobby;
 	private String dirAvatarOnThisPC;
-	
+	private ChatWindow chatWindow ; 
 	private Client client = AppController.getClient();
 	
 	public LobbyMenuController() {
@@ -233,7 +235,7 @@ public class LobbyMenuController extends StackPane {
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
 		
-		chatButton = new DesignButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio, 170 * ratio, true);
+		chatButton = new ChatButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio, 170 * ratio, true);
 		chatButton.setAlignment(Pos.CENTER);
 		chatDiv = new HBox();
 		chatDiv.getChildren().add(chatButton);
@@ -429,7 +431,7 @@ public class LobbyMenuController extends StackPane {
 		settingsPane.getChildren().addAll(settingsBanner, settingsControlPane);
 		
 		settingsReadyPane.getChildren().addAll(settingsPane, readyButtonPane);
-
+		chatWindow= ServerMainWindowController.getChatPane();
 		mainContent.getChildren().addAll(playerCardsPane, settingsReadyPane);
 		contentVBox.getChildren().addAll(mainContent);
 
@@ -623,16 +625,22 @@ public class LobbyMenuController extends StackPane {
 		    }
 		});
 		
-		chatButton.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
-		    	// TODO
-		    	System.out.println("Open Chat");
-	    	}
-		});
+			chatButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					(new GameSound()).buttonClickForwardSound();
+
+					if (!chatButton.isSelected()) {
+						chatButton.setSelected(false);
+						chatWindow.setVisible(false);
+					} else {
+						chatButton.setSelected(true);
+						chatWindow.setVisible(true);
+					}
+				}
+			});
 		
-		this.getChildren().addAll(contentVBox, topBannerParent);
+		this.getChildren().addAll(contentVBox, topBannerParent, chatWindow);
 	}
 	
 	

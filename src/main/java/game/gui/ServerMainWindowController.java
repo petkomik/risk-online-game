@@ -562,7 +562,7 @@ public class ServerMainWindowController extends StackPane {
 
 	}
 
-	public ChatWindow getChatPane() {
+	public static ChatWindow getChatPane() {
 		return chatPane;
 	}
 

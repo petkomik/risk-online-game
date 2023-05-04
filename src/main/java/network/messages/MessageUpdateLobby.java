@@ -9,6 +9,11 @@ public class MessageUpdateLobby  extends Message {
 	 */
 	private Lobby lobby;
 	
+	public Lobby getLobby() {
+		return lobby;
+	}
+
+
 	private static final long serialVersionUID = 1L;
 	
 	public MessageUpdateLobby(Lobby lobby) {
@@ -16,9 +21,6 @@ public class MessageUpdateLobby  extends Message {
 		this.lobby = lobby;
 	}
 
-	public Lobby getLobby() {
-		return lobby;
-	}
 
 	public void setLobby(Lobby lobby) {
 		this.lobby = lobby;

@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -33,6 +34,7 @@ import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
+import network.messages.MessageUpdateLobbyList;
 
 public class Client {
 	private Socket socket;
@@ -201,7 +203,6 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public void listenForMessage() {
 		clientThread = new Thread(new Runnable() {
@@ -245,6 +246,12 @@ public class Client {
 							chat.addLabel(
 									((MessageConnect) message).getProfile().getUserName() + " has joined the server");
 							sendMessage(new MessageConnect(getProfile(), profilee.getId()));
+
+							if (!lobbies.isEmpty()) {
+
+								sendMessage(
+										new MessageUpdateLobbyList( lobbies ,((MessageConnect) message).getProfile().getId()));
+							}
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
@@ -351,6 +358,22 @@ public class Client {
 							}
 							ServerMainWindowController.drawLobbies();
 
+							break;
+						case MessageUpdateLobbyList:
+							for (Map.Entry<String, Lobby> entry : ((MessageUpdateLobbyList) message).getLobbyList()
+									.entrySet()) {
+								String key = entry.getKey();
+								Lobby lobby = entry.getValue();
+								lobbies.putIfAbsent(key, lobby);
+
+							}
+							lobbies.forEach((key, value) -> {
+								if (!ServerMainWindowController.lobbyGUIList.containsKey(key)) {
+									ServerMainWindowController.lobbyGUIList.put(key, new LobbyGUI(value));
+								}
+							});
+
+							ServerMainWindowController.drawLobbies();
 							break;
 						default:
 							break;
