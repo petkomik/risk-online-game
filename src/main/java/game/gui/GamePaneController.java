@@ -3,9 +3,7 @@ package game.gui;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import game.Battle;
@@ -13,17 +11,13 @@ import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
 import game.models.Card;
-import game.models.Continent;
 import game.models.CountryName;
 import game.models.Player;
 import gameState.ChoosePane;
-import gameState.GameHandler;
-import gameState.GameState;
 import gameState.Hint;
 import gameState.Period;
 import gameState.Phase;
 import gameState.SinglePlayerHandler;
-import general.AppController;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -49,23 +43,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -90,10 +76,6 @@ public class GamePaneController implements Initializable{
 	private HashMap<String, Label> labelTroopsDisplay;	
 	private int numOfPlayer;
 	private int turn;
-	private String[] avatars = {"blonde-boy", "bruntette-boy", "earrings-girl", "ginger-girl", "hat-boy", "mustache-man"};
-	private Color[] colors = {Color.BLUE, Color.ORANGE, Color.GREEN, Color.RED,
-			Color.BROWN, Color.YELLOW};
-	
 	
 	private VBox vbPlayerList;
 	private Pane[] panes;
@@ -166,44 +148,12 @@ public class GamePaneController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		double scaleX = (0.7 * w)/map.getPrefWidth();
-		double scaleY = (0.7 * h)/map.getPrefHeight();
-		map.setScaleX(scaleX);
-		map.setScaleY(-scaleY);
-		
-		double translateX = -(-3356.693401*scaleX+3356.9374584);
-		double translateY = -(2109.9775723*(-scaleY)+2109.9955679);
-		map.setTranslateX(translateX);
-		map.setTranslateY(translateY);
-		
-		double layoutX = (w - scaleX * map.getPrefWidth()) / 2.0;
-		double layoutY = ((h - scaleY * map.getPrefHeight()) / 2.0) - 20.0;
-		map.setLayoutX(layoutX);
-		map.setLayoutY(layoutY);
-		
-		for(Node n : map.getChildren()) {
-			if(n instanceof StackPane) {
-				n.setVisible(false);
-			}
-		}
-		
-		/*  */
-		getComponents();
-		Button leaveGameButton = new Button("LEAVE GAME");
-		leaveGameButton.setId("leaveGameButton");
-		leaveGameButton.setOnAction(e -> clickLeaveGameButton(e));
-		
-		leaveGameButton.setPrefSize((150.0/1536.0) * w, (50.0/864.0) * h);
-		leaveGameButton.setLayoutX((40.0/1536.0) * w);
-		leaveGameButton.setLayoutY((40.0/864.0) * h);
-		leaveGameButton.setPickOnBounds(true);
-
-		gameBoard.getChildren().add(leaveGameButton);
-		
+		setUpMapComponents();
+		setUpLeaveGameButton();
 		setUpPhaseBoard();
 		setUpChoosingTroopsPane();
 		setUpCardsPopUp();
-		setUpNextPhaseSymbol();
+		setUpNextPhaseButton();
 		setUpTutorialsPane();
 	}
 	
@@ -244,23 +194,8 @@ public class GamePaneController implements Initializable{
         cirPhase.setFill(Color.web(playerColors.get(0)));
         ivPhase.setImage(new Image(playerAvatar.get(0)));
 		pB.setStyle("-fx-accent: " + playerColors.get(0) + ";");
-        nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ playerColors.get(0) +";");
-        nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(0) +";");
-            } else {
-            	nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(0))) +";");
-            }
-	        });
         rectCards.setFill(Color.web(playerColors.get(0)));
         cardsImageView.setImage(new Image(Parameter.phaseLogosdir + "cards" + getColorAsString(Color.web(playerColors.get(0))) + ".png"));
-        cirNum.setFill(Color.web(playerColors.get(0)));
         
         this.playerOnGUI = this.playerIdHash.get(playerIDs.get(0));
         this.setCurrentPlayer(playerIDs.get(0));
@@ -274,18 +209,10 @@ public class GamePaneController implements Initializable{
 		diceIV.setLayoutY(getRelativeVer(695.0));
 		diceIV.setPickOnBounds(true);
 
-		throwDiceButton = new Button("THROW DICE");
-		throwDiceButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-		throwDiceButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-        		throwDiceButton.setStyle("-fx-background-color: #ac7339; "
-        				+ "-fx-background-radius: 15px; ");
-            } else {
-            	throwDiceButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-            }
-	        });
-		throwDiceButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
-		throwDiceButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
+		throwDiceButton = new DesignButton();
+		throwDiceButton.setText("THROW DICE");
+		throwDiceButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(18)));
+		throwDiceButton.setPrefSize(getRelativeHorz(200.0), getRelativeVer(45.0));
 		throwDiceButton.setLayoutX((w - throwDiceButton.getPrefWidth()) / 2.0);
 		throwDiceButton.setLayoutY(getRelativeVer(760.0));
 		throwDiceButton.setPickOnBounds(true);
@@ -317,7 +244,28 @@ public class GamePaneController implements Initializable{
 		thread.start();
 	}
 	
-	private void getComponents() {
+	private void setUpMapComponents() {
+		double scaleX = (0.7 * w)/map.getPrefWidth();
+		double scaleY = (0.7 * h)/map.getPrefHeight();
+		map.setScaleX(scaleX);
+		map.setScaleY(-scaleY);
+		
+		double translateX = -(-3356.693401*scaleX+3356.9374584);
+		double translateY = -(2109.9775723*(-scaleY)+2109.9955679);
+		map.setTranslateX(translateX);
+		map.setTranslateY(translateY);
+		
+		double layoutX = ((w - scaleX * map.getPrefWidth()) / 2.0) - 45.0;
+		double layoutY = ((h - scaleY * map.getPrefHeight()) / 2.0) - 40.0;
+		map.setLayoutX(layoutX);
+		map.setLayoutY(layoutY);
+		
+		for(Node n : map.getChildren()) {
+			if(n instanceof StackPane) {
+				n.setVisible(false);
+			}
+		}
+		
 		countries = new ArrayList<>();
 		spTroopsDisplay = new ArrayList<>();
 		circleTroopsDisplay = new HashMap<>();
@@ -413,10 +361,37 @@ public class GamePaneController implements Initializable{
 		
 		gameBoard.getChildren().add(vbPlayerList);
 	}
-	
-	private void setUpNextPhaseSymbol() {
-		nextPhaseButton = new Button("✓");
-        nextPhaseButton.setId("nextPhaseButton");
+	private void setUpLeaveGameButton() {
+		Button leaveGameButton = new DesignButton();
+		leaveGameButton.setText("LEAVE GAME");
+		leaveGameButton.setOnAction(e -> clickLeaveGameButton(e));
+		
+		leaveGameButton.setPrefSize((200.0/1536.0) * w, (50.0/864.0) * h);
+		leaveGameButton.setLayoutX((40.0/1536.0) * w);
+		leaveGameButton.setLayoutY((40.0/864.0) * h);
+		leaveGameButton.setPickOnBounds(true);
+		leaveGameButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, (18.0/1536.0) * w));
+
+		gameBoard.getChildren().add(leaveGameButton);
+	}
+	private void setUpNextPhaseButton() {
+		nextPhaseButton = new Button();
+		ImageView endTurnIV = new ImageView(Parameter.phaseLogosdir + "endturn.png");
+		endTurnIV.setFitWidth(getRelativeHorz(31.0));
+		endTurnIV.setFitHeight(getRelativeHorz(31.0));
+		nextPhaseButton.setGraphic(endTurnIV);
+		nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;" 
+				+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+
+		nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			if (newValue) {
+				nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+			} else {
+				nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+			}
+		});
         nextPhaseButton.setLayoutX(getRelativeHorz(1072.0));
         nextPhaseButton.setLayoutY(getRelativeVer(750.0));
         nextPhaseButton.setMnemonicParsing(false);
@@ -479,12 +454,15 @@ public class GamePaneController implements Initializable{
         
         cirNum = new Circle();
         cirNum.setRadius(getRelativeHorz(20.0));
-        cirNum.setStroke(Color.WHITE);
-        cirNum.setStrokeType(StrokeType.INSIDE);
+        cirNum.setStroke(Color.BLACK);
+        cirNum.setStrokeType(StrokeType.OUTSIDE);
         cirNum.setStrokeWidth(3.0);
+        cirNum.setFill(Color.WHITE);
 
         // Erstelle ein Label mit Text "5"
-        labNum = new Label("0");
+        labNum = new Label();
+        labNum.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20.0)));
+        labNum.setAlignment(Pos.CENTER);
 
         // Füge den Kreis und das Label in ein StackPane
         spNum = new StackPane();
@@ -659,23 +637,13 @@ public class GamePaneController implements Initializable{
 		cancelButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
 		cancelButton.setOnAction(e -> cardsPopUp.setVisible(false));
 		
-		tradeButton = new Button("NO TRADE");
+		tradeButton = new DesignButton();
+		tradeButton.setText("NO TRADE");
 		tradeButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
 		tradeButton.setLayoutX((w - tradeButton.getPrefWidth()) / 2.0);
 		tradeButton.setLayoutY((h - tradeButton.getPrefHeight()) / 2.0);
-		tradeButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-		tradeButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-        		tradeButton.setStyle("-fx-background-color: #ac7339; "
-        				+ "-fx-background-radius: 15px; ");
-            } else {
-            	tradeButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-            }
-	        });
 		tradeButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
 		tradeButton.setDisable(true);
-		
-
 		
 		Rectangle dropOnCard1 = new Rectangle();
 		Rectangle dropOnCard2 = new Rectangle();
@@ -879,7 +847,6 @@ public class GamePaneController implements Initializable{
 		}
 		cirPhase.setFill(Color.web(playerColors.get(turn)));
 		ivPhase.setImage(new Image(playerAvatar.get(turn)));
-		cirNum.setFill(Color.web(playerColors.get(turn)));
 		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
 		
 	}
@@ -976,6 +943,11 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void showCardsPopUp() {
+		cardsPopUp.getChildren().removeIf(x -> x instanceof HBox);
+		dropOnPane1.getChildren().removeIf(x -> x instanceof VBox);
+		dropOnPane2.getChildren().removeIf(x -> x instanceof VBox);
+		dropOnPane3.getChildren().removeIf(x -> x instanceof VBox);
+
 		ArrayList<Card> cards = this.cardsPlayerOnGUI;
 		HBox hbCards = new HBox();
 		hbCards.setPrefHeight(getRelativeVer(270.0));
@@ -1109,6 +1081,7 @@ public class GamePaneController implements Initializable{
 		middlePhaseLogo.setVisible(phase == Phase.ATTACK);
 		lastPhaseLogo.setVisible(phase == Phase.FORTIFY);
 		labPhase.setText(phase.toString());
+		spNum.setVisible(phase == Phase.REINFORCE);
 		this.currentPhase = phase;
 	}
 	
