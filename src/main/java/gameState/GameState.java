@@ -3,6 +3,7 @@ package gameState;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import game.Battle;
 import game.Lobby;
@@ -40,6 +41,7 @@ public class GameState {
 	private CountryName lastAttackingCountry;
 	private CountryName lastFortifyingCounty;
 	private Battle battle;
+	private boolean lastTurnWonterritory;
 
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
@@ -217,6 +219,12 @@ public class GameState {
 		this.cards.removeAll(this.riskCardsInPlayers.get(idOfPlayer));
 	}
 	
+	public void receiveRandomRiskCard(int idOfPlayer) {
+		Random generator = new Random();
+		Card card = this.cards.remove(generator.nextInt(this.cards.size()));
+		this.riskCardsInPlayers.get(idOfPlayer).add(card);
+	}
+	
 	public CountryName getLastAttackingCountry() {
 		return lastAttackingCountry;
 	}
@@ -245,6 +253,16 @@ public class GameState {
 
 	public void setBattle(Battle battle) {
 		this.battle = battle;
+	}
+
+
+	public boolean getLastTurnWonterritory() {
+		return lastTurnWonterritory;
+	}
+
+
+	public void setLastTurnWonterritory(boolean lastTurnWonterritory) {
+		this.lastTurnWonterritory = lastTurnWonterritory;
 	}
 	
 }

@@ -488,7 +488,7 @@ public class LobbyMenuController extends StackPane {
 
 				lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());
 				if(!singleplayerLobby) {
-				client.sendMessage(new MessageUpdateLobby(lobby));
+					client.sendMessage(new MessageUpdateLobby(lobby));
 				}
 			}
 		});
@@ -511,7 +511,7 @@ public class LobbyMenuController extends StackPane {
 
 				// TODO add remove ai players
 				if(!singleplayerLobby) {
-				client.sendMessage(new MessageUpdateLobby(lobby));
+					client.sendMessage(new MessageUpdateLobby(lobby));
 				}
 			}
 		});
@@ -529,7 +529,7 @@ public class LobbyMenuController extends StackPane {
 				} catch (FileNotFoundException e) {
 				}
 				if(!singleplayerLobby) {
-				client.sendMessage(new MessageUpdateLobby(lobby));
+					client.sendMessage(new MessageUpdateLobby(lobby));
 				}
 			}
 		});
@@ -561,9 +561,10 @@ public class LobbyMenuController extends StackPane {
 						setUpPlayerCards();
 					} catch (FileNotFoundException e) {
 					}
-					client.sendMessage(new MessageUpdateLobby(lobby));
+					if (!singleplayerLobby) {
+						client.sendMessage(new MessageUpdateLobby(lobby));
+					}
 				}
-
 			}
 		});
 
@@ -593,7 +594,9 @@ public class LobbyMenuController extends StackPane {
 						setUpPlayerCards();
 					} catch (FileNotFoundException e) {
 					}
-					client.sendMessage(new MessageUpdateLobby(lobby));
+					if (!singleplayerLobby) {
+						client.sendMessage(new MessageUpdateLobby(lobby));
+					}				
 					System.out.println("last");
 				}
 			}
@@ -672,7 +675,11 @@ public class LobbyMenuController extends StackPane {
 			}
 		});
 
-		this.getChildren().addAll(contentVBox, topBannerParent, chatWindow);
+		this.getChildren().addAll(contentVBox, topBannerParent);
+		if(!singleplayerLobby) {
+			this.getChildren().add(chatWindow);
+
+		}
 	}
 
 	public void setUpPlayerCards() throws FileNotFoundException {

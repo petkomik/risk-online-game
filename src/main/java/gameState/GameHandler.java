@@ -351,6 +351,9 @@ public class GameHandler {
 					break;
 				case ATTACK:
 					this.gameState.setCurrentTurnPhase(Phase.FORTIFY);
+					if(this.gameState.getLastTurnWonterritory()) {
+						this.gameState.receiveRandomRiskCard(idOfPlayer);
+					}
 					switch(this.gameType) {
 					case SinglePlayer:
 						System.out.println("Attack Phase ended for " + idOfPlayer);
@@ -366,6 +369,7 @@ public class GameHandler {
 					this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
 					this.gameState.setNextPlayer();	
 					this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
+					this.gameState.setLastTurnWonterritory(false);
 
 					switch(this.gameType) {
 					case SinglePlayer:
@@ -550,6 +554,7 @@ public class GameHandler {
 			boolean overAt = changed.getTroopsInAttackAt() == 0; 
 			boolean overDf = changed.getTroopsInAttackDf() == 0;
 			if(overDf) {
+				this.gameState.setLastTurnWonterritory(true);
 				this.gameState.getTerritories().get(changed.getCountryNameDf()).setOwnedByPlayer(
 						this.gameState.getPlayers().get(changed.getAttackerID()));
 				if(!Logic.playerIsAlive(gameState, changed.getDefenderID())) {
