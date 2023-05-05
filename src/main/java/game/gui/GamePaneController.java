@@ -1033,37 +1033,60 @@ public class GamePaneController implements Initializable{
 			countryNamePane.getChildren().add(countryNameLabel);
 			
 			ImageView countryIV = new ImageView(c.getPngDir()); 
-			
-			String path = null;
-			switch (c.getCardSymbol()) {
-			case 1:
-				path = Parameter.infantry;
-				break;
-			case 5:
-				path = Parameter.cavalry;
-				break;
-			case 10:
-				path = Parameter.artillery;
-				break;
-			case -1:
-//				path = Parameter.wildCard;
-				break;
-			default:
-				break;
-			}
-			ImageView armyIV = new ImageView(path);
-			
 			countryIV.setFitWidth(countryArmyPane.getPrefWidth() - 30.0);
 			countryIV.setFitHeight(countryArmyPane.getPrefHeight() - 50.0);
 			countryIV.setLayoutX((countryArmyPane.getPrefWidth() - countryIV.getFitWidth()) / 2.0);
 			countryIV.setLayoutY((countryArmyPane.getPrefHeight() - countryIV.getFitHeight()) / 2.0);
 			
-			armyIV.setFitWidth(55.0);
-			armyIV.setFitHeight(80.0);
-			armyIV.setLayoutX(15.0);
-			armyIV.setLayoutY(110.0);
+			countryArmyPane.getChildren().add(countryIV);
 			
-			countryArmyPane.getChildren().addAll(countryIV, armyIV);
+			
+			if(c.isJoker()) {
+				VBox armiesVB = new VBox();
+				armiesVB.setPrefSize(55.0, 150.0);
+				armiesVB.setLayoutX(14.0);
+				armiesVB.setLayoutY(27.0);
+				armiesVB.setSpacing(10.0);
+				
+				ImageView armyIV1 = new ImageView(Parameter.infantry);
+				armyIV1.setFitWidth(55.0);
+				armyIV1.setFitHeight(40.0);
+				
+				ImageView armyIV2 = new ImageView(Parameter.artillery);
+				armyIV2.setFitWidth(55.0);
+				armyIV2.setFitHeight(40.0);
+				
+				ImageView armyIV3 = new ImageView(Parameter.cavalry);
+				armyIV3.setFitWidth(55.0);
+				armyIV3.setFitHeight(40.0);
+				
+				armiesVB.getChildren().addAll(armyIV1, armyIV2, armyIV3);
+				countryArmyPane.getChildren().add(armiesVB);
+			}
+			else {
+				String path = null;
+				switch (c.getCardSymbol()) {
+				case 1:
+					path = Parameter.infantry;
+					break;
+				case 5:
+					path = Parameter.cavalry;
+					break;
+				case 10:
+					path = Parameter.artillery;
+					break;
+				default:
+					break;
+				}
+				ImageView armyIV = new ImageView(path);
+				armyIV.setFitWidth(55.0);
+				armyIV.setFitHeight(80.0);
+				armyIV.setLayoutX(15.0);
+				armyIV.setLayoutY(110.0);
+				
+				countryArmyPane.getChildren().add(armyIV);
+			}
+			
 			
 			vbCard.getChildren().addAll(countryNamePane, countryArmyPane);
 			hbCards.getChildren().add(vbCard);
