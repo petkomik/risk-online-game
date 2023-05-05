@@ -406,6 +406,7 @@ public class GameHandler {
 							this.singlePlayerHandler.setPeriodOnGUI(Period.COUNTRYPOSESSION);
 							if(this.gameState.getCurrentPlayer().isAI()) {
 								// calls the AI 
+								this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
 							} else {
 								this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 										this.gameState.getRiskCardsInPlayers().get(idOfPlayer));	
@@ -625,11 +626,12 @@ public class GameHandler {
     			}
             	System.out.println("Test" + country.toString());
         		Timeline timer2 = new Timeline(new KeyFrame(Duration.seconds(3)));
+        		Timeline timer3 = new Timeline(new KeyFrame(Duration.seconds(6)));
             	final CountryName countryNameCopy = country;
             	timer2.play();
-            	timer2.setOnFinished(x -> this.clickCountry(this.gameState.getCurrentPlayer().getID(), countryNameCopy));
-            	timer2.play();
-            	timer2.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
+            	timer2.setOnFinished(x -> this.clickCountry(player.getID(), countryNameCopy));
+            	timer3.play();
+            	timer3.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
             	return;
             case INITIALDEPLOY:
             	country = AILogic.chooseTerritoryToInitialReinforce(gameState, player);
