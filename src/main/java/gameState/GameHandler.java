@@ -21,6 +21,9 @@ import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerAI;
 import game.models.Territory;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 public class GameHandler {
 	// Gamelogic Ausführung der Methoden
@@ -370,7 +373,8 @@ public class GameHandler {
 						this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 								this.gameState.getTroopsLeftForCurrent());
 						if(this.gameState.getCurrentPlayer().isAI()) {
-							// calls the AI 
+							// calls the AI
+							this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
 						} else {
 							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 									this.gameState.getRiskCardsInPlayers().get(idOfPlayer));
@@ -419,7 +423,8 @@ public class GameHandler {
 							this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 									this.gameState.getTroopsLeftForCurrent());
 							if(this.gameState.getCurrentPlayer().isAI()) {
-								// calls the AI 
+								// calls the AI
+								this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
 							} else {
 								this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 										this.gameState.getRiskCardsInPlayers().get(idOfPlayer));
@@ -453,6 +458,7 @@ public class GameHandler {
 								this.gameState.getTroopsLeftForCurrent());
 						if(this.gameState.getCurrentPlayer().isAI()) {
 							// calls the AI 
+							this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
 						} else {
 							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 									this.gameState.getRiskCardsInPlayers().get(idOfPlayer));
@@ -487,6 +493,7 @@ public class GameHandler {
 								this.gameState.getTroopsLeftForCurrent());
 						if(this.gameState.getCurrentPlayer().isAI()) {
 							// calls the AI 
+							this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
 						} else {
 							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 									this.gameState.getRiskCardsInPlayers().get(idOfPlayer));
@@ -599,49 +606,77 @@ public class GameHandler {
 	}
 	
 	public void simulateAI(GameState gameState, PlayerAI player) {
+		CountryName country = null;
+		Timeline timer = new Timeline(new KeyFrame(Duration.seconds(3)));
         while(true) {
             switch(gameState.getCurrentGamePeriod()) {
-            case DICETHROW:
-            	try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-            	this.playerThrowsInitialDice(player.getID());
-            	this.gameState.setNextPlayer();
-            	this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+            case DICETHROW:            
+        		this.playerThrowsInitialDice(player.getID());
+            	timer.play();
+            	timer.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
             	return;
             case COUNTRYPOSESSION:
-            	try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-            	CountryName country = AILogic.chooseTerritoryToInitialClaim(gameState, player);
+            	country = AILogic.chooseTerritoryToInitialClaim(gameState, player);
             	if(Logic.claimTerritory(player, this.gameState, country)) {
     				this.gameState.setOwnedByTerritory(country, player);
     				this.gameState.updateTroopsOnTerritory(country, 1);
     				int numTroopsPlayer = this.gameState.getPlayerTroopsLeft().get(player.getID()) - 1; 
     				this.gameState.getPlayerTroopsLeft().replace(player.getID(), numTroopsPlayer);
-    				switch (this.gameType) {
-    				case SinglePlayer:
-    					this.singlePlayerHandler.possesCountryOnGUI(country, player.getID(), this.gameState.getPlayerTroopsLeft().get(player.getID()));
-    					break;
-    				case Multiplayer:
-    					break;
-    				case Tutorial:
-    					break;
-    				}
     			}
-            	this.gameState.setNextPlayer();
-            	this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 0);
+            	System.out.println("Test" + country.toString());
+        		Timeline timer2 = new Timeline(new KeyFrame(Duration.seconds(3)));
+            	final CountryName countryNameCopy = country;
+            	timer2.play();
+            	timer2.setOnFinished(x -> this.clickCountry(this.gameState.getCurrentPlayer().getID(), countryNameCopy));
+            	timer2.play();
+            	timer2.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
             	return;
             case INITIALDEPLOY:
+            	country = AILogic.chooseTerritoryToInitialReinforce(gameState, player);
+            	try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+            	this.clickCountry(this.gameState.getCurrentPlayer().getID(), country);
+            	this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID());
+            	return;
             case MAINPERIOD:
                 switch(gameState.getCurrentTurnPhase()) {
+                
                 case FORTIFY:
+                	if(AILogic.willFortify(gameState, player)) {
+                		AILogic.chooseTerritoriesPairFortify(gameState, player);
+                		AILogic.chooseTroopsToSendFortify(null, player);
+                	}
+                	try {
+    					Thread.sleep(2000);
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
+                	this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID());         	
                 case ATTACK:
+                	if(AILogic.willAttack(gameState, player)) {
+                		AILogic.chooseTerritoryPairAttack(gameState, player);
+                		try {
+        					Thread.sleep(2000);
+        				} catch (InterruptedException e) {
+        					e.printStackTrace();
+        				}
+                		
+                	}
                 case REINFORCE:
+                	while(this.gameState.getPlayerTroopsLeft().get(player.getID()) > 0){
+                    	AILogic.chooseTerritoryToReinforce(gameState, player);
+                    	try {
+        					Thread.sleep(2000);
+        				} catch (InterruptedException e) {
+        					e.printStackTrace();
+        				}
+                    	}
+                    	this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID());
+                    	return;
+                    	
                 }
 
             }
