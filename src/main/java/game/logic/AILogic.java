@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import game.models.CountryName;
@@ -198,14 +199,12 @@ public class AILogic {
 	}
 	
 	public static CountryName getRandomOwnedCountryName(GameState gameState, PlayerAI player) {
-		HashMap<CountryName, Territory> territories = gameState.getTerritories();
-
-		for(Entry<CountryName, Territory> set : territories.entrySet()) {
-			if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
-				return set.getKey();
-			}
-		}
-		return null;
+		Object[] territories = gameState.getTerritories().keySet().stream()
+				.filter(x -> gameState.getTerritories().get(x).getOwnedByPlayer().equals(player))
+				.toArray();
+		Random generator = new Random();
+		CountryName randomValue = (CountryName) territories[generator.nextInt(territories.length)];
+		return randomValue;
 	}
 	
 	//owned territory with the fewest owned neighbours -> most outer country

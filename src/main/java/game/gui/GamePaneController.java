@@ -161,6 +161,7 @@ public class GamePaneController implements Initializable{
 	private Label titleLabel;
 	private Label explainationLabel;
 	private BattleFrameController battleFrame;
+	private int currentPlayerID = 0;
 
 	
 	@Override
@@ -865,6 +866,7 @@ public class GamePaneController implements Initializable{
 	
 	public void setCurrentPlayer(int id) {
 		Player player = this.playerIdHash.get(id);
+		this.currentPlayerID  = id;
 		for(int i = 0; i < playerIDs.size(); i++) {
 			if(player.getID() == playerIDs.get(i)) {
 				turn = i;
@@ -888,7 +890,9 @@ public class GamePaneController implements Initializable{
 	
 	
 	public void showChoosingTroopsPane(CountryName countryName, int minTroops, int maxTroops, ChoosePane choosePane) {
-		choosingTroopsPane.setVisible(true);
+		if(this.currentPlayerID == this.playerOnGUI.getID()) {			
+			choosingTroopsPane.setVisible(true);
+		}
 		choosingTroopsPhaseLabel.setText(choosePane.toString());
 		this.numberLabel.setText(String.valueOf(minTroops));
 		if(choosePane.equals(ChoosePane.ATTACK_COLONISE)) {
@@ -964,6 +968,11 @@ public class GamePaneController implements Initializable{
 		    	numberLabel.setText(String.valueOf(i));	
 		    }
 		});
+	}
+	
+	public void closeChoosingTroopsPane() {
+    	choosingTroopsPane.setVisible(false);
+
 	}
 	
 	public void showCardsPopUp() {

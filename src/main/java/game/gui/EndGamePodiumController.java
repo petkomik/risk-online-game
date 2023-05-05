@@ -290,8 +290,8 @@ public class EndGamePodiumController extends Application {
 
 		thirdPlaceCup = new ImageView();
 		thirdPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "bronze.png")));
-		thirdPlaceCup.setFitWidth(180 * ratio);
-		thirdPlaceCup.setFitHeight(180 * ratio);
+		thirdPlaceCup.setFitWidth(200 * ratio);
+		thirdPlaceCup.setFitHeight(200 * ratio);
 		thirdPlaceCup.setPreserveRatio(true);
 		thirdPlaceCup.setSmooth(true);
 		thirdPlaceCup.setCache(true);
@@ -313,9 +313,8 @@ public class EndGamePodiumController extends Application {
 		
 		caption = new Text("WINNER");
 		caption.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 100 * ratio));
-		caption.setFill(Color.GOLD);
-		caption.setStroke(Color.WHITE);
-		caption.setStrokeWidth(2.0);
+		caption.setFill(Color.WHITE);
+
 
 		/*
 		 * adding the caption, cups and avatars to the vBox

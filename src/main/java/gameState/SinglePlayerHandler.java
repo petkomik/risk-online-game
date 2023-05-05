@@ -189,6 +189,10 @@ public class SinglePlayerHandler {
 		this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
 	}
 	
+	public void closeTroopsPaneOnGUI() {
+		this.gamePaneController.closeChoosingTroopsPane();
+	}
+	
 	public void setTroopsOnTerritory(CountryName countryName, int numTroopsOfCountry) {
 		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
 	}
