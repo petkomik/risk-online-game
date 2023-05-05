@@ -105,17 +105,18 @@ public class AILogic {
 		HashMap<Integer, Integer> troopsLeft = gameState.getPlayerTroopsLeft();
 		switch(player.getLevel()) {
 			case EASY:
-				int randNumbTroops = (int) (Math.random()*troopsLeft.get(player.getID()));
-				return new Pair(mostInnerCountry(gameState, player), randNumbTroops);
+				int randNumbTroops = (int) (Math.random() * (troopsLeft.get(player.getID()) - 1) + 1);
+				return new Pair<CountryName, Integer>(mostInnerCountry(gameState, player).getCountryName(), randNumbTroops);
+				
 			case CASUAL:
-				int randomNumTroops = (int) (Math.random()*troopsLeft.get(player.getID()));
+				int randomNumTroops = (int) (Math.random() * (troopsLeft.get(player.getID()) - 1) + 1);
 				List<Territory> list = new ArrayList<>();
 				for(Territory t : gameState.getTerritories().values()) {
 					if(t.getOwnedByPlayer().getID() == player.getID()) {
 						list.add(t);
 					}
 				}
-				int randomCountryIndex = (int) (Math.random()*list.size());
+				int randomCountryIndex = (int) (Math.random() * (list.size() - 1) + 1);
 				return new Pair<CountryName, Integer>(list.get(randomCountryIndex).getCountryName(), randomNumTroops);
 			case HARD:
 				ArrayList<Territory> threeMostOuterCountries = getThreeMostOuterCountries(gameState, player);
