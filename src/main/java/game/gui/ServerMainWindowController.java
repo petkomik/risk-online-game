@@ -104,7 +104,6 @@ public class ServerMainWindowController extends StackPane {
 	private static ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
 	private static volatile VBox vbox; // Lobbies in the scrollPane
 	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
-	public static HashMap<String, Lobby> lobbyList;
 	public static Lobby selectedLobby;
 
 	static Server server;
@@ -124,7 +123,6 @@ public class ServerMainWindowController extends StackPane {
 	public void setup() throws Exception {
 
 		lobbyGUIList = new HashMap<String, LobbyGUI>();
-		lobbyList = new HashMap<String, Lobby>();
 		/*
 		 * to be returned StackPane
 		 */
@@ -436,18 +434,17 @@ public class ServerMainWindowController extends StackPane {
 				BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
 					int i = 1;
 					String newUsername = clientUsername;
-					while (lobbyList.containsKey(newUsername)) {
+					while (client.getLobbies().containsKey(newUsername)) {
 						newUsername = clientUsername + i;
 						i++;
 					}
-					lobbyList.put(newUsername, lobby);
+					client.getLobbies().put(newUsername, lobby);
 					lobby.setLobbyName(newUsername);
 				};
 				addLobby.accept(client.getProfile().getUserName(), aLobby);
 				System.out.println(aLobby.getLobbyName());
 
 				client.sendMessage(new MessageCreateLobby(aLobby));
-				client.getLobbies().put(aLobby.getLobbyName(), aLobby);
 
 				drawLobbyMenu(aLobby);
 
@@ -501,6 +498,7 @@ public class ServerMainWindowController extends StackPane {
 
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
+								
 								lobby.leaveLobby(player);
 								
 								client.sendMessage(new MessageUpdateLobby(lobby));

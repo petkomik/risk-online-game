@@ -5,6 +5,8 @@ import java.io.IOException;
 import general.AppController;
 import general.Parameter;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,6 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import network.Client;
+import network.messages.MessageDisconnect;
+import network.messages.MessageServerCloseConnection;
 
 /**
  * 
@@ -52,6 +58,21 @@ public class MainApp extends Application{
         stage.setResizable(true);
         stage.setMinHeight(600);
 		stage.setMinWidth(900);
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			
+		@Override
+		public void handle(WindowEvent event) {
+			
+			Client client = AppController.getClient();
+			if(client.isHost()){
+				client.sendMessage(new MessageServerCloseConnection());
+			}else{
+				client.sendMessage(new MessageDisconnect(client.getProfile()));
+			}
+			Platform.exit();
+			System.exit(0);
+		}
+		});
         stage.show();
         
         /**************** Sound *************************//**

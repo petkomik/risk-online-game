@@ -93,7 +93,11 @@ public class Lobby implements Serializable{
 			k += i.getRank();
 		}
 		
+		if(this.getPlayerList().isEmpty()){
+			k=0;
+		}else {		
 		k = Math.round(k / this.getPlayerList().size());
+		}
 		this.lobbyRank = k;
 		
 	}

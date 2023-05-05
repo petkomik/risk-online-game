@@ -55,7 +55,7 @@ public class Client {
 		this.userName = profile.getUserName();
 		this.socket = socket;
 		try {
-
+				// update
 			this.outputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
@@ -296,7 +296,6 @@ public class Client {
 							System.out.println("MessageProfile");
 							break;
 						case MessageCreateLobby:
-							System.out.println("CLIENT " + profile.getUserName());
 
 							MessageCreateLobby mCL = (MessageCreateLobby) message;
 
@@ -318,7 +317,7 @@ public class Client {
 
 							ServerMainWindowController.lobbyGUIList.put(mCL.getLobby().getLobbyName(), lobbyGUI);
 							ServerMainWindowController.drawLobbies();
-							ServerMainWindowController.lobbyList.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
+							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
 
 							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
 
@@ -335,35 +334,37 @@ public class Client {
 											.drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
 								}
 							}
-
 							ServerMainWindowController.drawLobbies();
 							System.out.println(mJL.getLobby().getLobbyName());
 							break;
 						case MessageUpdateLobby:
 							MessageUpdateLobby messageUpdateLobby = (MessageUpdateLobby) message;
-							System.out.println(messageUpdateLobby.getLobby().getMaxNumberOfPlayers() + "Clinet 325");
-							System.out.println(messageUpdateLobby.getLobby().getLobbyName() + "Clinet 325");
+							// update all lobbies in Lobby 
 							lobbies.replace(messageUpdateLobby.getLobby().getLobbyName(),
 									messageUpdateLobby.getLobby());
+							// update Pane before joining a Lobby
 							ServerMainWindowController.lobbyGUIList.replace(
 									messageUpdateLobby.getLobby().getLobbyName(),
 									new LobbyGUI(messageUpdateLobby.getLobby()));
-							
+							// draws in the lobby
 							for (Player player : messageUpdateLobby.getLobby().getPlayersJoined()) {
 								if (profile.getId() == player.getID()) {
 									ServerMainWindowController
 											.drawLobbyMenu(lobbies.get(messageUpdateLobby.getLobby().getLobbyName()));
-									System.out.println("newlydrawn");
 								}
 							}
+							// remove lobbies in Server (Pane) if empty
 								if(messageUpdateLobby.getLobby().getHumanPlayerList().isEmpty()){
 									ServerMainWindowController.lobbyGUIList.remove(messageUpdateLobby.getLobby().getLobbyName());
 									lobbies.remove(messageUpdateLobby.getLobby().getLobbyName());
 							}
+								// draws Server pane 
 							ServerMainWindowController.drawLobbies();
 
 							break;
+							// Its a Message that sends all lobbies to everyone 
 						case MessageUpdateLobbyList:
+							
 							for (Map.Entry<String, Lobby> entry : ((MessageUpdateLobbyList) message).getLobbyList()
 									.entrySet()) {
 								String key = entry.getKey();
@@ -376,7 +377,6 @@ public class Client {
 									ServerMainWindowController.lobbyGUIList.put(key, new LobbyGUI(value));
 								}
 							});
-
 							ServerMainWindowController.drawLobbies();
 							break;
 						default:

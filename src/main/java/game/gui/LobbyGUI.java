@@ -66,7 +66,7 @@ public class LobbyGUI extends ToggleButton implements Serializable {
 		this.ratio = Math.min(ratio + 0.3, 1);
 		this.ratingString = lobby.getLobbyRank();
 		this.numberOfPlayersJoined = lobby.getPlayersJoined().size();
-		this.maxNumberOfPlayers = 6;
+		this.maxNumberOfPlayers = lobby.getMaxNumberOfPlayers();
 		this.lobbyNameString = lobby.getLobbyName();
 		setup();
 	}
