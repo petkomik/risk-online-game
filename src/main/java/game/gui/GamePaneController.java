@@ -1,5 +1,6 @@
 package game.gui;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 /**
  * @author majda
@@ -371,7 +373,7 @@ public class GamePaneController implements Initializable{
 		endTurnIV.setFitHeight(getRelativeHorz(31.0));
 		nextPhaseButton.setGraphic(endTurnIV);
 		nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;" 
-				+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+				+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 4px;");
 
 		nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 			if (newValue) {
@@ -382,8 +384,8 @@ public class GamePaneController implements Initializable{
 						+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 			}
 		});
-        nextPhaseButton.setLayoutX(getRelativeHorz(1072.0));
-        nextPhaseButton.setLayoutY(getRelativeVer(750.0));
+        nextPhaseButton.setLayoutX(getRelativeHorz(1020));
+        nextPhaseButton.setLayoutY(getRelativeVer(730.0));
         nextPhaseButton.setMnemonicParsing(false);
         nextPhaseButton.setPrefHeight(getRelativeHorz(72.0));
         nextPhaseButton.setPrefWidth(getRelativeHorz(72.0));
@@ -950,6 +952,7 @@ public class GamePaneController implements Initializable{
 
 		ArrayList<Card> cards = this.cardsPlayerOnGUI;
 		HBox hbCards = new HBox();
+		hbCards.setSpacing(20);
 		hbCards.setPrefHeight(getRelativeVer(270.0));
 		hbCards.setLayoutX(getRelativeHorz(435.0));
 		hbCards.setLayoutY(getRelativeVer(510.0));
@@ -998,48 +1001,52 @@ public class GamePaneController implements Initializable{
 					tradeButton.setText("NO TRADE");
 				}
 			});
-			Pane countryNamePane = new Pane();
-			Pane countryArmyPane = new Pane();
+			VBox countryNamePane = new VBox();
+			StackPane countryArmyPane = new StackPane();
 			
 			countryNamePane.setStyle("-fx-background-color: " + this.playerOnGUI.getColor() + ";");
 			countryArmyPane.setStyle("-fx-background-color: #ecd9c6;");
 			
+			countryNamePane.setAlignment(Pos.CENTER);
+			countryArmyPane.setAlignment(Pos.CENTER);
+			
 			countryNamePane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(70.0));
 			countryArmyPane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(200.0));
 
-			Label countryNameLabel = new Label(c.getName().toString());
+			Label countryNameLabel = new Label(c.getName().toString().replaceAll("(?!^)([A-Z])", "\n$1"));
 			countryNameLabel.setAlignment(Pos.CENTER);
 			countryNameLabel.setPadding(new Insets(10, 10, 10, 10));
+			countryNameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
+			countryNameLabel.setTextAlignment(TextAlignment.CENTER);
+
 			
 			countryNamePane.getChildren().add(countryNameLabel);
 			
-			ImageView countryIV = new ImageView(c.getPngDir()); 
-			countryIV.setFitWidth(countryArmyPane.getPrefWidth() - 30.0);
-			countryIV.setFitHeight(countryArmyPane.getPrefHeight() - 50.0);
-			countryIV.setLayoutX((countryArmyPane.getPrefWidth() - countryIV.getFitWidth()) / 2.0);
-			countryIV.setLayoutY((countryArmyPane.getPrefHeight() - countryIV.getFitHeight()) / 2.0);
-			
-			countryArmyPane.getChildren().add(countryIV);
 			
 			
 			if(c.isJoker()) {
 				VBox armiesVB = new VBox();
 				armiesVB.setPrefSize(55.0, 150.0);
-				armiesVB.setLayoutX(14.0);
-				armiesVB.setLayoutY(27.0);
+				armiesVB.setAlignment(Pos.CENTER);
 				armiesVB.setSpacing(10.0);
 				
 				ImageView armyIV1 = new ImageView(Parameter.infantry);
-				armyIV1.setFitWidth(55.0);
-				armyIV1.setFitHeight(40.0);
+				armyIV1.setFitHeight(55.0);
+				armyIV1.setPreserveRatio(true);
+				armyIV1.setSmooth(true);
+				armyIV1.setCache(true);
 				
 				ImageView armyIV2 = new ImageView(Parameter.artillery);
-				armyIV2.setFitWidth(55.0);
-				armyIV2.setFitHeight(40.0);
+				armyIV2.setFitHeight(55.0);
+				armyIV2.setPreserveRatio(true);
+				armyIV2.setSmooth(true);
+				armyIV2.setCache(true);	
 				
 				ImageView armyIV3 = new ImageView(Parameter.cavalry);
-				armyIV3.setFitWidth(55.0);
-				armyIV3.setFitHeight(40.0);
+				armyIV3.setFitHeight(55.0);
+				armyIV3.setPreserveRatio(true);
+				armyIV3.setSmooth(true);
+				armyIV3.setCache(true);
 				
 				armiesVB.getChildren().addAll(armyIV1, armyIV2, armyIV3);
 				countryArmyPane.getChildren().add(armiesVB);
@@ -1060,11 +1067,18 @@ public class GamePaneController implements Initializable{
 					break;
 				}
 				ImageView armyIV = new ImageView(path);
-				armyIV.setFitWidth(55.0);
-				armyIV.setFitHeight(80.0);
-				armyIV.setLayoutX(15.0);
-				armyIV.setLayoutY(110.0);
+				armyIV.setFitHeight(100);
+				armyIV.setPreserveRatio(true);
+				armyIV.setSmooth(true);
+				armyIV.setCache(true);
 				
+				ImageView countryIV = new ImageView(c.getPngDir()); 
+				countryIV.setFitWidth(countryArmyPane.getPrefWidth() - 30.0);
+				countryIV.setFitHeight(countryArmyPane.getPrefHeight() - 50.0);
+				countryIV.setLayoutX((countryArmyPane.getPrefWidth() - countryIV.getFitWidth()) / 2.0);
+				countryIV.setLayoutY((countryArmyPane.getPrefHeight() - countryIV.getFitHeight()) / 2.0);
+				
+				countryArmyPane.getChildren().add(countryIV);
 				countryArmyPane.getChildren().add(armyIV);
 			}
 			
