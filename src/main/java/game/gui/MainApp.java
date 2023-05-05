@@ -65,16 +65,13 @@ public class MainApp extends Application {
 			public void handle(WindowEvent event) {
 
 				Client client = AppController.getClient();
-				if (client.isHost()) {
-					if ((client != null)) {
+				if (client != null) {
+					if (client.isHost()) {
 						client.sendMessage(new MessageServerCloseConnection());
-					}
-				} else {
-					if (client != null) {
-
+					} else {
 						client.sendMessage(new MessageDisconnect(client.getProfile()));
 					}
-				}
+				} 
 				Platform.exit();
 				System.exit(0);
 			}

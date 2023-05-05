@@ -522,4 +522,8 @@ public class AILogic {
 			return 0;
 		}
 	}
+	public static int chooseTroopsToAttackWith(Territory territory, PlayerAI player, GameState gameState) {
+		// TODO Auto-generated method stub
+		return gameState.getTerritories().get(territory.getCountryName()).getNumberOfTroops();
+	}
 }
