@@ -107,10 +107,10 @@ public class EndGamePodiumController extends Application {
 		vBoxIcons = new VBox();
 		vBoxIcons.setAlignment(Pos.CENTER);
 
-		avatars = new HBox(50 * ratio);
-		avatars.setAlignment(Pos.CENTER);
+		avatars = new HBox(70 * ratio);
+		avatars.setAlignment(Pos.BOTTOM_CENTER);
 		place = new HBox(60 * ratio);
-		place.setAlignment(Pos.CENTER);
+		place.setAlignment(Pos.BOTTOM_CENTER);
 
 		/*
 		 * setting background Image and color
@@ -160,7 +160,7 @@ public class EndGamePodiumController extends Application {
 		Spacing bannerContentSpacing = new Spacing();
 		HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
 		
-		lobbyTextBanner = new Label("LOBBY");
+		lobbyTextBanner = new Label("GAME OVER");
 		lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
 		lobbyTextBanner.setTextFill(Color.WHITE);
 		
@@ -198,13 +198,13 @@ public class EndGamePodiumController extends Application {
 		// TODO set up the right color
 		circleFirstP.setFill(Parameter.blueColor);
 		circleFirstP.setStroke(Color.WHITE);
-		circleFirstP.setStrokeWidth(6);
+		circleFirstP.setStrokeWidth(8 * ratio);
 
 		firstP.getChildren().add(circleFirstP);
 
 		circleFirstI.setImage(new Image(new FileInputStream(Parameter.blondBoy)));
-		circleFirstI.setFitWidth(200 * ratio);
-		circleFirstI.setFitHeight(200 * ratio);
+		circleFirstI.setFitWidth(180 * ratio);
+		circleFirstI.setFitHeight(180 * ratio);
 		circleFirstI.setPreserveRatio(true);
 		circleFirstI.setSmooth(true);
 		circleFirstI.setCache(true);
@@ -215,18 +215,18 @@ public class EndGamePodiumController extends Application {
 		 * image and shape for the second avatar
 		 */
 
-		circleSecondP = new Circle(80 * ratio);
+		circleSecondP = new Circle(90 * ratio);
 		circleSecondI = new ImageView();
 		// TODO set up the right color
 		circleSecondP.setFill(Parameter.greenColor);
 		circleSecondP.setStroke(Color.WHITE);
-		circleSecondP.setStrokeWidth(6);
+		circleSecondP.setStrokeWidth(8 * ratio);
 
 		secondP.getChildren().add(circleSecondP);
 
 		circleSecondI.setImage(new Image(new FileInputStream(Parameter.hatBoy)));
-		circleSecondI.setFitWidth(170 * ratio);
-		circleSecondI.setFitHeight(170 * ratio);
+		circleSecondI.setFitWidth(180 * ratio);
+		circleSecondI.setFitHeight(180 * ratio);
 		circleSecondI.setPreserveRatio(true);
 		circleSecondI.setSmooth(true);
 		circleSecondI.setCache(true);
@@ -237,19 +237,19 @@ public class EndGamePodiumController extends Application {
 		 * image and shape for the third avatar
 		 */
 
-		circleThirdP = new Circle(70 * ratio);
+		circleThirdP = new Circle(90 * ratio);
 		circleThirdI = new ImageView();
 		// TODO set up the right color
 		if (players > 2) {
 			circleThirdP.setFill(Parameter.yellowColor);
 			circleThirdP.setStroke(Color.WHITE);
-			circleThirdP.setStrokeWidth(6);
+			circleThirdP.setStrokeWidth(8 * ratio);
 
 			thirdP.getChildren().add(circleThirdP);
 
 			circleThirdI.setImage(new Image(new FileInputStream(Parameter.gingerGirl)));
-			circleThirdI.setFitWidth(140 * ratio);
-			circleThirdI.setFitHeight(140 * ratio);
+			circleThirdI.setFitWidth(180 * ratio);
+			circleThirdI.setFitHeight(180 * ratio);
 			circleThirdI.setPreserveRatio(true);
 			circleThirdI.setSmooth(true);
 			circleThirdI.setCache(true);
@@ -266,49 +266,46 @@ public class EndGamePodiumController extends Application {
 		} else {
 			avatars.getChildren().addAll(firstP, secondP);
 		}
-		avatars.setPadding(new Insets(20, 200 * ratio, 20, 200 * ratio));
+		avatars.setPadding(new Insets(20, 0, 20, 0));
 
 		/*
 		 * setting up the images for the cups
 		 */
 
 		firstPlaceCup = new ImageView();
-		firstPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "PodiumPlace1.png")));
-		firstPlaceCup.setFitWidth(200 * ratio);
-		firstPlaceCup.setFitHeight(200 * ratio);
+		firstPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "gold.png")));
+		firstPlaceCup.setFitWidth(220 * ratio);
+		firstPlaceCup.setFitHeight(220 * ratio);
 		firstPlaceCup.setPreserveRatio(true);
 		firstPlaceCup.setSmooth(true);
 		firstPlaceCup.setCache(true);
 
 		secondPlaceCup = new ImageView();
-		secondPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "PodiumPlace2.png")));
-		secondPlaceCup.setFitWidth(170 * ratio);
-		secondPlaceCup.setFitHeight(170 * ratio);
+		secondPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "silver.png")));
+		secondPlaceCup.setFitWidth(200 * ratio);
+		secondPlaceCup.setFitHeight(200 * ratio);
 		secondPlaceCup.setPreserveRatio(true);
 		secondPlaceCup.setSmooth(true);
 		secondPlaceCup.setCache(true);
 
 		thirdPlaceCup = new ImageView();
+		thirdPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "bronze.png")));
+		thirdPlaceCup.setFitWidth(180 * ratio);
+		thirdPlaceCup.setFitHeight(180 * ratio);
+		thirdPlaceCup.setPreserveRatio(true);
+		thirdPlaceCup.setSmooth(true);
+		thirdPlaceCup.setCache(true);
 
-		if (players > 2) {
-			thirdPlaceCup.setImage(new Image(new FileInputStream(Parameter.podiumdir + "PodiumPlace3.png")));
-			thirdPlaceCup.setFitWidth(140 * ratio);
-			thirdPlaceCup.setFitHeight(140 * ratio);
-			thirdPlaceCup.setPreserveRatio(true);
-			thirdPlaceCup.setSmooth(true);
-			thirdPlaceCup.setCache(true);
+		if (players == 2) {
+			thirdPlaceCup.setVisible(false);
 		}
 
 		/*
 		 * adding the cups to their vBox
 		 */
 
-		if (players > 2) {
-			place.getChildren().addAll(secondPlaceCup, firstPlaceCup, thirdPlaceCup);
-		} else {
-			place.getChildren().addAll(firstPlaceCup, secondPlaceCup);
-		}
-		place.setPadding(new Insets(20 * ratio, 200 * ratio, 20 * ratio, 200 * ratio));
+		place.getChildren().addAll(secondPlaceCup, firstPlaceCup, thirdPlaceCup);
+		place.setPadding(new Insets(20 * ratio, 0, 20 * ratio, 0));
 
 		/*
 		 * adding endgame text

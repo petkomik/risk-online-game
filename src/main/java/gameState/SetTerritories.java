@@ -264,7 +264,8 @@ public class SetTerritories {
 		territories.get(CountryName.NorthAfrica)
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.WesternEurope),
 						territories.get(CountryName.SouthernEurope), territories.get(CountryName.Egypt),
-						territories.get(CountryName.EastAfrica), territories.get(CountryName.Congo))));
+						territories.get(CountryName.EastAfrica), territories.get(CountryName.Congo),
+						territories.get(CountryName.Brazil))));
 		territories.get(CountryName.Congo)
 				.setNeighboringTerritories(new ArrayList<>(Arrays.asList(territories.get(CountryName.NorthAfrica),
 						territories.get(CountryName.EastAfrica), territories.get(CountryName.SouthAfrica))));

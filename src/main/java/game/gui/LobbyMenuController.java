@@ -474,8 +474,9 @@ public class LobbyMenuController extends StackPane {
 		    	
 		    	lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());
 		    	
-		    	client.sendMessage(new MessageUpdateLobby(lobby));
-	    	}
+		    	if(!singleplayerLobby) {
+		    		client.sendMessage(new MessageUpdateLobby(lobby));		    		
+		    	}	    	}
 		});
 		
 		lessBtnDiff.setOnAction(new EventHandler<ActionEvent>() {
@@ -493,8 +494,9 @@ public class LobbyMenuController extends StackPane {
 		    	} else {}
 		    	
 		    	lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());; 	    	
-		    	client.sendMessage(new MessageUpdateLobby(lobby));
-
+		    	if(!singleplayerLobby) {
+		    		client.sendMessage(new MessageUpdateLobby(lobby));		    		
+		    	}
 	    	}
 		});
 		
@@ -511,8 +513,9 @@ public class LobbyMenuController extends StackPane {
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
 
 		    	// TODO add remove ai players
-		    	client.sendMessage(new MessageUpdateLobby(lobby));
-
+		    	if(!singleplayerLobby) {
+		    		client.sendMessage(new MessageUpdateLobby(lobby));		    		
+		    	}
 	    	}
 		});
 		
@@ -525,7 +528,9 @@ public class LobbyMenuController extends StackPane {
 		    		labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size()));
 		    	}
 		    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
-		    	client.sendMessage(new MessageUpdateLobby(lobby));
+		    	if(!singleplayerLobby) {
+		    		client.sendMessage(new MessageUpdateLobby(lobby));		    		
+		    	}
 
 	    	}
 		});
@@ -551,8 +556,8 @@ public class LobbyMenuController extends StackPane {
 			    		labelBtnPlayers.setText(String.valueOf(lobby.getMaxNumberOfPlayers()));
 			    	}
 			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
+			    	client.sendMessage(new MessageUpdateLobby(lobby));
 		    	}
-		    	client.sendMessage(new MessageUpdateLobby(lobby));
 		    	
 
 	    	}
@@ -577,9 +582,9 @@ public class LobbyMenuController extends StackPane {
 			    		labelBtnPlayers.setText(String.valueOf(lobby.getMaxNumberOfPlayers()));			    	
 			    		}
 			    	try {setUpPlayerCards();} catch (FileNotFoundException e) {}
+			    	client.sendMessage(new MessageUpdateLobby(lobby));
+			    	System.out.println("last");
 		    	}
-		    	client.sendMessage(new MessageUpdateLobby(lobby));
-		    	System.out.println("last");
 
 		    }
 		});
@@ -620,8 +625,9 @@ public class LobbyMenuController extends StackPane {
 
 		    		}
 		    	}
-		    	client.sendMessage(new MessageUpdateLobby(lobby));
-
+		    	if(!singleplayerLobby) {
+		    		client.sendMessage(new MessageUpdateLobby(lobby));		    		
+		    	}
 		    }
 		});
 		

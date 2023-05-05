@@ -360,11 +360,9 @@ public class GameHandler {
 					break;
 				case FORTIFY:
 					this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
-					this.gameState.setNextPlayer();
-					if(this.gameState.getCurrentPlayer().getID() == Logic.getFirstPlayer(gameState)) {
-						this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
-						
-					}
+					this.gameState.setNextPlayer();	
+					this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
+
 					switch(this.gameType) {
 					case SinglePlayer:
 						System.out.println("Fortify Phase ended for " + idOfPlayer);

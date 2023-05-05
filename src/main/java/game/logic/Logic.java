@@ -223,6 +223,10 @@ public class Logic {
 	public static HashMap<Integer, Integer> getTroopsReinforce(GameState gameState) {
 		HashMap<Integer, Integer> troops = gameState.getPlayerTroopsLeft();
 		
+		for(Integer idPlayer : troops.keySet()) {
+			troops.replace(idPlayer, 0);
+		}
+		
 		for(Territory territory : gameState.getTerritories().values()) {
 			troops.put(territory.getOwnedByPlayer().getID(), troops.get(territory.getOwnedByPlayer().getID()) + 1);
 		}
