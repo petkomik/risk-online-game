@@ -81,7 +81,6 @@ public class GamePaneController implements Initializable{
 	private Pane[] panes;
 	private Rectangle[] rectangles;
 	private ImageView[] ivTimer;
-	private Label[] labTimer;
 	private StackPane[] stackPanes;
 	private Circle[] circles;
 	private ImageView[] imageviews;
@@ -151,9 +150,9 @@ public class GamePaneController implements Initializable{
 		setUpMapComponents();
 		setUpLeaveGameButton();
 		setUpPhaseBoard();
+		setUpNextPhaseButton();
 		setUpChoosingTroopsPane();
 		setUpCardsPopUp();
-		setUpNextPhaseButton();
 		setUpTutorialsPane();
 	}
 	
@@ -304,7 +303,6 @@ public class GamePaneController implements Initializable{
 		stackPanes = new StackPane[numOfPlayer];
 		circles = new Circle[numOfPlayer];
 		imageviews = new ImageView[numOfPlayer];
-		labTimer = new Label[numOfPlayer];
 		ivTimer = new ImageView[numOfPlayer];
 		
 		for(int i = 0; i < numOfPlayer; i++) {
@@ -331,25 +329,17 @@ public class GamePaneController implements Initializable{
 			boxBlur.setWidth(38.25);
 			rectangles[i].setEffect(boxBlur);
 			
-			labTimer[i] = new Label("Timer");
-			labTimer[i].setLayoutX(16.0);
-			labTimer[i].setLayoutY(42.0);
-			labTimer[i].setPrefHeight(34.0);
-			labTimer[i].setPrefWidth(80.0);
-			labTimer[i].setAlignment(Pos.CENTER);
-			labTimer[i].setVisible(false);
-
 			// ImageView
 			ivTimer[i] = new ImageView(Parameter.phaseLogosdir + "timer.png");
-			ivTimer[i].setFitHeight(27.0);
-			ivTimer[i].setFitWidth(32.0);
+			ivTimer[i].setFitHeight(50.0);
+			ivTimer[i].setFitWidth(50.0);
 			ivTimer[i].setLayoutX(40.0);
-			ivTimer[i].setLayoutY(9.0);
+			ivTimer[i].setLayoutY(20.0);
 			ivTimer[i].setPickOnBounds(true);
 			ivTimer[i].setPreserveRatio(true);
 			ivTimer[i].setVisible(false);
 			
-			panes[i] = new Pane(rectangles[i], stackPanes[i], labTimer[i], ivTimer[i]);
+			panes[i] = new Pane(rectangles[i], stackPanes[i], ivTimer[i]);
 			
 		}
 		vbPlayerList.getChildren().addAll(panes);
@@ -413,7 +403,7 @@ public class GamePaneController implements Initializable{
 	
 	public void setUpPhaseBoard() {
 		phaseBoard = new Pane();
-		phaseBoard.setPrefSize(getRelativeHorz(800.0), getRelativeVer(130.0));
+		phaseBoard.setPrefSize(getRelativeHorz(645.0), getRelativeVer(130.0));
 		
 		vbPhase = new VBox();
 		vbPhase.setPrefSize(getRelativeHorz(250.0), getRelativeVer(130.0));
@@ -473,8 +463,8 @@ public class GamePaneController implements Initializable{
         spNum.getChildren().addAll(cirNum, labNum);
         
         labPhase = new Label("CLAIM");
-        labPhase.setPrefSize(getRelativeHorz(245.0), getRelativeVer(40.0));
-        labPhase.setLayoutX(getRelativeHorz(378.0));
+        labPhase.setPrefSize(getRelativeHorz(300.0), getRelativeVer(40.0));
+        labPhase.setLayoutX(getRelativeHorz(341.0));
         labPhase.setLayoutY(getRelativeVer(81.0));
         labPhase.setAlignment(Pos.CENTER);
         labPhase.setStyle("-fx-font-family: \"Helvetica\";"
@@ -511,13 +501,12 @@ public class GamePaneController implements Initializable{
         rectCards = new Rectangle();
         rectCards.setArcHeight(5.0);
         rectCards.setArcWidth(5.0);
-		rectCards.setOpacity(0.44);
-        rectCards.setHeight(getRelativeVer(84.0));
+        rectCards.setHeight(getRelativeVer(60.0));
         rectCards.setLayoutX(getRelativeHorz(99.0));
         rectCards.setLayoutY(getRelativeVer(23.0));
         rectCards.setStrokeType(StrokeType.INSIDE);
         rectCards.setStrokeWidth(0.0);
-        rectCards.setWidth(getRelativeHorz(150.0));
+        rectCards.setWidth(getRelativeHorz(80.0));
         BoxBlur boxBlur = new BoxBlur();
         boxBlur.setHeight(0.0);
         boxBlur.setWidth(38.25);
@@ -525,8 +514,10 @@ public class GamePaneController implements Initializable{
         rectCards.setVisible(false);
 
         cardsImageView = new ImageView();
-        cardsImageView.setFitHeight(getRelativeVer(115.0));
-        cardsImageView.setFitWidth(getRelativeHorz(110.0));
+        cardsImageView.setFitHeight(getRelativeVer(60.0));
+        cardsImageView.setFitWidth(getRelativeHorz(60.0));
+        cardsImageView.setLayoutX(getRelativeHorz(39.0));
+        cardsImageView.setLayoutY(getRelativeVer(23.0));
         cardsImageView.setPickOnBounds(true);
         cardsImageView.setPreserveRatio(true);
         cardsImageView.setOnMouseClicked(e -> {
@@ -535,18 +526,19 @@ public class GamePaneController implements Initializable{
         cardsImageView.setVisible(false);
 
         
-        numCardsLabel = new Label("");
-        numCardsLabel.setLayoutX(getRelativeHorz(138.0));
-        numCardsLabel.setLayoutY(getRelativeVer(45.0));
-        numCardsLabel.setPrefHeight(getRelativeVer(50.0));
-        numCardsLabel.setPrefWidth(getRelativeHorz(92.0));
+        numCardsLabel = new Label();
+        numCardsLabel.setLayoutX(getRelativeHorz(99.0));
+        numCardsLabel.setLayoutY(getRelativeVer(23.0));
+        numCardsLabel.setPrefHeight(getRelativeVer(60.0));
+        numCardsLabel.setPrefWidth(getRelativeHorz(80.0));
+        numCardsLabel.setAlignment(Pos.CENTER);
+        numCardsLabel.setFont(Font.font(getRelativeHorz(25.0)));
+        numCardsLabel.setTextFill(Color.WHITE);
         numCardsLabel.setVisible(false);
 
-
-        
         phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo, middlePhaseLogo, lastPhaseLogo, rectCards, cardsImageView, numCardsLabel);
         
-        phaseBoard.setLayoutX((w - phaseBoard.getPrefWidth() * phaseBoard.getScaleX()) / 2.0);
+        phaseBoard.setLayoutX(((w - phaseBoard.getPrefWidth()) / 2.0) - vbPhase.getPrefWidth() / 2.0);
         phaseBoard.setLayoutY(getRelativeVer(700.0));
         phaseBoard.setVisible(false);
         phaseBoard.setPickOnBounds(true);
@@ -556,7 +548,7 @@ public class GamePaneController implements Initializable{
 	public void setUpChoosingTroopsPane() {
 		choosingTroopsPane = new Pane();
 		choosingTroopsPane.setPrefSize(w, h);
-		choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
 		Rectangle rectangle = new Rectangle();
 		rectangle.setArcHeight(5.0);
@@ -566,13 +558,45 @@ public class GamePaneController implements Initializable{
 		rectangle.setWidth(getRelativeHorz(284.0));
 		rectangle.setHeight(getRelativeVer(72.0));
 		
-		falseButtonChoosingTroops = new Button("x");
+		ImageView cancelIV = new ImageView(Parameter.phaseLogosdir + "cancel.png");
+		cancelIV.setFitWidth(getRelativeHorz(31.0));
+		cancelIV.setFitHeight(getRelativeHorz(31.0));
+		falseButtonChoosingTroops = new Button();
+		falseButtonChoosingTroops.setGraphic(cancelIV);
+		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;" 
+				+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+
+		falseButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			if (newValue) {
+				falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+			} else {
+				falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+			}
+		});
 		falseButtonChoosingTroops.setLayoutX(getRelativeHorz(586.0));
 		falseButtonChoosingTroops.setLayoutY(getRelativeVer(608.0));
 		falseButtonChoosingTroops.setMnemonicParsing(false);
 		falseButtonChoosingTroops.setPrefSize(getRelativeHorz(72.0), getRelativeHorz(72.0));
 
-		trueButtonChoosingTroops = new Button("✓");
+		ImageView endTurnIV = new ImageView(Parameter.phaseLogosdir + "endturn.png");
+		endTurnIV.setFitWidth(getRelativeHorz(31.0));
+		endTurnIV.setFitHeight(getRelativeHorz(31.0));
+		trueButtonChoosingTroops = new Button();
+		trueButtonChoosingTroops.setGraphic(endTurnIV);
+		trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;" 
+				+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+
+		trueButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			if (newValue) {
+				trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+			} else {
+				trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+			}
+		});
 		trueButtonChoosingTroops.setLayoutX(getRelativeHorz(879.0));
 		trueButtonChoosingTroops.setLayoutY(getRelativeVer(608.0));
 		trueButtonChoosingTroops.setMnemonicParsing(false);
@@ -606,7 +630,14 @@ public class GamePaneController implements Initializable{
 		numTroopsBP.setLayoutX((w - numTroopsBP.getPrefWidth()) / 2.0);
 		numTroopsBP.setLayoutY(getRelativeVer(514.0));
 		
-		choosingTroopsPane.getChildren().addAll(confirmationSP, trueButtonChoosingTroops, falseButtonChoosingTroops, numTroopsBP);
+		Rectangle whiteBackground = new Rectangle();
+		whiteBackground.setFill(Color.WHITE);
+		whiteBackground.setWidth(getRelativeHorz(400.0));
+		whiteBackground.setHeight(getRelativeVer(200.0));
+		whiteBackground.setLayoutX((w - whiteBackground.getWidth()) / 2.0);
+		whiteBackground.setLayoutY(getRelativeVer(500));
+		
+		choosingTroopsPane.getChildren().addAll(whiteBackground, confirmationSP, trueButtonChoosingTroops, falseButtonChoosingTroops, numTroopsBP);
 		choosingTroopsPane.setVisible(false);
 		choosingTroopsPane.setPickOnBounds(true);
 		gameBoard.getChildren().add(choosingTroopsPane);
@@ -618,7 +649,7 @@ public class GamePaneController implements Initializable{
 	private void setUpCardsPopUp() {
 		cardsPopUp = new Pane();
 		cardsPopUp.setPrefSize(w, h);
-		cardsPopUp.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		cardsPopUp.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 		cardsPopUp.setVisible(false);
 		
 		Button cancelButton = new Button("CANCEL");
@@ -706,7 +737,7 @@ public class GamePaneController implements Initializable{
 	private void setUpTutorialsPane() {
 		tutorialMainPane = new Pane();
 		tutorialMainPane.setPrefSize(w, h);
-		tutorialMainPane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		tutorialMainPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 		
 		Pane tutorialTextPane = new Pane();
 		tutorialTextPane.setPrefSize(getRelativeHorz(800.0), getRelativeVer(600.0));
@@ -842,7 +873,6 @@ public class GamePaneController implements Initializable{
 		}
 		for(int i = 0; i < numOfPlayer; i++) {
 			rectangles[i].setVisible(i == turn);
-			labTimer[i].setVisible(i == turn);
 			ivTimer[i].setVisible(i == turn);
 		}
 		cirPhase.setFill(Color.web(playerColors.get(turn)));
@@ -868,21 +898,6 @@ public class GamePaneController implements Initializable{
 			falseButtonChoosingTroops.setDisable(false);
 
 		}
-		
-		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-		falseButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-        		falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
-            } else {
-            	falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-            }
-	        });
 		falseButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
@@ -892,21 +907,6 @@ public class GamePaneController implements Initializable{
 		    }
 		});
 		
-		trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-    			+ "	-fx-font-size: 30px;"
-    			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-        trueButtonChoosingTroops.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ makeColorHexDarker(Color.web(playerColors.get(turn))) +";");
-            } else {
-            	trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\";"
-            			+ "	-fx-font-size: 30px;"
-            			+ "	-fx-background-color: "+ playerColors.get(turn) +";");
-            }
-        });
-        
         trueButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
@@ -1205,7 +1205,7 @@ public class GamePaneController implements Initializable{
 	public void openBattleFrame(Battle battle) {
 		battlePane = new Pane();
 		battlePane.setPrefSize(w, h);
-		battlePane.setStyle("-fx-background-color: rgba(0, 0, 255, 0.2);");
+		battlePane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
 		boolean attacker = this.playerOnGUI.getID() == battle.getAttackerID();
 
