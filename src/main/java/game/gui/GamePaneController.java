@@ -1032,7 +1032,7 @@ public class GamePaneController implements Initializable{
 			
 			countryNamePane.getChildren().add(countryNameLabel);
 			
-			ImageView countryIV = new ImageView(); // I need to get the right name of the file
+			ImageView countryIV = new ImageView(c.getPngDir()); 
 			
 			String path = null;
 			switch (c.getCardSymbol()) {
