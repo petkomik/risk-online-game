@@ -42,7 +42,7 @@ public class AILogic {
 					}
 					for(Territory t : territories.values()) {
 						if(t.getOwnedByPlayer().getID() == player.getID()) {
-							return getNearestTerritory(t.getNeighboringTerritories());
+							return getNearestTerritory(t.getNeighboringTerritories(), gameState);
 						}
 					}
 				}
@@ -50,31 +50,30 @@ public class AILogic {
 				if(getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
 					return getRandomFreeCountryName(gameState);
 				}
+				ArrayList<Territory> neighbouringTerr = new ArrayList<>();
 				for(Territory t : territories.values()) {
-					if(t.getOwnedByPlayer().getID() == player.getID()) {
-						return getNearestTerritory(t.getNeighboringTerritories());
-					}
+					neighbouringTerr.addAll(t.getNeighboringTerritories());
+					neighbouringTerr.removeIf(x -> x.getOwnedByPlayer() != null && x.getOwnedByPlayer().getID() == player.getID());
 				}
+				
+				return getNearestTerritory(neighbouringTerr, gameState);
 			default:
 				return null;
 		}
 	}
-	private static CountryName getNearestTerritory(Collection<Territory> neighbourTerritories) {
+	private static CountryName getNearestTerritory(Collection<Territory> neighbourTerritories, GameState gameState) {
 		for(Territory t : neighbourTerritories) {
 			if(t.getOwnedByPlayer() == null) {
 				return t.getCountryName();
 			}
 		}
-		for(Territory t : neighbourTerritories) {
-			return getNearestTerritory(t.getNeighboringTerritories());
-		}
-		return null;
+		return getRandomFreeCountryName(gameState);
 	}
 	
 	private static int getNumberOfCountriesOwnedByPlayer(Collection<Territory> territories, Player player) {
 		int i = 0;
 		for(Territory t : territories) {
-			if(t.getOwnedByPlayer().getID() == player.getID()) {
+			if(t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
 				i++;
 			}
 		}
