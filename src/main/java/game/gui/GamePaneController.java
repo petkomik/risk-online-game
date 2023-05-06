@@ -372,7 +372,7 @@ public class GamePaneController implements Initializable{
 		vbPlayerList.getChildren().addAll(panes);
 //		vbPlayerList.setScaleX(w / 1536.0);
 //		vbPlayerList.setScaleY(h / 864.0);
-		vbPlayerList.setLayoutX(getRelativeHorz(1285.0));
+		vbPlayerList.setLayoutX(getRelativeHorz(1325.0));
 		vbPlayerList.setLayoutY((h - vbPlayerList.getPrefHeight()) / 2.0);
 		vbPlayerList.setSpacing(getRelativeVer(20.0));
 		
