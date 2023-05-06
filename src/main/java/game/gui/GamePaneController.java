@@ -469,9 +469,10 @@ public class GamePaneController implements Initializable{
         labPhase.setLayoutX(getRelativeHorz(341.0));
         labPhase.setLayoutY(getRelativeVer(81.0));
         labPhase.setAlignment(Pos.CENTER);
-        labPhase.setStyle("-fx-font-family: \"Helvetica\";"
-        		+ "    -fx-font-weight: bold;"
-        		+ "    -fx-font-size: 30px;");
+        labPhase.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(30.0)));
+//        labPhase.setStyle("-fx-font-family: \"Helvetica\";"
+//        		+ "    -fx-font-weight: bold;"
+//        		+ "    -fx-font-size: 30px;");
 
         firstPhaseLogo = new ImageView(Parameter.phaseLogosdir + "reinforce.png"); 
         firstPhaseLogo.setFitHeight(getRelativeVer(27.0));
@@ -606,6 +607,8 @@ public class GamePaneController implements Initializable{
 	
 		choosingTroopsPhaseLabel = new Label();
 		choosingTroopsPhaseLabel.setPrefSize(getRelativeHorz(204.0), getRelativeVer(72.0));
+		choosingTroopsPhaseLabel.setAlignment(Pos.CENTER);
+		choosingTroopsPhaseLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(30)));
 		
 		StackPane confirmationSP = new StackPane();
 		confirmationSP.getChildren().addAll(rectangle, choosingTroopsPhaseLabel);
@@ -654,19 +657,11 @@ public class GamePaneController implements Initializable{
 		cardsPopUp.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 		cardsPopUp.setVisible(false);
 		
-		Button cancelButton = new Button("CANCEL");
+		Button cancelButton = new DesignButton();
+		cancelButton.setText("CANCEL");
 		cancelButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
 		cancelButton.setLayoutX(getRelativeHorz(1185.0));
 		cancelButton.setLayoutY(getRelativeVer(90.0));
-		cancelButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-		cancelButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-        	if (newValue) {
-        		cancelButton.setStyle("-fx-background-color: #ac7339; "
-        				+ "-fx-background-radius: 15px; ");
-            } else {
-            	cancelButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-            }
-	        });
 		cancelButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
 		cancelButton.setOnAction(e -> cardsPopUp.setVisible(false));
 		
@@ -894,12 +889,7 @@ public class GamePaneController implements Initializable{
 		}
 		choosingTroopsPhaseLabel.setText(choosePane.toString());
 		this.numberLabel.setText(String.valueOf(minTroops));
-		if(choosePane.equals(ChoosePane.ATTACK_COLONISE)) {
-			falseButtonChoosingTroops.setDisable(true);
-		} else {
-			falseButtonChoosingTroops.setDisable(false);
-
-		}
+		falseButtonChoosingTroops.setVisible(choosePane != ChoosePane.ATTACK_COLONISE);
 		falseButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
@@ -961,6 +951,8 @@ public class GamePaneController implements Initializable{
 			vbCard.setMinSize(200, 270);
 			vbCard.setPrefSize(getRelativeHorz(200.0), getRelativeVer(270.0));
 			vbCard.setOnMouseClicked(e -> {
+				((VBox)e.getSource()).setLayoutX(0);
+				((VBox)e.getSource()).setLayoutY(0);
 				if(!(dropOnPane1.getChildren().contains(e.getSource())
 						|| dropOnPane2.getChildren().contains(e.getSource())
 						|| dropOnPane3.getChildren().contains(e.getSource()))) {
@@ -1013,14 +1005,7 @@ public class GamePaneController implements Initializable{
 			countryNamePane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(70.0));
 			countryArmyPane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(200.0));
 
-			Label countryNameLabel = new Label(c.getName().toString().replaceAll("(?!^)([A-Z])", "\n$1"));
-			countryNameLabel.setAlignment(Pos.CENTER);
-			countryNameLabel.setPadding(new Insets(10, 10, 10, 10));
-			countryNameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
-			countryNameLabel.setTextAlignment(TextAlignment.CENTER);
-
 			
-			countryNamePane.getChildren().add(countryNameLabel);
 			
 			
 			
@@ -1029,6 +1014,8 @@ public class GamePaneController implements Initializable{
 				armiesVB.setPrefSize(55.0, 150.0);
 				armiesVB.setAlignment(Pos.CENTER);
 				armiesVB.setSpacing(10.0);
+				armiesVB.setLayoutX((countryArmyPane.getPrefWidth() - armiesVB.getPrefWidth()) / 2.0);
+				armiesVB.setLayoutY((countryArmyPane.getPrefHeight() - armiesVB.getPrefHeight()) / 2.0);
 				
 				ImageView armyIV1 = new ImageView(Parameter.infantry);
 				armyIV1.setFitHeight(55.0);
@@ -1080,6 +1067,15 @@ public class GamePaneController implements Initializable{
 				
 				countryArmyPane.getChildren().add(countryIV);
 				countryArmyPane.getChildren().add(armyIV);
+				
+				Label countryNameLabel = new Label(c.getName().toString().replaceAll("(?!^)([A-Z])", "\n$1"));
+				countryNameLabel.setAlignment(Pos.CENTER);
+				countryNameLabel.setPadding(new Insets(10, 10, 10, 10));
+				countryNameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20.0)));
+				countryNameLabel.setTextAlignment(TextAlignment.CENTER);
+
+				
+				countryNamePane.getChildren().add(countryNameLabel);
 			}
 			
 			
