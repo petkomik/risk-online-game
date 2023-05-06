@@ -23,8 +23,7 @@ import general.Parameter;
 public class Lobby implements Serializable{
 
 
-	static String[] colors = new String[] {"#c1272d", "#0071bc",
-			"#26d124", "#d9e021", "#f28a3a", "#c73af2"};
+	static String[] colors = Parameter.allColors;
 	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
 			Parameter.bruntetteBoy, Parameter.mustacheMan,
 			Parameter.earringsGirl, Parameter.hatBoy};

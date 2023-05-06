@@ -43,12 +43,11 @@ public class Parameter {
 	//player color codes
 	public static final Color redColor = Color.web("#c1272d");
 	public static final Color blueColor = Color.web("#0071bc");
-	public static final Color greenColor = Color.web("#26d124");
-	public static final Color yellowColor = Color.web("#d9e021");
+	public static final Color greenColor = Color.web("#159e13");
+	public static final Color yellowColor = Color.web("#d1bc04");
 	public static final Color orangeColor = Color.web("#f28a3a");
 	public static final Color purpleColor = Color.web("#c73af2");
-	public static final String[] allColors = new String[] {"#c1272d", "#0071bc",
-			"#26d124", "#d9e021", "#f28a3a", "#c73af2"};
+	public static final String[] allColors = new String[] {"#c1272d", "#0071bc", "#159e13", "#d1bc04", "#f28a3a", "#c73af2"};
 	
 	public static final Color darkGrey = Color.web("#303030");
 	
