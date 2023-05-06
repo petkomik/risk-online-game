@@ -133,6 +133,8 @@ public class LobbyMenuController extends StackPane {
 	boolean singleplayerLobby;
 	private String dirAvatarOnThisPC;
 	private ChatWindow chatWindow;
+	
+
 	private Client client = AppController.getClient();
 
 	public LobbyMenuController() {
@@ -711,5 +713,7 @@ public class LobbyMenuController extends StackPane {
 		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
 		return fxmlLoader.load();
 	}
-
+	public ChatWindow getChatWindow() {
+		return chatWindow;
+	}
 }

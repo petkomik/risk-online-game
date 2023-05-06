@@ -59,7 +59,7 @@ import network.messages.MessageUpdateLobby;
 
 /**
  * 
- * @author pmalamov
+ * @author pmalamov 
  * 
  */
 
@@ -105,6 +105,7 @@ public class ServerMainWindowController extends StackPane {
 	private static volatile VBox vbox; // Lobbies in the scrollPane
 	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
 	public static Lobby selectedLobby;
+	public ServerMainWindowController parent = this;
 
 	static Server server;
 	static Client client;
@@ -118,6 +119,7 @@ public class ServerMainWindowController extends StackPane {
 		this.ratioBanner = Math.min(1, this.ratio + 0.1);
 		this.setup();
 		this.actionEventsSetup();
+		
 	}
 
 	public void setup() throws Exception {
@@ -344,9 +346,13 @@ public class ServerMainWindowController extends StackPane {
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
 					chatPane.setVisible(false);
+					System.out.println("lets try the chat SERVERMAIN 348");
+					System.out.println(chatPane.isVisible()+ "SERVERMAIN 349  ");
 				} else {
 					chatButton.setSelected(true);
 					chatPane.setVisible(true);
+					System.out.println("lets try the chat SERVERMAIN 348");
+					System.out.println(chatPane.isVisible()+ "SERVERMAIN 354  ");
 				}
 			}
 		});
@@ -495,12 +501,14 @@ public class ServerMainWindowController extends StackPane {
 					public void handle(ActionEvent event) {
 						(new GameSound()).buttonClickBackwardSound();
 						vBoxLobbyMenuController.setVisible(false);
-
+						vBoxLobbyMenuController.getChildren().remove(chatPane);
+						chatPane = lobbyMenuController.getChatWindow();
+						//chatPane.toFront();
+						System.out.println(chatPane.getParent() + " ist sein vater");
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
 								
 								lobby.leaveLobby(player);
-								
 								client.sendMessage(new MessageUpdateLobby(lobby));
 							}
 						}
