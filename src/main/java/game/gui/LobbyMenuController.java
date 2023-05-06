@@ -11,6 +11,7 @@ import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
 import game.logic.GameType;
+import game.models.Difficulty;
 import game.models.Player;
 import game.models.PlayerSingle;
 import gameState.SinglePlayerHandler;
@@ -362,7 +363,7 @@ public class LobbyMenuController extends StackPane {
 		labelBtnAI.setText(String.valueOf(this.lobby.getAIPlayerList().size()));
 
 		moreBtnDiff.setRotate(180);
-		labelBtnDiff.setText(lobby.getCurrentdifficulty());
+		labelBtnDiff.setText(lobby.difficultyOfAI.toString());
 
 		labelBtnPlayers.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
 		labelBtnPlayers.textOverrunProperty().set(OverrunStyle.CLIP);
@@ -452,17 +453,14 @@ public class LobbyMenuController extends StackPane {
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickForwardSound();
 				String current = labelBtnDiff.getText();
-				if (current.equals(aiDifficultyLevels[0])) {
-					lobby.setCurrentdifficulty(aiDifficultyLevels[1]);
-					labelBtnDiff.setText(lobby.getCurrentdifficulty());
-				} else if (current.equals(aiDifficultyLevels[1])) {
-					lobby.setCurrentdifficulty(aiDifficultyLevels[2]);
-					labelBtnDiff.setText(lobby.getCurrentdifficulty());
-
-				} else {
-				}
-
-				lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());
+				if (current.equals(Difficulty.EASY.toString())) {
+					lobby.setDifficultyOfAI(Difficulty.CASUAL);
+					labelBtnDiff.setText(Difficulty.CASUAL.toString());
+				} else if (current.equals(Difficulty.CASUAL.toString())) {
+					lobby.setDifficultyOfAI(Difficulty.HARD);
+					labelBtnDiff.setText(Difficulty.HARD.toString());
+				} 
+								
 				if(!singleplayerLobby) {
 		    		client.sendMessage(new MessageUpdateLobby(lobby));		    		
 		    	}
@@ -476,17 +474,14 @@ public class LobbyMenuController extends StackPane {
 			public void handle(ActionEvent event) {
 				(new GameSound()).buttonClickForwardSound();
 				String current = labelBtnDiff.getText();
-				if (current.equals(aiDifficultyLevels[2])) {
-					lobby.setCurrentdifficulty(aiDifficultyLevels[1]);
-					labelBtnDiff.setText(lobby.getCurrentdifficulty());
-
-				} else if (current.equals(aiDifficultyLevels[1])) {
-					lobby.setCurrentdifficulty(aiDifficultyLevels[0]);
-					labelBtnDiff.setText(lobby.getCurrentdifficulty());
-				} else {
-				}
-
-				lobby.difficultyOfAI = Arrays.asList(aiDifficultyLevels).indexOf(labelBtnDiff.getText());
+				if (current.equals(Difficulty.HARD.toString())) {
+					lobby.setDifficultyOfAI(Difficulty.CASUAL);
+					labelBtnDiff.setText(Difficulty.CASUAL.toString());
+				} else if (current.equals(Difficulty.CASUAL.toString())) {
+					lobby.setDifficultyOfAI(Difficulty.EASY);
+					labelBtnDiff.setText(Difficulty.EASY.toString());
+				} 
+				
 				if(!singleplayerLobby) {
 					client.sendMessage(new MessageUpdateLobby(lobby));
 				}

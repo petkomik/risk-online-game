@@ -13,6 +13,7 @@ import network.ClientHandler;
 
 public class PlayerAI extends Player {
 	Difficulty level;
+
 	private static final long serialVersionUID = 123456789L;
 	
 	public PlayerAI(Player player, Difficulty level) {
@@ -53,4 +54,7 @@ public class PlayerAI extends Player {
 		return this.level;
 	}
 
+	public void setLevel(Difficulty level) {
+		this.level = level;
+	}
 }

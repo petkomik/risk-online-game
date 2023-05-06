@@ -43,15 +43,14 @@ public class Lobby implements Serializable{
 	}
 
 	public int lobbyRank;
-	public int difficultyOfAI;
+	public Difficulty difficultyOfAI;
 	private int  maxNumberOfPlayers;
-	private String currentdifficulty;
 	
 
 	public Lobby() {
 		this.playersJoined = new ArrayList<Player>();
 		this.lobbyRank = 0;
-		this.difficultyOfAI = 0;
+		this.difficultyOfAI = Difficulty.EASY;
 		this.maxNumberOfPlayers = 6;
 		this.avaiableColors = new ArrayList<String>();
 		for (String k : colors) {
@@ -66,7 +65,7 @@ public class Lobby implements Serializable{
 			this.avaiableAINames.add(k);
 		}
 		this.readyHashMap = new HashMap<Player, Boolean>();
-		setCurrentdifficulty("easy");
+		this.setDifficultyOfAI(Difficulty.EASY);
 	}
 	
 	
@@ -211,7 +210,11 @@ public class Lobby implements Serializable{
 	}
 	
 	public void updateAILevel() {
-		// update the PlayerAI instances difficulty
+		for(Player ply : this.playersJoined) {
+			if(ply instanceof PlayerAI) {
+				((PlayerAI) ply).setLevel(difficultyOfAI);
+			}
+		}
 	}
 	
 	public boolean isEveryoneReady() {
@@ -282,7 +285,7 @@ public class Lobby implements Serializable{
 	}
 
 
-	public int getDifficultyOfAI() {
+	public Difficulty getDifficultyOfAI() {
 		return difficultyOfAI;
 	}
 
@@ -336,25 +339,15 @@ public class Lobby implements Serializable{
 	}
 
 
-	public void setDifficultyOfAI(int difficultyOfAI) {
+	public void setDifficultyOfAI(Difficulty difficultyOfAI) {
 		this.difficultyOfAI = difficultyOfAI;
+		this.updateAILevel();	
 	}
 
 
 	public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
 	}
-
-
-	public String getCurrentdifficulty() {
-		return currentdifficulty;
-	}
-
-
-	public void setCurrentdifficulty(String currentdifficulty) {
-		this.currentdifficulty = currentdifficulty;
-	}
-
 
 }
 
