@@ -86,7 +86,7 @@ public class GamePaneController implements Initializable{
 	private ImageView[] ivTimer;
 	private StackPane[] stackPanes;
 	private Circle[] circles;
-	private ImageView[] imageviews;
+	private ImageView[] avatarImageViews;
 	
 	private Pane phaseBoard;
 	private VBox vbPhase;
@@ -146,6 +146,9 @@ public class GamePaneController implements Initializable{
 	private Label explainationLabel;
 	private BattleFrameController battleFrame;
 	private int currentPlayerID = 0;
+	private StackPane[] rankSP;
+	private Circle[] rankCircle;
+	private Label[] rankLabel;
 
 	
 	@Override
@@ -299,25 +302,28 @@ public class GamePaneController implements Initializable{
 	}
 	public void setUpPlayerList() {
 		vbPlayerList = new VBox();
-		vbPlayerList.setPrefWidth(192);
-		vbPlayerList.setPrefHeight(numOfPlayer * 100);
+		vbPlayerList.setPrefWidth(getRelativeHorz(192.0));
+		vbPlayerList.setPrefHeight(numOfPlayer * getRelativeVer(100.0));
 		panes = new Pane[numOfPlayer];
 		rectangles = new Rectangle[numOfPlayer];
 		stackPanes = new StackPane[numOfPlayer];
 		circles = new Circle[numOfPlayer];
-		imageviews = new ImageView[numOfPlayer];
+		avatarImageViews = new ImageView[numOfPlayer];
 		ivTimer = new ImageView[numOfPlayer];
+		rankSP = new StackPane[numOfPlayer];
+		rankCircle = new Circle[numOfPlayer];
+		rankLabel = new Label[numOfPlayer];
 		
 		for(int i = 0; i < numOfPlayer; i++) {
-			imageviews[i] = new ImageView(playerAvatar.get(i));
-			imageviews[i].setFitWidth(80);
-			imageviews[i].setFitHeight(80);
-			circles[i] = new Circle(42);
+			avatarImageViews[i] = new ImageView(playerAvatar.get(i));
+			avatarImageViews[i].setFitWidth(getRelativeHorz(80.0));
+			avatarImageViews[i].setFitHeight(getRelativeHorz(80.0));
+			circles[i] = new Circle(getRelativeHorz(42.0));
 			circles[i].setStrokeWidth(3);
 			circles[i].setStroke(Color.WHITE);
-			stackPanes[i] = new StackPane(circles[i], imageviews[i]);
-			stackPanes[i].setLayoutX(108);
-			rectangles[i] = new Rectangle(150, 84);
+			stackPanes[i] = new StackPane(circles[i], avatarImageViews[i]);
+			stackPanes[i].setLayoutX(getRelativeHorz(108.0));
+			rectangles[i] = new Rectangle(getRelativeHorz(150.0), getRelativeVer(84.0));
 			rectangles[i].setStrokeWidth(0);
 			rectangles[i].setOpacity(0.44);
 			rectangles[i].setArcHeight(5.0);
@@ -334,21 +340,39 @@ public class GamePaneController implements Initializable{
 			
 			// ImageView
 			ivTimer[i] = new ImageView(Parameter.phaseLogosdir + "timer.png");
-			ivTimer[i].setFitHeight(50.0);
-			ivTimer[i].setFitWidth(50.0);
-			ivTimer[i].setLayoutX(40.0);
-			ivTimer[i].setLayoutY(20.0);
+			ivTimer[i].setFitHeight(getRelativeHorz(50.0));
+			ivTimer[i].setFitWidth(getRelativeVer(50.0));
+			ivTimer[i].setLayoutX(getRelativeHorz(40.0));
+			ivTimer[i].setLayoutY(getRelativeVer(20.0));
 			ivTimer[i].setPickOnBounds(true);
 			ivTimer[i].setPreserveRatio(true);
 			ivTimer[i].setVisible(false);
 			
-			panes[i] = new Pane(rectangles[i], stackPanes[i], ivTimer[i]);
+			rankCircle[i] = new Circle();
+	        rankCircle[i].setRadius(getRelativeHorz(15.0));
+	        rankCircle[i].setStroke(Color.BLACK);
+	        rankCircle[i].setStrokeType(StrokeType.OUTSIDE);
+	        rankCircle[i].setStrokeWidth(3.0);
+	        rankCircle[i].setFill(Color.WHITE);
+
+	        rankLabel[i] = new Label("1");
+	        rankLabel[i].setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(18.0)));
+	        rankLabel[i].setAlignment(Pos.CENTER);
+
+	        rankSP[i] = new StackPane();
+	        rankSP[i].setLayoutX(getRelativeHorz(95.0));
+	        rankSP[i].setPrefHeight(getRelativeHorz(15.0));
+	        rankSP[i].setPrefWidth(getRelativeHorz(15.0));
+	        rankSP[i].getChildren().addAll(rankCircle[i], rankLabel[i]);
+	        rankSP[i].setVisible(false);
+			
+			panes[i] = new Pane(rectangles[i], stackPanes[i], ivTimer[i], rankSP[i]);
 			
 		}
 		vbPlayerList.getChildren().addAll(panes);
 		vbPlayerList.setScaleX(w / 1536.0);
 		vbPlayerList.setScaleY(h / 864.0);
-		vbPlayerList.setLayoutX((1335.0/1536.0) * w);
+		vbPlayerList.setLayoutX(getRelativeHorz(1335.0));
 		vbPlayerList.setLayoutY((h - vbPlayerList.getPrefHeight() * vbPlayerList.getScaleY()) / 2.0);
 		vbPlayerList.setSpacing(24);
 		
@@ -1306,6 +1330,12 @@ public class GamePaneController implements Initializable{
 		}
 	}
 	
+	public void setPlayersRanking(int[] playersRanking) {
+		for(int i = 0; i < rankSP.length; i++) {
+			rankLabel[i].setText(String.valueOf(playersRanking[i]));
+			rankSP[i].setVisible(true);
+		}
+	}
 	private void clickLeaveGameButton(ActionEvent e) {
 		
 	}
