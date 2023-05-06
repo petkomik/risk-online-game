@@ -8,7 +8,6 @@ import java.sql.ClientInfoStatus;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
-
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatButton;

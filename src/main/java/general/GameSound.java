@@ -1,9 +1,8 @@
-package game.gui;
+package general;
 
 import java.io.File;
 import java.io.IOException;
 
-import general.Parameter;
 import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

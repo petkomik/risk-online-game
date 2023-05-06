@@ -3,6 +3,7 @@ package game.gui;
 import java.io.IOException;
 
 import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.application.Application;
 import javafx.application.Platform;

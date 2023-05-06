@@ -38,6 +38,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import network.Client;
 import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
