@@ -714,6 +714,9 @@ public class LobbyMenuController extends StackPane {
 		return fxmlLoader.load();
 	}
 	public ChatWindow getChatWindow() {
+		this.getChildren().remove(chatWindow);
+		ServerMainWindowController.setChatPain(chatWindow);
+
 		return chatWindow;
 	}
 }

@@ -86,7 +86,8 @@ public class ServerMainWindowController extends StackPane {
 
 	private HBox chatDiv; // chatdiv with button
 	private ChatButton chatButton; // *
-	private static ChatWindow chatPane; // chatPane
+	private static ChatWindow chatPane2; // chatPane
+	private static HBox chatPane;
 
 	private HBox menu; // menu
 	private HBox searchBar; // searchField + Button
@@ -208,11 +209,13 @@ public class ServerMainWindowController extends StackPane {
 		/*
 		 * initializing the chat
 		 */
-
-		chatPane = new ChatWindow();
+		chatPane = new HBox();
 		chatPane.setVisible(false);
 		chatPane.setPickOnBounds(true);
-
+		chatPane2 = new ChatWindow();
+		chatPane2.setVisible(false);
+		chatPane2.setPickOnBounds(true);
+		chatPane2.getChildren().add(chatPane);
 		/*
 		 * setting up ScrollPane
 		 */
@@ -328,7 +331,7 @@ public class ServerMainWindowController extends StackPane {
 		vBoxLobbyMenuController.setVisible(false);
 		vBoxLobbyMenuController.setPickOnBounds(true);
 
-		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane,
+		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane2,
 				vBoxLobbyMenuController);
 	}
 
@@ -346,11 +349,13 @@ public class ServerMainWindowController extends StackPane {
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
 					chatPane.setVisible(false);
+					chatPane2.setVisible(false);
 					System.out.println("lets try the chat SERVERMAIN 348");
 					System.out.println(chatPane.isVisible()+ "SERVERMAIN 349  ");
 				} else {
 					chatButton.setSelected(true);
 					chatPane.setVisible(true);
+					chatPane2.setVisible(true);
 					System.out.println("lets try the chat SERVERMAIN 348");
 					System.out.println(chatPane.isVisible()+ "SERVERMAIN 354  ");
 				}
@@ -501,8 +506,6 @@ public class ServerMainWindowController extends StackPane {
 					public void handle(ActionEvent event) {
 						(new GameSound()).buttonClickBackwardSound();
 						vBoxLobbyMenuController.setVisible(false);
-						vBoxLobbyMenuController.getChildren().remove(chatPane);
-						chatPane = lobbyMenuController.getChatWindow();
 						//chatPane.toFront();
 						System.out.println(chatPane.getParent() + " ist sein vater");
 						for (Player player : lobby.getHumanPlayerList()) {
@@ -527,6 +530,11 @@ public class ServerMainWindowController extends StackPane {
 
 		});
 	}
+	
+	public static void setChatPain(ChatWindow chatWindow) {
+		chatPane2 = chatWindow;
+		chatPane.getChildren().add(chatPane2);
+	}
 
 	public static void drawLobbies() {
 
@@ -550,9 +558,9 @@ public class ServerMainWindowController extends StackPane {
 			client = Client.createClient(host, port);
 			client.listenForMessage();
 			AppController.setClient(client);
-			chatPane.setClient(client);
-			client.setChat(chatPane);
-			chatPane.addLabel(host);
+			chatPane2.setClient(client);
+			client.setChat(chatPane2);
+			chatPane2.addLabel(host);
 			client.setHost(true);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -563,8 +571,8 @@ public class ServerMainWindowController extends StackPane {
 	public void initClient() {
 		client = AppController.getClient();
 		client.listenForMessage();
-		chatPane.setClient(client);
-		client.setChat(chatPane);
+		chatPane2.setClient(client);
+		client.setChat(chatPane2);
 		this.hostView = false;
 		client.setHost(false);
 		// client.sendMessage(new MessageConnect(AppController.getProfile()));
@@ -572,7 +580,7 @@ public class ServerMainWindowController extends StackPane {
 	}
 
 	public static ChatWindow getChatPane() {
-		return chatPane;
+		return chatPane2;
 	}
 
 	public static Lobby getSelectedLobby() {
