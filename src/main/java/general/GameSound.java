@@ -15,28 +15,47 @@ import javafx.util.Duration;
  */
 public class GameSound {
 	private Media media;
-	private MediaPlayer mediaPlayer;
-
-	public void startThemeSong() {
+	private MediaPlayer musicSoundPlayer;
+	private MediaPlayer effectsSoundPlayer;
+	
+	public GameSound() {
+		// Setting up musicSound
 		File file = new File(Parameter.themeSong);
 		media = new Media(file.toURI().toString());
-		mediaPlayer = new MediaPlayer(media);
-		mediaPlayer.play();
-		mediaPlayer.setAutoPlay(true);
-		mediaPlayer.setOnEndOfMedia(new Runnable() {
+		musicSoundPlayer = new MediaPlayer(media);
+		
+		// Setting up 
+		effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.buttonClick03Sound).toURI().toString()));
+		
+	}
+
+	public void startThemeSong() {
+		
+		musicSoundPlayer.play();
+		musicSoundPlayer.setAutoPlay(true);
+		musicSoundPlayer.setOnEndOfMedia(new Runnable() {
 			@Override
 			public void run() {
-				mediaPlayer.seek(Duration.ZERO);
-				mediaPlayer.play();
+				musicSoundPlayer.seek(Duration.ZERO);
+				musicSoundPlayer.play();
 			}
 		});
+	}
+	
+	public void mute_unmute_MusicSound() {
+		musicSoundPlayer.setMute(!musicSoundPlayer.isMute());
+	}
+	
+	public void mute_unmute_EffectsSound() {
+		effectsSoundPlayer.setMute(!effectsSoundPlayer.isMute());
 	}
 
 	public void buttonClickForwardSound() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				new MediaPlayer(new Media(new File(Parameter.buttonClick03Sound).toURI().toString())).play();
+				effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.buttonClick03Sound).toURI().toString()));
+				effectsSoundPlayer.play();
 			}
 		});
 	}
@@ -45,9 +64,18 @@ public class GameSound {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				new MediaPlayer(new Media(new File(Parameter.buttonClick04Sound).toURI().toString())).play();
+				effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.buttonClick04Sound).toURI().toString()));
+				effectsSoundPlayer.play();
 			}
 		});
+	}
+
+	public MediaPlayer getEffectsSoundPlayer() {
+		return effectsSoundPlayer;
+	}
+	
+	public MediaPlayer getMusicSoundPlayer() {
+		return musicSoundPlayer;
 	}
 
 }
