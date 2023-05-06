@@ -370,11 +370,11 @@ public class GamePaneController implements Initializable{
 			
 		}
 		vbPlayerList.getChildren().addAll(panes);
-		vbPlayerList.setScaleX(w / 1536.0);
-		vbPlayerList.setScaleY(h / 864.0);
-		vbPlayerList.setLayoutX(getRelativeHorz(1335.0));
-		vbPlayerList.setLayoutY((h - vbPlayerList.getPrefHeight() * vbPlayerList.getScaleY()) / 2.0);
-		vbPlayerList.setSpacing(24);
+//		vbPlayerList.setScaleX(w / 1536.0);
+//		vbPlayerList.setScaleY(h / 864.0);
+		vbPlayerList.setLayoutX(getRelativeHorz(1285.0));
+		vbPlayerList.setLayoutY((h - vbPlayerList.getPrefHeight()) / 2.0);
+		vbPlayerList.setSpacing(getRelativeVer(20.0));
 		
 		gameBoard.getChildren().add(vbPlayerList);
 	}
@@ -433,7 +433,7 @@ public class GamePaneController implements Initializable{
 		phaseBoard.setPrefSize(getRelativeHorz(645.0), getRelativeVer(130.0));
 		
 		vbPhase = new VBox();
-		vbPhase.setPrefSize(getRelativeHorz(250.0), getRelativeVer(130.0));
+		vbPhase.setPrefSize(getRelativeHorz(300.0), getRelativeVer(130.0));
 		vbPhase.setLayoutX(getRelativeHorz(341.0));
 		
 		rectPhase = new Rectangle(getRelativeHorz(300.0), getRelativeVer(70.0));
@@ -495,31 +495,27 @@ public class GamePaneController implements Initializable{
         labPhase.setLayoutY(getRelativeVer(81.0));
         labPhase.setAlignment(Pos.CENTER);
         labPhase.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(30.0)));
-//        labPhase.setStyle("-fx-font-family: \"Helvetica\";"
-//        		+ "    -fx-font-weight: bold;"
-//        		+ "    -fx-font-size: 30px;");
 
         firstPhaseLogo = new ImageView(Parameter.phaseLogosdir + "reinforce.png"); 
-        firstPhaseLogo.setFitHeight(getRelativeVer(27.0));
-        firstPhaseLogo.setFitWidth(getRelativeHorz(32.0));
+        firstPhaseLogo.setFitHeight(getRelativeVer(35.0));
+        firstPhaseLogo.setFitWidth(getRelativeHorz(35.0));
         firstPhaseLogo.setLayoutX(getRelativeHorz(400.0));
         firstPhaseLogo.setLayoutY(getRelativeVer(27.0));
         firstPhaseLogo.setPickOnBounds(true);
         firstPhaseLogo.setPreserveRatio(true);
         firstPhaseLogo.setVisible(false);
         
-        // Erstelle ein ImageView mit einem Bild
         middlePhaseLogo = new ImageView(Parameter.phaseLogosdir + "claim.png"); 
-        middlePhaseLogo.setFitHeight(getRelativeVer(27.0));
-        middlePhaseLogo.setFitWidth(getRelativeHorz(32.0));
-        middlePhaseLogo.setLayoutX(getRelativeHorz(474.0));
+        middlePhaseLogo.setFitHeight(getRelativeVer(35.0));
+        middlePhaseLogo.setFitWidth(getRelativeHorz(35.0));
+        middlePhaseLogo.setLayoutX(getRelativeHorz(473.5));
         middlePhaseLogo.setLayoutY(getRelativeVer(27.0));
         middlePhaseLogo.setPickOnBounds(true);
         middlePhaseLogo.setPreserveRatio(true);
         
         lastPhaseLogo = new ImageView(Parameter.phaseLogosdir + "fortify.png"); 
-        lastPhaseLogo.setFitHeight(getRelativeVer(27.0));
-        lastPhaseLogo.setFitWidth(getRelativeHorz(32.0));
+        lastPhaseLogo.setFitHeight(getRelativeVer(35.0));
+        lastPhaseLogo.setFitWidth(getRelativeHorz(35.0));
         lastPhaseLogo.setLayoutX(getRelativeHorz(548.0));
         lastPhaseLogo.setLayoutY(getRelativeVer(27.0));
         lastPhaseLogo.setPickOnBounds(true);
