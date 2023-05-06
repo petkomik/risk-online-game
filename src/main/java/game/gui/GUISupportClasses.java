@@ -3,8 +3,10 @@ package game.gui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
-
+import java.util.Optional;
+import java.util.Objects;
 import database.Profile;
+import game.Lobby;
 import game.PlayerInLobby;
 import game.models.Player;
 import general.AppController;
@@ -55,7 +57,9 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 import network.Client;
 import network.ClientHandler;
+import network.messages.MessageSend;
 import network.messages.MessageToPerson;
+import network.messages.MessageinLobby;
 
 public class GUISupportClasses {
 	static class Spacing extends Region {
@@ -120,16 +124,19 @@ public class GUISupportClasses {
 			this.setPadding(new Insets(10, 20, 10, 20));
 			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
 			this.setTextFill(Color.WHITE);
-			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;" 
-					+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+			this.setStyle(
+					"-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 				if (newValue) {
-					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-radius: 15;"
+							+ "-fx-background-insets: 1 1 1 1;" + "-fx-border-radius: 12;" + "-fx-border-color: #ffff;"
+							+ "-fx-border-width: 3px;");
 				} else {
-					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+							+ "-fx-background-insets: 1 1 1 1;" + "-fx-border-radius: 12;"
+							+ "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 				}
 			});
 		}
@@ -425,7 +432,6 @@ public class GUISupportClasses {
 		// message to be send, should used by client
 		private Client client;
 
-
 		private boolean dragAreaHover = false;
 		private double ratio;
 		private double xCord;
@@ -452,8 +458,7 @@ public class GUISupportClasses {
 			names = new ComboBox<String>();
 			dragArea = new HBox();
 			items = names.getItems();
-			
-			
+
 			dragArea.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0;");
 			dragArea.setPrefHeight(30 * ratio);
 			dragArea.getChildren().add(new Spacing(1));
@@ -538,7 +543,6 @@ public class GUISupportClasses {
 			this.setPickOnBounds(true);
 			this.getChildren().addAll(dragArea, chat, textfieldAndButtons);
 		}
-		
 
 		public void actionEventsSetup() {
 
@@ -591,20 +595,41 @@ public class GUISupportClasses {
 							@Override
 							public void run() {
 								System.out.println("Run of Host sworks, this is what it starts with ");
+
+//								Optional<Lobby> lobby = client.getLobbies().values().stream()
+//										.filter(looby -> looby.getHumanPlayerList().stream()
+//										.anyMatch(player -> (player.getID()== client.getProfile().getId()))).findAny();
+//								
+//								if(lobby.isPresent()){
+//									Lobby lobby1 = lobby.get();
+//									client.sendMessage( new MessageinLobby(lobby1, messageToBeSend));
+//					 
+//								}
+
 								if (!names.getValue().equals("All")) {
 
 									String username = names.getValue();
 									// send the message to the specified user
-									System.out.println(client.getProfile().getUserName() +  " e izprashtach i prashta na  "
-									+findProfileFromString(username).getUserName() 
-									+ " subshtenieto e " + username );
+									System.out
+											.println(client.getProfile().getUserName() + " e izprashtach i prashta na  "
+													+ findProfileFromString(username).getUserName() + " subshtenieto e "
+													+ username);
+									// Assume that lobbies is a HashMap<String, Lobby> and client refers to the
+									// client object
+									// Assume that client.getLobbies() returns a HashMap<String, Lobby> and client
+									// refers to the client object
+									// Assume that client.getLobbies() returns a HashMap<String, Lobby> and client
+									// refers to the client object
+
 									client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
-											findProfileFromString(username)));
+											findProfileFromString(username), client.isInALobby()));
 
 								} else if (!messageToBeSend.equals(null) && names.getValue().equals("All")) {
 									// send the message to the general chat
-									System.out.println(client.getProfile());
-									client.sendMessage(messageToBeSend);
+									// Assume that lobbyGUIList is a HashMap<String, LobbyGUI> and client refers to
+									// the client object
+									client.sendMessage(
+											new MessageSend(messageToBeSend, client.getProfile(), client.isInALobby()));
 								}
 							}
 						});
@@ -628,20 +653,17 @@ public class GUISupportClasses {
 			});
 
 		}
-		
+
 		/*
-		 * finds the username from the send message
-		 * so that it can be a private message
+		 * finds the username from the send message so that it can be a private message
 		 */
-		
+
 		private Profile findProfileFromString(String username) {
-			
-		
-			for (Profile profile  : Client.profiles) {
-				
-			
+
+			for (Profile profile : Client.profiles) {
+
 				if (profile.getUserName().equalsIgnoreCase(username)) {
-					
+
 					return profile;
 				}
 			}
@@ -676,7 +698,7 @@ public class GUISupportClasses {
 			});
 
 		}
-		
+
 		/*
 		 * method for the GUI to display the personal message
 		 */
@@ -686,8 +708,8 @@ public class GUISupportClasses {
 			Text text = new Text(messageFromCLient);
 			text.setFill(Color.YELLOW);
 			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
-			
-			Text username =  new Text(profile + ": ");
+
+			Text username = new Text(profile + ": ");
 			username.setFill(Color.YELLOW);
 			username.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
@@ -695,7 +717,7 @@ public class GUISupportClasses {
 			textFlow.getChildren().addAll(username, text);
 			textFlow.setStyle("-fx-color: rgb(92,64,51); " + "-fx-background-color: rgb(92,64,51); "
 					+ "-fx-background-radius: 20px;");
-			textFlow.setLineSpacing(ratio*5);
+			textFlow.setLineSpacing(ratio * 5);
 			textFlow.setPadding(new Insets(5 * ratio, 10 * ratio, 5 * ratio, 10 * ratio));
 
 			HBox message = new HBox();
@@ -703,7 +725,6 @@ public class GUISupportClasses {
 			message.getChildren().addAll(textFlow, new Spacing(150 * ratio, 1 * ratio));
 			HBox.setHgrow(message, Priority.ALWAYS);
 
-			
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
@@ -712,7 +733,7 @@ public class GUISupportClasses {
 			});
 
 		}
-		
+
 		public void addLabelFromSystem(String messageFromCLient) {
 
 			Text text = new Text(messageFromCLient);
@@ -737,17 +758,18 @@ public class GUISupportClasses {
 			});
 
 		}
-		
-		public void addItemsInComboBox(Profile profile){
-			
+
+		public void addItemsInComboBox(Profile profile) {
+
 			items.add(profile.getUserName());
-			
+
 		}
-		public void removeItemsInComboBox(Profile profile){
-			
+
+		public void removeItemsInComboBox(Profile profile) {
+
 			items.remove(profile.getUserName());
-			
-		}	
+
+		}
 
 		public void setxCord(double xCord) {
 			this.xCord = xCord;
@@ -776,7 +798,7 @@ public class GUISupportClasses {
 		public Client getClient() {
 			return client;
 		}
-		
+
 		public void setClient(Client client) {
 			this.client = client;
 		}

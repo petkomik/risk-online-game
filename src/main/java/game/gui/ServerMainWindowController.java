@@ -8,6 +8,7 @@ import java.sql.ClientInfoStatus;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
+
 import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatButton;
@@ -428,7 +429,7 @@ public class ServerMainWindowController extends StackPane {
 				// lobby of the other person
 
 				Lobby aLobby = new Lobby();
-
+			
 				aLobby.joinLobby(new PlayerSingle(client.getProfile()));
 				BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
 					int i = 1;
@@ -442,11 +443,11 @@ public class ServerMainWindowController extends StackPane {
 				};
 				addLobby.accept(client.getProfile().getUserName(), aLobby);
 				System.out.println(aLobby.getLobbyName());
-
+				client.setInALobby(true);
 				client.sendMessage(new MessageCreateLobby(aLobby));
-
+				
 				drawLobbyMenu(aLobby);
-
+				
 				System.out.println("im in lobby " + aLobby.getLobbyName());
 				// stage.getScene().setRoot(lobbyMenuController);
 
@@ -472,7 +473,7 @@ public class ServerMainWindowController extends StackPane {
 
 					selectedLobby.joinLobby(new PlayerSingle(client.getProfile()));
 					client.sendMessage(new MessageJoinLobby(selectedLobby));
-
+					client.setInALobby(true);
 					drawLobbyMenu(selectedLobby);
 
 				}

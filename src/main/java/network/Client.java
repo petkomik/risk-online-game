@@ -49,13 +49,20 @@ public class Client {
 	private Lobby clientsLobby;
 	GUISupportClasses.ChatWindow chat;
 	private boolean host;
+	private boolean isInALobby = false;
+
+	
+
+	public void setClientsLobby(Lobby clientsLobby) {
+		this.clientsLobby = clientsLobby;
+	}
 
 	public Client(Socket socket, Profile profile) {
 		this.profile = profile;
 		this.userName = profile.getUserName();
 		this.socket = socket;
 		try {
-				// update
+			// update
 			this.outputStream = new ObjectOutputStream(socket.getOutputStream());
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
@@ -131,36 +138,36 @@ public class Client {
 
 	}
 
-	public void sendMessageViaConsole() {
+//	public void sendMessageViaConsole() {
+//
+//		new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//
+//				try {
+//					Scanner scanner = new Scanner(System.in);
+//					while (socket.isConnected()) {
+//					//	outputStream.writeObject(new MessageSend(userName + ": " + scanner.nextLine()));
+//						outputStream.flush();
+//					}
+//
+//				} catch (Exception e) {
+//					closeEverything(socket, inputStream, outputStream);
+//				}
+//			}
+//		}).start();
+//	}
 
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-
-				try {
-					Scanner scanner = new Scanner(System.in);
-					while (socket.isConnected()) {
-						outputStream.writeObject(new MessageSend(userName + ": " + scanner.nextLine()));
-						outputStream.flush();
-					}
-
-				} catch (Exception e) {
-					closeEverything(socket, inputStream, outputStream);
-				}
-			}
-		}).start();
-	}
-
-	public void sendMessage(String message) {
-		try {
-			outputStream.writeObject(new MessageSend(userName + ": " + message));
-			outputStream.flush();
-		} catch (IOException e) {
-			closeEverything(socket, inputStream, outputStream);
-			e.printStackTrace();
-		}
-	}
+//	public void sendMessage(String message) {
+//		try {
+//			outputStream.writeObject(new MessageSend(userName + ": " + message));
+//			outputStream.flush();
+//		} catch (IOException e) {
+//			closeEverything(socket, inputStream, outputStream);
+//			e.printStackTrace();
+//		}
+//	}
 
 	public static Client createClient(String host, int port) throws IOException {
 		AppController.getInstance();
@@ -225,7 +232,35 @@ public class Client {
 
 							System.out.println("case MessageSend in Clinet Success 0 ");
 							System.out.println(((MessageSend) message).getMessage());
-							chat.addLabel(((MessageSend) message).getMessage());
+							
+							
+							String textMessage =((MessageSend) message).getMessage();
+							Profile profileFrom =((MessageSend) message).getProfileFrom();
+							boolean isInLobby = ((MessageSend) message).isForLobby();
+							// Assume that each Lobby object has a List<HumanPlayer> called humanPlayerList, and that this.profile refers to the profile of the program
+							boolean isSenderInSameLobby = lobbies.values().stream()
+							    .anyMatch(lobby -> lobby.getHumanPlayerList().stream()
+							        .anyMatch(player -> player.getID() == profileFrom.getId()) && lobby.getHumanPlayerList().stream()
+							        .anyMatch(player -> player.getID() == profile.getId()));
+
+						
+
+							if(isInLobby){
+								if(isSenderInSameLobby){
+									chat.addLabel(((MessageSend) message).getMessage());
+								}
+								
+							}else{
+								if(!isInALobby){
+									chat.addLabel(((MessageSend) message).getMessage());
+
+								}
+								
+							}
+   
+
+							
+							
 							// HostServerMessengerController.addLabel(((MessageSend) message).getMessage(),
 							// vBoxMessages);
 							// System.out.println(((MessageSend) message).getMessage());
@@ -249,8 +284,8 @@ public class Client {
 
 							if (!lobbies.isEmpty()) {
 
-								sendMessage(
-										new MessageUpdateLobbyList( lobbies ,((MessageConnect) message).getProfile().getId()));
+								sendMessage(new MessageUpdateLobbyList(lobbies,
+										((MessageConnect) message).getProfile().getId()));
 							}
 							break;
 						case Disconnect:
@@ -265,19 +300,38 @@ public class Client {
 						case MessageServerCloseConnection:
 							System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
 							chat.addLabel("Host has left, please reconnect to a new server ");
-
-//							JoinClientMessengerController
-//									.addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);	
-//							JoinClientMessengerController.addLabel("Host has disconnected, please reconnect",
-//									vBoxMessages);
+									
+									
 							closeEverything(socket, inputStream, outputStream);
 							Server.closeServerSocket();
 							break;
 						case MessageToPerson:
 							System.out.println("case 4 in Client");
 
-							chat.addLabel(((MessageToPerson) message).getStringMessage(),
-									((MessageToPerson) message).getFromProfile().getUserName());
+							String textMessage1 =((MessageToPerson) message).getStringMessage();
+							Profile profileFrom1 =((MessageToPerson) message).getFromProfile();
+							boolean isInLobby1 = ((MessageToPerson) message).isInALobby();
+							// Assume that each Lobby object has a List<HumanPlayer> called humanPlayerList, and that this.profile refers to the profile of the program
+							boolean isSenderInSameLobby1 = lobbies.values().stream()
+							    .anyMatch(lobby -> lobby.getHumanPlayerList().stream()
+							        .anyMatch(player -> player.getID() == profileFrom1.getId()) && lobby.getHumanPlayerList().stream()
+							        .anyMatch(player -> player.getID() == profile.getId()));
+
+							if(isInLobby1){
+								if(isSenderInSameLobby1){
+									chat.addLabel(((MessageToPerson) message).getStringMessage(),
+											((MessageToPerson) message).getFromProfile().getUserName());
+								}
+								
+							}else{
+								if(!isInALobby){
+									chat.addLabel(textMessage1, profileFrom1.getUserName());
+								}
+								
+							}
+
+							
+							
 							System.out.println();
 							// chat.addLabel(((MessageToPerson)message).getFromProfile().getUserName()+" : "
 							// + ((MessageToPerson)message).getStringMessage());
@@ -339,7 +393,7 @@ public class Client {
 							break;
 						case MessageUpdateLobby:
 							MessageUpdateLobby messageUpdateLobby = (MessageUpdateLobby) message;
-							// update all lobbies in Lobby 
+							// update all lobbies in Lobby
 							lobbies.replace(messageUpdateLobby.getLobby().getLobbyName(),
 									messageUpdateLobby.getLobby());
 							// update Pane before joining a Lobby
@@ -354,17 +408,18 @@ public class Client {
 								}
 							}
 							// remove lobbies in Server (Pane) if empty
-								if(messageUpdateLobby.getLobby().getHumanPlayerList().isEmpty()){
-									ServerMainWindowController.lobbyGUIList.remove(messageUpdateLobby.getLobby().getLobbyName());
-									lobbies.remove(messageUpdateLobby.getLobby().getLobbyName());
+							if (messageUpdateLobby.getLobby().getHumanPlayerList().isEmpty()) {
+								ServerMainWindowController.lobbyGUIList
+										.remove(messageUpdateLobby.getLobby().getLobbyName());
+								lobbies.remove(messageUpdateLobby.getLobby().getLobbyName());
 							}
-								// draws Server pane 
+							// draws Server pane
 							ServerMainWindowController.drawLobbies();
 
 							break;
-							// Its a Message that sends all lobbies to everyone 
+						// Its a Message that sends all lobbies to everyone
 						case MessageUpdateLobbyList:
-							
+
 							for (Map.Entry<String, Lobby> entry : ((MessageUpdateLobbyList) message).getLobbyList()
 									.entrySet()) {
 								String key = entry.getKey();
@@ -372,11 +427,13 @@ public class Client {
 								lobbies.putIfAbsent(key, lobby);
 
 							}
+
 							lobbies.forEach((key, value) -> {
 								if (!ServerMainWindowController.lobbyGUIList.containsKey(key)) {
 									ServerMainWindowController.lobbyGUIList.put(key, new LobbyGUI(value));
 								}
 							});
+
 							ServerMainWindowController.drawLobbies();
 							break;
 						default:
@@ -430,5 +487,12 @@ public class Client {
 	}
 
 	private void updateInLobbyVisual(Message message) {
+	}
+	public boolean isInALobby() {
+		return isInALobby;
+	}
+
+	public void setInALobby(boolean isInALobby) {
+		this.isInALobby = isInALobby;
 	}
 }

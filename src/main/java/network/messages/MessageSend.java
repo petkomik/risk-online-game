@@ -1,11 +1,8 @@
 package network.messages;
 
+import database.Profile;
 import game.models.Player;
-/**
- * 
- * @author srogalsk
- *
- */
+
 
 public class MessageSend extends Message {
 	
@@ -15,6 +12,8 @@ public class MessageSend extends Message {
 	private Player playerFrom;
 	private Player playerTo;
 	private String playerToS;
+	private Profile profileFrom;
+	private boolean forLobby;
 	
 
 	public MessageSend(String message, Player playerFrom, Player playerTo) {
@@ -30,10 +29,13 @@ public class MessageSend extends Message {
 		this.playerToS = playerToS;
 	}
 	
-	public MessageSend(String message) {
+	public MessageSend(String message, Profile profileFrom, boolean forLobby) {
 		super(MessageType.MessageSend);
 		this.message = message;
+		this.profileFrom = profileFrom;
+		this.forLobby = forLobby;
 	}
+	
 	
 	public Player getPlayerFrom() {
 		return playerFrom;
@@ -45,6 +47,12 @@ public class MessageSend extends Message {
 	
 	public String getMessage() {
 		return message;
+	}
+	public Profile getProfileFrom() {
+		return profileFrom;
+	}
+	public boolean isForLobby() {
+		return forLobby;
 	}
 
 }

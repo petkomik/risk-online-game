@@ -10,7 +10,6 @@ import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.PlayerSingle;
 import general.AppController;
-import general.GameSound;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

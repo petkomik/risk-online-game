@@ -16,6 +16,7 @@ public class MessageToPerson extends Message {
 	
 	private Profile fromProfile;
 	private Profile toProfile;
+	private  boolean inALobby;
 	public Message getMessage() {
 		return message;
 	}
@@ -28,11 +29,12 @@ public class MessageToPerson extends Message {
 		this.to = to;
 		this.message = message;
 	}
-	public MessageToPerson(String message ,Profile fromProfile, Profile toProfile) {
+	public MessageToPerson(String message ,Profile fromProfile, Profile toProfile, boolean inAlobby) {
 		super(MessageType.MessageToPerson);
 		this.fromProfile = fromProfile;
 		this.toProfile = toProfile;
 		this.strinMessage = message;
+		this.setInALobby(inAlobby);
 	}
 	
 	public MessageToPerson(String stringMessage, String username) {
@@ -57,6 +59,12 @@ public class MessageToPerson extends Message {
 	}
 	public Profile getToProfile() {
 		return toProfile;
+	}
+	public boolean isInALobby() {
+		return inALobby;
+	}
+	public void setInALobby(boolean inALobby) {
+		this.inALobby = inALobby;
 	}
 
 }
