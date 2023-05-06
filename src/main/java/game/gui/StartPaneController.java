@@ -7,9 +7,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import game.Lobby;
+import game.gui.GUISupportClasses.ChatButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.MenuButton;
+import game.gui.GUISupportClasses.SettingsButton;
 import game.gui.GUISupportClasses.Spacing;
 import general.Parameter;
 import javafx.event.ActionEvent;
@@ -47,6 +49,7 @@ public class StartPaneController extends StackPane {
 	private VBox contentVBox;
 	private ImageView riskLogo;
 	private DesignButton playButton;
+	private SettingsButton settingsButton;
 	private double ratio;
 	
 	
@@ -103,12 +106,15 @@ public class StartPaneController extends StackPane {
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
 		
+		settingsButton = new SettingsButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio,
+				170 * ratio, true);
+		
 		playButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
 		playButton.setText("Play");
 
 		contentVBox.setSpacing(30 * ratio);
 		
-		contentVBox.getChildren().addAll(riskLogo, playButton);
+		contentVBox.getChildren().addAll(riskLogo, playButton, settingsButton);
 		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 
 		

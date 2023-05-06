@@ -2,17 +2,11 @@ package game.gui;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Objects;
+
 import database.Profile;
-import game.Lobby;
-import game.PlayerInLobby;
 import game.models.Player;
-import general.AppController;
 import general.Parameter;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -24,23 +18,17 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.Skin;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.skin.ComboBoxPopupControl;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -48,18 +36,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 import network.Client;
-import network.ClientHandler;
 import network.messages.MessageSend;
 import network.messages.MessageToPerson;
-import network.messages.MessageinLobby;
+import general.GameSound;
 
 public class GUISupportClasses {
 	static class Spacing extends Region {
@@ -802,5 +787,78 @@ public class GUISupportClasses {
 		public void setClient(Client client) {
 			this.client = client;
 		}
+	}
+	
+	static class SettingsButton extends ToggleButton {
+		public SettingsButton() {
+			super();
+			this.setPadding(new Insets(10, 20, 10, 20));
+			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 28));
+			this.setTextFill(Color.WHITE);
+			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-border-radius: 12;"
+					+ "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+			this.setSelected(false);
+
+			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+				if (newValue) {
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-radius: 15;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+				} else {
+					this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+							+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+				}
+			});
+		}
+
+		private SettingsButton(Insets inst, int radius, double fontSize, double width) {
+			super();
+			this.setPadding(inst);
+			this.setPrefWidth(width);
+			this.setFont(Font.font("Cooper Black", FontWeight.NORMAL, fontSize));
+			this.setTextFill(Color.WHITE);
+			this.setStyle("-fx-background-color: " + "radial-gradient(focus-distance 0% , center 50% 50% , "
+					+ "radius 75% , #b87331, #64441f);" + "-fx-background-insets: 1 1 1 1;" + "-fx-background-radius: "
+					+ radius + ";" + "-fx-border-radius: " + radius + ";" + "-fx-border-color: transparent;"
+					+ "-fx-border-width: 4px;");
+
+			this.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+				if (newValue) {
+
+					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";" + "-fx-border-radius: " + radius + ";"
+							+ "-fx-border-color: #ffff;" + "-fx-border-width: 4px;");
+				} else {
+					this.setStyle("-fx-background-color: " + "radial-gradient(focus-distance 0% , center 50% 50% , "
+							+ "radius 75% , #b87331, #64441f);" + "-fx-background-insets: 1 1 1 1;"
+							+ "-fx-background-radius: " + radius + ";" + "-fx-border-radius: " + radius + ";"
+							+ "-fx-border-color: transparent;" + "-fx-border-width: 4px;");
+				}
+			});
+		}
+
+		public SettingsButton(Insets inst, int radius, double fontSize, double width, boolean settingsButton)
+				throws FileNotFoundException {
+			this(inst, radius, fontSize, width);
+			if (settingsButton) {
+				this.setText("Settings");
+//				ImageView img = new ImageView();
+//				img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
+//				img.setFitHeight(fontSize);
+//				img.setPreserveRatio(true);
+//				img.setSmooth(true);
+//				img.setCache(true);
+//				this.setGraphicTextGap(10);
+//				this.setGraphic(img);
+			}
+
+		}
+	}
+	
+	public static class SettingsPane extends VBox {
+		
+		public SettingsPane() {
+			
+		}
+		//TODO
 	}
 }
