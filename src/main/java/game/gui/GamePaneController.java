@@ -1134,8 +1134,7 @@ public class GamePaneController implements Initializable{
 				break;
 			}
 		}
-		// TODO
-		numCardsLabel.setText("4");
+		numCardsLabel.setText(String.valueOf(cards.size()));
 	}
 		
 	public void showCardsSymbol() {
