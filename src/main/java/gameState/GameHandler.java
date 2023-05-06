@@ -161,7 +161,6 @@ public class GameHandler {
 				} else if(Logic.playerAttackingCountry(country, idOfPlayer, this.gameState)) {
 					switch(this.gameType) {
 					case SinglePlayer:
-						System.out.println("opens meu");
 						this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
 								this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry())
 								.getNumberOfTroops() - 1, ChoosePane.ATTACK_ATTACK);
@@ -207,7 +206,6 @@ public class GameHandler {
 							break;
 						}
 					} else {
-						System.out.println("calling choose" + country.toString());
 						switch(this.gameType) {
 						case SinglePlayer:
 							this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(country, 1, 
@@ -248,8 +246,7 @@ public class GameHandler {
 			}
 			break;
 		case ATTACK_ATTACK: //open battle frame
-			if(Logic.playerAttackAttackConfirmedIsOK(this.gameState, idOfPlayer, 
-					this.gameState.getLastAttackingCountry(), country, troops )) {
+			if(Logic.playerAttackAttackConfirmedIsOK(this.gameState, idOfPlayer, country, troops )) {
 				Territory atTer = this.gameState.getTerritories().get(this.gameState.getLastAttackingCountry());
 				Territory dfTer = this.gameState.getTerritories().get(country);
 				Player atPly = atTer.getOwnedByPlayer();
@@ -290,6 +287,8 @@ public class GameHandler {
 				}
 			}
 			this.gameState.setLastAttackingCountry(null);
+			System.out.println("setting last attacking null");
+
 			break;
 		case FORTIFY: //move troops from own territory x to own y
 			if(Logic.playerForitfyConfirmedIsOk(gameState, gameState.getPlayers().get(idOfPlayer), 
@@ -321,6 +320,8 @@ public class GameHandler {
 			break;
 		case ATTACK_ATTACK:
 			this.gameState.setLastAttackingCountry(null);
+			System.out.println("setting last attacking null");
+
 			// remove pinup country, reset activate countries
 			break;
 		case ATTACK_COLONISE:
@@ -349,6 +350,9 @@ public class GameHandler {
 					case Tutorial:
 						break;
 					}
+					if(this.gameState.getCurrentPlayer().isAI()) {
+						this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
+					}
 					break;
 				case ATTACK:
 					this.gameState.setCurrentTurnPhase(Phase.FORTIFY);
@@ -365,6 +369,9 @@ public class GameHandler {
 					case Tutorial:
 						break;
 					}
+					if(this.gameState.getCurrentPlayer().isAI()) {
+						this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
+					}
 					break;
 				case FORTIFY:
 					this.gameState.setCurrentTurnPhase(Phase.REINFORCE);
@@ -379,7 +386,6 @@ public class GameHandler {
 						this.singlePlayerHandler.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 								this.gameState.getTroopsLeftForCurrent());
 						if(this.gameState.getCurrentPlayer().isAI()) {
-							// calls the AI
 							this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
 						} else {
 							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
@@ -560,7 +566,7 @@ public class GameHandler {
 						this.gameState.getPlayers().get(changed.getAttackerID()));
 				if(!Logic.playerIsAlive(gameState, changed.getDefenderID())) {
 					this.gameState.removeDeadPlayer(changed.getDefenderID());
-					System.out.println("player died left are" + gameState.getAlivePlayers().size());
+					System.out.println("player died left are " + gameState.getAlivePlayers().size());
 					if(Logic.isGameOver(gameState)) {
 						System.out.println("game ended " + this.gameState.getCurrentPlayer().getID() + " is winner");
 					}
@@ -618,7 +624,7 @@ public class GameHandler {
         switch(gameState.getCurrentGamePeriod()) {
         case DICETHROW:            
     		this.playerThrowsInitialDice(player.getID());
-    		Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1)));
+    		Timeline timer = new Timeline(new KeyFrame(Duration.seconds(2)));
         	timer.play();
         	timer.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
         	break;
@@ -628,13 +634,14 @@ public class GameHandler {
     		Timeline timer3 = new Timeline(new KeyFrame(Duration.seconds(1)));
         	final CountryName countryNameCopy = country;
         	timer2.play();
-        	timer2.setOnFinished(x -> this.clickCountry(player.getID(), countryNameCopy));
-        	timer3.play();
+        	timer2.setOnFinished(x -> {
+        		this.clickCountry(player.getID(), countryNameCopy);
+        		timer3.play();
+        	});
         	timer3.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), player.getID()));
         	break;
         case INITIALDEPLOY:
         	country = AILogic.chooseTerritoryToInitialReinforce(gameState, player);
-        	System.out.println(country.toString() + " test initial deploy");
         	final CountryName countryNameCopy2 = country;
         	Timeline timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
         	timer4.play();
@@ -655,7 +662,8 @@ public class GameHandler {
             		Pair<CountryName, Integer> pairReinforce = AILogic.chooseTerritoryToReinforce(gameState, player);
             		System.out.println(pairReinforce.getKey().toString() + " " + pairReinforce.getValue());
             		this.clickCountry(player.getID(), pairReinforce.getKey());
-            		this.confirmTroopsToCountry(pairReinforce.getKey(), pairReinforce.getValue(), ChoosePane.REINFORCE, player.getID());
+            		this.confirmTroopsToCountry(pairReinforce.getKey(), pairReinforce.getValue(),
+            											ChoosePane.REINFORCE, player.getID());
             		timer11.play();	
             	});
             	
@@ -666,62 +674,65 @@ public class GameHandler {
                     	timer10.play();
                     }
             	});                	
-        		timer8.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
+        		timer8.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(),
+									        				this.gameState.getCurrentTurnPhase(),
+									        				player.getID()));
             	break;        	
             case ATTACK:
-            	while(AILogic.willAttack(gameState, player)) {
+            	Timeline timer12 = new Timeline(new KeyFrame(Duration.seconds(1)));
+            	Timeline timer13 = new Timeline(new KeyFrame(Duration.seconds(1)));
+
+        		timer12.play();
+        		timer12.setOnFinished(x -> {
             		Pair<CountryName, CountryName> pairAttack = AILogic.chooseTerritoryPairAttack(gameState, player);
             		int troops = AILogic.chooseTroopsToAttackWith(this.gameState.getTerritories().get(pairAttack.getKey()), player, gameState);
-            		timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.clickCountry(player.getID(), pairAttack.getKey()));
-            		timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.clickCountry(player.getID(), pairAttack.getValue()));
-            		timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.confirmTroopsToCountry(pairAttack.getValue(), troops, ChoosePane.ATTACK_ATTACK, player.getID()));
-            		timer4 = new Timeline(new KeyFrame(Duration.seconds(3)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.aiBattleSimulate());
-               		timer4 = new Timeline(new KeyFrame(Duration.seconds(3)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.confirmTroopsToCountry(pairAttack.getValue(), troops, ChoosePane.ATTACK_COLONISE, player.getID()));
-            	}
-            	Timeline timer7 = new Timeline(new KeyFrame(Duration.seconds(2))); 
-            	timer7.play();
-            	timer7.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
+            		System.out.println(pairAttack.getKey().toString() + " " + pairAttack.getValue().toString() + " with troops " + troops);
+            		this.clickCountry(player.getID(), pairAttack.getKey());
+            		this.clickCountry(player.getID(), pairAttack.getValue());
+            		this.confirmTroopsToCountry(pairAttack.getValue(), troops, ChoosePane.ATTACK_ATTACK, player.getID());
+            		this.battleDiceThrow();
+            		
+            		while(this.gameState.getBattle() != null) {
+            			this.battleDiceThrow();
+            			timer13.play();
+            		} 
+            		int troopsColonise = AILogic.chooseTroopsToSendToConqueredTerritory(
+            				gameState.getTerritories().get(pairAttack.getKey()), 
+            				gameState.getTerritories().get(pairAttack.getValue()), player);
+            		this.confirmTroopsToCountry(pairAttack.getValue(), troopsColonise, ChoosePane.ATTACK_COLONISE, player.getID());
+
+            		if(!AILogic.willAttack(gameState, player)) {
+            			timer13.play();
+            		} else {
+            			timer12.play();
+            		}
+            		
+            	});
+           
+        		timer13.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), 
+            			this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
         		break;
             case FORTIFY:
-            	if(AILogic.willFortify(gameState, player)) {
-            		Pair<CountryName, CountryName> pairFortify = AILogic.chooseTerritoriesPairFortify(gameState, player);
-            		int troops = AILogic.chooseTroopsToSendFortify(this.gameState.getTerritories().get(pairFortify.getKey()), player);
-            		timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.clickCountry(player.getID(), pairFortify.getKey()));
-            		timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.clickCountry(player.getID(), pairFortify.getValue()));
-            		timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
-            		timer4.play();
-            		timer4.setOnFinished(x -> this.confirmTroopsToCountry(pairFortify.getValue(), troops, ChoosePane.FORTIFY, player.getID()));
-            		
-            	}
-            	Timeline timer6 = new Timeline(new KeyFrame(Duration.seconds(2)));
-            	timer6.play();
-            	timer6.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
+            	Timeline timer14 = new Timeline(new KeyFrame(Duration.seconds(2)));
+            	timer14.play();
+        		timer14.setOnFinished(x -> {
+        			if(AILogic.willFortify(gameState, player)) {
+                		Pair<CountryName, CountryName> pairFortify = AILogic.chooseTerritoriesPairFortify(gameState, player);
+                		int troops = AILogic.chooseTroopsToSendFortify(this.gameState.getTerritories().get(pairFortify.getKey()), player);
+                		System.out.println(pairFortify.getKey().toString() + " " + pairFortify.getValue().toString() + " with troops " + troops);
+
+                		this.clickCountry(player.getID(), pairFortify.getKey());
+                		this.clickCountry(player.getID(), pairFortify.getValue());
+                		this.confirmTroopsToCountry(pairFortify.getValue(), troops, ChoosePane.FORTIFY, player.getID());
+        			}
+        			this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), 
+                			this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID());
+            	});
+
             	break;
             }
 
         }
     }
-
-	private void aiBattleSimulate() {
-		while(this.gameState.getBattle() != null) {
-			this.battleDiceThrow();
-		}
-	}
-
-
 	
 }

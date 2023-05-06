@@ -298,7 +298,7 @@ public class Logic {
 					if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
 						if(!gameState.getTerritories().get(country).getOwnedByPlayer()
 								.equals(gameState.getCurrentPlayer())) {
-							if(!gameState.getLastAttackingCountry().equals(null)) {
+							if(gameState.getLastAttackingCountry() != null) {
 								if(gameState.getTerritories().get(gameState.getLastAttackingCountry())
 										.getNeighboringTerritories()
 										.contains(gameState.getTerritories().get(country))) {									
@@ -405,16 +405,16 @@ public class Logic {
 		return false;
 	}
 	
-	public static boolean playerAttackAttackConfirmedIsOK(GameState gameState, int idOfPLayer, 
-			CountryName attacking, CountryName attacked, int numTroops) {
+	public static boolean playerAttackAttackConfirmedIsOK(GameState gameState, int idOfPLayer,
+			CountryName attacked, int numTroops) {
 		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
 			if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
 				if(gameState.getCurrentPlayer().getID() == idOfPLayer) {
-					if(gameState.getTerritories().get(attacking).getOwnedByPlayer()
+					if(gameState.getTerritories().get(gameState.getLastAttackingCountry()).getOwnedByPlayer()
 							.equals(gameState.getCurrentPlayer()) ) {
 						if(!gameState.getTerritories().get(attacked).getOwnedByPlayer()
 								.equals(gameState.getCurrentPlayer())) {
-							if(gameState.getTerritories().get(attacking).getNumberOfTroops() >= numTroops) {
+							if(gameState.getTerritories().get(gameState.getLastAttackingCountry()).getNumberOfTroops() >= numTroops) {
 								return true;
 							}
 						}

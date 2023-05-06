@@ -210,21 +210,23 @@ public class AILogic {
 	//owned territory with the fewest owned neighbours -> most outer country
 	public static Territory mostOuterCountry(GameState gameState, PlayerAI player) {
 		
-			int min = Integer.MAX_VALUE;
+			int min = Integer.MIN_VALUE;
 			int count = 0;
 			Territory terr = null;
 			for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-				if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+				if(set.getValue().getOwnedByPlayer().getID() == player.getID() && set.getValue().getNumberOfTroops() > 1) {
 					for(Territory neighbour : set.getValue().getNeighboringTerritories()) {
-						if(neighbour.getOwnedByPlayer().getID() == player.getID()) {
+						if(neighbour.getOwnedByPlayer().getID() != player.getID()) {
 							count++;
 						}
 					}
-					if(count < min) {
+					if(count > min) {
 						min = count;
 						terr = set.getValue();
+						System.out.println("Set most outter territory to " + terr.getCountryName().toString());
 					}
 				}
+				count = 0;
 			}
 			return terr;
 	}
@@ -397,14 +399,15 @@ public class AILogic {
 	}
 	
 	public static int chooseTroopsToSendToConqueredTerritory(Territory oldTerritory, Territory newTerritory, PlayerAI player) {
+		int troopsRandom = (int)(Math.random() * oldTerritory.getNumberOfTroops() - 1);
+		troopsRandom = troopsRandom < 1 ? 1 : troopsRandom;
 		switch(player.getLevel()) {
 		case EASY:
-			return (int)(Math.random() * oldTerritory.getNumberOfTroops()-1) + 1;
+			return troopsRandom;
 		case CASUAL:
 			if(Math.random() < 0.5) {
-				return (int)(Math.random() * oldTerritory.getNumberOfTroops()-1) + 1;
-			}
-			else {
+				return troopsRandom;
+			} else {
 				return chooseTroopsToSendToConqueredTerritoryHard(oldTerritory, newTerritory, player);
 			}
 		case HARD:
@@ -524,6 +527,6 @@ public class AILogic {
 	}
 	public static int chooseTroopsToAttackWith(Territory territory, PlayerAI player, GameState gameState) {
 		// TODO Auto-generated method stub
-		return gameState.getTerritories().get(territory.getCountryName()).getNumberOfTroops();
+		return gameState.getTerritories().get(territory.getCountryName()).getNumberOfTroops() - 1;
 	}
 }
