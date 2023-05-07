@@ -3,6 +3,7 @@ package game.gui;
 import java.io.IOException;
 
 import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -29,7 +30,7 @@ public class MainApp extends Application {
 	public static double screenHeight;
 	private AnchorPane anchorPane;
 	private Scene scene;
-	public static GameSound themeSound;
+	public static GameSound gameSound;
 	public static AppController appController;
 
 	/**
@@ -47,6 +48,7 @@ public class MainApp extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws IOException {
+		gameSound = AppController.getGameSound();
 		screenWidth = Screen.getPrimary().getVisualBounds().getWidth();
 		screenHeight = Screen.getPrimary().getVisualBounds().getHeight();
 		StartPaneController start = new StartPaneController();
@@ -85,8 +87,7 @@ public class MainApp extends Application {
 															 * mediaPlayer = new MediaPlayer(media); mediaPlayer.play();
 															 */
 
-		themeSound = new GameSound();
-		themeSound.startThemeSong();
+		gameSound.startThemeSong();
 
 	}
 

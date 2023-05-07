@@ -5,3 +5,6 @@ https://creativecommons.org/licenses/by/4.0/
 
 Button sounds
 by zapsplat
+
+<a href="https://www.flaticon.com/free-icons/speaker" title="speaker icons">Speaker icons created by Aficons studio - Flaticon</a>
+<a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by Pixel perfect - Flaticon</a>
