@@ -13,12 +13,13 @@ import javafx.util.Duration;
  * @author srogalsk
  *
  */
-public class GameSound {
+public final class GameSound {
 	private Media media;
 	private MediaPlayer musicSoundPlayer;
 	private MediaPlayer effectsSoundPlayer;
+    private static GameSound instance = null;
 	
-	public GameSound() {
+	private GameSound() {
 		// Setting up musicSound
 		File file = new File(Parameter.themeSong);
 		media = new Media(file.toURI().toString());
@@ -28,6 +29,13 @@ public class GameSound {
 		effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.buttonClick03Sound).toURI().toString()));
 		
 	}
+	
+	protected static GameSound getGameSoundInstance() {
+        if (instance == null) {
+            instance = new GameSound();
+        }
+        return instance;
+    }
 
 	public void startThemeSong() {
 		

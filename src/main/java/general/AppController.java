@@ -1,6 +1,5 @@
 package general;
 
-
 import java.util.Arrays;
 
 import database.PlayerProfileHandler;
@@ -25,7 +24,6 @@ public class AppController {
 	private static Client client;
 	private static Server server;
 
-	
 	/**
 	 * @param firstName
 	 * @param lastName
@@ -35,7 +33,7 @@ public class AppController {
 	 */
 	public static void createFirstProfile(String firstName, String lastName, String userName, String password)
 			throws WrongTextFieldInputException {
-		/*checking for inputs*/
+		/* checking for inputs */
 		if (userName.isBlank()) {
 			throw new WrongTextFieldInputException("Username must not be blank.");
 		} else if (!userName.matches("[a-zA-Z0-9]+")) {
@@ -56,14 +54,14 @@ public class AppController {
 		if (password.isBlank()) {
 			throw new WrongTextFieldInputException("Password must not be blank.");
 		}
-		/*Profile creating*/
+		/* Profile creating */
 		AppController.profile = new Profile(firstName, lastName, userName, password);
 		dbH.createProfileData(profile);
 	}
-	
-	public static Profile createFirstSecondaryProfile(String firstName, String lastName, String userName, String password)
-			throws WrongTextFieldInputException {
-		/*checking for inputs*/
+
+	public static Profile createFirstSecondaryProfile(String firstName, String lastName, String userName,
+			String password) throws WrongTextFieldInputException {
+		/* checking for inputs */
 		if (userName.isBlank()) {
 			throw new WrongTextFieldInputException("Username must not be blank.");
 		} else if (!userName.matches("[a-zA-Z0-9]+")) {
@@ -84,38 +82,38 @@ public class AppController {
 		if (password.isBlank()) {
 			throw new WrongTextFieldInputException("Password must not be blank.");
 		}
-		/*Profile creating*/
+		/* Profile creating */
 		Profile profile = new Profile(firstName, lastName, userName, password);
 		dbH.createProfileData(profile);
-		
+
 		return profile;
 	}
-	
+
 	public static boolean logIntoProfile(String username, String password) {
-		for(Profile profile : dbH.getAllProfiles()) {
-			if(profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
+		for (Profile profile : dbH.getAllProfiles()) {
+			if (profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
 				// TODO delete
-				if(profile.getColor() == null || profile.getPhoto() == null) {
+				if (profile.getColor() == null || profile.getPhoto() == null) {
 					profile.setAnyColorAvatar();
-				} 
-				AppController.profile=profile;
+				}
+				AppController.profile = profile;
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public static Profile logIntoSecondProfile(String username, String password) {
-		for(Profile profile : dbH.getAllProfiles()) {
-			if(profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
+		for (Profile profile : dbH.getAllProfiles()) {
+			if (profile.getUserName().equals(username) && profile.getPassword().equals(password)) {
 				return profile;
 			}
 		}
 		return null;
 	}
-	
-	public static void updateProfile(String value,String attribute) throws WrongTextFieldInputException {
-		/*checking for inputs*/
+
+	public static void updateProfile(String value, String attribute) throws WrongTextFieldInputException {
+		/* checking for inputs */
 		if (attribute.equals("UserName") && value.isBlank()) {
 			throw new WrongTextFieldInputException("Username must not be blank.");
 		} else if (attribute.equals("UserName") && !value.matches("[a-zA-Z0-9]+")) {
@@ -136,39 +134,37 @@ public class AppController {
 		if (attribute.equals("Password") && value.isBlank()) {
 			throw new WrongTextFieldInputException("Password must not be blank.");
 		}
-		if(attribute.equals("UserName")) {
-			for(Profile p : dbH.getAllProfiles()) {
-				if(p.getUserName().equals(value)) {
+		if (attribute.equals("UserName")) {
+			for (Profile p : dbH.getAllProfiles()) {
+				if (p.getUserName().equals(value)) {
 					throw new WrongTextFieldInputException("This username is used already.");
 				}
 			}
 		}
-		if (attribute.equals("Color") && !Arrays.stream(Parameter.allColors).
-											anyMatch(n -> n.equals(value))) {
+		if (attribute.equals("Color") && !Arrays.stream(Parameter.allColors).anyMatch(n -> n.equals(value))) {
 			throw new WrongTextFieldInputException("Invalid Color Code.");
 		}
-		if (attribute.equals("Photo") && !Arrays.stream(Parameter.allAvatars).
-											anyMatch(n -> n.equals(value))) {
+		if (attribute.equals("Photo") && !Arrays.stream(Parameter.allAvatars).anyMatch(n -> n.equals(value))) {
 			throw new WrongTextFieldInputException("Invalid Avatar.");
 		}
 		dbH.updateProfileInfo(value, attribute, AppController.profile);
 		AppController.profile.setAttribute(attribute, value);
 	}
-	
+
 	public static void deleteProfile() {
 		dbH.deleteProfile(AppController.profile.getId());
 	}
-	
+
 	public static void logoutAndSetValuesToNull() {
 		profile = null;
 		client = null;
 
 	}
-	
+
 	public static AppController getInstance() {
 		return AppController.appController;
 	}
-	
+
 	public static Profile getProfile() {
 		return AppController.profile;
 	}
@@ -197,7 +193,6 @@ public class AppController {
 		AppController.client = client;
 	}
 
-
 	public static Server getServer() {
 		return server;
 	}
@@ -212,5 +207,9 @@ public class AppController {
 
 	public static void setDatabaseHandler(PlayerProfileHandler dbH) {
 		AppController.dbH = dbH;
+	}
+
+	public static GameSound getGameSound() {
+		return GameSound.getGameSoundInstance();
 	}
 }
