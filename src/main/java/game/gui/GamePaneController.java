@@ -19,6 +19,7 @@ import gameState.Hint;
 import gameState.Period;
 import gameState.Phase;
 import gameState.SinglePlayerHandler;
+import general.AppController;
 import general.GameSound;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
@@ -65,8 +66,12 @@ import javafx.scene.text.TextAlignment;
  */
 public class GamePaneController implements Initializable{
 	
+	private GameSound gameSound = AppController.getGameSound();
+
+	
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
+	
 	
 	@FXML
 	private AnchorPane gameBoard;
@@ -418,7 +423,7 @@ public class GamePaneController implements Initializable{
         nextPhaseButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	System.out.println(playerOnGUI.getName() + " " + playerOnGUI.getID() + "clicked next phase button");
 		    	singlePlayerHandler.endPhaseTurn(currentPeriod, currentPhase, playerOnGUI.getID());
 
@@ -914,7 +919,7 @@ public class GamePaneController implements Initializable{
 		falseButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	choosingTroopsPane.setVisible(false);
 		    	singlePlayerHandler.cancelNumberOfTroops(countryName, choosePane, playerOnGUI.getID());
 		    }
@@ -923,7 +928,7 @@ public class GamePaneController implements Initializable{
         trueButtonChoosingTroops.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	choosingTroopsPane.setVisible(false);
 		    	singlePlayerHandler.confirmNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()), choosePane, playerOnGUI.getID());
 		    }
@@ -932,7 +937,7 @@ public class GamePaneController implements Initializable{
 		lessBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	int i = Integer.parseInt(numberLabel.getText());
 		    	i = i == minTroops ? maxTroops : --i;
 		    	numberLabel.setText(String.valueOf(i));		    	  
@@ -942,7 +947,7 @@ public class GamePaneController implements Initializable{
 		moreBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	int i = Integer.parseInt(numberLabel.getText());
 		    	i = i == maxTroops ? minTroops : ++i;
 		    	numberLabel.setText(String.valueOf(i));	

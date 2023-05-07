@@ -12,7 +12,10 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.MenuButton;
 import game.gui.GUISupportClasses.SettingsButton;
+import game.gui.GUISupportClasses.SettingsPane;
 import game.gui.GUISupportClasses.Spacing;
+import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -50,7 +53,11 @@ public class StartPaneController extends StackPane {
 	private ImageView riskLogo;
 	private DesignButton playButton;
 	private SettingsButton settingsButton;
+	private SettingsPane settingsPane;
 	private double ratio;
+	
+	private GameSound gameSound = AppController.getGameSound();
+
 	
 	
 	public StartPaneController() throws FileNotFoundException {
@@ -114,18 +121,20 @@ public class StartPaneController extends StackPane {
 
 		contentVBox.setSpacing(30 * ratio);
 		
-		contentVBox.getChildren().addAll(riskLogo, playButton, settingsButton);
+		contentVBox.getChildren().addAll(riskLogo, playButton);
 		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
+		
+		settingsPane = new SettingsPane();
 
 		
 		
 		// maybe add vBoxColor
-		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
+		this.getChildren().addAll(vBox, vBoxColor, contentVBox, settingsButton);
 	
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 				Node node = (Node)event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 
@@ -140,6 +149,21 @@ public class StartPaneController extends StackPane {
 
 	
 	    	}
+		});
+		
+		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				gameSound.buttonClickForwardSound();
+
+				if (!settingsButton.isSelected()) {
+					settingsButton.setSelected(false);
+					settingsPane.setVisible(false);
+				} else {
+					settingsButton.setSelected(true);
+					settingsPane.setVisible(true);
+				}
+			}
 		});
 		
 		contentVBox.setOnKeyPressed(new EventHandler<KeyEvent>() {

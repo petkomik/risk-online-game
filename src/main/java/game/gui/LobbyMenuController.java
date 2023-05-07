@@ -17,6 +17,7 @@ import game.models.PlayerSingle;
 import gameState.SinglePlayerHandler;
 import general.Parameter;
 import general.AppController;
+import general.GameSound;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -136,6 +137,8 @@ public class LobbyMenuController extends StackPane {
 	
 
 	private Client client = AppController.getClient();
+	private GameSound gameSound = AppController.getGameSound();
+
 
 	public LobbyMenuController() {
 
@@ -435,7 +438,7 @@ public class LobbyMenuController extends StackPane {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickBackwardSound();
+				gameSound.buttonClickBackwardSound();
 				Node node = (Node) event.getSource();
 				Stage stage = (Stage) node.getScene().getWindow();
 				try {
@@ -453,7 +456,7 @@ public class LobbyMenuController extends StackPane {
 		moreBtnDiff.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				String current = labelBtnDiff.getText();
 				if (current.equals(Difficulty.EASY.toString())) {
 					lobby.setDifficultyOfAI(Difficulty.CASUAL);
@@ -474,7 +477,7 @@ public class LobbyMenuController extends StackPane {
 		lessBtnDiff.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				String current = labelBtnDiff.getText();
 				if (current.equals(Difficulty.HARD.toString())) {
 					lobby.setDifficultyOfAI(Difficulty.CASUAL);
@@ -493,7 +496,7 @@ public class LobbyMenuController extends StackPane {
 		moreBtnAI.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				// TODO
 				int labelBefore = Integer.parseInt(labelBtnAI.getText());
 				if (lobby.getAIPlayerList().size() < 5
@@ -516,7 +519,7 @@ public class LobbyMenuController extends StackPane {
 		lessBtnAI.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				if (lobby.getAIPlayerList().size() > 0) {
 					lobby.removeAI();
 					labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size()));
@@ -534,7 +537,7 @@ public class LobbyMenuController extends StackPane {
 		moreBtnPlayers.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				if (singleplayerLobby) {
 					if (lobby.getHumanPlayerList().size() < 6) {
 						Profile newProfile = new SecondaryPlayerDialog().addPlayerDialog();
@@ -568,7 +571,7 @@ public class LobbyMenuController extends StackPane {
 		lessBtnPlayers.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 
 				if (singleplayerLobby) {
 					if (lobby.getHumanPlayerList().size() > 1) {
@@ -602,7 +605,7 @@ public class LobbyMenuController extends StackPane {
 		readyBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				boolean ready = readyBtn.getText().equals("Ready");
 				if (ready) {
 					readyBtn.setText("Not Ready");
@@ -660,7 +663,7 @@ public class LobbyMenuController extends StackPane {
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);

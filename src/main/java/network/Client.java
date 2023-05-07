@@ -358,7 +358,7 @@ public class Client {
 							lobbyGUI.setOnAction(new EventHandler<ActionEvent>() {
 								@Override
 								public void handle(ActionEvent event) {
-									(new GameSound()).buttonClickBackwardSound();
+									AppController.getGameSound().buttonClickBackwardSound();
 									ServerMainWindowController.selectedLobby = lobbyGUI.getLobby();
 									for (LobbyGUI lobbyEnt : ServerMainWindowController.lobbyGUIList.values()) {
 										lobbyEnt.setSelected(false);

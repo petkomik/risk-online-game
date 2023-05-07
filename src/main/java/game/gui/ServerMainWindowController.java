@@ -107,6 +107,9 @@ public class ServerMainWindowController extends StackPane {
 	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
 	public static Lobby selectedLobby;
 	public ServerMainWindowController parent = this;
+	
+	private static GameSound gameSound = AppController.getGameSound();
+
 
 	static Server server;
 	static Client client;
@@ -344,7 +347,7 @@ public class ServerMainWindowController extends StackPane {
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
@@ -400,7 +403,7 @@ public class ServerMainWindowController extends StackPane {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickBackwardSound();
+				gameSound.buttonClickBackwardSound();
 
 				Node node = (Node) event.getSource();
 				stage = (Stage) node.getScene().getWindow();
@@ -433,7 +436,7 @@ public class ServerMainWindowController extends StackPane {
 		hostGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				// send profile createLobby message
 				// TODO have to set the my lobby here
 				// the lobby in that we get in client and set as myLobby(clientsLobby) is the
@@ -471,7 +474,7 @@ public class ServerMainWindowController extends StackPane {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO add if the lobby is full not joining
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 //				Node node = (Node) event.getSource();
 //				stage = (Stage) node.getScene().getWindow();
 
@@ -504,7 +507,7 @@ public class ServerMainWindowController extends StackPane {
 				LobbyMenuController.getBackButton().setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
-						(new GameSound()).buttonClickBackwardSound();
+						gameSound.buttonClickBackwardSound();
 						vBoxLobbyMenuController.setVisible(false);
 						//chatPane.toFront();
 						System.out.println(chatPane.getParent() + " ist sein vater");

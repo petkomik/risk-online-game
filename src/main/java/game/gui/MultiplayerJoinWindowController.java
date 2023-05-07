@@ -38,6 +38,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import network.Client;
 import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -52,7 +53,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 	
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
-	private GameSound gameSound = new GameSound();
+	private GameSound gameSound = AppController.getGameSound();
 	private Stage stage;	
 	private VBox vBox;
 	private ImageView imgBackground;
@@ -251,7 +252,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 					return;
 				}
 
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {
@@ -268,7 +269,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickBackwardSound();
+		    	gameSound.buttonClickBackwardSound();
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {

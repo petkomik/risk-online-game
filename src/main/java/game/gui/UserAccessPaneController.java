@@ -9,6 +9,8 @@ import java.util.ResourceBundle;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,7 +35,7 @@ public class UserAccessPaneController extends StackPane {
 	
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
-	private GameSound gameSound = new GameSound();
+	private GameSound gameSound = AppController.getGameSound();
 	private Stage stage;	
 	private VBox vBox;
 	private ImageView imgBackground;

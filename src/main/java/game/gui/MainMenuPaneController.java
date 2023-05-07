@@ -10,6 +10,7 @@ import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.PlayerSingle;
 import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -43,7 +44,7 @@ public class MainMenuPaneController extends StackPane {
 	
 	private double w = MainApp.screenWidth;
 	private double h = MainApp.screenHeight;
-	private GameSound gameSound = new GameSound();
+	private GameSound gameSound = AppController.getGameSound();
 	private Stage stage;	
 	private VBox vBox;
 	private ImageView imgBackground;
@@ -172,7 +173,7 @@ public class MainMenuPaneController extends StackPane {
 		playTutorialButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				Node node = (Node) event.getSource();
 				// Getting the Stage where the event is happened
 				stage = (Stage)node.getScene().getWindow();
@@ -204,7 +205,7 @@ public class MainMenuPaneController extends StackPane {
 		profileSettingsButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {
@@ -221,7 +222,7 @@ public class MainMenuPaneController extends StackPane {
 		singleplayerButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				Lobby lobby = new Lobby();
 				// TODO get methods for color + avatars
 				lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
@@ -256,7 +257,7 @@ public class MainMenuPaneController extends StackPane {
 		multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
 				try {
@@ -273,7 +274,7 @@ public class MainMenuPaneController extends StackPane {
 		logoutButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickBackwardSound();
+		    	gameSound.buttonClickBackwardSound();
 				
 				AppController.logoutAndSetValuesToNull();
 				Node node = (Node) event.getSource();

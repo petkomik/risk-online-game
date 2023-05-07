@@ -34,6 +34,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -44,6 +45,7 @@ import javafx.stage.Screen;
 import network.Client;
 import network.messages.MessageSend;
 import network.messages.MessageToPerson;
+import general.AppController;
 import general.GameSound;
 
 public class GUISupportClasses {
@@ -858,6 +860,58 @@ public class GUISupportClasses {
 		
 		public SettingsPane() {
 			
+		}
+		
+		public static StackPane createMutePane() {
+			MediaPlayer musicPlayer = AppController.getGameSound().getMusicSoundPlayer();
+			MediaPlayer soundPlayer = AppController.getGameSound().getEffectsSoundPlayer();
+		    // Create buttons for music and sound effects mute/unmute
+		    Button musicButton = new Button("Music: Unmute");
+		    Button soundButton = new Button("Sound Effects: Unmute");
+
+		    // Add event handlers to toggle mute/unmute state of media players
+		    musicButton.setOnAction(event -> {
+		        if (musicPlayer != null) {
+		            if (musicPlayer.isMute()) {
+		                musicPlayer.setMute(false);
+		                musicButton.setText("Music: Unmute");
+		            } else {
+		                musicPlayer.setMute(true);
+		                musicButton.setText("Music: Mute");
+		            }
+		        }
+		    });
+		    soundButton.setOnAction(event -> {
+		        if (soundPlayer != null) {
+		            if (soundPlayer.isMute()) {
+		                soundPlayer.setMute(false);
+		                soundButton.setText("Sound Effects: Unmute");
+		            } else {
+		                soundPlayer.setMute(true);
+		                soundButton.setText("Sound Effects: Mute");
+		            }
+		        }
+		    });
+
+		    // Set the initial state of the mute/unmute buttons based on the media player's mute state
+		    if (musicPlayer != null && musicPlayer.isMute()) {
+		        musicButton.setText("Music: Mute");
+		    }
+		    if (soundPlayer != null && soundPlayer.isMute()) {
+		        soundButton.setText("Sound Effects: Mute");
+		    }
+
+		    // Create a VBox to hold the buttons
+		    VBox vbox = new VBox(10, musicButton, soundButton);
+
+		    // Set the background color and opacity of the VBox
+		    vbox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.2);");
+
+		    // Create a StackPane to hold the VBox and center it on the screen
+		    StackPane stackPane = new StackPane(vbox);
+		    stackPane.setPrefSize(200, 100);
+
+		    return stackPane;
 		}
 		//TODO
 	}

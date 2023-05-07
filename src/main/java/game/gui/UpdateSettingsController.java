@@ -14,6 +14,7 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import general.AppController;
+import general.GameSound;
 import general.Parameter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -57,6 +58,9 @@ import javafx.stage.Stage;
  */
 
 public class UpdateSettingsController extends StackPane {
+	
+	private GameSound gameSound = AppController.getGameSound();
+
 	
 	VBox vBox;
 	ImageView imgBackground;
@@ -408,7 +412,7 @@ public class UpdateSettingsController extends StackPane {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickBackwardSound();
+		    	gameSound.buttonClickBackwardSound();
 				Node node = (Node) event.getSource();
 				Stage stage = (Stage) node.getScene().getWindow();
 				try {
@@ -424,7 +428,7 @@ public class UpdateSettingsController extends StackPane {
 		colorLeft.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	String hex = AppController.getProfile().getColor();
 		    	for(int i = 0; i < colors.length; i++) {
 		    		if(colorToHexCode(colors[i]).equals(hex)) {
@@ -444,7 +448,7 @@ public class UpdateSettingsController extends StackPane {
 		colorRight.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	String hex = AppController.getProfile().getColor();
 		    	for(int i = 0; i < colors.length; i++) {
 		    		if(colorToHexCode(colors[i]).equals(hex)) {
@@ -464,7 +468,7 @@ public class UpdateSettingsController extends StackPane {
 		avatarLeft.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	String avatar = AppController.getProfile().getPhoto();
 		    	for(int i = 0; i < avatars.length; i++) {
 		    		if(avatars[i].equals(Parameter.avatarsdir + avatar)) {
@@ -488,7 +492,7 @@ public class UpdateSettingsController extends StackPane {
 		avatarRight.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	String avatar = AppController.getProfile().getPhoto();
 		    	for(int i = 0; i < avatars.length; i++) {
 		    		if(avatars[i].equals(Parameter.avatarsdir + avatar)) {
@@ -512,7 +516,7 @@ public class UpdateSettingsController extends StackPane {
 		deleteButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickBackwardSound();
+		    	gameSound.buttonClickBackwardSound();
 				 // Display confirmation dialog
 			    Alert alert = new Alert(AlertType.CONFIRMATION);
 			    alert.setTitle("Confirm Delete");
@@ -545,7 +549,7 @@ public class UpdateSettingsController extends StackPane {
 		updateSaveButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 	    		TextField[] fields = new TextField[] {usernameTextField, 
 	    				passwordField, firstNameField, lastNameField};
 

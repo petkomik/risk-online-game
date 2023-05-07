@@ -9,7 +9,8 @@ import game.models.Territory;
 import gameState.SinglePlayerHandler;
 import game.Battle;
 import game.Lobby;
-import general.*;
+import general.AppController;
+import general.Parameter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -406,7 +407,7 @@ public class BattleFrameController extends VBox {
 		throwBtn.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	AppController.getGameSound().buttonClickForwardSound();
 				throwBtn.setDisable(true);
 				switch(gameType) {
 				case SinglePlayer: 
@@ -426,7 +427,7 @@ public class BattleFrameController extends VBox {
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	AppController.getGameSound().buttonClickForwardSound();
 		    	// TODO
 		    	System.out.println("Open Chat");
 	    	}

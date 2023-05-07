@@ -75,7 +75,8 @@ public class EndGamePodiumController extends Application {
 	private HBox chatDiv;											//chatdiv with button
 	private ChatButton chatButton;									//*
 	private ChatWindow chatPane;									//chatPane
-	
+	private GameSound gameSound = AppController.getGameSound();
+
 	
 	public EndGamePodiumController() throws Exception {
 		super();
@@ -357,7 +358,7 @@ public class EndGamePodiumController extends Application {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			 public void handle(ActionEvent event) {
-		    	(new GameSound()).buttonClickForwardSound();
+		    	gameSound.buttonClickForwardSound();
 		    	
 				Node node = (Node) event.getSource();
 				
@@ -378,7 +379,7 @@ public class EndGamePodiumController extends Application {
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				(new GameSound()).buttonClickForwardSound();
+				gameSound.buttonClickForwardSound();
 				
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
