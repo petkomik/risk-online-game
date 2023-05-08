@@ -966,6 +966,7 @@ public class GamePaneController implements Initializable{
 		dropOnPane3.getChildren().removeIf(x -> x instanceof VBox);
 
 		ArrayList<Card> cards = this.cardsPlayerOnGUI;
+		ArrayList<String> selectedCards = new ArrayList<>();
 		HBox hbCards = new HBox();
 		hbCards.setSpacing(20);
 		hbCards.setPrefHeight(getRelativeVer(270.0));
@@ -984,27 +985,33 @@ public class GamePaneController implements Initializable{
 					if(dropOnPane1.getChildren().size() == 0) {
 						hbCards.getChildren().remove(e.getSource());
 						dropOnPane1.getChildren().add((VBox)e.getSource());
+						selectedCards.add(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText());
 					}
 					else if(dropOnPane2.getChildren().size() == 0) {
 						hbCards.getChildren().remove(e.getSource());
 						dropOnPane2.getChildren().add((VBox)e.getSource());
+						selectedCards.add(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText());
 					}
 					else if(dropOnPane3.getChildren().size() == 0) {
 						hbCards.getChildren().remove(e.getSource());
 						dropOnPane3.getChildren().add((VBox)e.getSource());
+						selectedCards.add(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText());
 					}
 				}
 				else if(dropOnPane1.getChildren().contains(e.getSource())) {
 					dropOnPane1.getChildren().remove(e.getSource());
 					hbCards.getChildren().add((VBox)e.getSource());
+					selectedCards.removeIf(x -> x.equals(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText()));
 				}
 				else if(dropOnPane2.getChildren().contains(e.getSource())) {
 					dropOnPane2.getChildren().remove(e.getSource());
 					hbCards.getChildren().add((VBox)e.getSource());
+					selectedCards.removeIf(x -> x.equals(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText()));
 				}
 				else if(dropOnPane3.getChildren().contains(e.getSource())) {
 					dropOnPane3.getChildren().remove(e.getSource());
 					hbCards.getChildren().add((VBox)e.getSource());
+					selectedCards.removeIf(x -> x.equals(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText()));
 				}
 				
 				if(dropOnPane1.getChildren().size() != 0 
@@ -1018,6 +1025,7 @@ public class GamePaneController implements Initializable{
 					tradeButton.setText("NO TRADE");
 				}
 			});
+			tradeButton.setOnAction(e -> this.singlePlayerHandler.turnInRiskCards(selectedCards, playerOnGUI.getID()));
 			VBox countryNamePane = new VBox();
 			StackPane countryArmyPane = new StackPane();
 			
