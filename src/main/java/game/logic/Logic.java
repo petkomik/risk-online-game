@@ -2,6 +2,7 @@ package game.logic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -9,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import game.Battle;
+import game.Lobby;
 import game.exceptions.WrongCardsException;
 import game.exceptions.WrongCardsSetException;
 import game.exceptions.WrongCountryException;
@@ -543,13 +545,32 @@ public class Logic {
 		return gameState.getAlivePlayers().size() == 1;
 	}
 
-	public static HashMap<Integer, Integer> getInGameRanks(GameState gameState) {
+	public static int[] getInGameRanks(GameState gameState, Lobby lobby) {
 		HashMap<Integer, Integer> ranks = new HashMap<Integer, Integer>();
+		ArrayList<Integer> ranksList = new ArrayList<Integer>();
 		for(int plyID : gameState.getPlayers().keySet()) {
-			ranks.put(plyID, 0);
+			int troopN = 0;
+			int terrN = 0;
+			for(CountryName country : gameState.getTerritories().keySet()) {
+				if(gameState.getTerritories().get(country)
+						.getOwnedByPlayer().getID() == plyID) {
+					terrN++;
+					troopN += gameState.getTerritories().get(country).getNumberOfTroops();
+				}
+			}
+			troopN += gameState.getPlayerTroopsLeft().get(plyID);
+			ranks.put(plyID, troopN * terrN);
+			ranksList.add(troopN * terrN);
 		}
 		
-		return null;
+		Collections.sort(ranksList, Collections.reverseOrder());
+		int[] rankArray = new int[lobby.getPlayerList().size()];
+		
+		for(int i = 0; i < lobby.getPlayerList().size(); i++) {
+			rankArray[i] = ranksList.indexOf(ranks.get(lobby.getPlayerList().get(i).getID())) + 1;
+		}
+		
+		return rankArray;
 	}
 
 }

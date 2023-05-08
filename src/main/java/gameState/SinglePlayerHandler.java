@@ -2,6 +2,7 @@ package gameState;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import game.Battle;
@@ -233,6 +234,10 @@ public class SinglePlayerHandler {
 //		sets all countries enableed
 //		all button enabled
 //		no point up
+	}
+
+	public void updateRanksOnGUI(int[] ranks) {
+		this.gamePaneController.setPlayersRanking(ranks);
 	}
 
 

@@ -379,6 +379,7 @@ public class GameHandler {
 					this.gameState.setNextPlayer();	
 					this.gameState.setPlayerTroopsLeft(Logic.getTroopsReinforce(this.gameState));
 					this.gameState.setLastTurnWonterritory(false);
+					this.updateInGameLeaderBoard();
 
 					switch(this.gameType) {
 					case SinglePlayer:
@@ -392,6 +393,7 @@ public class GameHandler {
 							this.singlePlayerHandler.chnagePlayerOnGUI(this.gameState.getCurrentPlayer().getID(), 
 									this.gameState.getRiskCardsInPlayers().get(this.gameState.getCurrentPlayer().getID()));
 						}
+						
 						break;
 					case Multiplayer:
 						break;
@@ -488,6 +490,7 @@ public class GameHandler {
 					if(Logic.isDeployPeriodOver(this.gameState)) {
 						gameState.setCurrentGamePeriod(Period.MAINPERIOD);						
 						gameState.setCurrentTurnPhase(Phase.REINFORCE);
+						this.updateInGameLeaderBoard();
 						switch(this.gameType) {
 						case SinglePlayer:
 							this.singlePlayerHandler.setPeriodOnGUI(Period.MAINPERIOD);
@@ -521,7 +524,7 @@ public class GameHandler {
 					break;
 				case MAINPERIOD: //not here
 					break;
-				default: //no szch case
+				default: //no such case
 					break;
 				}
 			}
@@ -530,7 +533,16 @@ public class GameHandler {
 	}
 
 	public void updateInGameLeaderBoard() {
-		HashMap<Integer, Integer> ranks = Logic.getInGameRanks(this.gameState);
+		int[] ranks = Logic.getInGameRanks(this.gameState, this.lobby);
+		switch(this.gameType) {
+		case Tutorial:
+			break;
+		case SinglePlayer:
+			this.singlePlayerHandler.updateRanksOnGUI(ranks);
+			break;
+		case Multiplayer:
+			break;
+		}
 	}
 	
 	public void turnInRiskCards(ArrayList<Card> cards, int idOfPlayer) 

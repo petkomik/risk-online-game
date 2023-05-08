@@ -324,7 +324,8 @@ public class GamePaneController implements Initializable{
 			avatarImageViews[i].setFitWidth(getRelativeHorz(80.0));
 			avatarImageViews[i].setFitHeight(getRelativeHorz(80.0));
 			circles[i] = new Circle(getRelativeHorz(42.0));
-			circles[i].setStrokeWidth(3);
+			circles[i].setStrokeWidth(getRelativeVer(5));
+			circles[i].setStrokeType(StrokeType.CENTERED);
 			circles[i].setStroke(Color.WHITE);
 			stackPanes[i] = new StackPane(circles[i], avatarImageViews[i]);
 			stackPanes[i].setLayoutX(getRelativeHorz(108.0));
@@ -345,8 +346,7 @@ public class GamePaneController implements Initializable{
 			
 			// ImageView
 			ivTimer[i] = new ImageView(Parameter.phaseLogosdir + "timer.png");
-			ivTimer[i].setFitHeight(getRelativeHorz(50.0));
-			ivTimer[i].setFitWidth(getRelativeVer(50.0));
+			ivTimer[i].setFitHeight(getRelativeHorz(45.0));
 			ivTimer[i].setLayoutX(getRelativeHorz(40.0));
 			ivTimer[i].setLayoutY(getRelativeVer(20.0));
 			ivTimer[i].setPickOnBounds(true);
@@ -358,7 +358,7 @@ public class GamePaneController implements Initializable{
 	        rankCircle[i].setFill(Color.WHITE);
 
 	        rankLabel[i] = new Label("1");
-	        rankLabel[i].setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(18.0)));
+	        rankLabel[i].setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(18.0)));
 	        rankLabel[i].setAlignment(Pos.CENTER);
 
 	        rankSP[i] = new StackPane();
@@ -401,18 +401,19 @@ public class GamePaneController implements Initializable{
 		endTurnIV.setFitHeight(getRelativeHorz(31.0));
 		nextPhaseButton.setGraphic(endTurnIV);
 		nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;" 
-				+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 4px;");
+				+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: " + getRelativeVer(4) + "px;");
 
 		nextPhaseButton.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 			if (newValue) {
 				nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-						+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: " + getRelativeVer(4) + "px;");
 			} else {
 				nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-						+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+						+ "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: " + getRelativeVer(4) + "px;");
 			}
 		});
-        nextPhaseButton.setLayoutX(getRelativeHorz(1020));
+		
+        nextPhaseButton.setLayoutX(getRelativeHorz(980));
         nextPhaseButton.setLayoutY(getRelativeVer(730.0));
         nextPhaseButton.setMnemonicParsing(false);
         nextPhaseButton.setPrefHeight(getRelativeHorz(72.0));
@@ -457,7 +458,8 @@ public class GamePaneController implements Initializable{
         cirPhase.setRadius(getRelativeHorz(42.0));
         cirPhase.setStroke(Color.WHITE);
         cirPhase.setStrokeType(StrokeType.INSIDE);
-        cirPhase.setStrokeWidth(3.0);
+        cirPhase.setStrokeWidth(getRelativeVer(5));
+        cirPhase.setStrokeType(StrokeType.OUTSIDE);
 
         // Erstelle ein ImageView mit einem Bild
         ivPhase = new ImageView();
@@ -474,9 +476,6 @@ public class GamePaneController implements Initializable{
         
         cirNum = new Circle();
         cirNum.setRadius(getRelativeHorz(20.0));
-        cirNum.setStroke(Color.BLACK);
-        cirNum.setStrokeType(StrokeType.OUTSIDE);
-        cirNum.setStrokeWidth(3.0);
         cirNum.setFill(Color.WHITE);
 
         // Erstelle ein Label mit Text "5"
@@ -486,7 +485,7 @@ public class GamePaneController implements Initializable{
 
         // Füge den Kreis und das Label in ein StackPane
         spNum = new StackPane();
-        spNum.setLayoutX(getRelativeHorz(340.0));
+        spNum.setLayoutX(getRelativeHorz(280.0));
         spNum.setLayoutY(getRelativeVer(11.0));
         spNum.setPrefHeight(getRelativeHorz(20.0));
         spNum.setPrefWidth(getRelativeHorz(20.0));
@@ -498,6 +497,7 @@ public class GamePaneController implements Initializable{
         labPhase.setLayoutY(getRelativeVer(81.0));
         labPhase.setAlignment(Pos.CENTER);
         labPhase.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(30.0)));
+        labPhase.setTextFill(Color.WHITE);
 
         firstPhaseLogo = new ImageView(Parameter.phaseLogosdir + "reinforce.png"); 
         firstPhaseLogo.setFitHeight(getRelativeVer(35.0));
@@ -541,8 +541,7 @@ public class GamePaneController implements Initializable{
         rectCards.setVisible(false);
 
         cardsImageView = new ImageView();
-        cardsImageView.setFitHeight(getRelativeVer(60.0));
-        cardsImageView.setFitWidth(getRelativeHorz(60.0));
+        cardsImageView.setFitHeight(getRelativeVer(70.0));
         cardsImageView.setLayoutX(getRelativeHorz(39.0));
         cardsImageView.setLayoutY(getRelativeVer(23.0));
         cardsImageView.setPickOnBounds(true);
@@ -559,7 +558,7 @@ public class GamePaneController implements Initializable{
         numCardsLabel.setPrefHeight(getRelativeVer(60.0));
         numCardsLabel.setPrefWidth(getRelativeHorz(80.0));
         numCardsLabel.setAlignment(Pos.CENTER);
-        numCardsLabel.setFont(Font.font(getRelativeHorz(25.0)));
+        numCardsLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(25)));
         numCardsLabel.setTextFill(Color.WHITE);
         numCardsLabel.setVisible(false);
 
@@ -646,7 +645,7 @@ public class GamePaneController implements Initializable{
 		
 		lessBtn.setText("<");
 		moreBtn.setText(">");
-		numberLabel.setFont(Font.font("Verdana", FontWeight.BOLD, getRelativeHorz(34)));
+		numberLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(34)));
 		numberLabel.setTextFill(Color.web("#b87331"));
 		numberLabel.textOverrunProperty().set(OverrunStyle.CLIP);
 		numberLabel.setAlignment(Pos.CENTER);
