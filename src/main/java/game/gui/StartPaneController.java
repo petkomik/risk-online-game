@@ -121,7 +121,7 @@ public class StartPaneController extends StackPane {
 
 		contentVBox.setSpacing(30 * ratio);
 		
-		contentVBox.getChildren().addAll(riskLogo, playButton);
+		contentVBox.getChildren().addAll(riskLogo, playButton, settingsButton);
 		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 		
 		settingsPane = new SettingsPane();
@@ -129,7 +129,7 @@ public class StartPaneController extends StackPane {
 		
 		
 		// maybe add vBoxColor
-		this.getChildren().addAll(vBox, vBoxColor, contentVBox, settingsButton);
+		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	
 		playButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
