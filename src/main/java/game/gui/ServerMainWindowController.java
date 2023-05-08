@@ -63,7 +63,7 @@ import network.messages.MessageUpdateLobby;
  * 
  */
 
-public class ServerMainWindowController extends StackPane {
+public class ServerMainWindowController extends VBox {
 
 	/*
 	 * all containers for easier understanding of the construction
@@ -73,31 +73,30 @@ public class ServerMainWindowController extends StackPane {
 	private double ratioBanner;
 	private Stage stage;
 
-	private VBox menuAndScrollAndButtons; // top level container
-	private HBox backgroundPic; // background
-	private HBox backgroundColor; // *
+	private static VBox menuAndScrollAndButtons; // top level container
+	private static HBox backgroundPic; // background
+	private static HBox backgroundColor; // *
 	private ImageView imgBackground; // *
 	private ImageViewPane imgBackgroundPane; // *
 
-	private HBox topBannerParent; // banner
+	private static HBox topBannerParent; // banner
 	private HBox topBannerContent; // *
 	private Label lobbyTextBanner; // *
 	private ArrowButton backButton; // *
 
 	private HBox chatDiv; // chatdiv with button
 	private ChatButton chatButton; // *
-	private static ChatWindow chatPane2; // chatPane
-	private static HBox chatPane;
+	private static ChatWindow chatPane; // chatPane
 
 	private HBox menu; // menu
 	private HBox searchBar; // searchField + Button
 	private TextField searchField; // *
-	private DesignButton searchButton; // *
+	private static DesignButton searchButton; // *
 
 	private HBox buttonsHBox; // Join and Host buttons
 	private DesignButton hostGameButton; // *
 	private DesignButton joinGameButton; // *
-	private Button refreshButton; // *
+	private Button cancelButton; // *
 
 	private static LobbyMenuController lobbyMenuController;
 	private static VBox vBoxLobbyMenuController;
@@ -105,9 +104,10 @@ public class ServerMainWindowController extends StackPane {
 	private static ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
 	private static volatile VBox vbox; // Lobbies in the scrollPane
 	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
+	public static HashMap<String, LobbyGUI> lobbyGUIListSearch; // Hashmap with all the Lobbies
 	public static Lobby selectedLobby;
-	public ServerMainWindowController parent = this;
-	
+
+	private static StackPane topContainer;
 	private static GameSound gameSound = AppController.getGameSound();
 
 
@@ -129,6 +129,7 @@ public class ServerMainWindowController extends StackPane {
 	public void setup() throws Exception {
 
 		lobbyGUIList = new HashMap<String, LobbyGUI>();
+		topContainer = new StackPane();
 		/*
 		 * to be returned StackPane
 		 */
@@ -194,7 +195,7 @@ public class ServerMainWindowController extends StackPane {
 		bannerSpacing.setVisible(false);
 
 		chatButton = new ChatButton(new Insets(10 * ratioBanner, 20 * ratioBanner, 10 * ratioBanner, 20 * ratioBanner),
-				30, 28 * ratioBanner, 170 * ratio, true);
+				30, 28 * ratioBanner, 170 * ratioBanner, true);
 		chatButton.setAlignment(Pos.CENTER);
 		chatDiv = new HBox();
 		chatDiv.getChildren().add(chatButton);
@@ -212,13 +213,9 @@ public class ServerMainWindowController extends StackPane {
 		/*
 		 * initializing the chat
 		 */
-		chatPane = new HBox();
+		chatPane = new ChatWindow();
 		chatPane.setVisible(false);
 		chatPane.setPickOnBounds(true);
-		chatPane2 = new ChatWindow();
-		chatPane2.setVisible(false);
-		chatPane2.setPickOnBounds(true);
-		chatPane2.getChildren().add(chatPane);
 		/*
 		 * setting up ScrollPane
 		 */
@@ -262,16 +259,16 @@ public class ServerMainWindowController extends StackPane {
 		joinGameButton.setAlignment(Pos.CENTER);
 		joinGameButton.setMinHeight(ratio * 60);
 
-		refreshButton = new Button();
+		cancelButton = new Button();
 		ImageView img = new ImageView();
-		img.setImage(new Image(new FileInputStream(Parameter.refreshIcon)));
+		img.setImage(new Image(new FileInputStream(Parameter.phaseLogosdir + "cancel.png")));
 		img.setFitHeight(60 * ratio);
 		img.setPreserveRatio(true);
 		img.setSmooth(true);
 		img.setCache(true);
-		refreshButton.setGraphicTextGap(10);
-		refreshButton.setGraphic(img);
-		refreshButton.setStyle("-fx-background-color: transparent");
+		cancelButton.setGraphicTextGap(10);
+		cancelButton.setGraphic(img);
+		cancelButton.setStyle("-fx-background-color: transparent");
 
 		/*
 		 * setting up the searchBar and Button
@@ -303,7 +300,7 @@ public class ServerMainWindowController extends StackPane {
 		 * assembling the menu
 		 */
 
-		menu.getChildren().addAll(searchBar, new Spacing(1), refreshButton);
+		menu.getChildren().addAll(searchBar, new Spacing(1), cancelButton);
 		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
 
 		/*
@@ -334,8 +331,10 @@ public class ServerMainWindowController extends StackPane {
 		vBoxLobbyMenuController.setVisible(false);
 		vBoxLobbyMenuController.setPickOnBounds(true);
 
-		this.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane2,
+		topContainer.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane,
 				vBoxLobbyMenuController);
+		
+		this.getChildren().add(topContainer);
 	}
 
 	/*
@@ -352,16 +351,14 @@ public class ServerMainWindowController extends StackPane {
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
 					chatPane.setVisible(false);
-					chatPane2.setVisible(false);
-					System.out.println("lets try the chat SERVERMAIN 348");
-					System.out.println(chatPane.isVisible()+ "SERVERMAIN 349  ");
+					System.out.println(chatPane.isVisible()+ " SERVERMAIN set on 'false' ");
 				} else {
 					chatButton.setSelected(true);
 					chatPane.setVisible(true);
-					chatPane2.setVisible(true);
-					System.out.println("lets try the chat SERVERMAIN 348");
-					System.out.println(chatPane.isVisible()+ "SERVERMAIN 354  ");
+					System.out.println(chatPane.isVisible()+ " SERVERMAIN set on 'true' ");
 				}
+				System.out.println(chatPane.getParent() + " ist chats vater in SMW");
+
 			}
 		});
 
@@ -371,6 +368,20 @@ public class ServerMainWindowController extends StackPane {
 			public void handle(ActionEvent event) {
 				// TODO implement search method
 				String lobbyName = searchField.getText();
+				if(!lobbyName.isEmpty()) {
+				lobbyGUIListSearch = new HashMap<String,LobbyGUI>();
+				
+				for (String key : lobbyGUIList.keySet()) {
+					if(key.contains(lobbyName)) {
+						lobbyGUIListSearch.put(key, lobbyGUIList.get(key));
+					}
+				}
+				
+				drawLobbies(false);
+				}else {
+					drawLobbies(true);
+				}
+				
 
 			}
 
@@ -389,13 +400,12 @@ public class ServerMainWindowController extends StackPane {
 			}
 		});
 
-		refreshButton.setOnAction(new EventHandler<ActionEvent>() {
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				refreshButton.setRotate(refreshButton.getRotate() + 90);
-
-				// client.sendMessage(new MessageRefresh())
-				// return HashMap<String, Lobby>
+				cancelButton.setRotate(cancelButton.getRotate() + 60);
+				searchField.setText("");
+				searchButton.fire();
 			}
 
 		});
@@ -424,15 +434,9 @@ public class ServerMainWindowController extends StackPane {
 
 				stage.show();
 
-//				TODO disconnect from server
-//				if(hostView) {
-//					client.sendMessage(new MessageServerCloseConnection());
-//				} else {
-//					client.sendMessage(new MessageDisconnect(client.getProfile()));
-//					client.closeEverything();
-//				}
 			}
 		});
+		
 		hostGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -445,6 +449,9 @@ public class ServerMainWindowController extends StackPane {
 				Lobby aLobby = new Lobby();
 			
 				aLobby.joinLobby(new PlayerSingle(client.getProfile()));
+				
+				//checks if the lobbyname is taken
+				
 				BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
 					int i = 1;
 					String newUsername = clientUsername;
@@ -475,8 +482,6 @@ public class ServerMainWindowController extends StackPane {
 			public void handle(ActionEvent event) {
 				// TODO add if the lobby is full not joining
 				gameSound.buttonClickForwardSound();
-//				Node node = (Node) event.getSource();
-//				stage = (Stage) node.getScene().getWindow();
 
 				for (LobbyGUI lobbyEnt : lobbyGUIList.values()) {
 					if (lobbyEnt.isSelected()) {
@@ -498,7 +503,38 @@ public class ServerMainWindowController extends StackPane {
 		});
 
 	}
+	
+	public static void drawLobbies(boolean all) {
+		
+		Platform.runLater(() -> {
+			
+			vbox.getChildren().clear();
+			
+			if (all) {
+				
+				for (String key : lobbyGUIList.keySet()) {
+					vbox.getChildren().add(lobbyGUIList.get(key));
+				}
+				System.out.println(lobbyGUIList.size());
+			} else {
+				
+				for (String key : lobbyGUIListSearch.keySet()) {
+					vbox.getChildren().add(lobbyGUIListSearch.get(key));
+				}
+				System.out.println(lobbyGUIList.size());
+			}
+			
+			lobbyListContainer.setContent(vbox);
+			//sets the selected Lobby empty so that it doesnt connect to the lobby with the old information
+			selectedLobby = null;
+		});
+		
+	}
 
+	/*
+	 * creating a new LobbyMenuController with the new lobby information and drawing it
+	 */
+	
 	public static void drawLobbyMenu(Lobby lobby) {
 		Platform.runLater(() -> {
 
@@ -507,22 +543,29 @@ public class ServerMainWindowController extends StackPane {
 				LobbyMenuController.getBackButton().setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
+						/*
+						 * setting the top layer(vBoxLobbyMenuController invisible
+						 */
 						gameSound.buttonClickBackwardSound();
 						vBoxLobbyMenuController.setVisible(false);
-						//chatPane.toFront();
-						System.out.println(chatPane.getParent() + " ist sein vater");
+						lobbyMenuController.getChatWindow();
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
 								
 								lobby.leaveLobby(player);
 								client.sendMessage(new MessageUpdateLobby(lobby));
+								searchButton.fire();
 							}
 						}
 						
 						
 					}
 				});
-
+				
+				/*
+				 * updating the LobbyMenuGUI
+				 */
+				
 				vBoxLobbyMenuController.getChildren().clear();
 				vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
 				vBoxLobbyMenuController.setVisible(true);
@@ -533,22 +576,15 @@ public class ServerMainWindowController extends StackPane {
 
 		});
 	}
-	
+	/*
+	 * adding chatPane to SMW parent when leaving a lobby
+	 */
 	public static void setChatPain(ChatWindow chatWindow) {
-		chatPane2 = chatWindow;
-		chatPane.getChildren().add(chatPane2);
-	}
-
-	public static void drawLobbies() {
-
-		Platform.runLater(() -> {
-			vbox.getChildren().clear();
-			for (String key : lobbyGUIList.keySet()) {
-				vbox.getChildren().add(lobbyGUIList.get(key));
-			}
-			System.out.println(lobbyGUIList.size());
-			lobbyListContainer.setContent(vbox);
-		});
+		chatPane = chatWindow;
+		topContainer.getChildren().clear();
+		topContainer.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane,
+				vBoxLobbyMenuController);
+		
 	}
 
 	public static void initServer() {
@@ -561,9 +597,9 @@ public class ServerMainWindowController extends StackPane {
 			client = Client.createClient(host, port);
 			client.listenForMessage();
 			AppController.setClient(client);
-			chatPane2.setClient(client);
-			client.setChat(chatPane2);
-			chatPane2.addLabel(host);
+			chatPane.setClient(client);
+			client.setChat(chatPane);
+			chatPane.addLabel(host);
 			client.setHost(true);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -574,8 +610,8 @@ public class ServerMainWindowController extends StackPane {
 	public void initClient() {
 		client = AppController.getClient();
 		client.listenForMessage();
-		chatPane2.setClient(client);
-		client.setChat(chatPane2);
+		chatPane.setClient(client);
+		client.setChat(chatPane);
 		this.hostView = false;
 		client.setHost(false);
 		// client.sendMessage(new MessageConnect(AppController.getProfile()));
@@ -583,10 +619,14 @@ public class ServerMainWindowController extends StackPane {
 	}
 
 	public static ChatWindow getChatPane() {
-		return chatPane2;
+		return chatPane;
 	}
 
 	public static Lobby getSelectedLobby() {
 		return selectedLobby;
+	}
+
+	public static DesignButton getSearchButton() {
+		return searchButton;
 	}
 }

@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import database.Profile;
+import game.gui.GUISupportClasses.ChatWindow;
 import game.models.Player;
 import general.Parameter;
 import javafx.application.Platform;
@@ -105,7 +106,7 @@ public class GUISupportClasses {
 		}
 	}
 
-	static class DesignButton extends Button {
+	public static class DesignButton extends Button {
 		public DesignButton() {
 			super();
 			this.setPadding(new Insets(10, 20, 10, 20));
@@ -433,6 +434,26 @@ public class GUISupportClasses {
 			setup();
 			actionEventsSetup();
 
+		}
+
+		public ChatWindow(ChatWindow chatPane) {
+			this.chat = chatPane.chat;
+			this.vBoxMessages = chatPane.vBoxMessages;
+			this.textfieldAndButtons = chatPane.textfieldAndButtons;
+			this.textfieldMessage = chatPane.textfieldMessage;
+			this.comboAndSend = chatPane.comboAndSend;
+			this.sendButton = chatPane.sendButton;
+			this.names = chatPane.names;
+			this.dragArea = chatPane.dragArea;
+			this.messageToBeSend = chatPane.messageToBeSend;
+			
+			this.client = chatPane.client;
+
+			this.dragAreaHover = chatPane.dragAreaHover;
+			this.ratio = chatPane.ratio;
+			this.xCord = chatPane.xCord;
+			this.yCord = chatPane.yCord;
+			this.items = chatPane.items;
 		}
 
 		public void setup() {

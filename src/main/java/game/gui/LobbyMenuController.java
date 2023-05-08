@@ -81,7 +81,6 @@ import network.messages.MessageUpdateLobby;
 public class LobbyMenuController extends StackPane {
 
 	private Lobby lobby;
-	private String[] aiDifficultyLevels = { "easy", "casual", "hard" };
 
 	private VBox vBox;
 	private ImageView imgBackground;
@@ -467,7 +466,7 @@ public class LobbyMenuController extends StackPane {
 				} 
 								
 				if(!singleplayerLobby) {
-		    		client.sendMessage(new MessageUpdateLobby(lobby));		    		
+		    		client.sendMessage(new MessageUpdateLobby(lobby));		 
 		    	}
 				
 				
@@ -672,6 +671,7 @@ public class LobbyMenuController extends StackPane {
 					chatButton.setSelected(true);
 					chatWindow.setVisible(true);
 				}
+				System.out.println(chatWindow.getParent() + " ist chatPanes vater in SMW");
 			}
 		});
 

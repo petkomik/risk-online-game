@@ -370,7 +370,8 @@ public class Client {
 							});
 
 							ServerMainWindowController.lobbyGUIList.put(mCL.getLobby().getLobbyName(), lobbyGUI);
-							ServerMainWindowController.drawLobbies();
+							ServerMainWindowController.drawLobbies(true);
+				    		ServerMainWindowController.getSearchButton().fire();
 							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
 
 							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
@@ -388,7 +389,8 @@ public class Client {
 											.drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
 								}
 							}
-							ServerMainWindowController.drawLobbies();
+							ServerMainWindowController.drawLobbies(true);
+				    		ServerMainWindowController.getSearchButton().fire();
 							System.out.println(mJL.getLobby().getLobbyName());
 							break;
 						case MessageUpdateLobby:
@@ -414,7 +416,8 @@ public class Client {
 								lobbies.remove(messageUpdateLobby.getLobby().getLobbyName());
 							}
 							// draws Server pane
-							ServerMainWindowController.drawLobbies();
+							ServerMainWindowController.drawLobbies(true);
+				    		ServerMainWindowController.getSearchButton().fire();
 
 							break;
 						// Its a Message that sends all lobbies to everyone
@@ -434,7 +437,8 @@ public class Client {
 								}
 							});
 
-							ServerMainWindowController.drawLobbies();
+							ServerMainWindowController.drawLobbies(true);
+				    		ServerMainWindowController.getSearchButton().fire();
 							break;
 						default:
 							break;
