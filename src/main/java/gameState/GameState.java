@@ -42,6 +42,7 @@ public class GameState {
 	private CountryName lastFortifyingCounty;
 	private Battle battle;
 	private boolean lastTurnWonterritory;
+	private ArrayList<Player> deadPlayers;
 
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
@@ -52,6 +53,7 @@ public class GameState {
 		playerTroopsLeft = new HashMap<Integer, Integer>();
 		playersDiceThrown = new HashMap<Integer, Integer>();
 		riskCardsInPlayers = new HashMap<Integer, ArrayList<Card>>();
+		deadPlayers = new ArrayList<Player>();
 		numberOfCardsTurnedIn = 0;
 		currentTurnPhase = null;
 		currentGamePeriod = Period.DICETHROW;
@@ -264,5 +266,16 @@ public class GameState {
 	public void setLastTurnWonterritory(boolean lastTurnWonterritory) {
 		this.lastTurnWonterritory = lastTurnWonterritory;
 	}
+	
+	public void addDeadPlayer(int id) {
+		Player dead = this.players.get(id);
+		this.deadPlayers.add(dead);
+
+	}
+
+	public ArrayList<Player> getDeadPlayers() {
+		return deadPlayers;
+	}
+	
 	
 }

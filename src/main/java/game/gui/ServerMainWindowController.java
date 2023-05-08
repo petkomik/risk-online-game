@@ -19,6 +19,8 @@ import game.gui.GUISupportClasses.Spacing;
 import game.models.Player;
 import game.models.PlayerSingle;
 import general.*;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -46,6 +48,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import network.Client;
 import network.ClientHandler;
 import network.Server;
@@ -363,7 +366,6 @@ public class ServerMainWindowController extends VBox {
 		});
 
 		searchButton.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO implement search method
@@ -378,6 +380,7 @@ public class ServerMainWindowController extends VBox {
 				}
 				
 				drawLobbies(false);
+				
 				}else {
 					drawLobbies(true);
 				}
@@ -406,6 +409,15 @@ public class ServerMainWindowController extends VBox {
 				cancelButton.setRotate(cancelButton.getRotate() + 60);
 				searchField.setText("");
 				searchButton.fire();
+            	Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1)));    
+        		timer.play();
+            	timer.setOnFinished(x -> {
+        			cancelButton.setRotate(0);
+        		});
+            	System.out.println(cancelButton.getRotate());
+            	if(cancelButton.getRotate() == 180) {
+            		AppController.getGameSound().buttonClickHelicopterSound();
+            	}
 			}
 
 		});
@@ -515,13 +527,13 @@ public class ServerMainWindowController extends VBox {
 				for (String key : lobbyGUIList.keySet()) {
 					vbox.getChildren().add(lobbyGUIList.get(key));
 				}
-				System.out.println(lobbyGUIList.size());
+				System.out.println("Number of Lobbies" + lobbyGUIList.size());
 			} else {
 				
 				for (String key : lobbyGUIListSearch.keySet()) {
 					vbox.getChildren().add(lobbyGUIListSearch.get(key));
 				}
-				System.out.println(lobbyGUIList.size());
+				System.out.println("Number of Lobbies" + lobbyGUIList.size());
 			}
 			
 			lobbyListContainer.setContent(vbox);

@@ -2,6 +2,7 @@ package game.gui;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1231,7 +1232,15 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void endGame(ArrayList<Player> playersByRank) {
+		Stage stage = (Stage) gameBoard.getScene().getWindow();
 		
+		try {
+			EndGamePodiumController end = new EndGamePodiumController(playersByRank, 
+					this.gameType.equals(GameType.SinglePlayer));
+			stage.getScene().setRoot(end);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void openBattleFrame(Battle battle) {

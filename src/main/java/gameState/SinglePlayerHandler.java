@@ -240,5 +240,9 @@ public class SinglePlayerHandler {
 		this.gamePaneController.setPlayersRanking(ranks);
 	}
 
+	public void gameIsOverOnGUI(ArrayList<Player> podium) {
+		this.gamePaneController.endGame(podium);
+	}
+
 
 }

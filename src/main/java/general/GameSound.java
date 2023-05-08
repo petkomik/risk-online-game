@@ -77,6 +77,16 @@ public final class GameSound {
 			}
 		});
 	}
+	
+	public void buttonClickHelicopterSound() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.soundsdir + "helicopter-helicopter.mp3").toURI().toString()));
+				effectsSoundPlayer.play();
+			}
+		});
+	}
 
 	public MediaPlayer getEffectsSoundPlayer() {
 		return effectsSoundPlayer;

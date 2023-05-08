@@ -3,6 +3,7 @@ package game.gui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 import database.Profile;
 import game.Lobby;
@@ -12,6 +13,7 @@ import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Player;
 import general.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -40,7 +42,7 @@ import javafx.stage.Stage;
  *
  */
 
-public class EndGamePodiumController extends Application {
+public class EndGamePodiumController extends StackPane {
 
 	private int players;
 	private double ratio;
@@ -48,8 +50,7 @@ public class EndGamePodiumController extends Application {
 	// public int players = game.Lobby.getPlayerList().size();
 	private Stage stage;
 	
-	private StackPane container;									//TODO will be removed by this when added to the rest
-	private VBox contentVBox;										//main container
+	private VBox contentVBox;										
 	
 	private HBox backgroundPic;										//background
 	private HBox backgroundColor;									//*
@@ -76,32 +77,23 @@ public class EndGamePodiumController extends Application {
 	private ChatButton chatButton;									//*
 	private ChatWindow chatPane;									//chatPane
 	private GameSound gameSound = AppController.getGameSound();
-
 	
-	public EndGamePodiumController() throws Exception {
+	private ArrayList<Player> playerList;
+	private boolean singleplayer;
+	
+	public EndGamePodiumController(List<Player> podiumPlayers, boolean singleplayer) throws Exception {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
-		this.players = 3;
-		this.container = this.setup();
-		actionEventsSetup();
-		
-	}
-	
-	public EndGamePodiumController(Lobby lobby) throws Exception {
-		super();
-		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
-				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-		this.ratio = Math.min(ratio + 0.3, 1);
-		this.players = lobby.getPlayerList().size();
-		this.container = this.setup();
+		this.players = podiumPlayers.size();
+		this.playerList = (ArrayList<Player>) podiumPlayers;
+		this.singleplayer = singleplayer;
+		this.setup();
 		actionEventsSetup();
 	}
 
-	public StackPane setup() throws Exception {
-
-		container = new StackPane();
+	public void setup() throws Exception {
 		contentVBox = new VBox();
 		contentVBox.setAlignment(Pos.CENTER);
 
@@ -169,18 +161,8 @@ public class EndGamePodiumController extends Application {
 		HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
 		bannerSpacing.setVisible(false);
 		
-		chatButton = new ChatButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio, 170 * ratio, true);
-		chatButton.setAlignment(Pos.CENTER);
-		chatDiv = new HBox();
-		chatDiv.getChildren().add(chatButton);
-		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
-		chatDiv.maxHeightProperty().bind(chatDiv.prefHeightProperty());
-		chatDiv.setPrefHeight(100 * ratio);
-		chatDiv.setPadding(new Insets(0, 50 * ratio, 0, 0));
-		chatDiv.setAlignment(Pos.CENTER);
-
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
-		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing, chatDiv);
+		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing);
 
 		/*
 		 * setting up players avatars - in the VBox avatars
@@ -197,13 +179,13 @@ public class EndGamePodiumController extends Application {
 		circleFirstP = new Circle(90 * ratio);
 		circleFirstI = new ImageView();
 		// TODO set up the right color
-		circleFirstP.setFill(Parameter.blueColor);
+		circleFirstP.setFill(Color.web(this.playerList.get(0).getColor()));
 		circleFirstP.setStroke(Color.WHITE);
 		circleFirstP.setStrokeWidth(8 * ratio);
 
 		firstP.getChildren().add(circleFirstP);
 
-		circleFirstI.setImage(new Image(new FileInputStream(Parameter.blondBoy)));
+		circleFirstI.setImage(new Image(new FileInputStream(this.playerList.get(0).getAvatar())));
 		circleFirstI.setFitWidth(180 * ratio);
 		circleFirstI.setFitHeight(180 * ratio);
 		circleFirstI.setPreserveRatio(true);
@@ -219,13 +201,13 @@ public class EndGamePodiumController extends Application {
 		circleSecondP = new Circle(90 * ratio);
 		circleSecondI = new ImageView();
 		// TODO set up the right color
-		circleSecondP.setFill(Parameter.greenColor);
+		circleSecondP.setFill(Color.web(this.playerList.get(1).getColor()));
 		circleSecondP.setStroke(Color.WHITE);
 		circleSecondP.setStrokeWidth(8 * ratio);
 
 		secondP.getChildren().add(circleSecondP);
 
-		circleSecondI.setImage(new Image(new FileInputStream(Parameter.hatBoy)));
+		circleSecondI.setImage(new Image(new FileInputStream(this.playerList.get(1).getAvatar())));
 		circleSecondI.setFitWidth(180 * ratio);
 		circleSecondI.setFitHeight(180 * ratio);
 		circleSecondI.setPreserveRatio(true);
@@ -242,13 +224,13 @@ public class EndGamePodiumController extends Application {
 		circleThirdI = new ImageView();
 		// TODO set up the right color
 		if (players > 2) {
-			circleThirdP.setFill(Parameter.yellowColor);
+			circleThirdP.setFill(Color.web(this.playerList.get(2).getColor()));
 			circleThirdP.setStroke(Color.WHITE);
 			circleThirdP.setStrokeWidth(8 * ratio);
 
 			thirdP.getChildren().add(circleThirdP);
 
-			circleThirdI.setImage(new Image(new FileInputStream(Parameter.gingerGirl)));
+			circleThirdI.setImage(new Image(new FileInputStream(this.playerList.get(2).getAvatar())));
 			circleThirdI.setFitWidth(180 * ratio);
 			circleThirdI.setFitHeight(180 * ratio);
 			circleThirdI.setPreserveRatio(true);
@@ -339,13 +321,11 @@ public class EndGamePodiumController extends Application {
 		contentVBox.setSpacing(30 * ratio);
 		
 		contentVBox.getChildren().addAll(topBannerParent, new Spacing(50), vBoxIcons, new Spacing(100));
-		container.getChildren().addAll(backgroundPic, backgroundColor, contentVBox, chatPane);
+		this.getChildren().addAll(backgroundPic, backgroundColor, contentVBox, chatPane);
 
 		//TODO remove when main is removed
 		actionEventsSetup();
 
-		
-		return container;
 	}
 	
 
@@ -361,53 +341,28 @@ public class EndGamePodiumController extends Application {
 		    	gameSound.buttonClickForwardSound();
 		    	
 				Node node = (Node) event.getSource();
-				
 				stage = (Stage)node.getScene().getWindow();
-				try {
-					ServerMainWindowController serverMenu = new ServerMainWindowController();
-					stage.getScene().setRoot(serverMenu);
-					 String string = Parameter.orangeColor.toString();
-					 System.out.println(string);
-				} catch (Exception e) {
-					e.printStackTrace();
+				
+				if(singleplayer) {
+					MainMenuPaneController mainMenu;
+					try {
+						mainMenu = new MainMenuPaneController();
+						stage.getScene().setRoot(mainMenu);
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
+				} else {
+					ServerMainWindowController serverMenu;
+					try {
+						serverMenu = new ServerMainWindowController();
+						stage.getScene().setRoot(serverMenu);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-
+				
 		    }
 			
 		});
-
-		chatButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				gameSound.buttonClickForwardSound();
-				
-				if (!chatButton.isSelected()) {
-					chatButton.setSelected(false);
-					chatPane.setVisible(false);
-				} else {
-					chatButton.setSelected(true);
-					chatPane.setVisible(true);
-				}
-			}
-		});
-
 	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-		Scene scene = new Scene(setup(), 1300, 900);
-		primaryStage.setScene(scene);
-		primaryStage.setFullScreen(true);
-		primaryStage.setTitle("EndPodium");
-		primaryStage.setMinHeight(800);
-		primaryStage.setMinWidth(1300);
-		primaryStage.show();
-
-	}
-
-	public static void main(String[] args) {
-		launch(args);
-	}
-
 }

@@ -3,6 +3,7 @@ package gameState;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -582,9 +583,16 @@ public class GameHandler {
 				this.gameState.getTerritories().get(changed.getCountryNameDf()).setOwnedByPlayer(
 						this.gameState.getPlayers().get(changed.getAttackerID()));
 				if(!Logic.playerIsAlive(gameState, changed.getDefenderID())) {
+					if(this.gameState.getAlivePlayers().size() <= 3) {
+						this.gameState.addDeadPlayer(changed.getDefenderID());
+					}
 					this.gameState.removeDeadPlayer(changed.getDefenderID());
 					System.out.println("player died left are " + gameState.getAlivePlayers().size());
 					if(Logic.isGameOver(gameState)) {
+						this.gameState.addDeadPlayer(this.gameState.getCurrentPlayer().getID());
+						ArrayList<Player> podium = this.gameState.getDeadPlayers();
+						Collections.reverse(podium);
+						this.singlePlayerHandler.gameIsOverOnGUI(podium);
 						System.out.println("game ended " + this.gameState.getCurrentPlayer().getID() + " is winner");
 					}
 				}
