@@ -35,6 +35,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -122,6 +123,11 @@ public class StartPaneController extends StackPane {
 		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 
 		settingsPane = new StackPane();
+		double w = MainApp.screenWidth;
+		double h = MainApp.screenHeight;
+		settingsButton.setLayoutX((40.0/1536.0) * w);
+		settingsButton.setLayoutY((40.0/864.0) * h);
+		settingsButton.setPickOnBounds(true);
 
 		// maybe add vBoxColor
 		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
@@ -144,14 +150,16 @@ public class StartPaneController extends StackPane {
 
 			}
 		});
-
+		
+		Pane home = this;
+		
 		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				gameSound.buttonClickForwardSound();
 				
 				settingsPane = SettingsPane.createMutePane(28 * ratio, settingsButton, ratio);
-				contentVBox.getChildren().add(settingsPane);
+				home.getChildren().add(settingsPane);
 				settingsPane.setVisible(true);
 				settingsButton.setDisable(true);
 				

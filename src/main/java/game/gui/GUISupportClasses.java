@@ -38,6 +38,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -880,10 +881,19 @@ public class GUISupportClasses {
 	public static class SettingsPane extends VBox {
 		double fontSize;
 		SettingsButton settingsButton;
+		static double w = MainApp.screenWidth;
+		static double h = MainApp.screenHeight;
 
 		public SettingsPane(double fontSize, SettingsButton settingsButton) {
 			this.fontSize = fontSize;
 			this.settingsButton = settingsButton;
+		}
+		
+		private static double getRelativeHorz(double x) {
+			return (x / 1536.0) * w;
+		}
+		private static double getRelativeVer(double y) {
+			return (y / 864.0) * h;
 		}
 
 		public static StackPane createMutePane(double fontSize, SettingsButton settingsButton, double ratio) {
@@ -939,11 +949,13 @@ public class GUISupportClasses {
 			soundButton.setOnAction(event -> {
 				if (soundPlayer != null) {
 					AppController.getGameSound().buttonClickForwardSound();
-					if (soundPlayer.isMute()) {
+					if (AppController.getGameSound().isMutePropertyEffectsSound()) {
 						soundPlayer.setMute(false);
+						AppController.getGameSound().setMutePropertyEffectsSound(false);
 						soundButton.setText("Sound Effects: Unmute");
 					} else {
 						soundPlayer.setMute(true);
+						AppController.getGameSound().setMutePropertyEffectsSound(true);
 						soundButton.setText("Sound Effects: Mute");
 					}
 				}
@@ -959,15 +971,26 @@ public class GUISupportClasses {
 					e.printStackTrace();
 				}
 			}
-			if (soundPlayer != null && soundPlayer.isMute()) {
+			if (soundPlayer != null && AppController.getGameSound().isMutePropertyEffectsSound()) {
 				soundButton.setText("Sound Effects: Mute");
 			}
+			
+			
+			
+			Rectangle whiteBackground = new Rectangle();
+			whiteBackground.setFill(Color.WHITE);
+			whiteBackground.setWidth(getRelativeHorz(400.0));
+			whiteBackground.setHeight(getRelativeVer(200.0));
+			whiteBackground.setLayoutX((w - whiteBackground.getWidth()) / 2.0);
+			whiteBackground.setLayoutY(getRelativeVer(500));
 
 			// Create a VBox to hold the buttons
 			VBox vbox = new VBox(10, musicButton, soundButton, confirmationButton);
+			
+			vbox.setPadding(new Insets(100 * ratio, 20 * ratio, 100 * ratio, 60 * ratio));
 
 			// Set the background color and opacity of the VBox
-			vbox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.2);");
+			vbox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
 
 			// Create a StackPane to hold the VBox and center it on the screen
 			StackPane stackPane = new StackPane(vbox);
@@ -978,6 +1001,9 @@ public class GUISupportClasses {
 				stackPane.setVisible(false);
 				settingsButton.setDisable(false);
 			});
+			
+			
+			stackPane.setPrefSize(w, h);
 
 			return stackPane;
 		}

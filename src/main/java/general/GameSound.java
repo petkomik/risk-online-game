@@ -17,28 +17,29 @@ public final class GameSound {
 	private Media media;
 	private MediaPlayer musicSoundPlayer;
 	private MediaPlayer effectsSoundPlayer;
-    private static GameSound instance = null;
-	
+	private static GameSound instance = null;
+	private boolean mutePropertyEffectsSound = false;
+
 	private GameSound() {
 		// Setting up musicSound
 		File file = new File(Parameter.themeSong);
 		media = new Media(file.toURI().toString());
 		musicSoundPlayer = new MediaPlayer(media);
-		
-		// Setting up 
+
+		// Setting up
 		effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.buttonClick03Sound).toURI().toString()));
-		
+
 	}
-	
+
 	protected static GameSound getGameSoundInstance() {
-        if (instance == null) {
-            instance = new GameSound();
-        }
-        return instance;
-    }
+		if (instance == null) {
+			instance = new GameSound();
+		}
+		return instance;
+	}
 
 	public void startThemeSong() {
-		
+
 		musicSoundPlayer.play();
 		musicSoundPlayer.setAutoPlay(true);
 		musicSoundPlayer.setOnEndOfMedia(new Runnable() {
@@ -49,11 +50,11 @@ public final class GameSound {
 			}
 		});
 	}
-	
+
 	public void mute_unmute_MusicSound() {
 		musicSoundPlayer.setMute(!musicSoundPlayer.isMute());
 	}
-	
+
 	public void mute_unmute_EffectsSound() {
 		effectsSoundPlayer.setMute(!effectsSoundPlayer.isMute());
 	}
@@ -62,8 +63,11 @@ public final class GameSound {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.buttonClick03Sound).toURI().toString()));
-				effectsSoundPlayer.play();
+				if (!mutePropertyEffectsSound) {
+					effectsSoundPlayer = new MediaPlayer(
+							new Media(new File(Parameter.buttonClick03Sound).toURI().toString()));
+					effectsSoundPlayer.play();
+				}
 			}
 		});
 	}
@@ -72,18 +76,24 @@ public final class GameSound {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.buttonClick04Sound).toURI().toString()));
+				if (!mutePropertyEffectsSound) {
+				effectsSoundPlayer = new MediaPlayer(
+						new Media(new File(Parameter.buttonClick04Sound).toURI().toString()));
 				effectsSoundPlayer.play();
+				}
 			}
 		});
 	}
-	
+
 	public void buttonClickHelicopterSound() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				effectsSoundPlayer = new MediaPlayer(new Media(new File(Parameter.soundsdir + "helicopter-helicopter.mp3").toURI().toString()));
+				if (!mutePropertyEffectsSound) {
+				effectsSoundPlayer = new MediaPlayer(
+						new Media(new File(Parameter.soundsdir + "helicopter-helicopter.mp3").toURI().toString()));
 				effectsSoundPlayer.play();
+				}
 			}
 		});
 	}
@@ -91,9 +101,17 @@ public final class GameSound {
 	public MediaPlayer getEffectsSoundPlayer() {
 		return effectsSoundPlayer;
 	}
-	
+
 	public MediaPlayer getMusicSoundPlayer() {
 		return musicSoundPlayer;
+	}
+
+	public boolean isMutePropertyEffectsSound() {
+		return mutePropertyEffectsSound;
+	}
+
+	public void setMutePropertyEffectsSound(boolean mutePropertyEffectsSound) {
+		this.mutePropertyEffectsSound = mutePropertyEffectsSound;
 	}
 
 }
