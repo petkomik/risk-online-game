@@ -696,6 +696,7 @@ public class GamePaneController implements Initializable{
 		tradeButton.setLayoutY((h - tradeButton.getPrefHeight()) / 2.0);
 		tradeButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
 		tradeButton.setDisable(true);
+		tradeButton.setOnAction(e -> this.singlePlayerHandler.turnInRiskCards(this.cardsPlayerOnGUI, this.playerOnGUI.getID()));
 		
 		Rectangle dropOnCard1 = new Rectangle();
 		Rectangle dropOnCard2 = new Rectangle();
@@ -1159,6 +1160,7 @@ public class GamePaneController implements Initializable{
 			}
 		}
 		numCardsLabel.setText(String.valueOf(cards.size()));
+		this.cardsPopUp.setVisible(false);
 	}
 		
 	public void showCardsSymbol() {
