@@ -20,7 +20,7 @@ public class PlayerAI extends Player {
 		super(player.getName(), player.getID());
 		this.level = level;
 		this.isAI = true;
-		this.id = (int)Math.round(Math.random()*10000);
+		this.id = (int)Math.round(Math.random()*1000000);
 	}
 	
 	public PlayerAI(String name, int id, Difficulty setLevel) {
@@ -35,7 +35,7 @@ public class PlayerAI extends Player {
 		super(name, id);
 		this.level = Difficulty.values()[setLevel];
 		this.isAI = true;
-		this.id = (int)Math.round(Math.random() * 1000000);
+		this.id = (int)Math.round(Math.random() * 10000000);
 
 	}
 	
