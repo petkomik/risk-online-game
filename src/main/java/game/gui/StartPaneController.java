@@ -110,7 +110,9 @@ public class StartPaneController extends StackPane {
 		riskLogo.setPreserveRatio(true);
 		riskLogo.setSmooth(true);
 		riskLogo.setCache(true);
-
+		
+		Pane home = this;
+		settingsPane = new StackPane();
 		settingsButton = new SettingsButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio,
 				170 * ratio, true);
 
@@ -122,13 +124,12 @@ public class StartPaneController extends StackPane {
 		contentVBox.getChildren().addAll(riskLogo, playButton, settingsButton);
 		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 
-		settingsPane = new StackPane();
 		double w = MainApp.screenWidth;
 		double h = MainApp.screenHeight;
 		settingsButton.setLayoutX((40.0/1536.0) * w);
 		settingsButton.setLayoutY((40.0/864.0) * h);
 		settingsButton.setPickOnBounds(true);
-
+		
 		// maybe add vBoxColor
 		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 
@@ -151,13 +152,12 @@ public class StartPaneController extends StackPane {
 			}
 		});
 		
-		Pane home = this;
+		
 		
 		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				gameSound.buttonClickForwardSound();
-				
 				settingsPane = SettingsPane.createMutePane(28 * ratio, settingsButton, ratio);
 				home.getChildren().add(settingsPane);
 				settingsPane.setVisible(true);
@@ -170,7 +170,7 @@ public class StartPaneController extends StackPane {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 		    	if(!settingsPane.isVisible()) {
-					contentVBox.getChildren().removeAll(settingsPane);
+					home.getChildren().removeAll(settingsPane);
 				}
 		    }
 		});
