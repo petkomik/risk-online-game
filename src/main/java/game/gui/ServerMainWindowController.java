@@ -500,7 +500,7 @@ public class ServerMainWindowController extends VBox {
 						selectedLobby = lobbyEnt.getLobby();
 					}
 				}
-				if ((selectedLobby != null) && (selectedLobby.getPlayerList().size() < 6)) {
+				if ((selectedLobby != null) && (selectedLobby.getPlayerList().size() < selectedLobby.getMaxNumberOfPlayers())) {
 
 					selectedLobby.joinLobby(new PlayerSingle(client.getProfile()));
 					client.sendMessage(new MessageJoinLobby(selectedLobby));

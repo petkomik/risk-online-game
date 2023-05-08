@@ -23,6 +23,7 @@ public class PlayerSingle extends Player {
 		this.profile = profile;
 		this.setColor(profile.getColor());
 		this.setAvatar(Parameter.avatarsdir + profile.getPhoto());
+		this.setRank(100 + (profile.getWins()*2-profile.getLoses()));
 	}
 
 }
