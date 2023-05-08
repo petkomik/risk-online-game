@@ -191,7 +191,7 @@ public class Logic {
 	
 	public static boolean turnInRiskCards(List<Card> cards, Player player, GameState gameState) 
 		throws WrongCountryException, WrongTroopsCountException, WrongPhaseException, WrongCardsException,
-		WrongCardsSetException, WrongPeriodException {
+		WrongPeriodException {
 		if (player == null || gameState.getCurrentPlayer().equals(player)) {
 			throw new WrongPhaseException("It is not your turn");
 		} else if (cards == null || cards.size() != 3) {
@@ -203,12 +203,11 @@ public class Logic {
 		} else if (!gameState.getRiskCardsInPlayers().get(player.getID()).containsAll(cards)) {
 			throw new WrongCardsException("You do not own all the cards that you tried to turn in.");
 		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
-				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)))) {
-			throw new WrongCardsSetException("The set of cards you turn in should either have three of "
-					+ "the same troop type or one from each.");
+				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)) ||
+				!(cards.stream().map(Card::getCardSymbol).reduce(0, (a,b) -> a + b) < 0))) {
+			return true;			
 		}
-		
-		return true;
+		return false;
 	}
 
 	public static boolean isDeployPeriodOver(GameState gameState) {
@@ -542,6 +541,15 @@ public class Logic {
 
 	public static boolean isGameOver(GameState gameState) {
 		return gameState.getAlivePlayers().size() == 1;
+	}
+
+	public static HashMap<Integer, Integer> getInGameRanks(GameState gameState) {
+		HashMap<Integer, Integer> ranks = new HashMap<Integer, Integer>();
+		for(int plyID : gameState.getPlayers().keySet()) {
+			ranks.put(plyID, 0);
+		}
+		
+		return null;
 	}
 
 }

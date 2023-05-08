@@ -355,9 +355,6 @@ public class GamePaneController implements Initializable{
 			
 			rankCircle[i] = new Circle();
 	        rankCircle[i].setRadius(getRelativeHorz(15.0));
-	        rankCircle[i].setStroke(Color.BLACK);
-	        rankCircle[i].setStrokeType(StrokeType.OUTSIDE);
-	        rankCircle[i].setStrokeWidth(3.0);
 	        rankCircle[i].setFill(Color.WHITE);
 
 	        rankLabel[i] = new Label("1");
@@ -369,6 +366,7 @@ public class GamePaneController implements Initializable{
 	        rankSP[i].setPrefHeight(getRelativeHorz(15.0));
 	        rankSP[i].setPrefWidth(getRelativeHorz(15.0));
 	        rankSP[i].getChildren().addAll(rankCircle[i], rankLabel[i]);
+	        rankSP[i].setAlignment(Pos.CENTER);
 	        rankSP[i].setVisible(false);
 			
 			panes[i] = new Pane(rectangles[i], stackPanes[i], ivTimer[i], rankSP[i]);
@@ -1334,7 +1332,11 @@ public class GamePaneController implements Initializable{
 	public void setPlayersRanking(int[] playersRanking) {
 		for(int i = 0; i < rankSP.length; i++) {
 			rankLabel[i].setText(String.valueOf(playersRanking[i]));
-			rankSP[i].setVisible(true);
+			if (playersRanking[i] > 0) {				
+				rankSP[i].setVisible(true);
+			} else {
+				rankSP[i].setVisible(false);
+			}
 		}
 	}
 	private void clickLeaveGameButton(ActionEvent e) {

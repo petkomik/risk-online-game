@@ -3,6 +3,7 @@ package gameState;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import game.Battle;
@@ -528,6 +529,10 @@ public class GameHandler {
 		
 	}
 
+	public void updateInGameLeaderBoard() {
+		HashMap<Integer, Integer> ranks = Logic.getInGameRanks(this.gameState);
+	}
+	
 	public void turnInRiskCards(ArrayList<Card> cards, int idOfPlayer) 
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException,
 				WrongCardsException, WrongCardsSetException, WrongPeriodException {

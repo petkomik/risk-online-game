@@ -217,10 +217,7 @@ public class SinglePlayerHandler {
 	}
 	
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
-	}
-	
-	public void receiveRiskCardOnGUI(Card card, int idOfPlayer) {
-		
+		// todo majd
 	}
 	
 	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 

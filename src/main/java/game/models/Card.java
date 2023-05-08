@@ -47,7 +47,7 @@ public class Card implements Serializable{
 	public Card(boolean isJoker, int id) {
 		this.isJoker = true;
 		this.countryName = null;
-		this.cardValue = -1;
+		this.cardValue = -100;
 		this.pngDir = "";
 		this.ID = id;
 	}
@@ -55,40 +55,23 @@ public class Card implements Serializable{
 	public int getCardSymbol() {
 		return cardValue;
 	}
-	public void setCardSymbol(int cardSymbol) {
-		this.cardValue = cardSymbol;
-	}
 	
 	public CountryName getName() {
 		return countryName;
 	}
-	public void setName(CountryName name) {
-		this.countryName = name;
-	}
-
+	
 	public String getPngDir() {
 		return pngDir;
-	}
-	
-	public void setPngDir(String pngDir) {
-		this.pngDir = pngDir;
 	}
 	
 	public boolean isJoker() {
 		return isJoker;
 	}
 	
-	public void setJoker(boolean isJoker) {
-		this.isJoker = isJoker;
-	}
 	public int getID() {
 		return ID;
 	}
-	
-	public void setID(int iD) {
-		ID = iD;
-	}
-	
+
     @Override
     public String toString() {
         return this.getID() + " " + this.cardValue;
