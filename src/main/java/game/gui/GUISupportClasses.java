@@ -446,7 +446,7 @@ public class GUISupportClasses {
 			this.names = chatPane.names;
 			this.dragArea = chatPane.dragArea;
 			this.messageToBeSend = chatPane.messageToBeSend;
-			
+
 			this.client = chatPane.client;
 
 			this.dragAreaHover = chatPane.dragAreaHover;
@@ -811,8 +811,8 @@ public class GUISupportClasses {
 			this.client = client;
 		}
 	}
-	
-	static class SettingsButton extends ToggleButton {
+
+	static class SettingsButton extends Button {
 		public SettingsButton() {
 			super();
 			this.setPadding(new Insets(10, 20, 10, 20));
@@ -820,7 +820,7 @@ public class GUISupportClasses {
 			this.setTextFill(Color.WHITE);
 			this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;" + "-fx-border-radius: 12;"
 					+ "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
-			this.setSelected(false);
+			// this.setSelected(false);
 
 			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 				if (newValue) {
@@ -844,7 +844,7 @@ public class GUISupportClasses {
 					+ radius + ";" + "-fx-border-radius: " + radius + ";" + "-fx-border-color: transparent;"
 					+ "-fx-border-width: 4px;");
 
-			this.selectedProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
+			this.hoverProperty().addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
 				if (newValue) {
 
 					this.setStyle("-fx-background-color: #64441f;" + "-fx-background-insets: 1 1 1 1;"
@@ -876,64 +876,111 @@ public class GUISupportClasses {
 
 		}
 	}
-	
+
 	public static class SettingsPane extends VBox {
-		
-		public SettingsPane() {
-			
+		double fontSize;
+		SettingsButton settingsButton;
+
+		public SettingsPane(double fontSize, SettingsButton settingsButton) {
+			this.fontSize = fontSize;
+			this.settingsButton = settingsButton;
 		}
-		
-		public static StackPane createMutePane() {
+
+		public static StackPane createMutePane(double fontSize, SettingsButton settingsButton, double ratio) {
 			MediaPlayer musicPlayer = AppController.getGameSound().getMusicSoundPlayer();
 			MediaPlayer soundPlayer = AppController.getGameSound().getEffectsSoundPlayer();
-		    // Create buttons for music and sound effects mute/unmute
-		    Button musicButton = new Button("Music: Unmute");
-		    Button soundButton = new Button("Sound Effects: Unmute");
+			// Create buttons for music and sound effects mute/unmute
+			DesignButton musicButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 600 * ratio);
+			musicButton.setText("Music: Unmute");
+			DesignButton soundButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 600 * ratio);
+			soundButton.setText("Sound Effects: Unmute");
+			DesignButton confirmationButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
+			ImageView imgMusicButton = new ImageView();
 
-		    // Add event handlers to toggle mute/unmute state of media players
-		    musicButton.setOnAction(event -> {
-		        if (musicPlayer != null) {
-		            if (musicPlayer.isMute()) {
-		                musicPlayer.setMute(false);
-		                musicButton.setText("Music: Unmute");
-		            } else {
-		                musicPlayer.setMute(true);
-		                musicButton.setText("Music: Mute");
-		            }
-		        }
-		    });
-		    soundButton.setOnAction(event -> {
-		        if (soundPlayer != null) {
-		            if (soundPlayer.isMute()) {
-		                soundPlayer.setMute(false);
-		                soundButton.setText("Sound Effects: Unmute");
-		            } else {
-		                soundPlayer.setMute(true);
-		                soundButton.setText("Sound Effects: Mute");
-		            }
-		        }
-		    });
+			confirmationButton.setText("Confirm");
 
-		    // Set the initial state of the mute/unmute buttons based on the media player's mute state
-		    if (musicPlayer != null && musicPlayer.isMute()) {
-		        musicButton.setText("Music: Mute");
-		    }
-		    if (soundPlayer != null && soundPlayer.isMute()) {
-		        soundButton.setText("Sound Effects: Mute");
-		    }
+			try {
+				imgMusicButton.setImage(new Image(new FileInputStream(Parameter.audioSpeakerIcon)));
+				imgMusicButton.setFitHeight(fontSize);
+				imgMusicButton.setPreserveRatio(true);
+				imgMusicButton.setSmooth(true);
+				imgMusicButton.setCache(true);
+				musicButton.setGraphicTextGap(10);
+				musicButton.setGraphic(imgMusicButton);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 
-		    // Create a VBox to hold the buttons
-		    VBox vbox = new VBox(10, musicButton, soundButton);
+			// Add event handlers to toggle mute/unmute state of media players
+			musicButton.setOnAction(event -> {
+				if (musicPlayer != null) {
+					AppController.getGameSound().buttonClickForwardSound();
+					if (musicPlayer.isMute()) {
+						musicPlayer.setMute(false);
+						musicButton.setText("Music: Unmute");
+						try {
+							imgMusicButton.setImage(new Image(new FileInputStream(Parameter.audioSpeakerIcon)));
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
 
-		    // Set the background color and opacity of the VBox
-		    vbox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.2);");
+					} else {
+						musicPlayer.setMute(true);
+						musicButton.setText("Music: Mute");
+						try {
+							imgMusicButton.setImage(new Image(new FileInputStream(Parameter.audioSpeakerMuteIcon)));
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
 
-		    // Create a StackPane to hold the VBox and center it on the screen
-		    StackPane stackPane = new StackPane(vbox);
-		    stackPane.setPrefSize(200, 100);
+			soundButton.setOnAction(event -> {
+				if (soundPlayer != null) {
+					AppController.getGameSound().buttonClickForwardSound();
+					if (soundPlayer.isMute()) {
+						soundPlayer.setMute(false);
+						soundButton.setText("Sound Effects: Unmute");
+					} else {
+						soundPlayer.setMute(true);
+						soundButton.setText("Sound Effects: Mute");
+					}
+				}
+			});
 
-		    return stackPane;
+			// Set the initial state of the mute/unmute buttons based on the media player's
+			// mute state
+			if (musicPlayer != null && musicPlayer.isMute()) {
+				musicButton.setText("Music: Mute");
+				try {
+					imgMusicButton.setImage(new Image(new FileInputStream(Parameter.audioSpeakerMuteIcon)));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			if (soundPlayer != null && soundPlayer.isMute()) {
+				soundButton.setText("Sound Effects: Mute");
+			}
+
+			// Create a VBox to hold the buttons
+			VBox vbox = new VBox(10, musicButton, soundButton, confirmationButton);
+
+			// Set the background color and opacity of the VBox
+			vbox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.2);");
+
+			// Create a StackPane to hold the VBox and center it on the screen
+			StackPane stackPane = new StackPane(vbox);
+			stackPane.setPrefSize(200, 100);
+
+			confirmationButton.setOnAction(event -> {
+				AppController.getGameSound().buttonClickBackwardSound();
+				stackPane.setVisible(false);
+				settingsButton.setDisable(false);
+			});
+
+			return stackPane;
 		}
-		//TODO
+		// TODO
 	}
 }
