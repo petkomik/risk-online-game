@@ -50,21 +50,35 @@ public class AILogic {
 				if(getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
 					return getRandomFreeCountryName(gameState);
 				}
-				ArrayList<Territory> neighbouringTerr = new ArrayList<>();
-				for(Territory t : territories.values()) {
-					neighbouringTerr.addAll(t.getNeighboringTerritories());
-					neighbouringTerr.removeIf(x -> x.getOwnedByPlayer() != null && x.getOwnedByPlayer().getID() == player.getID());
-				}
 				
-				return getNearestTerritory(neighbouringTerr, gameState);
+				ArrayList<Territory> playerTerr = new ArrayList<>();
+				for(Territory t : territories.values()) {
+					if(t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
+						playerTerr.add(t);
+					}
+				}
+
+				return getNearestTerritory(playerTerr, gameState);
+				
 			default:
 				return null;
 		}
 	}
-	private static CountryName getNearestTerritory(Collection<Territory> neighbourTerritories, GameState gameState) {
-		for(Territory t : neighbourTerritories) {
-			if(t.getOwnedByPlayer() == null) {
-				return t.getCountryName();
+	private static CountryName getNearestTerritory(Collection<Territory> territories, GameState gameState) {
+		for(Territory t : territories) {
+			for(Territory tN : t.getNeighboringTerritories()) {
+				if(tN.getOwnedByPlayer() == null) {
+					return tN.getCountryName();
+				}
+			}
+		}
+		for(Territory t : territories) {
+			for(Territory tN : t.getNeighboringTerritories()) {
+				for(Territory tNN : tN.getNeighboringTerritories()) {
+					if(tNN.getOwnedByPlayer() == null) {
+						return tNN.getCountryName();
+					}
+				}
 			}
 		}
 		return getRandomFreeCountryName(gameState);
@@ -91,10 +105,34 @@ public class AILogic {
 					return getRandomOwnedCountryName(gameState, player);
 				}
 				else {
-					return mostOuterCountry(gameState, player).getCountryName();
+					ArrayList<Territory> threeMostOuterTerritories = getThreeMostOuterTerritories(territories.values(), player);
+					threeMostOuterTerritories.forEach(x -> System.out.println(x.getCountryName()));
+					double rand = Math.random();
+					// Country with the most neighbouring countries gets more probability
+					if(rand <= 0.4) {
+						return threeMostOuterTerritories.get(0).getCountryName();
+					}
+					else if(rand <= 0.7) {
+						return threeMostOuterTerritories.get(1).getCountryName();
+					}
+					else {
+						return threeMostOuterTerritories.get(2).getCountryName();
+					}
 				}
 			case HARD:
-				return mostOuterCountry2(gameState, player).getCountryName();
+				ArrayList<Territory> threeMostOuterTerritories = getThreeMostOuterTerritories(territories.values(), player);
+				threeMostOuterTerritories.forEach(x -> System.out.println(x.getCountryName()));
+				double rand = Math.random();
+				// Country with the most neighbouring countries gets more probability
+				if(rand <= 0.4) {
+					return threeMostOuterTerritories.get(0).getCountryName();
+				}
+				else if(rand <= 0.7) {
+					return threeMostOuterTerritories.get(1).getCountryName();
+				}
+				else {
+					return threeMostOuterTerritories.get(2).getCountryName();
+				}
 			default:
 				return null;
 		}
@@ -117,7 +155,7 @@ public class AILogic {
 				int randomCountryIndex = (int) (Math.random() * (list.size() - 1) + 1);
 				return new Pair<CountryName, Integer>(list.get(randomCountryIndex).getCountryName(), randomNumTroops);
 			case HARD:
-				ArrayList<Territory> threeMostOuterCountries = getThreeMostOuterCountries(gameState, player);
+				ArrayList<Territory> threeMostOuterCountries = getThreeMostOuterTerritories(gameState.getTerritories().values(), player);
 				int min = Integer.MAX_VALUE;
 				CountryName minCountryName = CountryName.Afghanistan;
 				for(Territory t : threeMostOuterCountries) {
@@ -149,8 +187,10 @@ public class AILogic {
 					terr = set.getValue();
 				}
 			}
+			count = 0;
 		}
 		list.add(terr);
+		min = Integer.MAX_VALUE;
 		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
 			if(set.getValue().getCountryName() != list.get(0).getCountryName()) {
 				if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
@@ -165,8 +205,10 @@ public class AILogic {
 					}
 				}
 			}
+			count = 0;
 		}
 		list.add(terr);
+		min = Integer.MAX_VALUE;
 		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
 			if(set.getValue().getCountryName() != list.get(0).getCountryName() && set.getValue().getCountryName() != list.get(1).getCountryName()) {
 				if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
@@ -181,9 +223,28 @@ public class AILogic {
 					}
 				}
 			}
+			count = 0;
 		}
 		list.add(terr);
 		return list;
+	}
+	
+	private static ArrayList<Territory> getThreeMostOuterTerritories(Collection<Territory> territories, PlayerAI player) {
+		List<Territory> territoriesCopy = new ArrayList<>();
+		for(Territory t : territories) {
+			territoriesCopy.add(t);
+		}
+		ArrayList<Territory> mostOuterTerritories = new ArrayList<>();
+		
+		mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+		territoriesCopy.removeIf(x -> x.getCountryName() == mostOuterTerritories.get(0).getCountryName());
+		mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+		territoriesCopy.removeIf(x -> 
+			x.getCountryName() == mostOuterTerritories.get(0).getCountryName() ||
+					x.getCountryName() == mostOuterTerritories.get(1).getCountryName());
+		mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+		
+		return mostOuterTerritories;
 	}
 	
 	public static CountryName getRandomFreeCountryName(GameState gameState) {
@@ -209,7 +270,7 @@ public class AILogic {
 	//owned territory with the fewest owned neighbours -> most outer country
 	public static Territory mostOuterCountry(GameState gameState, PlayerAI player) {
 		
-			int min = Integer.MIN_VALUE;
+			int max = Integer.MIN_VALUE;
 			int count = 0;
 			Territory terr = null;
 			for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
@@ -219,8 +280,8 @@ public class AILogic {
 							count++;
 						}
 					}
-					if(count > min) {
-						min = count;
+					if(count > max) {
+						max = count;
 						terr = set.getValue();
 						System.out.println("Set most outter territory to " + terr.getCountryName().toString());
 					}
@@ -230,22 +291,20 @@ public class AILogic {
 			return terr;
 	}
 	
-	public static Territory mostOuterCountry2(GameState gameState, PlayerAI player) {
-		
-		int min = Integer.MIN_VALUE;
+	public static Territory mostOuterCountry2(Collection<Territory> territories, PlayerAI player) {
+		int max = Integer.MIN_VALUE;
 		int count = 0;
 		Territory terr = null;
-		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-			if(set.getValue().getOwnedByPlayer().getID() == player.getID()) {
-				for(Territory neighbour : set.getValue().getNeighboringTerritories()) {
+		for(Territory t : territories) {
+			if(t.getOwnedByPlayer().getID() == player.getID()) {
+				for(Territory neighbour : t.getNeighboringTerritories()) {
 					if(neighbour.getOwnedByPlayer().getID() != player.getID()) {
 						count++;
 					}
 				}
-				if(count > min) {
-					min = count;
-					terr = set.getValue();
-					System.out.println("Set most outter territory to " + terr.getCountryName().toString());
+				if(count > max) {
+					max = count;
+					terr = t;
 				}
 			}
 			count = 0;
@@ -254,27 +313,45 @@ public class AILogic {
 }
 	
 	//owned territory with the most owned neighbours -> most inner country
-	public static Territory mostInnerCountry(GameState gameState, PlayerAI player) {
+	public static Territory mostInnerCountry(Collection<Territory> territories, PlayerAI player) {
 		
-		int max = Integer.MAX_VALUE;
+		int max = Integer.MIN_VALUE;
 		int count = 0;
 		Territory terr = null;
-		for(Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-			if(set.getValue().getOwnedByPlayer().getID() == player.getID() && set.getValue().getNumberOfTroops() > 1) {
-				for(Territory neighbour : set.getValue().getNeighboringTerritories()) {
-					if(neighbour.getOwnedByPlayer().getID() != player.getID()) {
+		for(Territory t : territories) {
+			if(t.getOwnedByPlayer().getID() == player.getID() && t.getNumberOfTroops() > 1) {
+				for(Territory neighbour : t.getNeighboringTerritories()) {
+					if(neighbour.getOwnedByPlayer().getID() == player.getID()) {
 						count++;
 					}
 				}
-				if(count < max) {
+				if(count > max) {
 					max = count;
-					terr = set.getValue();
+					terr = t;
 					System.out.println("Set most inner territory to " + terr.getCountryName().toString());
 				}
 			}
 			count = 0;
 		}
 		return terr;
+	}
+	
+	private static ArrayList<Territory> getThreeMostInnerTerritories(Collection<Territory> territories, PlayerAI player) {
+		List<Territory> territoriesCopy = new ArrayList<>();
+		for(Territory t : territories) {
+			territoriesCopy.add(t);
+		}
+		ArrayList<Territory> mostOuterTerritories = new ArrayList<>();
+		
+		mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+		territoriesCopy.removeIf(x -> x.getCountryName() == mostOuterTerritories.get(0).getCountryName());
+		mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+		territoriesCopy.removeIf(x -> 
+			x.getCountryName() == mostOuterTerritories.get(0).getCountryName() ||
+					x.getCountryName() == mostOuterTerritories.get(1).getCountryName());
+		mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+		
+		return mostOuterTerritories;
 	}
 	
 	//decision whether to attack a territory or not
@@ -484,7 +561,6 @@ public class AILogic {
 			return false;
 		}
 	}
-	
 	//list of countries, that are surrounded by own countries only
 	public static ArrayList<Territory> countriesSurroundedByOwnedCountries(GameState gameState, PlayerAI player) {
 		ArrayList<Territory> list = new ArrayList<Territory>();
@@ -502,16 +578,17 @@ public class AILogic {
 	}
 	
 	private static Pair<CountryName, CountryName>  chooseTerritoriesPairFortifyHard(GameState gameState, PlayerAI player){
+		gameState.getTerritories().values().forEach(x -> System.out.println(x.getCountryName()+ ", " + x.getOwnedByPlayer().getID()));
 		CountryName fromCountry = null;
-		ArrayList<Territory> threeMostOuter = getThreeMostOuterCountries(gameState, player);
+		ArrayList<Territory> threeMostInner = getThreeMostInnerTerritories(gameState.getTerritories().values(), player);
 		int max = 0;
-		for(Territory territory : threeMostOuter) {
+		for(Territory territory : threeMostInner) {
 			if(territory.getNumberOfTroops() > max) {
 				max = territory.getNumberOfTroops();
 				fromCountry = territory.getCountryName();
 			}
 		}
-		return new Pair(fromCountry, mostOuterCountry2(gameState, player));
+		return new Pair(fromCountry, mostOuterCountry2(gameState.getTerritories().values(), player));
 	}
 	
 	public static Pair<CountryName, CountryName>  chooseTerritoriesPairFortify(GameState gameState, PlayerAI player){
