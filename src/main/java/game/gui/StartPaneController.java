@@ -157,6 +157,7 @@ public class StartPaneController extends StackPane {
 				
 			}
 		});
+		// For deleting the settingsPane imidiatly
 		settingsButton.disabledProperty().addListener((ChangeListener<? super Boolean>) new ChangeListener<Boolean>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
