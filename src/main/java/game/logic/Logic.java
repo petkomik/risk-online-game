@@ -191,23 +191,21 @@ public class Logic {
 		return false;
 	}
 	
-	public static boolean turnInRiskCards(List<Card> cards, Player player, GameState gameState) 
-		throws WrongCountryException, WrongTroopsCountException, WrongPhaseException, WrongCardsException,
-		WrongPeriodException {
-		if (player == null || gameState.getCurrentPlayer().equals(player)) {
-			throw new WrongPhaseException("It is not your turn");
-		} else if (cards == null || cards.size() != 3) {
-			throw new WrongCardsException("You have to choose 3 cards");
-		} else if (gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
-			throw new WrongPhaseException("You are not in Deploy Phase. Can't turn in cards in the moment");
-		} else if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
-			throw new WrongPeriodException("You are not in Main Period.");
-		} else if (!gameState.getRiskCardsInPlayers().get(player.getID()).containsAll(cards)) {
-			throw new WrongCardsException("You do not own all the cards that you tried to turn in.");
-		} else if ((!cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || (!cards
-				.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)) ||
-				!(cards.stream().map(Card::getCardSymbol).reduce(0, (a,b) -> a + b) < 0))) {
-			return true;			
+	public static boolean turnInRiskCards(List<Card> cards, Player player, GameState gameState) {
+		if(gameState.getCurrentPlayer().equals(player)) {
+			if(cards != null && cards.size() == 3) {
+				if(!gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
+					if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
+						if(gameState.getRiskCardsInPlayers().get(player.getID()).containsAll(cards)) {
+							if((cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || 
+							   (cards.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)) ||
+							   (cards.stream().map(Card::getCardSymbol).reduce(0, (a,b) -> a + b) < 0))) {
+								return true;
+							}
+						}
+					}
+				}
+			}
 		}
 		return false;
 	}

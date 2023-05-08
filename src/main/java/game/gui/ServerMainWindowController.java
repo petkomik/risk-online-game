@@ -381,7 +381,7 @@ public class ServerMainWindowController extends VBox {
 				
 				drawLobbies(false);
 				
-				}else {
+				} else {
 					drawLobbies(true);
 				}
 				

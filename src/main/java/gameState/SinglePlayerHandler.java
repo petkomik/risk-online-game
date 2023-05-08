@@ -218,7 +218,8 @@ public class SinglePlayerHandler {
 	}
 	
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
-		// todo majd
+		this.gamePaneController.setAmountOfTroopsLeftToDeploy(bonusTroops);
+		this.gamePaneController.setPlayerOnGUI(idOfPlayer, card);
 	}
 	
 	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 

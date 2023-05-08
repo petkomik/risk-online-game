@@ -559,7 +559,7 @@ public class GameHandler {
 			switch(this.gameType) {
 			case SinglePlayer:
 				this.singlePlayerHandler.riskCardsTurnedInSuccessOnGUI(newCards, idOfPlayer,
-						bonusTroops);
+						this.gameState.getPlayerTroopsLeft().get(idOfPlayer) + bonusTroops);
 				break;
 			case Multiplayer:
 				break;
