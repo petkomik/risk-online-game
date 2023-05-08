@@ -69,7 +69,7 @@ public class Profile implements Serializable {
 		this.password = password;
 		this.color = this.colorToHexCode(colors[(int) (Math.random() * 6)]);
 		this.photo = avatars[(int) (Math.random() * 6)].replace(Parameter.avatarsdir, "");
-		this.id = Integer.parseInt(LocalDateTime.now().toString().replace("-", "").replace(":", "").replace("'", "").replace("T", "").substring(15,24));
+		this.id = (int)Math.round(Math.random() * 10000000);
 	}
 
 	public String getColor() {

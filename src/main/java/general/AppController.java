@@ -1,9 +1,12 @@
 package general;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 
-import database.PlayerProfileHandler;
+import database.DatabaseHandler;
 import database.Profile;
+import game.GameStatistic;
 import game.exceptions.WrongTextFieldInputException;
 import network.Client;
 import network.Server;
@@ -18,7 +21,7 @@ import network.Server;
 public class AppController {
 	private static Profile profile;
 	private static AppController appController = new AppController();
-	public static PlayerProfileHandler dbH = new PlayerProfileHandler();
+	public static DatabaseHandler dbH = new DatabaseHandler();
 	private static int portNumber = Parameter.portDefault;
 	private static String host = Parameter.hostDefault;
 	private static Client client;
@@ -154,6 +157,10 @@ public class AppController {
 	public static void deleteProfile() {
 		dbH.deleteProfile(AppController.profile.getId());
 	}
+	
+	public static void createGameStatistic(GameStatistic gameStatistic) {
+		dbH.createGameStatistic(gameStatistic);
+	}
 
 	public static void logoutAndSetValuesToNull() {
 		profile = null;
@@ -201,11 +208,11 @@ public class AppController {
 		AppController.server = server;
 	}
 
-	public static PlayerProfileHandler getDatabaseHandler() {
+	public static DatabaseHandler getDatabaseHandler() {
 		return dbH;
 	}
 
-	public static void setDatabaseHandler(PlayerProfileHandler dbH) {
+	public static void setDatabaseHandler(DatabaseHandler dbH) {
 		AppController.dbH = dbH;
 	}
 

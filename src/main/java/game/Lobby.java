@@ -44,6 +44,7 @@ public class Lobby implements Serializable{
 	public int lobbyRank;
 	public Difficulty difficultyOfAI;
 	private int  maxNumberOfPlayers;
+	private GameStatistic gameStatistic;
 	
 
 	public Lobby() {
@@ -346,6 +347,15 @@ public class Lobby implements Serializable{
 
 	public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
+	}
+	
+	public void setGameStatistic(GameStatistic gameStatistic) {
+		this.gameStatistic = gameStatistic;
+	}
+
+
+	public GameStatistic getGameStatistic() {
+		return this.gameStatistic;
 	}
 
 }

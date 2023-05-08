@@ -88,10 +88,10 @@ public class Database {
 		try (Statement stm = connection.createStatement()){
 			String sql = "CREATE TABLE IF NOT EXISTS Games "
 					+ "(GameID INTEGER PRIMARY KEY, "
-					+ "Length INTEGER NOT NULL, "
+					+ "Length INTEGER, "
 					+ "StartTime INTEGER NOT NULL, "
 					+ "NumberOfPlayers INTEGER NOT NULL, "
-					+ "WinnerID INTEGER NOT NULL REFERENCES Players);";
+					+ "WinnerID INTEGER REFERENCES Players);";
 			stm.executeUpdate(sql);
 			connection.commit();
 			

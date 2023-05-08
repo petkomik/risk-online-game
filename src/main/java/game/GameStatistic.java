@@ -15,10 +15,9 @@ public class GameStatistic {
 	private int idOfWinner;
 	private int numberOfPlayers;
 	
-	public static int countID = 0;
 	
-	public GameStatistic(int gameID, LocalDateTime startTime, int numberOfPlayers) {
-		countID++;
+	public GameStatistic(LocalDateTime startTime, int numberOfPlayers) {
+		this.gameID = (int)Math.round(Math.random()*10000);
 		this.setGameID(gameID);
 		this.setStartTime(LocalDateTime.now());
 		this.setNumberOfPlayers(numberOfPlayers);	

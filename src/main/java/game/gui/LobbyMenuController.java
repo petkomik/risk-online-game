@@ -1,5 +1,6 @@
 package game.gui;
 
+import game.GameStatistic;
 import game.Lobby;
 import game.PlayerInLobby;
 import game.exceptions.WrongTextFieldInputException;
@@ -22,6 +23,8 @@ import general.GameSound;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -642,6 +645,10 @@ public class LobbyMenuController extends StackPane {
 						FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
 						AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
 						GamePaneController gamePaneController = fxmlLoader.getController();
+						
+						GameStatistic gameStatistic = new GameStatistic(LocalDateTime.now(), lobby.getPlayerList().size());
+						AppController.createGameStatistic(gameStatistic);
+						lobby.setGameStatistic(gameStatistic);
 
 						SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby, gamePaneController);
 						gamePaneController.initSinglePlayer(singleHandler, lobby);

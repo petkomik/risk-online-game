@@ -1251,7 +1251,7 @@ public class GamePaneController implements Initializable{
 	
 	public void endGame(ArrayList<Player> playersByRank) {
 		Stage stage = (Stage) gameBoard.getScene().getWindow();
-		
+		AppController.dbH.updateGameStatistic(playersByRank.get(0).getID(), "WinnerID", lobby.getGameStatistic());
 		try {
 			EndGamePodiumController end = new EndGamePodiumController(playersByRank, 
 					this.gameType.equals(GameType.SinglePlayer));
