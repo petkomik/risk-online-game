@@ -32,6 +32,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -49,9 +50,7 @@ public class EndGamePodiumController extends StackPane {
 	private ArrayList<Profile> ranking; 							//ranking at the end of the game 
 	// public int players = game.Lobby.getPlayerList().size();
 	private Stage stage;
-	
-	private VBox contentVBox;										
-	
+		
 	private HBox backgroundPic;										//background
 	private HBox backgroundColor;									//*
 	private ImageView imgBackground;								//*
@@ -60,11 +59,12 @@ public class EndGamePodiumController extends StackPane {
 	private HBox topBannerParent;									//banner
 	private HBox topBannerContent;									//*
 	private Label lobbyTextBanner;									//*
-	private ArrowButton backButton;									//*
+	private ArrowButton backButton;			
 	
 	private VBox vBoxIcons;											//VBox with the caption,avatars and place	
 	private Text caption;											//caption
 	
+	private HBox captionBox;
 	private HBox avatars;											//avatars
 	private StackPane firstP, secondP, thirdP;						//*
 	private Circle circleFirstP, circleSecondP, circleThirdP;		//*
@@ -94,13 +94,10 @@ public class EndGamePodiumController extends StackPane {
 	}
 
 	public void setup() throws Exception {
-		contentVBox = new VBox();
-		contentVBox.setAlignment(Pos.CENTER);
-
 		vBoxIcons = new VBox();
 		vBoxIcons.setAlignment(Pos.CENTER);
 
-		avatars = new HBox(70 * ratio);
+		avatars = new HBox(82 * ratio);
 		avatars.setAlignment(Pos.BOTTOM_CENTER);
 		place = new HBox(60 * ratio);
 		place.setAlignment(Pos.BOTTOM_CENTER);
@@ -222,33 +219,37 @@ public class EndGamePodiumController extends StackPane {
 
 		circleThirdP = new Circle(90 * ratio);
 		circleThirdI = new ImageView();
-		// TODO set up the right color
+	// TODO set up the right color
+		circleThirdP.setStroke(Color.WHITE);
+		circleThirdP.setStrokeWidth(8 * ratio);
+
+		thirdP.getChildren().add(circleThirdP);
+		thirdP.setVisible(false);
+
+		circleThirdI.setFitWidth(180 * ratio);
+		circleThirdI.setFitHeight(180 * ratio);
+		circleThirdI.setPreserveRatio(true);
+		circleThirdI.setSmooth(true);
+		circleThirdI.setCache(true);
+		circleThirdI.setVisible(false);
+
+		thirdP.getChildren().add(circleThirdI);
+		
 		if (players > 2) {
 			circleThirdP.setFill(Color.web(this.playerList.get(2).getColor()));
-			circleThirdP.setStroke(Color.WHITE);
-			circleThirdP.setStrokeWidth(8 * ratio);
-
-			thirdP.getChildren().add(circleThirdP);
-
 			circleThirdI.setImage(new Image(new FileInputStream(this.playerList.get(2).getAvatar())));
-			circleThirdI.setFitWidth(180 * ratio);
-			circleThirdI.setFitHeight(180 * ratio);
-			circleThirdI.setPreserveRatio(true);
-			circleThirdI.setSmooth(true);
-			circleThirdI.setCache(true);
-
-			thirdP.getChildren().add(circleThirdI);
+			thirdP.setVisible(true);
+			circleThirdI.setVisible(true);
+	
 		}
 
 		/*
 		 * adding the avatars to their box
 		 */
 		
-		if (players > 2) {
-			avatars.getChildren().addAll(secondP, firstP, thirdP);
-		} else {
-			avatars.getChildren().addAll(firstP, secondP);
-		}
+
+		avatars.getChildren().addAll(secondP, firstP, thirdP);
+		
 		avatars.setPadding(new Insets(20, 0, 20, 0));
 
 		/*
@@ -279,10 +280,6 @@ public class EndGamePodiumController extends StackPane {
 		thirdPlaceCup.setSmooth(true);
 		thirdPlaceCup.setCache(true);
 
-		if (players == 2) {
-			thirdPlaceCup.setVisible(false);
-		}
-
 		/*
 		 * adding the cups to their vBox
 		 */
@@ -294,34 +291,42 @@ public class EndGamePodiumController extends StackPane {
 		 * adding endgame text
 		 */
 		
-		caption = new Text("WINNER");
-		caption.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 100 * ratio));
-		caption.setFill(Color.WHITE);
+		/*
+         * adding endgame text
+         */
+        captionBox = new HBox();
+        captionBox.setAlignment(Pos.CENTER);
+        captionBox.setStyle("-fx-background-color: "
+                + "linear-gradient(to right,transparent 5%, rgba(100, 68, 31, 0.7) 20%, rgba(100, 68, 31, 1) 40%, rgba(100, 68, 31, 1) 60%, "
+                + "rgba(100, 68, 31, 0.7) 80%, rgba(100, 68, 31, 0) 95%);");
+        captionBox.minHeightProperty().bind(captionBox.maxHeightProperty());
+        captionBox.maxHeightProperty().bind(captionBox.prefHeightProperty());
+        captionBox.minWidthProperty().bind(captionBox.maxWidthProperty());
+        captionBox.maxWidthProperty().bind(captionBox.prefWidthProperty());
+        captionBox.setPrefHeight(130 * ratio);
+        captionBox.setPrefWidth(700 * ratio);
+        HBox.setHgrow(captionBox, Priority.ALWAYS);
 
+        caption = new Text("WINNER");
+        caption.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 100 * ratio));
+        caption.setFill(Color.WHITE);
+        caption.setTextAlignment(TextAlignment.CENTER);
+
+        captionBox.getChildren().add(caption);
 
 		/*
 		 * adding the caption, cups and avatars to the vBox
 		 */
 
-		vBoxIcons.getChildren().addAll(caption, avatars, place);
+		vBoxIcons.getChildren().addAll(captionBox, avatars, place);
 		
-		/*
-		 * initializing the chat
-		 */
-		
-		chatPane = new ChatWindow();
-		chatPane.setVisible(false);
-		chatPane.setPickOnBounds(true);
-
 		/*
 		 * adding everything to the top container
 		 */
 		
-		contentVBox.setAlignment(Pos.CENTER);
-		contentVBox.setSpacing(30 * ratio);
 		
-		contentVBox.getChildren().addAll(topBannerParent, new Spacing(50), vBoxIcons, new Spacing(100));
-		this.getChildren().addAll(backgroundPic, backgroundColor, contentVBox, chatPane);
+		this.getChildren().addAll(backgroundPic, backgroundColor, vBoxIcons, topBannerParent);
+		StackPane.setMargin(topBannerParent, new Insets(50 * ratio,0,0,0));
 
 		//TODO remove when main is removed
 		actionEventsSetup();

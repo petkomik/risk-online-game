@@ -208,7 +208,7 @@ public class ServerMainWindowController extends VBox {
 		chatDiv.setPadding(new Insets(0, 50 * ratioBanner, 0, 0));
 		chatDiv.setAlignment(Pos.CENTER);
 
-		backButton = new ArrowButton(45);
+		backButton = new ArrowButton(60 * ratioBanner);
 
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
 		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing, chatDiv);
