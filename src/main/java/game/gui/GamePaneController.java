@@ -696,7 +696,6 @@ public class GamePaneController implements Initializable{
 		tradeButton.setLayoutY((h - tradeButton.getPrefHeight()) / 2.0);
 		tradeButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
 		tradeButton.setDisable(true);
-		tradeButton.setOnAction(e -> this.singlePlayerHandler.turnInRiskCards(this.cardsPlayerOnGUI, this.playerOnGUI.getID()));
 		
 		Rectangle dropOnCard1 = new Rectangle();
 		Rectangle dropOnCard2 = new Rectangle();
@@ -1068,8 +1067,15 @@ public class GamePaneController implements Initializable{
 				armyIV3.setSmooth(true);
 				armyIV3.setCache(true);
 				
+				Label countryNameLabel = new Label("Joker");
+				countryNameLabel.setAlignment(Pos.CENTER);
+				countryNameLabel.setPadding(new Insets(10, 10, 10, 10));
+				countryNameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20.0)));
+				countryNameLabel.setTextAlignment(TextAlignment.CENTER);
+		
 				armiesVB.getChildren().addAll(armyIV1, armyIV2, armyIV3);
 				countryArmyPane.getChildren().add(armiesVB);
+				countryNamePane.getChildren().add(countryNameLabel);
 			}
 			else {
 				String path = null;
@@ -1101,7 +1107,9 @@ public class GamePaneController implements Initializable{
 				countryArmyPane.getChildren().add(countryIV);
 				countryArmyPane.getChildren().add(armyIV);
 				
-				Label countryNameLabel = new Label(c.getName().toString().replaceAll("(?!^)([A-Z])", "\n$1"));
+				Label countryNameLabel = new Label(c.getName().toString()
+						.replaceAll("([a-z])([A-Z][a-z])", "$1\n$2")
+						.replaceAll("([a-zA-Z])([A-Z])", "$1 $2"));
 				countryNameLabel.setAlignment(Pos.CENTER);
 				countryNameLabel.setPadding(new Insets(10, 10, 10, 10));
 				countryNameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20.0)));

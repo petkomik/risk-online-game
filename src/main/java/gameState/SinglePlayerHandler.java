@@ -77,7 +77,7 @@ public class SinglePlayerHandler {
 	 * REINFORCE Phase
 	 */
 
-	public void turnInRiskCards(ArrayList<Card> cards, int idOfPlayer) {
+	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
 		try {
 			this.gameHandler.turnInRiskCards(cards, idOfPlayer);
 		} catch (Exception e) {
@@ -220,6 +220,9 @@ public class SinglePlayerHandler {
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(bonusTroops);
 		this.gamePaneController.setPlayerOnGUI(idOfPlayer, card);
+		for(Card c : card) {
+			System.out.println(c.toString());
+		}
 	}
 	
 	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 

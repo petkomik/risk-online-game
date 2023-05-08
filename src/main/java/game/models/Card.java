@@ -74,7 +74,7 @@ public class Card implements Serializable{
 
     @Override
     public String toString() {
-        return this.getID() + " " + this.cardValue;
+        return this.getID() + " " + this.cardValue + " " + this.countryName.toString();
     }
 	
 }

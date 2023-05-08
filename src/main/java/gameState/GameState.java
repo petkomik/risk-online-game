@@ -84,8 +84,8 @@ public class GameState {
 		this.playersDiceThrown = playersDiceThrown;
 	}
 	
-	public void addTroopsToPlayer(Integer idPlayer, int numberOfTroops){
-		this.getPlayerTroopsLeft().put(idPlayer,
+	public void addTroopsToPlayer(int idPlayer, int numberOfTroops){
+		this.getPlayerTroopsLeft().replace(idPlayer,
 				this.getPlayerTroopsLeft().get(idPlayer) + numberOfTroops);
 	}
 	
@@ -224,7 +224,13 @@ public class GameState {
 	public void receiveRandomRiskCard(int idOfPlayer) {
 		Random generator = new Random();
 		Card card = this.cards.remove(generator.nextInt(this.cards.size()));
+		Card card2 = this.cards.remove(generator.nextInt(this.cards.size()));
+		Card card3 = this.cards.remove(generator.nextInt(this.cards.size()));
+
 		this.riskCardsInPlayers.get(idOfPlayer).add(card);
+		this.riskCardsInPlayers.get(idOfPlayer).add(card2);
+		this.riskCardsInPlayers.get(idOfPlayer).add(card3);
+
 	}
 	
 	public CountryName getLastAttackingCountry() {

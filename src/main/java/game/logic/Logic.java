@@ -193,13 +193,13 @@ public class Logic {
 	
 	public static boolean turnInRiskCards(List<Card> cards, Player player, GameState gameState) {
 		if(gameState.getCurrentPlayer().equals(player)) {
-			if(cards != null && cards.size() == 3) {
-				if(!gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {
-					if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
-						if(gameState.getRiskCardsInPlayers().get(player.getID()).containsAll(cards)) {
+			if(cards != null && cards.size() == 3) {	
+				if(gameState.getCurrentTurnPhase().equals(Phase.REINFORCE)) {		
+					if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {		
+						if(gameState.getRiskCardsInPlayers().get(player.getID()).containsAll(cards)) {		
 							if((cards.stream().allMatch(o -> o.getCardSymbol() == cards.get(0).getCardSymbol())) || 
 							   (cards.stream().map(Card::getCardSymbol).distinct().collect(Collectors.toSet()).equals(Set.of(1, 5, 10)) ||
-							   (cards.stream().map(Card::getCardSymbol).reduce(0, (a,b) -> a + b) < 0))) {
+							   (cards.stream().map(Card::getCardSymbol).reduce(0, (a,b) -> a + b) < 0))) {	
 								return true;
 							}
 						}
@@ -569,6 +569,24 @@ public class Logic {
 		}
 		
 		return rankArray;
+	}
+
+	public static ArrayList<Card> arrayListFromStringsToCard(ArrayList<String> cards, 
+			GameState gameState, int idOfPlayer) {
+		ArrayList<Card> returnList = new ArrayList<Card>();
+		for(String s : cards) {
+			if(s.equals("Joker")) {
+				returnList.add(gameState.getRiskCardsInPlayers().get(idOfPlayer).stream()
+						.filter(x -> x.isJoker())
+						.collect(Collectors.toList()).get(0));
+			} else {
+				returnList.add(gameState.getRiskCardsInPlayers().get(idOfPlayer).stream()
+					.filter(x -> x.getName().equals(CountryName.valueOf(s.replaceAll("[\n\r]", ""))))
+					.collect(Collectors.toList()).get(0));
+			}
+		}
+		
+		return returnList;
 	}
 
 }

@@ -341,19 +341,21 @@ public class GameHandler {
 			if(Logic.playerEndsPhase(phase, idOfPlayer, this.gameState)) {
 				switch (phase) {
 				case REINFORCE:
-					this.gameState.setCurrentTurnPhase(Phase.ATTACK);
-					switch(this.gameType) {
-					case SinglePlayer:
-						System.out.println("Reinforce Phase ended for " + idOfPlayer);
-						this.singlePlayerHandler.setPhaseOnGUI(Phase.ATTACK);
-						break;
-					case Multiplayer:
-						break;
-					case Tutorial:
-						break;
-					}
-					if(this.gameState.getCurrentPlayer().isAI()) {
-						this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
+					if(this.gameState.getRiskCardsInPlayers().size() < 5) {
+						this.gameState.setCurrentTurnPhase(Phase.ATTACK);
+						switch(this.gameType) {
+						case SinglePlayer:
+							System.out.println("Reinforce Phase ended for " + idOfPlayer);
+							this.singlePlayerHandler.setPhaseOnGUI(Phase.ATTACK);
+							break;
+						case Multiplayer:
+							break;
+						case Tutorial:
+							break;
+						}
+						if(this.gameState.getCurrentPlayer().isAI()) {
+							this.simulateAI(gameState, ((PlayerAI)this.gameState.getCurrentPlayer()));
+						}
 					}
 					break;
 				case ATTACK:
@@ -546,20 +548,23 @@ public class GameHandler {
 		}
 	}
 	
-	public void turnInRiskCards(ArrayList<Card> cards, int idOfPlayer) 
+	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) 
 			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException,
 				WrongCardsException, WrongCardsSetException, WrongPeriodException {
-		if(Logic.turnInRiskCards(cards, this.gameState.getPlayers().get(idOfPlayer), 
+		ArrayList<Card> cardsCards = Logic.arrayListFromStringsToCard(cards, this.gameState, idOfPlayer);
+		if(Logic.turnInRiskCards(cardsCards, this.gameState.getPlayers().get(idOfPlayer), 
 				this.gameState)) {
 			ArrayList<Card> newCards = this.gameState.getRiskCardsInPlayers()
 					.get(idOfPlayer);
-			newCards.removeAll(cards);
+			newCards.removeAll(cardsCards);
 			this.gameState.editRiskCardsInPlayers(newCards, idOfPlayer);
 			int bonusTroops = this.gameState.playerTurnsInCard();
+			this.gameState.addTroopsToPlayer(idOfPlayer, bonusTroops);
+			System.out.println(this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
 			switch(this.gameType) {
 			case SinglePlayer:
 				this.singlePlayerHandler.riskCardsTurnedInSuccessOnGUI(newCards, idOfPlayer,
-						this.gameState.getPlayerTroopsLeft().get(idOfPlayer) + bonusTroops);
+						this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
 				break;
 			case Multiplayer:
 				break;
