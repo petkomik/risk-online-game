@@ -150,11 +150,13 @@ public class SinglePlayerHandler {
 	
 	public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
 		this.gamePaneController.claimCountry(country, id);
-		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
+		this.gamePaneController
+		.setAmountOfTroopsLeftToDeploy(troopsLeft);
 	}
 	
 	public void conquerCountryOnGUI(CountryName country, int id, int troops) {
-		this.gamePaneController.conquerCountry(country, id, troops);
+		this.gamePaneController
+		.conquerCountry(country, id, troops);
 	}
 	
 	/*

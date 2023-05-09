@@ -1,5 +1,6 @@
 package network.messages;
 
+import game.Lobby;
 import game.models.CountryName;
 import gameState.GameState;
 
@@ -10,14 +11,16 @@ public class MessageGUIsetTroopsOnTerritoryAndLeft extends Message {
 	private CountryName countryName;
 	private int numTroopsOfCountry;
 	private int numTroopsOfPlayer;
+	private Lobby lobby;
 
 	public MessageGUIsetTroopsOnTerritoryAndLeft(GameState gameState,
-			CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
+			CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer, Lobby clientsLobby) {
 		super(MessageType.MessageGUIsetTroopsOnTerritoryAndLeft);
 		this.gameState = gameState;
 		this.countryName = countryName;
 		this.numTroopsOfCountry = numTroopsOfCountry;
 		this.numTroopsOfPlayer = numTroopsOfPlayer;
+		this.lobby = clientsLobby;
 	}
 	
 	public GameState getGameState() {
@@ -34,6 +37,10 @@ public class MessageGUIsetTroopsOnTerritoryAndLeft extends Message {
 	
 	public int getNumTroopsOfPlayer() {
 		return numTroopsOfPlayer;
+	}
+
+	public Lobby getLobby() {
+		return lobby;
 	}
 
 }

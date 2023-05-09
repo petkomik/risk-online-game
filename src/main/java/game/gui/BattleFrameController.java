@@ -37,6 +37,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Screen;
 import javafx.util.Duration;
+import network.Client;
 
 /*
  * Class for the Battle Frame
@@ -64,6 +65,7 @@ public class BattleFrameController extends VBox {
 	
 	private GameType gameType;
 	private SinglePlayerHandler singleplayerHandler;
+	private Client client;
 //	TODO
 //	priavte MultiPlayerHandler mult...
 	
@@ -158,6 +160,29 @@ public class BattleFrameController extends VBox {
 		this.defenderColor = Color.web(battle.getDefenderColor());
 		this.gameType = battle.getGameType();
 		this.singleplayerHandler = singlePlayerHandler;
+		setup();
+		this.throwBtn.setVisible(attacker);
+	}
+	
+	public BattleFrameController(Battle battle, Client client, boolean attacker) throws Exception {
+		super();
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * 
+				 Screen.getPrimary().getVisualBounds().getHeight() 
+				 / (1846 * 1080);
+		this.menuRatio = Math.min(ratio + 0.3, 1);
+		this.menuRatio = Math.min(ratio + 0.3, 1);
+		this.attackingPNG = battle.getAttackingPNG();
+		this.defendingPNG = battle.getDefendingPNG();
+		this.troopsInAttackAt = battle.getTroopsInAttackAt();
+		this.troopsInAttackDf = battle.getTroopsInAttackDf();
+		this.maxDiceToThrow = battle.getMaxDiceToThrow();
+		this.defendingDice =  battle.getDefendingDice();
+		this.attackingAvatar = battle.getAttackingAvatar();
+		this.defendingAvatar = battle.getDefendingAvatar();
+		this.attackerColor = Color.web(battle.getAttackerColor());
+		this.defenderColor = Color.web(battle.getDefenderColor());
+		this.gameType = battle.getGameType();
+		this.client = client;
 		setup();
 		this.throwBtn.setVisible(attacker);
 	}

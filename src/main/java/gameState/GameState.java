@@ -1,5 +1,6 @@
 package gameState;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import game.models.Player;
 import game.models.Territory;
 import general.AppController;
 
-public class GameState {
+public class GameState implements Serializable {
 
 	/**
 	 * Class for the gameState for client-logic/representation

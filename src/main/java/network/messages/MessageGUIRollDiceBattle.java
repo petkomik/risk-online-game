@@ -1,5 +1,6 @@
 package network.messages;
 
+import game.Lobby;
 import gameState.GameState;
 
 public class MessageGUIRollDiceBattle extends Message {
@@ -15,6 +16,7 @@ public class MessageGUIRollDiceBattle extends Message {
 	private int troopsInAttackDf;
 	private int[] numberOfDice;
 	private GameState gameState;
+	private Lobby lobby;
 	
 	public int[] getAttackerDiceValues() {
 		return attackerDiceValues;
@@ -37,7 +39,7 @@ public class MessageGUIRollDiceBattle extends Message {
 	}
 
 	public MessageGUIRollDiceBattle(GameState gameState,int[] attackerDiceValues, int[] defenderDiceValues,
-			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice
+			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice, Lobby lobby
 			) {
 		super(MessageType.MessageGUIRollDiceBattle);
 		this.attackerDiceValues =attackerDiceValues;
@@ -46,11 +48,16 @@ public class MessageGUIRollDiceBattle extends Message {
 		this.defenderDiceValues = defenderDiceValues;
 		this.troopsInAttackAt = troopsInAttackAt;
 		this.troopsInAttackDf = troopsInAttackDf;
+		this.lobby = lobby;
 		
 	}
 
 	public GameState getGameState() {
 		return gameState;
+	}
+
+	public Lobby getLobby() {
+		return lobby;
 	}
 
 }

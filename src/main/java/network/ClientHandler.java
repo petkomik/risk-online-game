@@ -11,9 +11,25 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import database.Profile;
 import game.Lobby;
+import game.models.Player;
+import game.models.PlayerSingle;
 import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageDisconnect;
+import network.messages.MessageGUIOpenBattleFrame;
+import network.messages.MessageGUIRollDiceBattle;
+import network.messages.MessageGUIRollInitalDice;
+import network.messages.MessageGUIconquerCountry;
+import network.messages.MessageGUIendBattle;
+import network.messages.MessageGUIgameIsOver;
+import network.messages.MessageGUImoveTroopsFromTerritoryToOther;
+import network.messages.MessageGUIpossessCountry;
+import network.messages.MessageGUIsetCurrentPlayer;
+import network.messages.MessageGUIsetPeriod;
+import network.messages.MessageGUIsetPhase;
+import network.messages.MessageGUIsetTroopsOnTerritory;
+import network.messages.MessageGUIsetTroopsOnTerritoryAndLeft;
+import network.messages.MessageGUIupdateRanks;
 import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
 import network.messages.MessageToPerson;
@@ -30,7 +46,7 @@ public class ClientHandler implements Runnable {
 	private Profile profile;
 	private String clientUsername;
 	private Thread clieantHandlerThread;
-	private Lobby lobby ;
+	private Lobby lobby;
 
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
@@ -59,6 +75,23 @@ public class ClientHandler implements Runnable {
 				if (!clientHandler.clientUsername.equals(clientUsername)) {
 					clientHandler.objectOutputStream.writeObject(message);
 					clientHandler.objectOutputStream.flush();
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void broadcastMessageWithinLobby(Message message, Lobby lobby) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				for (Player player : lobby.getHumanPlayerList()) {
+					if (clientHandler.getProfile().getId() == player.getID() &&
+							this.getProfile().getId() != player.getID()  ) {
+						clientHandler.objectOutputStream.writeObject(message);
+						clientHandler.objectOutputStream.flush();
+					}
 				}
 			} catch (IOException e) {
 				closeEverything(socket, objectInputStream, objectOutputStream);
@@ -143,18 +176,16 @@ public class ClientHandler implements Runnable {
 	public void run() {
 		Message messageFromClient;
 
-		    BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
-
-		   
+		BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
 
 		while (socket.isConnected()) {
 			try {
-			      if (!messageQueue.isEmpty()) {
-		                messageFromClient = messageQueue.take();
-		            } else {
-		                // Otherwise, wait for a message from the client
-		                messageFromClient = (Message) objectInputStream.readObject();
-		            }
+				if (!messageQueue.isEmpty()) {
+					messageFromClient = messageQueue.take();
+				} else {
+					// Otherwise, wait for a message from the client
+					messageFromClient = (Message) objectInputStream.readObject();
+				}
 				switch (messageFromClient.getMessageType()) {
 				case MessageSend:
 					System.out.println("case MessageSend in Handler Success 0");
@@ -203,25 +234,91 @@ public class ClientHandler implements Runnable {
 					break;
 
 				case MessageJoinLobby:
-					
+
 					broadcastMessage(((MessageJoinLobby) messageFromClient));
 					break;
 				case MessageUpdateLobby:
-					
+
 					broadcastMessageToAllIncludingMe(((MessageUpdateLobby) messageFromClient));
 					break;
 				case MessageUpdateLobbyList:
-					
-				broadcastMessageToAllIncludingMe(messageFromClient);
+
+					broadcastMessageToAllIncludingMe(messageFromClient);
 					break;
 				case MessageReadyToPlay:
-				broadcastMessageToAllIncludingMe(messageFromClient);
+					broadcastMessageToAllIncludingMe(messageFromClient);
+					break;
+				case MessageGUIRollInitalDice:
+					// broadcastMessageToAllIncludingMe(messageFromClient);
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIRollInitalDice) messageFromClient).getLobby());
+					break;
+				case MessageGUIRollDiceBattle:
+				broadcastMessageWithinLobby(messageFromClient,
+						((MessageGUIRollDiceBattle) messageFromClient).getLobby());
 				break;
-				
+				case MessageGUIsetPeriod:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetPeriod) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIsetPhase:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetPhase) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIpossessCountry:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIpossessCountry) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIconquerCountry:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIconquerCountry) messageFromClient)
+							.getLobby());
 					
-					
-					
+					break;
+				case MessageGUIsetCurrentPlayer:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetCurrentPlayer) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIsetTroopsOnTerritory:
 
+					broadcastMessageWithinLobby(messageFromClient,
+							(( MessageGUIsetTroopsOnTerritory ) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUImoveTroopsFromTerritoryToOther:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUImoveTroopsFromTerritoryToOther) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIsetTroopsOnTerritoryAndLeft:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetTroopsOnTerritoryAndLeft) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIOpenBattleFrame:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIOpenBattleFrame) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIendBattle:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIendBattle) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIupdateRanks:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIupdateRanks) messageFromClient)
+							.getLobby());
+					break;
+				case MessageGUIgameIsOver:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIgameIsOver) messageFromClient)
+							.getLobby());
+					break;
 				default:
 					// Handle unknown message types, if necessary
 					break;

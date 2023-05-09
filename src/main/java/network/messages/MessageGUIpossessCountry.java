@@ -1,5 +1,6 @@
 package network.messages;
 
+import game.Lobby;
 import game.models.CountryName;
 import gameState.GameState;
 
@@ -13,6 +14,7 @@ private GameState gameState;
 private CountryName country;
 private int id;
 private int troopsLeft;
+private Lobby lobby;
 
 	public GameState getGameState() {
 	return gameState;
@@ -30,14 +32,19 @@ public int getTroopsLeft() {
 	return troopsLeft;
 }
 
-	public MessageGUIpossessCountry(GameState gameState,CountryName country, int id, int troopsLeft) {
+	public MessageGUIpossessCountry(GameState gameState,CountryName country, int id, int troopsLeft, Lobby clientsLobby) {
 		super(MessageType.MessageGUIpossessCountry);
 		this.country = country;
 		this.id = id;
 		this.troopsLeft = troopsLeft;
 		this.gameState = gameState;
+		this.lobby = clientsLobby;
 		
 		
+	}
+
+	public Lobby getLobby() {
+		return lobby;
 	}
 
 }

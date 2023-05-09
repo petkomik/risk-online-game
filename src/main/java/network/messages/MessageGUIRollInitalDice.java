@@ -1,5 +1,6 @@
 package network.messages;
 
+import game.Lobby;
 import gameState.GameState;
 
 public class MessageGUIRollInitalDice extends Message {
@@ -12,12 +13,14 @@ public class MessageGUIRollInitalDice extends Message {
 
 	private int Id;
 	private int value;
+	private Lobby lobby;
 	
-	public MessageGUIRollInitalDice(GameState gameState, int Id, int value ) {
+	public MessageGUIRollInitalDice(GameState gameState, int Id, int value,Lobby lobby ) {
 		super(MessageType.MessageGUIRollInitalDice);
 		this.gameState = gameState;
 		this.Id = Id;
 		this.value = value;
+		this.lobby = lobby;
 	}
 
 	public int getId() {
@@ -29,6 +32,10 @@ public class MessageGUIRollInitalDice extends Message {
 
 	public int getValue() {
 		return value;
+	}
+
+	public Lobby getLobby() {
+		return lobby;
 	}
 
 }
