@@ -12,4 +12,9 @@ public class MessageGUIendBattle extends Message {
 		super(MessageType.MessageGUIendBattle);
 	}
 
+	public GameState getGameState() {
+		return gameState;
+	}
+	
+
 }

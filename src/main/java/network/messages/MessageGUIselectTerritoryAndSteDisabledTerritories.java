@@ -21,4 +21,17 @@ public class MessageGUIselectTerritoryAndSteDisabledTerritories extends Message 
 		this.unreachableCountries = unreachableCountries;
 	}
 
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public CountryName getCountryName() {
+		return countryName;
+	}
+
+	public ArrayList<CountryName> getUnreachableCountries() {
+		return unreachableCountries;
+	}
+	
+
 }

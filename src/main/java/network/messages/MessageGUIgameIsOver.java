@@ -18,4 +18,12 @@ public class MessageGUIgameIsOver extends Message {
 		this.podium = podium;
 	}
 
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public ArrayList<Player> getPodium() {
+		return podium;
+	}
+
 }

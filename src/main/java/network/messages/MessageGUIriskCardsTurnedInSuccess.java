@@ -22,4 +22,20 @@ public class MessageGUIriskCardsTurnedInSuccess extends Message {
 		this.bonusTroops = bonusTroops;
 	}
 
+	public GameState getGamestate() {
+		return gamestate;
+	}
+
+	public ArrayList<Card> getCard() {
+		return card;
+	}
+
+	public int getIdOfPlayer() {
+		return idOfPlayer;
+	}
+
+	public int getBonusTroops() {
+		return bonusTroops;
+	}
+	
 }

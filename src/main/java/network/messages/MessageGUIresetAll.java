@@ -13,4 +13,7 @@ public class MessageGUIresetAll extends Message {
 		this.gameState = gameState;
 	}
 
+	public GameState getGameState() {
+		return gameState;
+	}
 }

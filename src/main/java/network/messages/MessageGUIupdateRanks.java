@@ -15,4 +15,12 @@ public class MessageGUIupdateRanks extends Message {
 		this.ranks = ranks;
 	}
 
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public int[] getRanks() {
+		return ranks;
+	}
+
 }
