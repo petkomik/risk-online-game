@@ -447,7 +447,7 @@ public class BattleFrameController extends VBox {
 					singleplayerHandler.battleDiceThrow();
 					break;
 				case Multiplayer:
-					// TODO
+					client.battleDiceThrow();
 					break;
 				case Tutorial:
 					// TODO
