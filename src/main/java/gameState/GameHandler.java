@@ -667,10 +667,6 @@ public class GameHandler {
 					System.out.println("player died left are " + gameState.getAlivePlayers().size());
 					if(Logic.isGameOver(gameState)) {
 						this.gameState.addDeadPlayer(this.gameState.getCurrentPlayer().getID());
-						ArrayList<Player> podium = this.gameState.getDeadPlayers();
-						Collections.reverse(podium);
-						this.singlePlayerHandler.gameIsOverOnGUI(podium);
-						System.out.println("game ended " + this.gameState.getCurrentPlayer().getID() + " is winner");
 					}
 				}
 			}
