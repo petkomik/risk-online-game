@@ -494,9 +494,15 @@ public class AILogic {
 			double sum = numTroopsNeighbourOldTerritories + numTroopsNeighbourNewTerritories;
 			double oldRatio = numTroopsNeighbourOldTerritories / sum;
 			double newRatio = 1 - oldRatio;
-			return (int) (newRatio * oldTerritory.getNumberOfTroops());
+			int tmp = (int) (newRatio * oldTerritory.getNumberOfTroops());
+            if(tmp < 1) {
+                return 1;
+            }
+            else {
+                return tmp;
+            }
 		}
-		return 0;
+		return 1;
 	}
 	
 	public static int chooseTroopsToSendToConqueredTerritory(Territory oldTerritory, Territory newTerritory, PlayerAI player) {
@@ -588,7 +594,7 @@ public class AILogic {
 				fromCountry = territory.getCountryName();
 			}
 		}
-		return new Pair(fromCountry, mostOuterCountry2(gameState.getTerritories().values(), player));
+		return new Pair(fromCountry, mostOuterCountry2(gameState.getTerritories().values(), player).getCountryName());
 	}
 	
 	public static Pair<CountryName, CountryName>  chooseTerritoriesPairFortify(GameState gameState, PlayerAI player){
@@ -612,16 +618,16 @@ public class AILogic {
 	public static int chooseTroopsToSendFortify(Territory territory, PlayerAI player) {
 		switch(player.getLevel()) {
 		case EASY:
-			return (int) (Math.random() * territory.getNumberOfTroops()) + 1;
+			return (int) (Math.random() * territory.getNumberOfTroops() - 1) + 1;
 		case CASUAL:
 			if(Math.random() < 0.5) {
-				return (int) (Math.random() * territory.getNumberOfTroops()) + 1;
+				return (int) (Math.random() * territory.getNumberOfTroops() - 1) + 1;
 			}
 			else {
-				return territory.getNumberOfTroops();
+				return territory.getNumberOfTroops() - 1;
 			}
 		case HARD:
-			return territory.getNumberOfTroops();
+			return territory.getNumberOfTroops() - 1;
 		default:
 			return 0;
 		}
