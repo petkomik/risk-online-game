@@ -706,137 +706,188 @@ public class Client {
 	}
 
 	public void playerThrowsInitalDice(int iD) {
+		 Platform.runLater(() -> {
 		this.gameHandler.playerThrowsInitialDice(iD);
+		 });
 	}
 
 	public void clickCountry(int id, CountryName country) {
+		 Platform.runLater(() -> {
 		this.gameHandler.clickCountry(id, country);
+		 });
 	}
 
 	public void cancelNumberOfTroops(CountryName country, ChoosePane choosePane, int idOfPlayer) {
+		 Platform.runLater(() -> {
 		this.gameHandler.cancelNumberOfTroops(country, choosePane, idOfPlayer);
+		 });
 	}
 
 	public void confirmNumberOfTroops(CountryName country, int troops, ChoosePane choosePane, int idOfPlayer) {
+		 Platform.runLater(() -> {
 		this.gameHandler.confirmTroopsToCountry(country, troops, choosePane, idOfPlayer);
+		 });
 	}
 
 	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
+		 Platform.runLater(() -> {
 		this.gameHandler.turnInRiskCards(cards, idOfPlayer);
+		 });
 	}
 
 	public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
+		 Platform.runLater(() -> {
 		System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " +
 				idOfPlayer + " clicks end turn");
 		this.gameHandler.endPhaseTurn(period, phase, idOfPlayer);
+		 });
 	}
 
 	public void battleDiceThrow() {
+		 Platform.runLater(() -> {
 		this.gameHandler.battleDiceThrow();
+		 });
 
 	}
 
 	// ot tuk
 	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
 		this.gamePane.rollInitialDice(idOfPlayer, i);
 		System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " +
 		idOfPlayer + " throes");
+		 });
 
 	}
 
 	public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues, int troopsInAttackAt,
 			int troopsInAttackDf, int[] numberOfDice) throws FileNotFoundException {
-
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIRollDiceBattle(gameHandler.getGameState(), attackerDiceValues, defenderDiceValues,
 				troopsInAttackAt, troopsInAttackDf, numberOfDice, clientsLobby));
-		this.gamePane.rollDiceBattle(attackerDiceValues, defenderDiceValues, troopsInAttackAt, troopsInAttackDf,
-				numberOfDice);
+		try {
+			this.gamePane.rollDiceBattle(attackerDiceValues, defenderDiceValues, troopsInAttackAt, troopsInAttackDf,
+					numberOfDice);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		 });
 	}
 
 	public void showExeceptionOnGUI(Exception e) {
+		 Platform.runLater(() -> {
 		this.gamePane.showException(e.toString());
+		 });
 	}
 
 	public void setPeriodOnGUI(Period period) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIsetPeriod(gameHandler.getGameState(), period, clientsLobby));
 		this.gamePane.setPeriod(period);
+		 });
 	}
 
 	public void setPhaseOnGUI(Phase phase) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIsetPhase(gameHandler.getGameState(), phase, clientsLobby));
 		this.gamePane.setPhase(phase);
+		 });
 	}
 
 	public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIpossessCountry(gameHandler.getGameState(), country, id, troopsLeft, clientsLobby));
 		this.gamePane.claimCountry(country, id);
 		this.gamePane.setAmountOfTroopsLeftToDeploy(troopsLeft);
+		 });
 	}
 
 	public void conquerCountryOnGUI(CountryName country, int id, int troops) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIconquerCountry(gameHandler.getGameState(), country, id, troops, clientsLobby));
 		this.gamePane.conquerCountry(country, id, troops);
+		 });
 	}
 
 	public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
+		 Platform.runLater(() -> {
 		 System.out.println(gameHandler.getGameState().getCurrentPlayer().getID()
 				 + "is set current player send message");
 		sendMessage(new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));
 		this.gamePane.setCurrentPlayer(id);
 		this.gamePane.setAmountOfTroopsLeftToDeploy(troopsLeft);
+		 });
 	}
 
 	public void chnagePlayerOnGUI(int id, ArrayList<Card> cards) {
+		 Platform.runLater(() -> {
 		this.gamePane.setPlayerOnGUI(id, cards);
+		 });
 	}
 
 	public void chooseNumberOfTroopsOnGUI(CountryName country, int min, int max, ChoosePane choosePane) {
+		 Platform.runLater(() -> {
 		System.out.println("Opening choose troops with " + country.toString() + " " + choosePane.toString());
 		this.gamePane.showChoosingTroopsPane(country, min, max, choosePane);
+		 });
 	}
 
 	public void closeTroopsPaneOnGUI() {
+		 Platform.runLater(() -> {
 		this.gamePane.closeChoosingTroopsPane();
+		 }); 
 	}
 
 	public void setTroopsOnTerritory(CountryName countryName, int numTroopsOfCountry) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIsetTroopsOnTerritory(gameHandler.getGameState(), countryName, numTroopsOfCountry,
 				clientsLobby));
 		this.gamePane.setNumTroops(countryName, numTroopsOfCountry);
+		 });
 	}
 
 	public void setTroopsOnTerritoryAndLeftOnGUI(CountryName countryName, int numTroopsOfCountry,
 			int numTroopsOfPlayer) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIsetTroopsOnTerritoryAndLeft(gameHandler.getGameState(), countryName,
 				numTroopsOfCountry, numTroopsOfPlayer, clientsLobby));
 		this.gamePane.setNumTroops(countryName, numTroopsOfCountry);
 		this.gamePane.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
+		 });
 	}
 
 	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom, int numberTo) {
 		sendMessage(new MessageGUImoveTroopsFromTerritoryToOther(gameHandler.getGameState(), from, to, numberFrom,
 				numberTo, clientsLobby));
+		 Platform.runLater(() -> {
 		this.gamePane.setNumTroops(from, numberFrom);
 		this.gamePane.setNumTroops(to, numberTo);
+		 });
 	}
 
 	public void openBattleFrameOnGUI(Battle battle) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIOpenBattleFrame(gameHandler.getGameState(), battle, clientsLobby));
 		this.gamePane.openBattleFrame(battle);
+		 });
 	}
 
 	public void endBattleOnGUI() {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIendBattle(gameHandler.getGameState(), clientsLobby));
 		this.gamePane.closeBattleFrame();
+		 });
 	}
 
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
+		 Platform.runLater(() -> {
 		this.gamePane.setAmountOfTroopsLeftToDeploy(bonusTroops);
 		this.gamePane.setPlayerOnGUI(idOfPlayer, card);
 		for (Card c : card) {
 			System.out.println(c.toString());
 		}
+		 });
 	}
 
 //	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 
@@ -852,13 +903,17 @@ public class Client {
 //	}
 
 	public void updateRanksOnGUI(int[] ranks) {
+		 Platform.runLater(() -> {
 		sendMessage(new MessageGUIupdateRanks(gameHandler.getGameState(), ranks, clientsLobby));
 		this.gamePane.setPlayersRanking(ranks);
+		 });
 	}
 
-	public void gameIsOverOnGUI(ArrayList<Player> podium) {
+	public void gameIsOverOnGUI(ArrayList<Player> podium) {	
+		Platform.runLater(() -> {
 		sendMessage(new MessageGUIgameIsOver(gameHandler.getGameState(), podium, clientsLobby));
 		this.gamePane.endGame(podium);
+	});
 	}
 
 }
