@@ -32,7 +32,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
-import network.Client;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -158,9 +157,6 @@ public class GamePaneController implements Initializable{
 	private Circle[] rankCircle;
 	private Label[] rankLabel;
 
-
-	private Client client;
-
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -217,45 +213,6 @@ public class GamePaneController implements Initializable{
         this.setCurrentPlayer(playerIDs.get(0));
 	}
 	
-	public void initMultiPlayer(Client client, Lobby lobby) {
-		this.gameType = GameType.Multiplayer;
-		this.client = client;
-		this.currentPeriod = Period.DICETHROW;
-		this.lobby = lobby;
-		this.playerColors = new ArrayList<>();
-		this.playerAvatar = new ArrayList<>();
-		this.playerIDs = new ArrayList<>();
-		this.playerIdHash = new HashMap<>();
-		this.cardsPlayerOnGUI = new ArrayList<>();
-		
-		for(Player p : this.lobby.getPlayerList()) {
-			playerColors.add(p.getColor());
-			playerAvatar.add(p.getAvatar());
-			playerIDs.add(p.getID());
-			playerIdHash.put(p.getID(), p);
-		}
-		
-		numOfPlayer = this.lobby.getPlayerList().size();
-		setUpThrowDicePeriod();
-		setUpPlayerList();
-		
-		for(int i = 0; i < numOfPlayer; i++) {
-			circles[i].setFill(Color.web(playerColors.get(i)));
-			rectangles[i].setFill(Color.web(playerColors.get(i)));
-			panes[i].setId(String.valueOf(playerIDs.get(i)));
-		}
-		rectangles[0].setVisible(true);
-        cirPhase.setFill(Color.web(playerColors.get(0)));
-        ivPhase.setImage(new Image(playerAvatar.get(0)));
-		pB.setStyle("-fx-accent: " + playerColors.get(0) + ";");
-        rectCards.setFill(Color.web(playerColors.get(0)));
-        cardsImageView.setImage(new Image(Parameter.phaseLogosdir + "cards" + getColorAsString(Color.web(playerColors.get(0))) + ".png"));
-        
-        this.playerOnGUI = this.playerIdHash.get(AppController.getProfile().getId());
-        this.setCurrentPlayer(playerIDs.get(0));
-	}
-	
-	
 	private void setUpThrowDicePeriod() {
 		diceIV = new ImageView(Parameter.dicedir + "dice1.png");
 		diceIV.setFitWidth(getRelativeHorz(60.0));
@@ -273,7 +230,6 @@ public class GamePaneController implements Initializable{
 		throwDiceButton.setPickOnBounds(true);
 		throwDiceButton.setOnAction(e -> {
 			throwDiceButton.setDisable(true);
-			System.out.println(this.playerOnGUI.getName() + " throws initial dice");
 	    	switch (gameType) {
 			case SinglePlayer:
 		    	this.singlePlayerHandler.playerThrowsInitialDice(this.playerOnGUI.getID());
@@ -491,7 +447,6 @@ public class GamePaneController implements Initializable{
 					break;
 				}
 		    	
-
 		    }
 		});
         
@@ -642,14 +597,6 @@ public class GamePaneController implements Initializable{
 		choosingTroopsPane.setPrefSize(w, h);
 		choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
-		Rectangle rectangle = new Rectangle();
-		rectangle.setArcHeight(5.0);
-		rectangle.setArcWidth(5.0);
-		rectangle.setFill(Color.web("#ecd9c6"));
-		rectangle.setStrokeWidth(0.0);
-		rectangle.setWidth(getRelativeHorz(284.0));
-		rectangle.setHeight(getRelativeVer(72.0));
-		
 		ImageView cancelIV = new ImageView(Parameter.phaseLogosdir + "cancel.png");
 		cancelIV.setFitWidth(getRelativeHorz(31.0));
 		cancelIV.setFitHeight(getRelativeHorz(31.0));
@@ -696,14 +643,10 @@ public class GamePaneController implements Initializable{
 	
 		choosingTroopsPhaseLabel = new Label();
 		choosingTroopsPhaseLabel.setPrefSize(getRelativeHorz(204.0), getRelativeVer(72.0));
+		choosingTroopsPhaseLabel.setLayoutX((w - choosingTroopsPhaseLabel.getPrefWidth()) / 2.0);
+		choosingTroopsPhaseLabel.setLayoutY(getRelativeVer(608.0));
 		choosingTroopsPhaseLabel.setAlignment(Pos.CENTER);
 		choosingTroopsPhaseLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(30)));
-		
-		StackPane confirmationSP = new StackPane();
-		confirmationSP.getChildren().addAll(rectangle, choosingTroopsPhaseLabel);
-		confirmationSP.setLayoutX(getRelativeHorz(622.0));
-		confirmationSP.setLayoutY(getRelativeVer(608.0));
-		
 		
 		lessBtn = new DesignButton();
 		moreBtn = new DesignButton();
@@ -724,14 +667,17 @@ public class GamePaneController implements Initializable{
 		numTroopsBP.setLayoutX((w - numTroopsBP.getPrefWidth()) / 2.0);
 		numTroopsBP.setLayoutY(getRelativeVer(514.0));
 		
-		Rectangle whiteBackground = new Rectangle();
-		whiteBackground.setFill(Color.WHITE);
-		whiteBackground.setWidth(getRelativeHorz(400.0));
-		whiteBackground.setHeight(getRelativeVer(200.0));
-		whiteBackground.setLayoutX((w - whiteBackground.getWidth()) / 2.0);
-		whiteBackground.setLayoutY(getRelativeVer(500));
+		Rectangle backgroundChoosingTroops = new Rectangle();
+		backgroundChoosingTroops.setFill(Color.web("#ecd9c6"));
+		backgroundChoosingTroops.setStrokeType(StrokeType.OUTSIDE);
+		backgroundChoosingTroops.setStrokeWidth(3);
+		backgroundChoosingTroops.setStroke(Color.web("#b87331"));
+		backgroundChoosingTroops.setWidth(getRelativeHorz(400.0));
+		backgroundChoosingTroops.setHeight(getRelativeVer(200.0));
+		backgroundChoosingTroops.setLayoutX((w - backgroundChoosingTroops.getWidth()) / 2.0);
+		backgroundChoosingTroops.setLayoutY(getRelativeVer(500));
 		
-		choosingTroopsPane.getChildren().addAll(whiteBackground, confirmationSP, trueButtonChoosingTroops, falseButtonChoosingTroops, numTroopsBP);
+		choosingTroopsPane.getChildren().addAll(backgroundChoosingTroops, choosingTroopsPhaseLabel, trueButtonChoosingTroops, falseButtonChoosingTroops, numTroopsBP);
 		choosingTroopsPane.setVisible(false);
 		choosingTroopsPane.setPickOnBounds(true);
 		gameBoard.getChildren().add(choosingTroopsPane);
@@ -961,7 +907,7 @@ public class GamePaneController implements Initializable{
 		cirPhase.setFill(Color.web(playerColors.get(turn)));
 		ivPhase.setImage(new Image(playerAvatar.get(turn)));
 		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
-		
+		tradeButton.setDisable(this.currentPlayerID != this.playerOnGUI.getID());
 	}
 	
 	public void setNumTroops(CountryName countryName, int numTroops) {
@@ -1067,41 +1013,45 @@ public class GamePaneController implements Initializable{
 			vbCard.setMinSize(200, 270);
 			vbCard.setPrefSize(getRelativeHorz(200.0), getRelativeVer(270.0));
 			vbCard.setOnMouseClicked(e -> {
-				((VBox)e.getSource()).setLayoutX(0);
-				((VBox)e.getSource()).setLayoutY(0);
-				if(!(dropOnPane1.getChildren().contains(e.getSource())
-						|| dropOnPane2.getChildren().contains(e.getSource())
-						|| dropOnPane3.getChildren().contains(e.getSource()))) {
+				VBox tmpVB = (VBox)e.getSource();
+				tmpVB.setLayoutX(0);
+				tmpVB.setLayoutY(0);
+				Pane tmpP = (Pane) tmpVB.getChildren().get(0);
+				Label tmpL = (Label) tmpP.getChildren().get(0);
+				
+				if(!(dropOnPane1.getChildren().contains(tmpVB)
+						|| dropOnPane2.getChildren().contains(tmpVB)
+						|| dropOnPane3.getChildren().contains(tmpVB))) {
 					if(dropOnPane1.getChildren().size() == 0) {
-						hbCards.getChildren().remove(e.getSource());
-						dropOnPane1.getChildren().add((VBox)e.getSource());
-						selectedCards.add(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText());
+						hbCards.getChildren().remove(tmpVB);
+						dropOnPane1.getChildren().add(tmpVB);
+						selectedCards.add(tmpL.getText());
 					}
 					else if(dropOnPane2.getChildren().size() == 0) {
-						hbCards.getChildren().remove(e.getSource());
-						dropOnPane2.getChildren().add((VBox)e.getSource());
-						selectedCards.add(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText());
+						hbCards.getChildren().remove(tmpVB);
+						dropOnPane2.getChildren().add(tmpVB);
+						selectedCards.add(tmpL.getText());
 					}
 					else if(dropOnPane3.getChildren().size() == 0) {
-						hbCards.getChildren().remove(e.getSource());
-						dropOnPane3.getChildren().add((VBox)e.getSource());
-						selectedCards.add(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText());
+						hbCards.getChildren().remove(tmpVB);
+						dropOnPane3.getChildren().add(tmpVB);
+						selectedCards.add(tmpL.getText());
 					}
 				}
-				else if(dropOnPane1.getChildren().contains(e.getSource())) {
-					dropOnPane1.getChildren().remove(e.getSource());
-					hbCards.getChildren().add((VBox)e.getSource());
-					selectedCards.removeIf(x -> x.equals(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText()));
+				else if(dropOnPane1.getChildren().contains(tmpVB)) {
+					dropOnPane1.getChildren().remove(tmpVB);
+					hbCards.getChildren().add(tmpVB);
+					selectedCards.removeIf(x -> x.equals(tmpL.getText()));
 				}
-				else if(dropOnPane2.getChildren().contains(e.getSource())) {
-					dropOnPane2.getChildren().remove(e.getSource());
-					hbCards.getChildren().add((VBox)e.getSource());
-					selectedCards.removeIf(x -> x.equals(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText()));
+				else if(dropOnPane2.getChildren().contains(tmpVB)) {
+					dropOnPane2.getChildren().remove(tmpVB);
+					hbCards.getChildren().add(tmpVB);
+					selectedCards.removeIf(x -> x.equals(tmpL.getText()));
 				}
-				else if(dropOnPane3.getChildren().contains(e.getSource())) {
-					dropOnPane3.getChildren().remove(e.getSource());
-					hbCards.getChildren().add((VBox)e.getSource());
-					selectedCards.removeIf(x -> x.equals(((Label)((Pane)((VBox)e.getSource()).getChildren().get(0)).getChildren().get(0)).getText()));
+				else if(dropOnPane3.getChildren().contains(tmpVB)) {
+					dropOnPane3.getChildren().remove(tmpVB);
+					hbCards.getChildren().add(tmpVB);
+					selectedCards.removeIf(x -> x.equals(tmpL.getText()));
 				}
 				
 				if(dropOnPane1.getChildren().size() != 0 
@@ -1140,9 +1090,6 @@ public class GamePaneController implements Initializable{
 			countryNamePane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(70.0));
 			countryArmyPane.setPrefSize(getRelativeHorz(200.0), getRelativeVer(200.0));
 
-			
-			
-			
 			
 			if(c.isJoker()) {
 				VBox armiesVB = new VBox();
@@ -1237,6 +1184,7 @@ public class GamePaneController implements Initializable{
 		lastPhaseLogo.setVisible(phase == Phase.FORTIFY);
 		labPhase.setText(phase.toString());
 		spNum.setVisible(phase == Phase.REINFORCE);
+		tradeButton.setDisable(phase != Phase.REINFORCE);
 		this.currentPhase = phase;
 	}
 	
@@ -1372,7 +1320,7 @@ public class GamePaneController implements Initializable{
 
 		boolean attacker = this.playerOnGUI.getID() == battle.getAttackerID();
 
-    	switch (gameType) {
+		switch (gameType) {
 		case SinglePlayer:
 			try {
 				this.battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
@@ -1403,6 +1351,7 @@ public class GamePaneController implements Initializable{
 			break;
 		default:
 			break;
+
 		}
 	}
 	
