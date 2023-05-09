@@ -15,6 +15,9 @@ public class MessageGUIRollInitalDice extends Message {
 	
 	public MessageGUIRollInitalDice(GameState gameState, int Id, int value ) {
 		super(MessageType.MessageGUIRollInitalDice);
+		this.gameState = gameState;
+		this.Id = Id;
+		this.value = value;
 	}
 
 	public int getId() {
