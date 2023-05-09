@@ -714,10 +714,13 @@ public class GameHandler {
         		timer12.setOnFinished(x -> {
             		Pair<CountryName, CountryName> pairAttack = AILogic.chooseTerritoryPairAttack(gameState, player);
             		int troops = AILogic.chooseTroopsToAttackWith(this.gameState.getTerritories().get(pairAttack.getKey()), player, gameState);
-            		System.out.println(pairAttack.getKey().toString() + " " + pairAttack.getValue().toString() + " with troops " + troops);
+            		System.out.println("before attack from " + pairAttack.getKey().toString() + " " + pairAttack.getValue().toString() + " with troops " + troops);
             		this.clickCountry(player.getID(), pairAttack.getKey());
             		this.clickCountry(player.getID(), pairAttack.getValue());
+            		System.out.println("after attack from " + pairAttack.getKey().toString() + " " + pairAttack.getValue().toString() + " with troops " + troops);
+            		System.out.println("before confirming troops" + pairAttack.getValue());
             		this.confirmTroopsToCountry(pairAttack.getValue(), troops, ChoosePane.ATTACK_ATTACK, player.getID());
+            		System.out.println("after confirming troops" + pairAttack.getValue());
             		this.battleDiceThrow();
             		
             		while(this.gameState.getBattle() != null) {
@@ -745,13 +748,18 @@ public class GameHandler {
             	timer14.play();
         		timer14.setOnFinished(x -> {
         			if(AILogic.willFortify(gameState, player)) {
+        				System.out.println("Will fortify checked...");
                 		Pair<CountryName, CountryName> pairFortify = AILogic.chooseTerritoriesPairFortify(gameState, player);
                 		int troops = AILogic.chooseTroopsToSendFortify(this.gameState.getTerritories().get(pairFortify.getKey()), player);
-                		System.out.println(pairFortify.getKey().toString() + " " + pairFortify.getValue().toString() + " with troops " + troops);
+                		System.out.println("before fortifiying from " + pairFortify.getKey().toString() + " " + pairFortify.getValue().toString() + " with troops " + troops);
 
                 		this.clickCountry(player.getID(), pairFortify.getKey());
                 		this.clickCountry(player.getID(), pairFortify.getValue());
+                		System.out.println("after fortifiying from " + pairFortify.getKey().toString() + " " + pairFortify.getValue().toString() + " with troops " + troops);
+                		System.out.println("Before confirmation of " + pairFortify.getValue());
                 		this.confirmTroopsToCountry(pairFortify.getValue(), troops, ChoosePane.FORTIFY, player.getID());
+                		System.out.println("After confirmation of " + pairFortify.getValue());
+
         			}
         			this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), 
                 			this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID());

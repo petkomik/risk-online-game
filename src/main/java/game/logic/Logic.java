@@ -389,7 +389,7 @@ public class Logic {
 		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
 			if(gameState.getCurrentTurnPhase().equals(Phase.FORTIFY)) {
 				if(gameState.getCurrentPlayer().getID() == player.getID()) {
-					if(gameState.getTerritories().get(from).getOwnedByPlayer()
+					if(gameState.getTerritories().get(from) != null && gameState.getTerritories().get(from).getOwnedByPlayer()
 							.equals(gameState.getCurrentPlayer()) ) {
 						if(gameState.getTerritories().get(to).getOwnedByPlayer()
 								.equals(gameState.getCurrentPlayer())) {
@@ -464,7 +464,7 @@ public class Logic {
 	public static boolean battleDiceThrowIsOK(GameState gameState) {
 		if(gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD) ) {
 			if(gameState.getCurrentTurnPhase().equals(Phase.ATTACK)) {
-				if(gameState.getCurrentPlayer().getID() == gameState.getBattle().getAttackerID()) {
+				if(gameState.getBattle() != null && gameState.getCurrentPlayer().getID() == gameState.getBattle().getAttackerID()) {
 					if(gameState.getBattle().getTroopsInAttackAt() > 0 && 
 							gameState.getBattle().getTroopsInAttackDf() > 0) {
 						return true;
