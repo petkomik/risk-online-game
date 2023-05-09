@@ -274,7 +274,17 @@ public class GamePaneController implements Initializable{
 		throwDiceButton.setOnAction(e -> {
 			throwDiceButton.setDisable(true);
 			System.out.println(this.playerOnGUI.getName() + " throws initial dice");
-			this.singlePlayerHandler.playerThrowsInitialDice(this.playerOnGUI.getID());
+	    	switch (gameType) {
+			case SinglePlayer:
+		    	this.singlePlayerHandler.playerThrowsInitialDice(this.playerOnGUI.getID());
+				break;
+			case Tutorial:
+				break;
+			case Multiplayer:
+				break;
+			default:
+				break;
+			}
 		});
 		
 		
@@ -469,7 +479,18 @@ public class GamePaneController implements Initializable{
 		    public void handle(ActionEvent event) {
 		    	gameSound.buttonClickForwardSound();
 		    	System.out.println(playerOnGUI.getName() + " " + playerOnGUI.getID() + "clicked next phase button");
-		    	singlePlayerHandler.endPhaseTurn(currentPeriod, currentPhase, playerOnGUI.getID());
+		    	switch (gameType) {
+				case SinglePlayer:
+			    	singlePlayerHandler.endPhaseTurn(currentPeriod, currentPhase, playerOnGUI.getID());
+					break;
+				case Tutorial:
+					break;
+				case Multiplayer:
+					break;
+				default:
+					break;
+				}
+		    	
 
 		    }
 		});
@@ -881,12 +902,9 @@ public class GamePaneController implements Initializable{
 			System.out.println(this.playerOnGUI.getName() + " " + idOfPlayer + " clicked " + country.toString() + " " + ((currentPhase == null) ? "" : currentPhase.toString()) + " " + currentPeriod.toString());
 			singlePlayerHandler.clickCountry(idOfPlayer, country);
 			break;
-
 		case Tutorial:
-			
 			break;
 		case Multiplayer:
-			
 			break;
 		default:
 			break;
@@ -963,7 +981,17 @@ public class GamePaneController implements Initializable{
 		    public void handle(ActionEvent event) {
 		    	gameSound.buttonClickForwardSound();
 		    	choosingTroopsPane.setVisible(false);
-		    	singlePlayerHandler.cancelNumberOfTroops(countryName, choosePane, playerOnGUI.getID());
+		    	switch (gameType) {
+				case SinglePlayer:
+			    	singlePlayerHandler.cancelNumberOfTroops(countryName, choosePane, playerOnGUI.getID());
+					break;
+				case Tutorial:
+					break;
+				case Multiplayer:
+					break;
+				default:
+					break;
+				}
 		    }
 		});
 		
@@ -972,7 +1000,17 @@ public class GamePaneController implements Initializable{
 		    public void handle(ActionEvent event) {
 		    	gameSound.buttonClickForwardSound();
 		    	choosingTroopsPane.setVisible(false);
-		    	singlePlayerHandler.confirmNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()), choosePane, playerOnGUI.getID());
+		    	switch (gameType) {
+				case SinglePlayer:
+			    	singlePlayerHandler.confirmNumberOfTroops(countryName, Integer.parseInt(numberLabel.getText()), choosePane, playerOnGUI.getID());
+					break;
+				case Tutorial:
+					break;
+				case Multiplayer:
+					break;
+				default:
+					break;
+				}
 		    }
 		});
         
@@ -1077,7 +1115,19 @@ public class GamePaneController implements Initializable{
 					tradeButton.setText("NO TRADE");
 				}
 			});
-			tradeButton.setOnAction(e -> this.singlePlayerHandler.turnInRiskCards(selectedCards, playerOnGUI.getID()));
+			tradeButton.setOnAction(e -> {
+		    	switch (gameType) {
+				case SinglePlayer:
+					this.singlePlayerHandler.turnInRiskCards(selectedCards, playerOnGUI.getID());
+					break;
+				case Tutorial:
+					break;
+				case Multiplayer:
+					break;
+				default:
+					break;
+				}
+			});
 			VBox countryNamePane = new VBox();
 			StackPane countryArmyPane = new StackPane();
 			
@@ -1322,27 +1372,37 @@ public class GamePaneController implements Initializable{
 
 		boolean attacker = this.playerOnGUI.getID() == battle.getAttackerID();
 
-		try {
-			this.battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
-			this.battleFrame.setPrefSize(w, h);
-			battlePane.getChildren().add(battleFrame);
-			gameBoard.getChildren().add(battlePane);
-			battleFrame.setCorrectTroops();
-			Stage stage = (Stage)gameBoard.getScene().getWindow();
-			stage.getScene().heightProperty().addListener(new ChangeListener<Number>() {
-			    @Override 
-			    public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-			    	if(newSceneHeight.doubleValue() != oldSceneHeight.doubleValue()) {
-					try {
-						battleFrame.setCorrectTroops();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
+    	switch (gameType) {
+		case SinglePlayer:
+			try {
+				this.battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
+				this.battleFrame.setPrefSize(w, h);
+				battlePane.getChildren().add(battleFrame);
+				gameBoard.getChildren().add(battlePane);
+				battleFrame.setCorrectTroops();
+				Stage stage = (Stage)gameBoard.getScene().getWindow();
+				stage.getScene().heightProperty().addListener(new ChangeListener<Number>() {
+					@Override 
+					public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+						if(newSceneHeight.doubleValue() != oldSceneHeight.doubleValue()) {
+							try {
+								battleFrame.setCorrectTroops();
+							} catch (FileNotFoundException e) {
+								e.printStackTrace();
+							}
+						}
 					}
-			    	}
-			    }
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case Tutorial:
+			break;
+		case Multiplayer:
+			break;
+		default:
+			break;
 		}
 	}
 	
