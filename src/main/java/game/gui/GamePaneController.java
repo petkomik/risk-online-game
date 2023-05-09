@@ -925,8 +925,7 @@ public class GamePaneController implements Initializable{
 						break;
 					}
 				}
-			}
-			
+			}		
 		}
 		for(StackPane sp : spTroopsDisplay) {
 			if(sp.getId().equals("sp"+countryName.toString())) {
