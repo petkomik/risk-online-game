@@ -508,7 +508,7 @@ public class ServerMainWindowController extends VBox {
 					drawLobbyMenu(selectedLobby);
 
 				}
-
+				
 				// TODO join the lobby and send a message to the server so that the lobby knows
 				// who the new paticipant is
 			}
@@ -565,6 +565,7 @@ public class ServerMainWindowController extends VBox {
 							if (player.getID() == client.getProfile().getId()) {
 								
 								lobby.leaveLobby(player);
+								client.setInALobby(false);
 								client.sendMessage(new MessageUpdateLobby(lobby));
 								searchButton.fire();
 							}

@@ -19,16 +19,10 @@ import game.models.PlayerSingle;
 import gameState.GameHandler;
 import javafx.application.Platform;
 import network.messages.Message;
-import network.messages.MessageAttack;
 import network.messages.MessageConnect;
 import network.messages.MessageCreateLobby;
-import network.messages.MessageDiceThrow;
 import network.messages.MessageDisconnect;
-import network.messages.MessageFortifyTroops;
 import network.messages.MessageJoinLobby;
-import network.messages.MessagePlaceTroops;
-import network.messages.MessagePlayerTurn;
-import network.messages.MessagePossessCountry;
 import network.messages.MessageProfile;
 import network.messages.MessageSend;
 import network.messages.MessageToPerson;
@@ -46,6 +40,7 @@ public class ClientHandler implements Runnable {
 	private Profile profile;
 	private String clientUsername;
 	private Thread clieantHandlerThread;
+	private Lobby lobby ;
 
 	public ClientHandler(Socket socket) {
 		this.socket = socket;
@@ -212,38 +207,7 @@ public class ClientHandler implements Runnable {
 				case MessageProfile:
 					broadcastMessage(new MessageProfile(((MessageProfile) messageFromClient).getProfile()));
 					break;
-				case MessageMove:
-					// Handle the message move message
-					break;
-				case MessagePlayerTurn:
-					broadcastMessage(((MessagePlayerTurn) messageFromClient));
-					break;
-				case MessagePlacingTroops:
-					broadcastMessage(((MessagePlaceTroops) messageFromClient));
-					break;
-				case MessageAttack:
-					broadcastMessage(((MessageAttack) messageFromClient));
-					break;
-				case MessageDiceThrow:
-					broadcastMessage(((MessageDiceThrow) messageFromClient));
 
-					break;
-				case MessagePossessCountry:
-					broadcastMessage(((MessagePossessCountry) messageFromClient));
-					break;
-				case MessageChooseCountry:
-					// Handle the message choose country message
-					break;
-				case MessagePlaceTroops:
-					broadcastMessage(((MessagePlaceTroops) messageFromClient));
-					break;
-				case MessageDiceThrowRequest:
-					// Handle the message dice throw request message
-					break;
-				case MessageFortifyTroops:
-					broadcastMessage(((MessageFortifyTroops) messageFromClient));
-
-					break;
 				case MessageCreateLobby:
 					broadcastMessage(messageFromClient);
 					break;
@@ -260,6 +224,10 @@ public class ClientHandler implements Runnable {
 					
 				broadcastMessageToAllIncludingMe(messageFromClient);
 					break;
+				
+					
+					
+					
 
 				default:
 					// Handle unknown message types, if necessary
@@ -325,6 +293,14 @@ public class ClientHandler implements Runnable {
 
 	public void setClieantHandlerThread(Thread clieantHandlerThread) {
 		this.clieantHandlerThread = clieantHandlerThread;
+	}
+
+	public Lobby getLobby() {
+		return lobby;
+	}
+
+	public void setLobby(Lobby lobby) {
+		this.lobby = lobby;
 	}
 
 }

@@ -2,36 +2,57 @@ package network.messages;
 
 /**
  * enum containing all messagetypes
- * @author srogalsk
+ * @author dignatov
  *
  */
 
 public enum MessageType {
-	Connect, // hat sich verbunden, bei jedem neuen Client, profile, 
+	Connect, 
 	Disconnect,
-	MessageServerCloseConnection,// verlassen vom Server IM CHAT
-	MessageSend, // v
-	MessageProfile, //fragwürdig 
-	MessageMove, //,GameStart (name) Settings in GameStart  
-	MessagePlacingTroops,
+	MessageServerCloseConnection,
+	MessageSend, 
+	MessageProfile, 
 	MessageToPerson,
-	MessageAttack,
-	MessageDiceThrow, // von Server an die Clients mit dem Wert, die random wird vom Server
-	MessagePlayerTurn, // 
-	MessagePossessCountry,
-	MessageChooseCountry,
-	MessagePlaceTroops,
-	MessageJoinGame,// WHAT
-	// MessageCreateGame
-	MessageCreateGame, //WHAT
-	MessageFortifyTroops,
-	MessageJoinLobby,
-	MessageCreateLobby,
 	MessageAllProfiles,
-	MessageUpdateLobbyList,
+	
+	MessageCreateLobby,
+	MessageJoinLobby,
 	MessageUpdateLobby,
+	MessageUpdateLobbyList,
 	MessageinLobby,
-	MessageDiceThrowRequest; // was an dem server gesendet wird (nicht wirklich viel)
+	MessageReadyToPlay,
+	
+	MessageCreateGame,
+	MessageJoinGame,
+	
+	// In Game
+	MessageGUIRollInitalDice, // 
+	MessageGUIRollDiceBattle,
+	MessageGUIshowExcption,
+	MessageGUIsetPeriod,
+	MessageGUIsetPhase,
+	MessageGUIpossessCountry,
+	MessageGUIconquerCountry,
+	MessageGUIsetCurrentPlayer,
+	
+	MessageGUIchnagePlayer,
+	MessageGUIchooseNumberOfTroops,
+	MessageGUIcloseTroopsPane,
+	MessageGUIsetTroopsOnTerritory,
+	MessageGUIsetTroopsOnTerritoryAndLeft,
+	MessageGUImoveTroopsFromTerritoryToOther,
+	MessageGUIOpenBattleFrame,
+	
+	MessageGUIendBattle,
+	MessageGUIriskCardsTurnedInSuccess,
+	MessageGUIselectTerritoryAndSteDisabledTerritories,
+	MessageGUIresetAll,
+	MessageGUIupdateRanks,
+	MessageGUIgameIsOver
+	
+	
+	
+	
 
 	// MessageJoinGame Nachricht
 	// MessageCreateGame

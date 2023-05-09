@@ -70,6 +70,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import network.Client;
+import network.messages.MessageReadyToPlay;
 import network.messages.MessageUpdateLobby;
 
 /*
@@ -449,7 +450,7 @@ public class LobbyMenuController extends StackPane {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				client.setInALobby(false);
+				
 				stage.show();
 
 			}
@@ -624,8 +625,31 @@ public class LobbyMenuController extends StackPane {
 						}
 						System.out.println(pl.getName() + ready);
 					}
+					if (lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1) {
+						System.out.println("start game");
+						try {
+							Node node = (Node) event.getSource();
+							Stage stage = (Stage) node.getScene().getWindow();
+							FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
+							AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
+							GamePaneController gamePaneController = fxmlLoader.getController();
+							
+							GameStatistic gameStatistic = new GameStatistic(LocalDateTime.now(), lobby.getPlayerList().size());
+							AppController.createGameStatistic(gameStatistic);
+							lobby.setGameStatistic(gameStatistic);
+							
+							SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby, gamePaneController);
+							gamePaneController.initSinglePlayer(singleHandler, lobby);
+							stage.getScene().setRoot(anchorPane);
+							stage.show();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+					}
 				} else {
 					for (Player player : lobby.getHumanPlayerList()) {
+						
 						if (player.getID() == client.getProfile().getId()) {
 							if (lobby.getReadyHashMap().get(player)) {
 								lobby.setReady(player, false);
@@ -635,34 +659,13 @@ public class LobbyMenuController extends StackPane {
 							}
 						}
 					}
-
-				}
-				if (lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1) {
-					System.out.println("start game");
-					try {
-						Node node = (Node) event.getSource();
-						Stage stage = (Stage) node.getScene().getWindow();
-						FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
-						AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
-						GamePaneController gamePaneController = fxmlLoader.getController();
-						
-						GameStatistic gameStatistic = new GameStatistic(LocalDateTime.now(), lobby.getPlayerList().size());
-						AppController.createGameStatistic(gameStatistic);
-						lobby.setGameStatistic(gameStatistic);
-
-						SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby, gamePaneController);
-						gamePaneController.initSinglePlayer(singleHandler, lobby);
-						stage.getScene().setRoot(anchorPane);
-						stage.show();
-					} catch (IOException e) {
-						e.printStackTrace();
+					if((lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1)){
+						client.sendMessage(new MessageReadyToPlay());
+					}else{
+						client.sendMessage(new MessageUpdateLobby(lobby));
 					}
-
 				}
 
-				if (!singleplayerLobby) {
-					client.sendMessage(new MessageUpdateLobby(lobby));
-				}
 			}
 		});
 
