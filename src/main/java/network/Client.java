@@ -538,6 +538,8 @@ public class Client {
 								 gameHandler.setGameState(mesCur.getGameState());
 								 gamePane.setCurrentPlayer(mesCur.getId());
 								 gamePane.setAmountOfTroopsLeftToDeploy(mesCur.getTroopsLeft());
+								 System.out.println(gameHandler.getGameState().getCurrentPlayer().getID()
+										 + "is set current player received message");
 							 });
 							break;
 						case MessageGUIsetTroopsOnTerritory:
@@ -738,6 +740,8 @@ public class Client {
 	}
 
 	public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
+		 System.out.println(gameHandler.getGameState().getCurrentPlayer().getID()
+				 + "is set current player send message");
 		sendMessage(new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));
 		this.gamePane.setCurrentPlayer(id);
 		this.gamePane.setAmountOfTroopsLeftToDeploy(troopsLeft);
