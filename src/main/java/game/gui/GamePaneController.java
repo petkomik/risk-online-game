@@ -1354,9 +1354,8 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void setAmountOfTroopsLeftToDeploy(int number) {
-		Platform.runLater(()->{
-			labNum.setText(String.valueOf(number));
-		});
+		labNum.setText(String.valueOf(number));
+		
 	}
 	
 	public void endGame(ArrayList<Player> playersByRank) {

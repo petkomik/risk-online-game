@@ -260,6 +260,7 @@ public class Client {
 							// Otherwise, wait for a message from the client
 							message = (Message) inputStream.readObject();
 						}
+						
 
 						switch (message.getMessageType()) {
 						case MessageSend:
@@ -487,18 +488,25 @@ public class Client {
 
 							break;
 						case MessageGUIRollInitalDice:
-							
-							gameHandler.setGameState(((MessageGUIRollInitalDice) message).getGameState());
-							gamePane.rollInitialDice(((MessageGUIRollInitalDice) message).getId(),
-									((MessageGUIRollInitalDice) message).getValue());
-							
+							final MessageGUIRollInitalDice me = ((MessageGUIRollInitalDice) message);
+							 Platform.runLater(() -> {
+								 gameHandler.setGameState(me.getGameState());
+								 gamePane.rollInitialDice(me.getId(),
+										 me.getValue());
+								 
+							 });
 							break;
 						case MessageGUIRollDiceBattle:
-							
-							MessageGUIRollDiceBattle mes = ((MessageGUIRollDiceBattle) message);
-							gameHandler.setGameState(((MessageGUIRollDiceBattle) message).getGameState());
-							gamePane.rollDiceBattle(mes.getAttackerDiceValues(), mes.getDefenderDiceValues(), 
-									mes.getTroopsInAttackAt(), mes.getTroopsInAttackDf(), mes.getNumberOfDice());
+							final MessageGUIRollDiceBattle mes = ((MessageGUIRollDiceBattle) message);
+							 Platform.runLater(() -> {
+								 gameHandler.setGameState(((MessageGUIRollDiceBattle) mes).getGameState());
+								 try {
+									 gamePane.rollDiceBattle(mes.getAttackerDiceValues(), mes.getDefenderDiceValues(), 
+											 mes.getTroopsInAttackAt(), mes.getTroopsInAttackDf(), mes.getNumberOfDice());
+								 } catch (FileNotFoundException e) {
+									 e.printStackTrace();
+								 }
+							 });
 							break;
 						case MessageGUIsetPeriod:
 							MessageGUIsetPeriod mesP = ((MessageGUIsetPeriod) message);
@@ -519,8 +527,8 @@ public class Client {
 							break;
 						case MessageGUIconquerCountry:
 							gameHandler.setGameState(((MessageGUIconquerCountry) message).getGameState());
-							gamePane
-							.conquerCountry(((MessageGUIconquerCountry)message).getCountry(), ((MessageGUIconquerCountry)message).getId(),
+							gamePane.conquerCountry(((MessageGUIconquerCountry)message).getCountry(), 
+									((MessageGUIconquerCountry)message).getId(),
 									((MessageGUIconquerCountry)message).getTroops());
 							
 							break;
@@ -580,12 +588,12 @@ public class Client {
 					} catch (Exception e) {
 						closeEverything(socket, inputStream, outputStream);
 						e.printStackTrace();
-						break;
 					}
 				}
-			}
 
-		});
+			}				
+			});
+
 		clientThread.start();
 	}
 
@@ -674,6 +682,8 @@ public class Client {
 	}
 
 	public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
+		System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " +
+				idOfPlayer + " clicks end turn");
 		this.gameHandler.endPhaseTurn(period, phase, idOfPlayer);
 	}
 
@@ -686,6 +696,9 @@ public class Client {
 	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
 		sendMessage(new MessageGUIRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
 		this.gamePane.rollInitialDice(idOfPlayer, i);
+		System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " +
+		idOfPlayer + " throes");
+
 	}
 
 	public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues, int troopsInAttackAt,
