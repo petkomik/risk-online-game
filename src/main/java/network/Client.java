@@ -510,37 +510,25 @@ public class Client {
 							break;
 						case MessageGUIsetPeriod:
 							MessageGUIsetPeriod mesP = ((MessageGUIsetPeriod) message);
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIsetPeriod) mesP).getGameState());
+							gameHandler.setGameState(((MessageGUIsetPeriod) message).getGameState());
 							gamePane.setPeriod(mesP.getPeriod());
-							 });
 							break;
 						case MessageGUIsetPhase:
 							MessageGUIsetPhase  mesPh = ((MessageGUIsetPhase)message);
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIsetPhase) mesPh).getGameState());
+							gameHandler.setGameState(((MessageGUIsetPhase) message).getGameState());
 							gamePane.setPhase(mesPh.getPhase());
-							 });
 							break;
 						case MessageGUIpossessCountry:
 							MessageGUIpossessCountry  mesCo =  ((MessageGUIpossessCountry)message);
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIpossessCountry) mesCo).getGameState());
+							gameHandler.setGameState(((MessageGUIpossessCountry) message).getGameState());
 							gamePane.claimCountry(mesCo.getCountry(), mesCo.getId());
-							gamePane
-							.setAmountOfTroopsLeftToDeploy(((MessageGUIpossessCountry)mesCo).getTroopsLeft());
-							 });
+							gamePane.setAmountOfTroopsLeftToDeploy(((MessageGUIpossessCountry)message).getTroopsLeft());
 							break;
 						case MessageGUIconquerCountry:
-							
-							MessageGUIconquerCountry  mesCoCo =  ((MessageGUIconquerCountry)message);
-
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIconquerCountry) mesCoCo).getGameState());
-							gamePane.conquerCountry(((MessageGUIconquerCountry)mesCoCo).getCountry(), 
-									((MessageGUIconquerCountry)mesCoCo).getId(),
-									((MessageGUIconquerCountry)mesCoCo).getTroops());
-							 });
+							gameHandler.setGameState(((MessageGUIconquerCountry) message).getGameState());
+							gamePane.conquerCountry(((MessageGUIconquerCountry)message).getCountry(), 
+									((MessageGUIconquerCountry)message).getId(),
+									((MessageGUIconquerCountry)message).getTroops());
 							
 							break;
 						case MessageGUIsetCurrentPlayer:
@@ -550,80 +538,50 @@ public class Client {
 								 gamePane.setCurrentPlayer(mesCur.getId());
 								 gamePane.setAmountOfTroopsLeftToDeploy(mesCur.getTroopsLeft());
 								 System.out.println(gameHandler.getGameState().getCurrentPlayer().getID()
-										 + "is set current player received message");
+										 + " is set current player received message " + mesCur.getId());
 							 });
 							break;
 						case MessageGUIsetTroopsOnTerritory:
-							
-							MessageGUIsetTroopsOnTerritory  mesTrOnTe =  ((MessageGUIsetTroopsOnTerritory)message);
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIsetTroopsOnTerritory) mesTrOnTe).getGameState());
-							gamePane.setNumTroops(((MessageGUIsetTroopsOnTerritory)mesTrOnTe)
-									.getCountryName(), ((MessageGUIsetTroopsOnTerritory)mesTrOnTe)
+							gameHandler.setGameState(((MessageGUIsetTroopsOnTerritory) message).getGameState());
+							gamePane.setNumTroops(((MessageGUIsetTroopsOnTerritory)message)
+									.getCountryName(), ((MessageGUIsetTroopsOnTerritory)message)
 									.getNumTroopsOfCountry());
-							 });
 							break;
 						case MessageGUIsetTroopsOnTerritoryAndLeft:
-							MessageGUIsetTroopsOnTerritoryAndLeft  mesTrOnTeAndLe =  ((MessageGUIsetTroopsOnTerritoryAndLeft)message);
-
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIsetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe).getGameState());
-							gamePane.setNumTroops(((MessageGUIsetTroopsOnTerritoryAndLeft)mesTrOnTeAndLe).getCountryName(),
-									((MessageGUIsetTroopsOnTerritoryAndLeft)mesTrOnTeAndLe).getNumTroopsOfCountry());
-							gamePane.setAmountOfTroopsLeftToDeploy(((MessageGUIsetTroopsOnTerritoryAndLeft)mesTrOnTeAndLe)
+							gameHandler.setGameState(((MessageGUIsetTroopsOnTerritoryAndLeft) message).getGameState());
+							gamePane.setNumTroops(((MessageGUIsetTroopsOnTerritoryAndLeft)message).getCountryName(),
+									((MessageGUIsetTroopsOnTerritoryAndLeft)message).getNumTroopsOfCountry());
+							gamePane.setAmountOfTroopsLeftToDeploy(((MessageGUIsetTroopsOnTerritoryAndLeft)message)
 									.getNumTroopsOfPlayer());
-							 });
 							break;
 							
 						case MessageGUImoveTroopsFromTerritoryToOther:
-							
-							MessageGUImoveTroopsFromTerritoryToOther  mesTrFromTeToO =  ((MessageGUImoveTroopsFromTerritoryToOther)message);
-
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUImoveTroopsFromTerritoryToOther) mesTrFromTeToO).getGameState());
-							gamePane.setNumTroops(((MessageGUImoveTroopsFromTerritoryToOther)mesTrFromTeToO).getFrom(), 
-									((MessageGUImoveTroopsFromTerritoryToOther)mesTrFromTeToO).getNumberFrom());		
+							gameHandler.setGameState(((MessageGUImoveTroopsFromTerritoryToOther) message).getGameState());
+							gamePane.setNumTroops(((MessageGUImoveTroopsFromTerritoryToOther)message).getFrom(), 
+									((MessageGUImoveTroopsFromTerritoryToOther)message).getNumberFrom());		
 							gamePane.setNumTroops(
-									((MessageGUImoveTroopsFromTerritoryToOther)mesTrFromTeToO).getTo(), 
-									((MessageGUImoveTroopsFromTerritoryToOther)mesTrFromTeToO).getNumberTo()
+									((MessageGUImoveTroopsFromTerritoryToOther)message).getTo(), 
+									((MessageGUImoveTroopsFromTerritoryToOther)message).getNumberTo()
 									);
-							 });
 							break;
 							
 						case MessageGUIOpenBattleFrame:
-							
-							MessageGUIOpenBattleFrame  mesOBF =  ((MessageGUIOpenBattleFrame)message);
-
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIOpenBattleFrame) mesOBF).getGameState());
-							gamePane.openBattleFrame(((MessageGUIOpenBattleFrame)mesOBF).getBattle());
-							 });
+							gameHandler.setGameState(((MessageGUIOpenBattleFrame) message).getGameState());
+							gamePane.openBattleFrame(((MessageGUIOpenBattleFrame)message).getBattle());
 							break;
 						case MessageGUIendBattle:
-							
-							MessageGUIendBattle  mesEB =  ((MessageGUIendBattle)message);
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIendBattle) mesEB).getGameState());
+							gameHandler.setGameState(((MessageGUIendBattle) message).getGameState());
 							gamePane.closeBattleFrame();
-							 });
 
 							break;
 						case MessageGUIupdateRanks:
-							
-							MessageGUIupdateRanks  mesUpRa =  ((MessageGUIupdateRanks)message);
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIupdateRanks) mesUpRa).getGameState());
-							gamePane.setPlayersRanking(((MessageGUIupdateRanks)mesUpRa).getRanks());
-							 });
+							gameHandler.setGameState(((MessageGUIupdateRanks) message).getGameState());
+							gamePane.setPlayersRanking(((MessageGUIupdateRanks)message).getRanks());
 
 							break;
 						case MessageGUIgameIsOver:
-							
-							MessageGUIgameIsOver  mesGaOv =  ((MessageGUIgameIsOver)message);
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIgameIsOver) mesGaOv).getGameState());
-							gamePane.endGame(((MessageGUIgameIsOver)mesGaOv).getPodium());
-							 });
+							gameHandler.setGameState(((MessageGUIgameIsOver) message).getGameState());
+							gamePane.endGame(((MessageGUIgameIsOver)message).getPodium());
 
 							break;
 

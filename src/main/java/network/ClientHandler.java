@@ -86,9 +86,9 @@ public class ClientHandler implements Runnable {
 	public void broadcastMessageWithinLobby(Message message, Lobby lobby) {
 		for (ClientHandler clientHandler : clientHandlers) {
 			try {
+				// &&this.getProfile().getId() != player.getID()
 				for (Player player : lobby.getHumanPlayerList()) {
-					if (clientHandler.getProfile().getId() == player.getID() &&
-							this.getProfile().getId() != player.getID()  ) {
+					if (clientHandler.getProfile().getId() == player.getID()   ) {
 						clientHandler.objectOutputStream.writeObject(message);
 						clientHandler.objectOutputStream.flush();
 					}

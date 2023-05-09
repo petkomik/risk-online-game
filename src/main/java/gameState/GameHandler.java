@@ -91,12 +91,12 @@ public class GameHandler {
 	 * decides what to do with the click, depending on period and phase 
 	 */
 	
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
+	public void setGameState(GameState gameStaten) {
+		this.gameState = gameStaten;
 	}
 
 	public GameState getGameState() {
-		return gameState;
+		return this.gameState;
 	}
 
 	public void clickCountry(int idOfPlayer, CountryName country) {
