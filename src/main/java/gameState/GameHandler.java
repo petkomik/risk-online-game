@@ -548,9 +548,7 @@ public class GameHandler {
 		}
 	}
 	
-	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) 
-			throws WrongCountryException, WrongTroopsCountException, WrongPhaseException,
-				WrongCardsException, WrongCardsSetException, WrongPeriodException {
+	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
 		ArrayList<Card> cardsCards = Logic.arrayListFromStringsToCard(cards, this.gameState, idOfPlayer);
 		if(Logic.turnInRiskCards(cardsCards, this.gameState.getPlayers().get(idOfPlayer), 
 				this.gameState)) {

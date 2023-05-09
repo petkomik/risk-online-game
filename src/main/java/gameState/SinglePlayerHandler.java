@@ -78,11 +78,7 @@ public class SinglePlayerHandler {
 	 */
 
 	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
-		try {
-			this.gameHandler.turnInRiskCards(cards, idOfPlayer);
-		} catch (Exception e) {
-			this.showExeceptionOnGUI(e);
-		}
+		this.gameHandler.turnInRiskCards(cards, idOfPlayer);
 	}
 	
 	/*

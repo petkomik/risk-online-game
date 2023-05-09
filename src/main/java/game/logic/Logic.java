@@ -575,12 +575,13 @@ public class Logic {
 			GameState gameState, int idOfPlayer) {
 		ArrayList<Card> returnList = new ArrayList<Card>();
 		for(String s : cards) {
-			if(s.equals("Joker")) {
+			if(s.equalsIgnoreCase("Joker")) {
 				returnList.add(gameState.getRiskCardsInPlayers().get(idOfPlayer).stream()
 						.filter(x -> x.isJoker())
 						.collect(Collectors.toList()).get(0));
 			} else {
 				returnList.add(gameState.getRiskCardsInPlayers().get(idOfPlayer).stream()
+					.filter(x -> !x.isJoker())
 					.filter(x -> x.getName().equals(CountryName.valueOf(s.replaceAll("[\n\r]", ""))))
 					.collect(Collectors.toList()).get(0));
 			}
