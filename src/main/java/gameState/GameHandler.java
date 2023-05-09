@@ -708,6 +708,11 @@ public class GameHandler {
 										.getNumberOfTroops() - 1), 
 								this.gameState.getTerritories().get(changed.getCountryNameAt())
 								.getNumberOfTroops() - 1, ChoosePane.ATTACK_COLONISE);
+						if(Logic.isGameOver(gameState)) {
+							ArrayList<Player> podium = this.gameState.getDeadPlayers();
+							Collections.reverse(podium);
+							this.singlePlayerHandler.gameIsOverOnGUI(podium);
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -736,6 +741,11 @@ public class GameHandler {
 										.getNumberOfTroops() - 1), 
 								this.gameState.getTerritories().get(changed.getCountryNameAt())
 								.getNumberOfTroops() - 1, ChoosePane.ATTACK_COLONISE);
+						if(Logic.isGameOver(gameState)) {
+							ArrayList<Player> podium = this.gameState.getDeadPlayers();
+							Collections.reverse(podium);
+							this.client.gameIsOverOnGUI(podium);
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
