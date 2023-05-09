@@ -533,10 +533,12 @@ public class Client {
 							
 							break;
 						case MessageGUIsetCurrentPlayer:
-							gameHandler.setGameState(((MessageGUIsetCurrentPlayer) message).getGameState());
-							gamePane.setCurrentPlayer(((MessageGUIsetCurrentPlayer)message).getId());
-							gamePane.setAmountOfTroopsLeftToDeploy(((MessageGUIsetCurrentPlayer)message).getTroopsLeft());
-						
+							final MessageGUIsetCurrentPlayer mesCur = ((MessageGUIsetCurrentPlayer) message);
+							 Platform.runLater(() -> {
+								 gameHandler.setGameState(mesCur.getGameState());
+								 gamePane.setCurrentPlayer(mesCur.getId());
+								 gamePane.setAmountOfTroopsLeftToDeploy(mesCur.getTroopsLeft());
+							 });
 							break;
 						case MessageGUIsetTroopsOnTerritory:
 							gameHandler.setGameState(((MessageGUIsetTroopsOnTerritory) message).getGameState());
