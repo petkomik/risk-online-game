@@ -183,6 +183,14 @@ public class BattleFrameController extends VBox {
 		this.defenderColor = Color.web(battle.getDefenderColor());
 		this.gameType = battle.getGameType();
 		this.client = client;
+		for (String avatar : Parameter.allAvatars) {
+			if (attackingAvatar.contains(avatar)) {
+				attackingAvatar = Parameter.avatarsdir + avatar;
+			}
+			if (defendingAvatar.contains(avatar)) {
+				defendingAvatar = Parameter.avatarsdir + avatar;
+			}
+		}
 		setup();
 		this.throwBtn.setVisible(attacker);
 	}
