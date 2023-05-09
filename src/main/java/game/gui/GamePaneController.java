@@ -38,6 +38,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.ColorAdjust;
@@ -966,11 +967,20 @@ public class GamePaneController implements Initializable{
 
 		ArrayList<Card> cards = this.cardsPlayerOnGUI;
 		ArrayList<String> selectedCards = new ArrayList<>();
+
+		AnchorPane cardsAnchorPane = new AnchorPane();
+		
+		ScrollPane cardsScrollPane = new ScrollPane(cardsAnchorPane);
+		cardsScrollPane.setMinHeight(getRelativeVer(300.0));
+		cardsScrollPane.setPrefWidth(getRelativeHorz(666.0));
+		cardsScrollPane.setLayoutX(getRelativeHorz(435.0));
+		cardsScrollPane.setLayoutY(getRelativeVer(510.0));
+		
+		
 		HBox hbCards = new HBox();
 		hbCards.setSpacing(20);
 		hbCards.setPrefHeight(getRelativeVer(270.0));
-		hbCards.setLayoutX(getRelativeHorz(435.0));
-		hbCards.setLayoutY(getRelativeVer(510.0));
+		
 		for(Card c : cards) {
 			VBox vbCard = new VBox();
 			vbCard.setMinSize(200, 270);
@@ -1123,7 +1133,8 @@ public class GamePaneController implements Initializable{
 			vbCard.getChildren().addAll(countryNamePane, countryArmyPane);
 			hbCards.getChildren().add(vbCard);
 		}
-		cardsPopUp.getChildren().add(hbCards);
+		cardsAnchorPane.getChildren().add(hbCards);
+		cardsPopUp.getChildren().add(cardsScrollPane);
 		cardsPopUp.setVisible(true);
 	}
 	
