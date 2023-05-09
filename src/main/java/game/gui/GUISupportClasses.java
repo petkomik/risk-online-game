@@ -46,6 +46,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Screen;
 import network.Client;
 import network.messages.MessageSend;
+import network.messages.MessageSendInGame;
 import network.messages.MessageToPerson;
 import general.AppController;
 import general.GameSound;
@@ -469,6 +470,8 @@ public class GUISupportClasses {
 			items = names.getItems();
 
 			dragArea.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0;");
+			dragArea.minHeightProperty().bind(dragArea.maxHeightProperty());
+			dragArea.maxHeightProperty().bind(dragArea.prefHeightProperty());
 			dragArea.setPrefHeight(30 * ratio);
 			dragArea.getChildren().add(new Spacing(1));
 			HBox.setHgrow(dragArea, Priority.ALWAYS);
@@ -629,16 +632,28 @@ public class GUISupportClasses {
 									// refers to the client object
 									// Assume that client.getLobbies() returns a HashMap<String, Lobby> and client
 									// refers to the client object
-
+									if(!client.isInAGame()) {
 									client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
 											findProfileFromString(username), client.isInALobby()));
+									}else {
+										client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
+												findProfileFromString(username)));
+										}
+									
 
 								} else if (!messageToBeSend.equals(null) && names.getValue().equals("All")) {
 									// send the message to the general chat
 									// Assume that lobbyGUIList is a HashMap<String, LobbyGUI> and client refers to
 									// the client object
-									client.sendMessage(
-											new MessageSend(messageToBeSend, client.getProfile(), client.isInALobby()));
+									if(!client.isInAGame()) {
+										client.sendMessage(
+												new MessageSend(messageToBeSend, client.getProfile(), client.isInALobby()));
+										}else {
+											System.out.println(client.getClientsLobby().getLobbyName());
+
+											client.sendMessage(new MessageSendInGame(messageToBeSend, client.getClientsLobby(), client.getProfile()));
+										}
+
 								}
 							}
 						});

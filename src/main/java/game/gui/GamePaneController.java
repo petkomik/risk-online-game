@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 
 import game.Battle;
 import game.Lobby;
+import game.gui.GUISupportClasses.ChatButton;
+import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
 import game.logic.GameType;
 import game.models.Card;
@@ -160,11 +162,17 @@ public class GamePaneController implements Initializable{
 	private StackPane[] rankSP;
 	private Circle[] rankCircle;
 	private Label[] rankLabel;
-
 	
+	private ChatButton chatButton;
+	private ChatWindow chatWindow;
+	
+
+
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		setUpMapComponents();
+		setUpChatButton();
 		setUpLeaveGameButton();
 		setUpPhaseBoard();
 		setUpNextPhaseButton();
@@ -215,6 +223,7 @@ public class GamePaneController implements Initializable{
         
         this.playerOnGUI = this.playerIdHash.get(playerIDs.get(0));
         this.setCurrentPlayer(playerIDs.get(0));
+		setUpChatWindow();
 	}
 	
 	public void initMultiPlayer(Client client, Lobby lobby) {
@@ -253,6 +262,7 @@ public class GamePaneController implements Initializable{
         
         this.playerOnGUI = this.playerIdHash.get(AppController.getProfile().getId());
         this.setCurrentPlayer(playerIDs.get(0));
+		setUpChatWindow();
 	}
 
 	
@@ -437,6 +447,51 @@ public class GamePaneController implements Initializable{
 		vbPlayerList.setSpacing(getRelativeVer(20.0));
 		
 		gameBoard.getChildren().add(vbPlayerList);
+	}
+	private void setUpChatWindow() {
+		chatWindow = ServerMainWindowController.getChatPane();
+		chatWindow.setVisible(false);
+		chatWindow.setPickOnBounds(true);
+		chatWindow.setLayoutX(0.5 * w - chatWindow.getMaxWidth() / 2);
+		chatWindow.setLayoutY((0.5 * h - chatWindow.getPrefHeight() / 2));
+		gameBoard.getChildren().add(chatWindow);
+		
+	}
+	
+	private void setUpChatButton() {
+		try {
+			chatButton = new ChatButton(new Insets(10 , 20 , 10 , 20),
+					30, 28 , 170 , true);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		
+		chatButton.setLayoutX((1300.0/1536.0) * w);
+		chatButton.setLayoutY((40.0/864.0) * h);
+		chatButton.setPickOnBounds(true);
+		chatButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, (18.0/1536.0) * w));
+		
+		chatButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				gameSound.buttonClickForwardSound();
+
+				if (!chatButton.isSelected()) {
+					chatButton.setSelected(false);
+					chatWindow.setVisible(false);
+					System.out.println(chatWindow.isVisible()+ " SERVERMAIN set on 'false' ");
+				} else {
+					chatButton.setSelected(true);
+					chatWindow.setVisible(true);
+					System.out.println(chatWindow.isVisible()+ " SERVERMAIN set on 'true' ");
+				}
+				System.out.println(chatWindow.getParent() + " ist chats vater in SMW");
+
+			}
+		});
+
+
+		gameBoard.getChildren().add(chatButton);
 	}
 	private void setUpLeaveGameButton() {
 		Button leaveGameButton = new DesignButton();
@@ -1405,7 +1460,7 @@ public class GamePaneController implements Initializable{
 			break;
 		case Multiplayer:
 			try {
-				this.battleFrame = new BattleFrameController(battle, this.client, attacker);
+				this.battleFrame = new BattleFrameController(battle, this.client, attacker, chatWindow);
 				this.battleFrame.setPrefSize(w, h);
 				battlePane.getChildren().add(battleFrame);
 				gameBoard.getChildren().add(battlePane);
@@ -1442,9 +1497,14 @@ public class GamePaneController implements Initializable{
 	
 	public void closeBattleFrame() {
 		this.battlePane.setVisible(false);
+		this.gameBoard.getChildren().remove(chatWindow);
+		this.chatWindow = ((BattleFrameController)this.battlePane.getChildren().get(0)).getChatWindow();
+		this.gameBoard.getChildren().add(chatWindow);
 		this.battlePane.getChildren().removeIf(x -> true);
+	
 		
 	}
+	
 	
 	public void showException(String message) {
 		Alert alert = new Alert(AlertType.ERROR);
@@ -1509,5 +1569,10 @@ public class GamePaneController implements Initializable{
 	private void clickLeaveGameButton(ActionEvent e) {
 		
 	}
+	
+	public ChatWindow getChatWindow() {
+		return chatWindow;
+	}
+
 
 }

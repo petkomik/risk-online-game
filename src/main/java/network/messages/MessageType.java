@@ -11,6 +11,7 @@ public enum MessageType {
 	Disconnect,
 	MessageServerCloseConnection,
 	MessageSend, 
+	MessageSendInGame,
 	MessageProfile, 
 	MessageToPerson,
 	MessageAllProfiles,

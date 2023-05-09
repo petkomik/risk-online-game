@@ -32,6 +32,7 @@ import network.messages.MessageGUIsetTroopsOnTerritoryAndLeft;
 import network.messages.MessageGUIupdateRanks;
 import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
+import network.messages.MessageSendInGame;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
 
@@ -89,6 +90,22 @@ public class ClientHandler implements Runnable {
 				// &&this.getProfile().getId() != player.getID()
 				for (Player player : lobby.getHumanPlayerList()) {
 					if (clientHandler.getProfile().getId() == player.getID()   ) {
+						clientHandler.objectOutputStream.writeObject(message);
+						clientHandler.objectOutputStream.flush();
+					}
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void broadcastMessageWithinLobbyWithoutMe(Message message, Lobby lobby) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				for (Player player : lobby.getHumanPlayerList()) {
+					if (clientHandler.getProfile().getId() == player.getID() && !clientHandler.clientUsername.equals(clientUsername) ) {
 						clientHandler.objectOutputStream.writeObject(message);
 						clientHandler.objectOutputStream.flush();
 					}
@@ -190,6 +207,9 @@ public class ClientHandler implements Runnable {
 				case MessageSend:
 					System.out.println("case MessageSend in Handler Success 0");
 					broadcastMessage(messageFromClient);
+					break;
+				case MessageSendInGame:
+					broadcastMessageWithinLobbyWithoutMe(messageFromClient, ((MessageSendInGame)messageFromClient).getLobby());
 					break;
 				case Connect:
 					// all clients send their profile to the new Client

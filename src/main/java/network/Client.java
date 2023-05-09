@@ -65,6 +65,7 @@ import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
 import network.messages.MessageReadyToPlay;
 import network.messages.MessageSend;
+import network.messages.MessageSendInGame;
 import network.messages.MessageServerCloseConnection;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
@@ -84,6 +85,7 @@ public class Client {
 	GUISupportClasses.ChatWindow chat;
 	private boolean host;
 	private boolean isInALobby = false;
+	private boolean isInAGame = false;
 	private GamePaneController gamePane;
 	private GameHandler gameHandler;
 
@@ -296,6 +298,12 @@ public class Client {
 							// System.out.println(((MessageSend) message).getMessage());
 
 							break;
+						case MessageSendInGame:
+							MessageSendInGame mesChat = ((MessageSendInGame) message);
+							Platform.runLater(()-> {
+								chat.addLabel(mesChat.getProfile().getUserName() +": " + mesChat.getMessage());
+							});
+							break;
 						case Connect:
 							// all clients profile of New connected client and send their profile only to
 							// this one clinet
@@ -475,13 +483,21 @@ public class Client {
 							lobbyWithAvatars.updateAvatarDir();
 							for (Player player : lobbyWithAvatars.getPlayersJoined()) {
 								if (profile.getId() == player.getID()) {
+									Platform.runLater(()->{
+										
 									gameHandler = new GameHandler(lobbyWithAvatars);
 									gameHandler.initMultiplayer(returnClient());
 									clientsLobby = lobbyWithAvatars;
 									ServerMainWindowController.startMultyplayerGame(lobbyWithAvatars);
+									//TODO when leaving game set the chat back on ServerMainWindowControllers chat also set isInAGame false
+									isInAGame = true;
+									setInALobby(false);
+									chat = gamePane.getChatWindow();
+									System.out.println(isInAGame);
+									});
 								}
 							}
-
+							// TODO has to be checked
 							lobbies.remove(lobbyWithAvatars.getLobbyName());
 							ServerMainWindowController.drawLobbies(true);
 
@@ -895,6 +911,10 @@ public class Client {
 		Platform.runLater(() -> {
 			sendMessage(new MessageGUIgameIsOver(gameHandler.getGameState(), podium, clientsLobby));
 		});
+	}
+
+	public boolean isInAGame() {
+		return isInAGame;
 	}
 
 }

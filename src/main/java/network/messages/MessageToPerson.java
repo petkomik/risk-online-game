@@ -37,6 +37,14 @@ public class MessageToPerson extends Message {
 		this.setInALobby(inAlobby);
 	}
 	
+	public MessageToPerson(String message ,Profile fromProfile, Profile toProfile) {
+		super(MessageType.MessageToPerson);
+		this.fromProfile = fromProfile;
+		this.toProfile = toProfile;
+		this.strinMessage = message;
+		
+	}
+	
 	public MessageToPerson(String stringMessage, String username) {
 		super(MessageType.MessageToPerson);
 		this.strinMessage =  stringMessage;

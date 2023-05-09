@@ -71,7 +71,8 @@ public class BattleFrameController extends VBox {
 //	priavte MultiPlayerHandler mult...
 	
 	private HBox chatDiv;
-	private DesignButton chatButton;
+	private ChatButton chatButton;
+	private ChatWindow chatWindow;
 	
 	private HBox imgTerritories;
 	private StackPane defendingStack;
@@ -165,7 +166,7 @@ public class BattleFrameController extends VBox {
 		this.throwBtn.setVisible(attacker);
 	}
 	
-	public BattleFrameController(Battle battle, Client client, boolean attacker) throws Exception {
+	public BattleFrameController(Battle battle, Client client, boolean attacker, ChatWindow chatWindow) throws Exception {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * 
 				 Screen.getPrimary().getVisualBounds().getHeight() 
@@ -192,6 +193,7 @@ public class BattleFrameController extends VBox {
 				defendingAvatar = Parameter.avatarsdir + avatar;
 			}
 		}
+		this.chatWindow = chatWindow;
 		setup();
 		this.throwBtn.setVisible(attacker);
 	}
@@ -211,8 +213,7 @@ public class BattleFrameController extends VBox {
 		 * Includes imgAttacking, spacingImg, imgDefending
 		 * ImageView are wrapped in ImageViewPane which delivers responsiveness
 		 */
-		
-		chatButton = new DesignButton(new Insets(10 * menuRatio, 20 * menuRatio, 
+		chatButton = new ChatButton(new Insets(10 * menuRatio, 20 * menuRatio, 
 				10 * menuRatio, 20 * menuRatio), 30, 28 * menuRatio, 170 * menuRatio, true);
 		chatButton.setAlignment(Pos.CENTER);
 		chatDiv = new HBox();
@@ -458,12 +459,21 @@ public class BattleFrameController extends VBox {
 	    });
 		
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent event) {
-		    	AppController.getGameSound().buttonClickForwardSound();
-		    	// TODO
-		    	System.out.println("Open Chat");
-	    	}
+			@Override
+			public void handle(ActionEvent event) {
+
+				if (!chatButton.isSelected()) {
+					chatButton.setSelected(false);
+					chatWindow.setVisible(false);
+					System.out.println(chatWindow.isVisible()+ " SERVERMAIN set on 'false' ");
+				} else {
+					chatButton.setSelected(true);
+					chatWindow.setVisible(true);
+					System.out.println(chatWindow.isVisible()+ " SERVERMAIN set on 'true' ");
+				}
+				System.out.println(chatWindow.getParent() + " ist chats vater in SMW");
+
+			}
 		});
 	    	   
 		diceSection.setSpacing(50 * menuRatio);
@@ -485,7 +495,7 @@ public class BattleFrameController extends VBox {
 		HBox.setHgrow(spacingControls1, Priority.ALWAYS);
 		HBox.setHgrow(spacingControls2, Priority.ALWAYS);
 
-		this.getChildren().add(diceAndProfile);		
+		this.getChildren().addAll(diceAndProfile,chatWindow);		
 	}
 	
 	public FlowPane diceImageFactory (int k, boolean at) throws FileNotFoundException {
@@ -704,6 +714,10 @@ public class BattleFrameController extends VBox {
 			
 			throwBtn.setDisable(false);
 		});
+	}
+	
+	public ChatWindow getChatWindow() {
+		return chatWindow;
 	}
 	
 }
