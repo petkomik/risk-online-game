@@ -608,6 +608,7 @@ public class Client {
 							Platform.runLater(() -> {
 								gameHandler.setGameState(((MessageGUIendBattle) mesEB).getGameState());
 								gamePane.closeBattleFrame();
+								System.out.println("I received a message to close my battle frame " + getProfile().getId());
 							});
 
 							break;
