@@ -173,7 +173,6 @@ public class BattleFrameController extends VBox {
 		this.menuRatio = Math.min(ratio + 0.3, 1);
 		this.attackingPNG = new Territory(battle.getCountryNameAt(), battle.getContinentAt()).getAddressToPNG();
 		this.defendingPNG = new Territory(battle.getCountryNameDf(), battle.getContinentDf()).getAddressToPNG();
-		this.defendingPNG = battle.getDefendingPNG();
 		this.troopsInAttackAt = battle.getTroopsInAttackAt();
 		this.troopsInAttackDf = battle.getTroopsInAttackDf();
 		this.maxDiceToThrow = battle.getMaxDiceToThrow();
