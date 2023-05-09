@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -613,88 +614,96 @@ public class BattleFrameController extends VBox {
 		this.dicesAttacker = attackerDiceValues;
 		this.dicesDefender = defenderDiceValues;
         
-        timeline = new Timeline(new KeyFrame(Duration.millis(80.0), e -> {
-    		
-    		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
-    			Random random = new Random();
-        		int n = random.nextInt(6)+1;
-                DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
-                try {
-					dice.setImage(new Image(new FileInputStream(
-							Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
+		Platform.runLater(() -> {
+			timeline = new Timeline(new KeyFrame(Duration.millis(80.0), e -> {
+				
+				for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
+					Random random = new Random();
+					int n = random.nextInt(6)+1;
+					DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
+					try {
+						dice.setImage(new Image(new FileInputStream(
+								Parameter.dicedir + "dice" + String.valueOf(n) + ".png")));
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
+					final int m = k;
+					diceImagesAt.getChildren().set(m, dice);
+				}
+				
+				for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
+					Random random = new Random();
+					int n = random.nextInt(6)+1;
+					DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
+					try {
+						dice.setImage(new Image(new FileInputStream(
+								Parameter.dicedir + "dice" + String.valueOf(n) + "b.png")));
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
+					final int m = k;
+					diceImagesDf.getChildren().set(m, dice);       
+				}
+				
+			})
+					);
+			timeline.setCycleCount(12);
+			timeline.play();
+			
+			timeline.setOnFinished(finish -> {
+				try {
+					this.timelineFinished(attackerDiceValues, defenderDiceValues);
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
-                final int m = k;
-            	diceImagesAt.getChildren().set(m, dice);
-    		}
-    		
-    		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
-    			Random random = new Random();
-        		int n = random.nextInt(6)+1;
-                DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
-                try {
-					dice.setImage(new Image(new FileInputStream(
-							Parameter.dicedir + "dice" + String.valueOf(n) + "b.png")));
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
-                final int m = k;
-            	diceImagesDf.getChildren().set(m, dice);       
-    		}
-    		
-    		})
-		);
-		timeline.setCycleCount(12);
-		timeline.play();
-		
-		timeline.setOnFinished(finish -> {
-			try {
-				this.timelineFinished(attackerDiceValues, defenderDiceValues);
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
+			});
 		});
 	}
 	
 	public void timelineFinished(int[] attackerDiceValues, int[] defenderDiceValues) throws FileNotFoundException {
-		for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
-			DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
-			try {
-				dice.setImage(new Image(new FileInputStream(
-						Parameter.dicedir + "dice" + String.valueOf(attackerDiceValues[k]) + ".png")));
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
+		Platform.runLater(() -> {
+			for (int k = 0; k < diceImagesAt.getChildren().size(); k++) {
+				DiceFactory dice = (DiceFactory) diceImagesAt.getChildren().get(k);
+				try {
+					dice.setImage(new Image(new FileInputStream(
+							Parameter.dicedir + "dice" + String.valueOf(attackerDiceValues[k]) + ".png")));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				final int m = k;
+				diceImagesAt.getChildren().set(m, dice);
 			}
-			final int m = k;
-			diceImagesAt.getChildren().set(m, dice);
-		}
-		
-		for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
-			DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
-			try {
-				dice.setImage(new Image(new FileInputStream(
-						Parameter.dicedir + "dice" + String.valueOf(defenderDiceValues[k]) + "b.png")));
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
+			
+			for (int k = 0; k < diceImagesDf.getChildren().size(); k++) {
+				DiceFactory dice = (DiceFactory) diceImagesDf.getChildren().get(k);
+				try {
+					dice.setImage(new Image(new FileInputStream(
+							Parameter.dicedir + "dice" + String.valueOf(defenderDiceValues[k]) + "b.png")));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				final int m = k;
+				diceImagesDf.getChildren().set(m, dice);       
 			}
-			final int m = k;
-			diceImagesDf.getChildren().set(m, dice);       
-		}
-		
-		this.setCorrectTroops();
-		troopsTextAt.setText(String.valueOf(this.troopsInAttackAt));
-		troopsTextDf.setText(String.valueOf(this.troopsInAttackDf));
-		
-		
-		while(this.diceImagesAt.getChildren().size() > this.maxDiceToThrow) {
-			this.diceImagesAt.getChildren().remove(0);
-		}
-		if(this.diceImagesDf.getChildren().size() > this.defendingDice) {
-			this.diceImagesDf.getChildren().remove(0);
-		}
-		
-		throwBtn.setDisable(false);
+			
+			try {
+				this.setCorrectTroops();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			troopsTextAt.setText(String.valueOf(this.troopsInAttackAt));
+			troopsTextDf.setText(String.valueOf(this.troopsInAttackDf));
+			
+			
+			while(this.diceImagesAt.getChildren().size() > this.maxDiceToThrow) {
+				this.diceImagesAt.getChildren().remove(0);
+			}
+			if(this.diceImagesDf.getChildren().size() > this.defendingDice) {
+				this.diceImagesDf.getChildren().remove(0);
+			}
+			
+			throwBtn.setDisable(false);
+		});
 	}
 	
 }
