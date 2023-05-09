@@ -23,6 +23,7 @@ import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -1353,7 +1354,9 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void setAmountOfTroopsLeftToDeploy(int number) {
-		labNum.setText(String.valueOf(number));
+		Platform.runLater(()->{
+			labNum.setText(String.valueOf(number));
+		});
 	}
 	
 	public void endGame(ArrayList<Player> playersByRank) {
