@@ -457,16 +457,18 @@ public class Client {
 							break;
 						case MessageReadyToPlay:
 							MessageReadyToPlay messageReadyToPlay  = ((MessageReadyToPlay) message);
-							for (Player player : messageReadyToPlay.getLobby().getPlayersJoined()) {
+							Lobby lobbyWithAvatars = messageReadyToPlay.getLobby();
+							lobbyWithAvatars.updateAvatarDir();
+							for (Player player : lobbyWithAvatars.getPlayersJoined()) {
 								if (profile.getId() == player.getID()) {
-									gameHandler = new GameHandler(messageReadyToPlay.getLobby());
+									gameHandler = new GameHandler(lobbyWithAvatars);
 									
-									ServerMainWindowController.startMultyplayerGame(messageReadyToPlay.getLobby());
+									ServerMainWindowController.startMultyplayerGame(lobbyWithAvatars);
 								}
 							}
 							
 							
-							lobbies.remove(((MessageReadyToPlay) message).getLobby().getLobbyName() );
+							lobbies.remove(lobbyWithAvatars.getLobbyName());
 							ServerMainWindowController.drawLobbies(true);
 							
 							break;

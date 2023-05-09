@@ -195,7 +195,16 @@ public class Lobby implements Serializable{
 		this.getPlayerList().add(aiP);
 		this.setReady(aiP, true);
 	
-		
+	}
+	
+	public void updateAvatarDir() {
+		for(Player ply : this.playersJoined) {
+			for (String avatar : Parameter.allAvatars) {
+				if (ply.getAvatar().contains(avatar)) {
+					ply.setAvatar(Parameter.avatarsdir + avatar);
+				}
+			}
+		}	
 	}
 
 	public void removeAI() {
