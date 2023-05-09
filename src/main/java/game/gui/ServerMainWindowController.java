@@ -18,6 +18,7 @@ import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Player;
 import game.models.PlayerSingle;
+import gameState.GameHandler;
 import general.*;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
@@ -27,6 +28,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -642,4 +644,27 @@ public class ServerMainWindowController extends VBox {
 	public static DesignButton getSearchButton() {
 		return searchButton;
 	}
+	
+	
+	public static  void startMultyplayerGame(Lobby lobby){
+		
+		try {
+			Stage stage = (Stage) topContainer.getScene().getWindow();
+			FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource( "gameFrame.fxml"));
+			AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
+			GamePaneController gamePaneController = fxmlLoader.getController();
+			gamePaneController.initMultiPlayer(client, lobby);
+			
+//			GameStatistic gameStatistic = new GameStatistic(LocalDateTime.now(), lobby.getPlayerList().size());
+//			AppController.createGameStatistic(gameStatistic);
+		//TODO
+			//	messageReadyToPlay.setGameStatistic(gameStatistic);
+			client.setGamePane(gamePaneController);
+			stage.getScene().setRoot(anchorPane);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 }

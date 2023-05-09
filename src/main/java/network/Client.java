@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,16 +14,27 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javafx.application.Platform;
 
 import database.Profile;
+import game.GameStatistic;
 import game.Lobby;
+import game.gui.CreateProfilePaneController;
 import game.gui.GUISupportClasses;
+import game.gui.GamePaneController;
 import game.gui.LobbyGUI;
 import game.gui.ServerMainWindowController;
 import game.models.Player;
+import gameState.GameHandler;
+import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.GameSound;
+import general.Parameter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageCreateLobby;
@@ -30,6 +42,7 @@ import network.messages.MessageDisconnect;
 
 import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
+import network.messages.MessageReadyToPlay;
 import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
 import network.messages.MessageToPerson;
@@ -50,6 +63,8 @@ public class Client {
 	GUISupportClasses.ChatWindow chat;
 	private boolean host;
 	private boolean isInALobby = false;
+	private  GamePaneController gamePane;
+	private GameHandler gameHandler;
 
 	
 
@@ -440,6 +455,22 @@ public class Client {
 							ServerMainWindowController.drawLobbies(true);
 				    		ServerMainWindowController.getSearchButton().fire();
 							break;
+						case MessageReadyToPlay:
+							MessageReadyToPlay messageReadyToPlay  = ((MessageReadyToPlay) message);
+							for (Player player : messageReadyToPlay.getLobby().getPlayersJoined()) {
+								if (profile.getId() == player.getID()) {
+									gameHandler = new GameHandler(messageReadyToPlay.getLobby());
+									
+									ServerMainWindowController.startMultyplayerGame(messageReadyToPlay.getLobby());
+								}
+							}
+							
+							
+							lobbies.remove(((MessageReadyToPlay) message).getLobby().getLobbyName() );
+							ServerMainWindowController.drawLobbies(true);
+							
+							break;
+							
 						default:
 							break;
 						}
@@ -469,6 +500,7 @@ public class Client {
 	public Profile getProfile() {
 		return profile;
 	}
+	
 
 	public Lobby getClientsLobby() {
 		return clientsLobby;
@@ -498,5 +530,17 @@ public class Client {
 
 	public void setInALobby(boolean isInALobby) {
 		this.isInALobby = isInALobby;
+	}
+	private static Parent loadFXML(String fxml) throws IOException {
+		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
+		return fxmlLoader.load();
+	}
+
+	public  GamePaneController getGamePane() {
+		return gamePane;
+	}
+
+	public  void setGamePane(GamePaneController gamePane) {
+		this.gamePane = gamePane;
 	}
 }

@@ -1,14 +1,21 @@
 package network.messages;
 
+import game.Lobby;
+
 public class MessageReadyToPlay  extends Message{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public MessageReadyToPlay() {
+	private Lobby lobby;
+	public MessageReadyToPlay(Lobby lobby) {
 		super(MessageType.MessageReadyToPlay);
+		this.lobby = lobby;
+	}
+	
+	public Lobby getLobby() {
+		return lobby;
 	}
 	
 

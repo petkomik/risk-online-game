@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import network.Client;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -157,6 +158,9 @@ public class GamePaneController implements Initializable{
 	private Circle[] rankCircle;
 	private Label[] rankLabel;
 
+
+	private Client client;
+
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -212,6 +216,45 @@ public class GamePaneController implements Initializable{
         this.playerOnGUI = this.playerIdHash.get(playerIDs.get(0));
         this.setCurrentPlayer(playerIDs.get(0));
 	}
+	
+	public void initMultiPlayer(Client client, Lobby lobby) {
+		this.gameType = GameType.Multiplayer;
+		this.client = client;
+		this.currentPeriod = Period.DICETHROW;
+		this.lobby = lobby;
+		this.playerColors = new ArrayList<>();
+		this.playerAvatar = new ArrayList<>();
+		this.playerIDs = new ArrayList<>();
+		this.playerIdHash = new HashMap<>();
+		this.cardsPlayerOnGUI = new ArrayList<>();
+		
+		for(Player p : this.lobby.getPlayerList()) {
+			playerColors.add(p.getColor());
+			playerAvatar.add(p.getAvatar());
+			playerIDs.add(p.getID());
+			playerIdHash.put(p.getID(), p);
+		}
+		
+		numOfPlayer = this.lobby.getPlayerList().size();
+		setUpThrowDicePeriod();
+		setUpPlayerList();
+		
+		for(int i = 0; i < numOfPlayer; i++) {
+			circles[i].setFill(Color.web(playerColors.get(i)));
+			rectangles[i].setFill(Color.web(playerColors.get(i)));
+			panes[i].setId(String.valueOf(playerIDs.get(i)));
+		}
+		rectangles[0].setVisible(true);
+        cirPhase.setFill(Color.web(playerColors.get(0)));
+        ivPhase.setImage(new Image(playerAvatar.get(0)));
+		pB.setStyle("-fx-accent: " + playerColors.get(0) + ";");
+        rectCards.setFill(Color.web(playerColors.get(0)));
+        cardsImageView.setImage(new Image(Parameter.phaseLogosdir + "cards" + getColorAsString(Color.web(playerColors.get(0))) + ".png"));
+        
+        this.playerOnGUI = this.playerIdHash.get(AppController.getProfile().getId());
+        this.setCurrentPlayer(playerIDs.get(0));
+	}
+	
 	
 	private void setUpThrowDicePeriod() {
 		diceIV = new ImageView(Parameter.dicedir + "dice1.png");

@@ -8,26 +8,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.function.BiConsumer;
 
 import database.Profile;
 import game.Lobby;
-import game.gui.LobbyGUI;
-import game.gui.MainApp;
-import game.models.Player;
-import game.models.PlayerSingle;
-import gameState.GameHandler;
-import javafx.application.Platform;
 import network.messages.Message;
 import network.messages.MessageConnect;
-import network.messages.MessageCreateLobby;
 import network.messages.MessageDisconnect;
 import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
-import network.messages.MessageSend;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
-import network.messages.MessageUpdateLobbyList;
 
 public class ClientHandler implements Runnable {
 
@@ -224,6 +214,9 @@ public class ClientHandler implements Runnable {
 					
 				broadcastMessageToAllIncludingMe(messageFromClient);
 					break;
+				case MessageReadyToPlay:
+				broadcastMessageToAllIncludingMe(messageFromClient);
+				break;
 				
 					
 					

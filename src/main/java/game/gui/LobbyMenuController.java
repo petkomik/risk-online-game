@@ -660,7 +660,7 @@ public class LobbyMenuController extends StackPane {
 						}
 					}
 					if((lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1)){
-						client.sendMessage(new MessageReadyToPlay());
+						client.sendMessage(new MessageReadyToPlay(lobby));
 					}else{
 						client.sendMessage(new MessageUpdateLobby(lobby));
 					}
