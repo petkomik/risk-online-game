@@ -593,10 +593,10 @@ public class Client {
 							
 							MessageGUIOpenBattleFrame  mesOBF =  ((MessageGUIOpenBattleFrame)message);
 
-							 Platform.runLater(() -> {
-							gameHandler.setGameState(((MessageGUIOpenBattleFrame) mesOBF).getGameState());
-							gamePane.openBattleFrame(((MessageGUIOpenBattleFrame)mesOBF).getBattle());
-							 });
+							Platform.runLater(() -> {
+								gameHandler.setGameState(((MessageGUIOpenBattleFrame) mesOBF).getGameState());
+								gamePane.openBattleFrame(((MessageGUIOpenBattleFrame)mesOBF).getBattle());
+							});
 							break;
 						case MessageGUIendBattle:
 							

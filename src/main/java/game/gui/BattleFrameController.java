@@ -171,7 +171,8 @@ public class BattleFrameController extends VBox {
 				 / (1846 * 1080);
 		this.menuRatio = Math.min(ratio + 0.3, 1);
 		this.menuRatio = Math.min(ratio + 0.3, 1);
-		this.attackingPNG = battle.getAttackingPNG();
+		this.attackingPNG = new Territory(battle.getCountryNameAt(), battle.getContinentAt()).getAddressToPNG();
+		this.defendingPNG = new Territory(battle.getCountryNameDf(), battle.getContinentDf()).getAddressToPNG();
 		this.defendingPNG = battle.getDefendingPNG();
 		this.troopsInAttackAt = battle.getTroopsInAttackAt();
 		this.troopsInAttackDf = battle.getTroopsInAttackDf();
@@ -186,7 +187,6 @@ public class BattleFrameController extends VBox {
 		setup();
 		this.throwBtn.setVisible(attacker);
 	}
-
 
 	public void setup() throws Exception {
 
