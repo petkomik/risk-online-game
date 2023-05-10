@@ -11,8 +11,10 @@ import game.logic.Logic;
 import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerSingle;
+import game.models.Territory;
 import gameState.GameState;
 import gameState.Period;
+import gameState.Phase;
 
 public class GameLogicTest {
 	
@@ -34,11 +36,14 @@ public class GameLogicTest {
 		gameState.setCurrentPlayer(0);
 		gameState.setCurrentGamePeriod(Period.COUNTRYPOSESSION);
 		testTerritory = CountryName.Argentina; // choose a test territory
+        gameState.setInitialTroops(10);
+		gameState.getTerritories().get(testTerritory).setOwnedByPlayer(player1);
 
 	}
 
 	@Test
 	void testClaimTerritory() {
+		gameState.getTerritories().get(testTerritory).setOwnedByPlayer(null);
 		// Test claiming a territory when it is unclaimed
 		boolean result = Logic.claimTerritory(player1, gameState, testTerritory);
 		assertTrue(result);
@@ -67,6 +72,85 @@ public class GameLogicTest {
 		result = Logic.claimTerritory(player1, gameState, testTerritory);
 		assertFalse(result);
 	}
+	
+	@Test
+	void testCanInitialDeployTroopsToTerritory() {
+		gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
+	    // Assert that player can initially deploy troops to territory
+	    assertTrue(Logic.canInitialDeployTroopsToTerritory(gameState, player1, testTerritory));
+	    
+	    // Assert that player cannot deploy troops if they have no troops left
+	    gameState.getPlayerTroopsLeft().put(player1.getID(), 0);
+	    assertFalse(Logic.canInitialDeployTroopsToTerritory(gameState, player1, testTerritory));
+	    
+	    // Assert that player cannot deploy troops to a territory they don't own
+	    gameState.getTerritories().get(testTerritory).setOwnedByPlayer(new PlayerSingle("Player 2", 1));
+	    assertFalse(Logic.canInitialDeployTroopsToTerritory(gameState, player1, testTerritory));
+	    
+	    // Assert that player cannot deploy troops during the wrong game period
+	    gameState.setCurrentGamePeriod(Period.COUNTRYPOSESSION);
+	    assertFalse(Logic.canInitialDeployTroopsToTerritory(gameState, player1, testTerritory));
+	    
+	    // Assert that a different player cannot deploy troops to the same territory
+	    gameState.setCurrentGamePeriod(Period.INITIALDEPLOY);
+	    assertFalse(Logic.canInitialDeployTroopsToTerritory(gameState, new PlayerSingle("Player 2", 1), testTerritory));
+	}
+	
+	@Test
+	void testCanReinforceTroopsToTerritory() {
+		// Test valid reinforcement
+		gameState.setCurrentGamePeriod(Period.MAINPERIOD);
+		gameState.setCurrentTurnPhase(Phase.REINFORCE);
+	    assertTrue(Logic.canReinforceTroopsToTerritory(gameState, player1, testTerritory));
+
+	    // Test invalid reinforcement due to different player
+	    assertFalse(Logic.canReinforceTroopsToTerritory(gameState, new PlayerSingle("Player 2", 1), testTerritory));
+
+	    // Test invalid reinforcement due to wrong game period
+	    gameState.setCurrentGamePeriod(Period.COUNTRYPOSESSION);
+	    assertFalse(Logic.canReinforceTroopsToTerritory(gameState, player1, testTerritory));
+
+	    // Test invalid reinforcement due to territory not owned by player
+	    gameState.setCurrentGamePeriod(Period.MAINPERIOD);
+	    gameState.getTerritories().get(testTerritory).setOwnedByPlayer(new PlayerSingle("Player 2", 1));
+	    assertFalse(Logic.canReinforceTroopsToTerritory(gameState, player1, testTerritory));
+
+	    // Test invalid reinforcement due to no troops left to deploy
+	    gameState.getTerritories().get(testTerritory).setOwnedByPlayer(player1);
+	    gameState.getPlayerTroopsLeft().put(player1.getID(), 0);
+	    assertFalse(Logic.canReinforceTroopsToTerritory(gameState, player1, testTerritory));
+
+	    // Test invalid reinforcement due to wrong turn phase
+	    gameState.getPlayerTroopsLeft().put(player1.getID(), 1);
+	    gameState.setCurrentTurnPhase(Phase.ATTACK);
+	    assertFalse(Logic.canReinforceTroopsToTerritory(gameState, player1, testTerritory));
+
+	}
+	
+	@Test
+	void testCanAttack() {
+	    // Set up test data
+	    Territory attacker = gameState.getTerritories().get(testTerritory);
+	    Territory defender = gameState.getTerritories().get(CountryName.India);
+	    attacker.addNumberOfTroops(10);
+	    defender.addNumberOfTroops(5);
+	    gameState.getTerritories().put(attacker.getCountryName(), attacker);
+	    gameState.getTerritories().put(defender.getCountryName(), defender);
+	    attacker.getNeighboringTerritories().add(defender);
+	    defender.getNeighboringTerritories().add(attacker);
+
+	    // Test cases
+	    assertFalse(Logic.canAttack(gameState, attacker, attacker)); // Cannot attack itself
+	    assertTrue(Logic.canAttack(gameState, attacker, defender)); // Valid Attack
+	    attacker.setNumberOfTroops(1);
+	    assertFalse(Logic.canAttack(gameState, attacker, defender)); // Not enough troops to attack
+	    attacker.setNumberOfTroops(2);
+	    assertTrue(Logic.canAttack(gameState, attacker, defender)); // Valid attack
+	    defender.setOwnedByPlayer(player1);
+	    assertFalse(Logic.canAttack(gameState, attacker, defender)); // Cannot attack own territory
+	}
+
+
 
 	@Test
 	void fortifyTroopsTest() {
