@@ -732,4 +732,16 @@ public class LobbyMenuController extends StackPane {
 
 		return chatWindow;
 	}
+	
+	public void disableForGuest(int id) {
+		if(lobby.getLobbyHost()!=id) {
+			settingsControlPane.setDisable(true);
+		}
+	}
+	
+	public void enableForNewHost(int id) {
+		if(lobby.getLobbyHost()==id) {
+			settingsControlPane.setDisable(false);
+		}
+	}
 }

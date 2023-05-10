@@ -460,7 +460,7 @@ public class ServerMainWindowController extends VBox {
 				// the lobby in that we get in client and set as myLobby(clientsLobby) is the
 				// lobby of the other person
 
-				Lobby aLobby = new Lobby();
+				Lobby aLobby = new Lobby(client.getProfile().getId());
 			
 				aLobby.joinLobby(new PlayerSingle(client.getProfile()));
 				
@@ -566,6 +566,16 @@ public class ServerMainWindowController extends VBox {
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
 								
+								if(lobby.getLobbyHost() == client.getProfile().getId()&&lobby.getHumanPlayerList().size()>1) {
+									
+									lobby.setLobbyHost(lobby.getHumanPlayerList().get(1).getID());
+									
+									for (Player playerRemain : lobby.getHumanPlayerList()) {
+											lobbyMenuController.enableForNewHost(playerRemain.getID());
+									}
+									
+								}
+								
 								lobby.leaveLobby(player);
 								client.setInALobby(false);
 								client.sendMessage(new MessageUpdateLobby(lobby));
@@ -583,6 +593,11 @@ public class ServerMainWindowController extends VBox {
 				
 				vBoxLobbyMenuController.getChildren().clear();
 				vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
+				for (Player player : lobby.getHumanPlayerList()) {
+					if (player.getID() == client.getProfile().getId()) {
+						lobbyMenuController.disableForGuest(client.getProfile().getId());
+					}
+				}
 				vBoxLobbyMenuController.setVisible(true);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
