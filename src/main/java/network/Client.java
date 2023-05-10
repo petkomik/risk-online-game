@@ -359,12 +359,12 @@ public class Client {
 							if (isInLobby1) {
 								if (isSenderInSameLobby1) {
 									chat.addLabel(((MessageToPerson) message).getStringMessage(),
-											((MessageToPerson) message).getFromProfile().getUserName());
+											"(private) " + ((MessageToPerson) message).getFromProfile().getUserName());
 								}
 
 							} else {
 								if (!isInALobby) {
-									chat.addLabel(textMessage1, profileFrom1.getUserName());
+									chat.addLabel(textMessage1,"(private) " + profileFrom1.getUserName());
 								}
 
 							}

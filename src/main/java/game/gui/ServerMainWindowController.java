@@ -566,6 +566,7 @@ public class ServerMainWindowController extends VBox {
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
 								
+								// changes the lobbyHost/Owner
 								if(lobby.getLobbyHost() == client.getProfile().getId()&&lobby.getHumanPlayerList().size()>1) {
 									
 									lobby.setLobbyHost(lobby.getHumanPlayerList().get(1).getID());
@@ -575,7 +576,6 @@ public class ServerMainWindowController extends VBox {
 									}
 									
 								}
-								
 								lobby.leaveLobby(player);
 								client.setInALobby(false);
 								client.sendMessage(new MessageUpdateLobby(lobby));

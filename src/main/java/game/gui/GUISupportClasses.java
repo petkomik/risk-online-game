@@ -730,7 +730,7 @@ public class GUISupportClasses {
 		public void addLabel(String messageFromCLient, String profile) {
 
 			Text text = new Text(messageFromCLient);
-			text.setFill(Color.YELLOW);
+			text.setFill(Color.WHITE);
 			text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
 			Text username = new Text(profile + ": ");
