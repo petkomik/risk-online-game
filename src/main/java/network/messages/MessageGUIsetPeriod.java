@@ -2,7 +2,7 @@ package network.messages;
 
 
 
-import game.Lobby;
+import game.models.Lobby;
 import gameState.GameState;
 import gameState.Period;
 

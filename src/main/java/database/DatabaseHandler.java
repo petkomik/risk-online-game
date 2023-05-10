@@ -7,8 +7,6 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import game.GameStatistic;
-
 /**
  * contains methods to get the Profile data from the database and store it on the database.
  *

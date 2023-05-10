@@ -1,7 +1,7 @@
 package network.messages;
 
 import database.Profile;
-import game.Lobby;
+import game.models.Lobby;
 
 public class MessageSendInGame extends Message {
 	

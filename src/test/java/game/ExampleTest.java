@@ -1,6 +1,9 @@
 //@author Petko Mikov
 package game;
 import org.junit.jupiter.api.Test;
+
+import game.models.Lobby;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 

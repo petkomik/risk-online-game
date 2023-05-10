@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import game.logic.Logic;
 import game.models.CountryName;
+import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
 import game.models.Territory;

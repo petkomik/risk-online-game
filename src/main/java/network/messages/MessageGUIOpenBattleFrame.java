@@ -1,7 +1,7 @@
 package network.messages;
 
-import game.Battle;
-import game.Lobby;
+import game.models.Battle;
+import game.models.Lobby;
 import gameState.GameState;
 
 public class MessageGUIOpenBattleFrame extends Message {

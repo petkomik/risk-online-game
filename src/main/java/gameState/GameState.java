@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import game.Battle;
-import game.Lobby;
 import game.gui.BattleFrameController;
 import game.gui.GamePaneController;
-import game.logic.GameType;
+import game.models.Battle;
 import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
+import game.models.Lobby;
 import game.models.Player;
 import game.models.Territory;
 import general.AppController;

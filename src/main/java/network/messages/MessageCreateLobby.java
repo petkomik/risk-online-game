@@ -1,7 +1,7 @@
 package network.messages;
 
-import game.Lobby;
 import game.gui.LobbyGUI;
+import game.models.Lobby;
 
 public class MessageCreateLobby extends Message {
 	/**

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import game.Battle;
-import game.Lobby;
 import game.exceptions.WrongCardsException;
 import game.exceptions.WrongCardsSetException;
 import game.exceptions.WrongCountryException;
@@ -14,10 +12,11 @@ import game.exceptions.WrongPeriodException;
 import game.exceptions.WrongPhaseException;
 import game.exceptions.WrongTroopsCountException;
 import game.gui.GamePaneController;
-import game.logic.GameType;
+import game.models.Battle;
 import game.models.Card;
 import game.models.Continent;
 import game.models.CountryName;
+import game.models.Lobby;
 import game.models.Player;
 import javafx.scene.paint.Color;
 

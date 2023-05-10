@@ -1,4 +1,4 @@
-package game;
+package database;
 
 import java.time.LocalDateTime;
 

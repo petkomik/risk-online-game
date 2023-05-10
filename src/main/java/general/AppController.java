@@ -5,8 +5,8 @@ import java.time.LocalTime;
 import java.util.Arrays;
 
 import database.DatabaseHandler;
+import database.GameStatistic;
 import database.Profile;
-import game.GameStatistic;
 import game.exceptions.WrongTextFieldInputException;
 import network.Client;
 import network.Server;

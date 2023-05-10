@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import database.Profile;
-import game.Lobby;
+import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
 import network.messages.Message;

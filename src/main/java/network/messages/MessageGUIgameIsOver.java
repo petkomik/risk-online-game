@@ -2,7 +2,7 @@ package network.messages;
 
 import java.util.ArrayList;
 
-import game.Lobby;
+import game.models.Lobby;
 import game.models.Player;
 import gameState.GameState;
 

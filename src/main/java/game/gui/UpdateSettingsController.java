@@ -7,12 +7,12 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import game.Lobby;
 import game.exceptions.WrongTextFieldInputException;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Lobby;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;

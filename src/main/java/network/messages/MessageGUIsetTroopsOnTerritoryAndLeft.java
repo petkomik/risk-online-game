@@ -1,7 +1,7 @@
 package network.messages;
 
-import game.Lobby;
 import game.models.CountryName;
+import game.models.Lobby;
 import gameState.GameState;
 
 public class MessageGUIsetTroopsOnTerritoryAndLeft extends Message {

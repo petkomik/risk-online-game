@@ -4,9 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 
 import database.Profile;
-import game.Lobby;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Lobby;
 import game.models.PlayerSingle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

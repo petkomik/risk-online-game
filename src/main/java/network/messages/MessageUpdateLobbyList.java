@@ -2,8 +2,8 @@ package network.messages;
 
 import java.util.HashMap;
 
-import game.Lobby;
 import game.gui.ServerMainWindowController;
+import game.models.Lobby;
 
 public class MessageUpdateLobbyList extends Message {
 

@@ -1,8 +1,5 @@
 package game.gui;
 
-import game.GameStatistic;
-import game.Lobby;
-import game.PlayerInLobby;
 import game.exceptions.WrongTextFieldInputException;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatButton;
@@ -11,10 +8,11 @@ import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.PlayerCard;
 import game.gui.GUISupportClasses.Spacing;
-import game.logic.GameType;
 import game.models.Difficulty;
+import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
+import gameState.GameType;
 import gameState.SinglePlayerHandler;
 import general.Parameter;
 import general.AppController;
@@ -30,6 +28,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Optional;
 
+import database.GameStatistic;
 import database.Profile;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

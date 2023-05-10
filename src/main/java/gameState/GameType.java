@@ -1,4 +1,4 @@
-package game.logic;
+package gameState;
 
 public enum GameType {
 	Tutorial,

@@ -1,14 +1,14 @@
 package game.gui;
 
 import game.gui.GUISupportClasses.*;
-import game.logic.GameType;
+import game.models.Battle;
 import game.models.Continent;
 import game.models.CountryName;
+import game.models.Lobby;
 import game.models.Player;
 import game.models.Territory;
+import gameState.GameType;
 import gameState.SinglePlayerHandler;
-import game.Battle;
-import game.Lobby;
 import general.AppController;
 import general.Parameter;
 

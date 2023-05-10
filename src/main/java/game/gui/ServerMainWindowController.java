@@ -8,14 +8,13 @@ import java.sql.ClientInfoStatus;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
-
-import game.Lobby;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatButton;
 import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
 import gameState.GameHandler;

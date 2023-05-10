@@ -1,13 +1,13 @@
-package game;
+package game.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import javafx.scene.paint.Color;
 
-import game.models.*;
+import database.GameStatistic;
+import javafx.scene.paint.Color;
 import general.Parameter;
 
 

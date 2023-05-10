@@ -1,6 +1,6 @@
 package network.messages;
 
-import game.Lobby;
+import game.models.Lobby;
 
 public class MessageUpdateLobby  extends Message {
 

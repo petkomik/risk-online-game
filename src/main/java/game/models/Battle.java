@@ -1,11 +1,8 @@
-package game;
+package game.models;
 
 import java.io.Serializable;
 
-import game.logic.GameType;
-import game.models.Continent;
-import game.models.CountryName;
-import game.models.Player;
+import gameState.GameType;
 import gameState.SinglePlayerHandler;
 
 /**
