@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.stream.Collectors;
+import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
 import game.models.PlayerAI;
@@ -765,5 +767,61 @@ public class AILogic {
       GameState gameState) {
     // TODO Auto-generated method stub
     return gameState.getTerritories().get(territory.getCountryName()).getNumberOfTroops() - 1;
+  }
+  
+  public static List<String> getRiskCardsTurnIn(GameState gameState, int idPly) {
+      ArrayList<Card> copy = new ArrayList<Card>();
+      ArrayList<Card> cards = new ArrayList<Card>();
+      List<Card> jokers = gameState.getRiskCardsInPlayers().get(idPly)
+	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
+      List<Card> infantry = gameState.getRiskCardsInPlayers().get(idPly)
+	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
+      List<Card> cavalry = gameState.getRiskCardsInPlayers().get(idPly)
+	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
+      List<Card> artillery = gameState.getRiskCardsInPlayers().get(idPly)
+	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
+
+      for(Card c : gameState.getRiskCardsInPlayers().get(idPly)) {
+	  copy.add(new Card(c));
+      }
+      
+      if(jokers.size() > 0) {
+	  cards.addAll(jokers);
+	  copy.removeAll(jokers);
+	  while(cards.size() < 3) {
+	      cards.add(copy.get((int) (Math.random() * copy.size())));
+	  }
+	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      }
+      
+      if(infantry.size() >= 3) {
+	  while(cards.size() < 3) {
+	      cards.add(infantry.get(0));
+	  }
+	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      }
+      
+      if(cavalry.size() >= 3) {
+	  while(cards.size() < 3) {
+	      cards.add(cavalry.get(0));
+	  }
+	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      }
+      
+      if(artillery.size() >= 3) {
+	  while(cards.size() < 3) {
+	      cards.add(artillery.get(0));
+	  }
+	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      }
+      
+      if(cavalry.size() > 0 && artillery.size() > 0 && infantry.size() > 0) {
+	  cards.add(cavalry.get(0));
+	  cards.add(artillery.get(0));
+	  cards.add(artillery.get(0));
+	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      }
+      
+      return null;
   }
 }

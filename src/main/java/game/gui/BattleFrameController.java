@@ -218,9 +218,11 @@ public class BattleFrameController extends StackPane {
 		chatButton = new ChatButton(new Insets(10 * menuRatio, 20 * menuRatio, 
 				10 * menuRatio, 20 * menuRatio), 30, 28 * menuRatio, 170 * menuRatio, true);
 		chatButton.setAlignment(Pos.CENTER);
-		chatButton.setSelected(chatWindow.isVisible());
+		if(chatWindow != null) {
+		    chatButton.setSelected(chatWindow.isVisible());		    
+		}
 		
-		if (!chatWindow.equals(null)) {
+		if (chatWindow != null) {
 			if (client.getClientsLobby().getHumanPlayerList().size() == 1) {
 				chatButton.setDisable(true);
 			}

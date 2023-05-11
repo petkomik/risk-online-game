@@ -44,6 +44,7 @@ public class GameState implements Serializable {
 	private boolean lastTurnWonterritory;
 	private ArrayList<Player> deadPlayers;
 	private int gameStateVersion ;
+	
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
 		cards = new ArrayList<Card>();
@@ -77,13 +78,6 @@ public class GameState implements Serializable {
 	}
 	
 
-	public HashMap<Integer, Integer> getPlayersDiceThrown() {
-		return playersDiceThrown;
-	}
-
-	public void setPlayersDiceThrown(HashMap<Integer, Integer> playersDiceThrown) {
-		this.playersDiceThrown = playersDiceThrown;
-	}
 	
 	public void addTroopsToPlayer(int idPlayer, int numberOfTroops){
 		this.getPlayerTroopsLeft().replace(idPlayer,
@@ -99,23 +93,64 @@ public class GameState implements Serializable {
 		}
 		
 	}
+	
+	public int playerTurnsInCard() {
+	    this.numberOfCardsTurnedIn++;
+	    switch (this.numberOfCardsTurnedIn) {
+	    case 1:
+		return 4;
+	    case 2:
+		return 6;
+	    case 3:
+		return 8;
+	    case 4:
+		return 10;
+	    case 5:
+		return 12;
+	    case 6:
+		return 15;
+	    default:
+		return (this.numberOfCardsTurnedIn - 6) * 5 + 15;
+	    }
+	    
+	}
+	
+	public void editRiskCardsInPlayers(ArrayList<Card> cards, int idOfPlayer) {
+	    this.cards.addAll(this.riskCardsInPlayers.get(idOfPlayer));
+	    this.riskCardsInPlayers.replace(idOfPlayer, cards);
+	    this.cards.removeAll(this.riskCardsInPlayers.get(idOfPlayer));
+	}
+	
+	public void receiveRandomRiskCard(int idOfPlayer) {
+	    Random generator = new Random();
+	    Card card = this.cards.remove(generator.nextInt(this.cards.size()));
+	    this.riskCardsInPlayers.get(idOfPlayer).add(card);
+	}
+	
+	public void setInitialTroops(int troops) {
+	    for(Integer playerId : this.players.keySet()) {
+		this.playerTroopsLeft.put(playerId, 0);
+	    }
+	    for(Integer playerId : this.players.keySet()) {
+		this.addTroopsToPlayer( playerId, troops);
+	    }
+	}
 
 	public void updateTerritory(CountryName countryName, Player player, int numberTroops) {
 		this.territories.get(countryName).setOwnedByPlayer(player);
 		this.territories.get(countryName).addNumberOfTroops(numberTroops);
 	}
+
+	public HashMap<Integer, Integer> getPlayersDiceThrown() {
+	    return playersDiceThrown;
+	}
+	
+	public void setPlayersDiceThrown(HashMap<Integer, Integer> playersDiceThrown) {
+	    this.playersDiceThrown = playersDiceThrown;
+	}
 	
 	public void updateTroopsOnTerritory(CountryName countryName, int numberTroops) {
 		this.territories.get(countryName).setNumberOfTroops(numberTroops);
-	}
-	
-	public void setInitialTroops(int troops) {
-		for(Integer playerId : this.players.keySet()) {
-			this.playerTroopsLeft.put(playerId, 0);
-		}
-		for(Integer playerId : this.players.keySet()) {
-			this.addTroopsToPlayer( playerId, troops);
-		}
 	}
 	
 	public void setOwnedByTerritory(CountryName country, Player player) {
@@ -187,27 +222,6 @@ public class GameState implements Serializable {
 				(this.alivePlayers.indexOf(currentPlayer)+1) % this.alivePlayers.size());
 	}
 	
-	public int playerTurnsInCard() {
-		this.numberOfCardsTurnedIn++;
-		switch (this.numberOfCardsTurnedIn) {
-		case 1:
-			return 4;
-		case 2:
-			return 6;
-		case 3:
-			return 8;
-		case 4:
-			return 10;
-		case 5:
-			return 12;
-		case 6:
-			return 15;
-		default:
-			return (this.numberOfCardsTurnedIn - 6) * 5 + 15;
-		}
-		
-	}
-	
 	public void setPlayerTroopsLeft(HashMap<Integer, Integer> playerTroopsLeft) {
 		this.playerTroopsLeft = playerTroopsLeft;
 	}
@@ -216,17 +230,6 @@ public class GameState implements Serializable {
 		return riskCardsInPlayers;
 	}
 	
-	public void editRiskCardsInPlayers(ArrayList<Card> cards, int idOfPlayer) {
-		this.cards.addAll(this.riskCardsInPlayers.get(idOfPlayer));
-		this.riskCardsInPlayers.replace(idOfPlayer, cards);
-		this.cards.removeAll(this.riskCardsInPlayers.get(idOfPlayer));
-	}
-	
-	public void receiveRandomRiskCard(int idOfPlayer) {
-		Random generator = new Random();
-		Card card = this.cards.remove(generator.nextInt(this.cards.size()));
-		this.riskCardsInPlayers.get(idOfPlayer).add(card);
-	}
 	
 	public CountryName getLastAttackingCountry() {
 		return lastAttackingCountry;

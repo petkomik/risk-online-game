@@ -52,6 +52,14 @@ public class Card implements Serializable{
 		this.ID = id;
 	}
 	
+	public Card(Card c) {
+		this.isJoker = c.isJoker;
+		this.countryName = c.countryName;
+		this.cardValue = c.cardValue;
+		this.pngDir = c.pngDir;
+		this.ID = c.ID;
+	}
+	
 	public int getCardSymbol() {
 		return cardValue;
 	}
@@ -74,7 +82,7 @@ public class Card implements Serializable{
 
     @Override
     public String toString() {
-        return this.getID() + " " + this.cardValue + " " + this.countryName.toString();
+        return this.isJoker() ? "Joker" : this.countryName.toString();
     }
 	
 }
