@@ -692,31 +692,33 @@ public class GameHandler {
                             changed.getTroopsInAttackAt(), changed.getTroopsInAttackDf(),
                             numberOfDices);
                     timer.play();
-                    timer.setOnFinished(x -> this.singlePlayerHandler.endBattleOnGUI());
-                    if(overAt || overDf) {
-                        this.singlePlayerHandler.endBattleOnGUI();
-                        this.singlePlayerHandler.setTroopsOnTerritory(changed.getCountryNameAt(),
-                                this.gameState.getTerritories().get(changed.getCountryNameAt())
-                                .getNumberOfTroops());
-                        this.singlePlayerHandler.setTroopsOnTerritory(changed.getCountryNameDf(), 
-                                this.gameState.getTerritories().get(changed.getCountryNameDf())
-                                .getNumberOfTroops());
-                    }
-                    if(overDf) {
-                        this.singlePlayerHandler.conquerCountryOnGUI(changed.getCountryNameDf(), 
-                                this.gameState.getCurrentPlayer().getID(), 0);
-                        this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(changed.getCountryNameDf(), 
-                                Math.min(Math.min(changed.getTroopsInAttackAtFinal(), 3),       
-                                        this.gameState.getTerritories().get(changed.getCountryNameAt())
-                                        .getNumberOfTroops() - 1), 
-                                this.gameState.getTerritories().get(changed.getCountryNameAt())
-                                .getNumberOfTroops() - 1, ChoosePane.ATTACK_COLONISE);
-                        if(Logic.isGameOver(gameState)) {
-                            ArrayList<Player> podium = this.gameState.getDeadPlayers();
-                            Collections.reverse(podium);
-                            this.singlePlayerHandler.gameIsOverOnGUI(podium);
+                    timer.setOnFinished(x -> {
+                	this.singlePlayerHandler.endBattleOnGUI();
+                        if(overAt || overDf) {
+                    	this.singlePlayerHandler.endBattleOnGUI();
+                    	this.singlePlayerHandler.setTroopsOnTerritory(changed.getCountryNameAt(),
+                    		this.gameState.getTerritories().get(changed.getCountryNameAt())
+                    		.getNumberOfTroops());
+                    	this.singlePlayerHandler.setTroopsOnTerritory(changed.getCountryNameDf(), 
+                    		this.gameState.getTerritories().get(changed.getCountryNameDf())
+                    		.getNumberOfTroops());
                         }
-                    }
+                        if(overDf) {
+                    	this.singlePlayerHandler.conquerCountryOnGUI(changed.getCountryNameDf(), 
+                    		this.gameState.getCurrentPlayer().getID(), 0);
+                    	this.singlePlayerHandler.chooseNumberOfTroopsOnGUI(changed.getCountryNameDf(), 
+                    		Math.min(Math.min(changed.getTroopsInAttackAtFinal(), 3),       
+                    			this.gameState.getTerritories().get(changed.getCountryNameAt())
+                    			.getNumberOfTroops() - 1), 
+                    		this.gameState.getTerritories().get(changed.getCountryNameAt())
+                    		.getNumberOfTroops() - 1, ChoosePane.ATTACK_COLONISE);
+                        	if(Logic.isGameOver(gameState)) {
+                        	    ArrayList<Player> podium = this.gameState.getDeadPlayers();
+                        	    Collections.reverse(podium);
+                        	    this.singlePlayerHandler.gameIsOverOnGUI(podium);
+                        	}
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -727,37 +729,39 @@ public class GameHandler {
                             changed.getTroopsInAttackAt(), changed.getTroopsInAttackDf(),
                             numberOfDices);
                     timer.play();
-                    timer.setOnFinished(x -> this.client.endBattleOnGUI());
-                    if(overAt || overDf) {
-                        this.client.endBattleOnGUI();
-                        this.client.setTroopsOnTerritory(changed.getCountryNameAt(),
-                                this.gameState.getTerritories().get(changed.getCountryNameAt())
-                                .getNumberOfTroops());
-                        this.client.setTroopsOnTerritory(changed.getCountryNameDf(), 
-                                this.gameState.getTerritories().get(changed.getCountryNameDf())
-                                .getNumberOfTroops());
-                    }
-                    if(overDf) {
-                        this.client.conquerCountryOnGUI(changed.getCountryNameDf(), 
-                                this.gameState.getCurrentPlayer().getID(), 0);
-                        this.client.chooseNumberOfTroopsOnGUI(changed.getCountryNameDf(), 
-                                Math.min(Math.min(changed.getTroopsInAttackAtFinal(), 3),       
-                                        this.gameState.getTerritories().get(changed.getCountryNameAt())
-                                        .getNumberOfTroops() - 1), 
-                                this.gameState.getTerritories().get(changed.getCountryNameAt())
-                                .getNumberOfTroops() - 1, ChoosePane.ATTACK_COLONISE);
-                        if(Logic.isGameOver(gameState)) {
-                            ArrayList<Player> podium = this.gameState.getDeadPlayers();
-                            AppController.dbH.updateProfileInfo(AppController.dbH.getProfileByID(podium.get(0).getID()).getWins() + 1, "Wins", podium.get(0).getID());
-                            for(Player p : this.lobby.getHumanPlayerList()) {
-                                if(p.getID() != podium.get(0).getID()) {
-                                    AppController.dbH.updateProfileInfo(AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses", p.getID());
-                                }
-                            }
-                            Collections.reverse(podium);
-                            this.client.gameIsOverOnGUI(podium);
+                    timer.setOnFinished(x -> {
+                	this.client.endBattleOnGUI();
+                        if(overAt || overDf) {
+                    	this.client.endBattleOnGUI();
+                    	this.client.setTroopsOnTerritory(changed.getCountryNameAt(),
+                    		this.gameState.getTerritories().get(changed.getCountryNameAt())
+                    		.getNumberOfTroops());
+                    	this.client.setTroopsOnTerritory(changed.getCountryNameDf(), 
+                    		this.gameState.getTerritories().get(changed.getCountryNameDf())
+                    		.getNumberOfTroops());
                         }
-                    }
+                        if(overDf) {
+                    	this.client.conquerCountryOnGUI(changed.getCountryNameDf(), 
+                    		this.gameState.getCurrentPlayer().getID(), 0);
+                    	this.client.chooseNumberOfTroopsOnGUI(changed.getCountryNameDf(), 
+                    		Math.min(Math.min(changed.getTroopsInAttackAtFinal(), 3),       
+                    			this.gameState.getTerritories().get(changed.getCountryNameAt())
+                    			.getNumberOfTroops() - 1), 
+                    		this.gameState.getTerritories().get(changed.getCountryNameAt())
+                    		.getNumberOfTroops() - 1, ChoosePane.ATTACK_COLONISE);
+                        	if(Logic.isGameOver(gameState)) {
+                        	    ArrayList<Player> podium = this.gameState.getDeadPlayers();
+                        	    AppController.dbH.updateProfileInfo(AppController.dbH.getProfileByID(podium.get(0).getID()).getWins() + 1, "Wins", podium.get(0).getID());
+                        	    for(Player p : this.lobby.getHumanPlayerList()) {
+                        		if(p.getID() != podium.get(0).getID()) {
+                        		    AppController.dbH.updateProfileInfo(AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses", p.getID());
+                        		}
+                        	    }
+                        	    Collections.reverse(podium);
+                        	    this.client.gameIsOverOnGUI(podium);
+                        	}
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
