@@ -617,6 +617,7 @@ public class GUISupportClasses {
 //									client.sendMessage( new MessageinLobby(lobby1, messageToBeSend));
 //					 
 //								}
+								System.out.println(client.isInALobby()+ " sender");
 
 								if (!names.getValue().equals("All")) {
 

@@ -83,8 +83,8 @@ public class Client {
 	private Lobby clientsLobby;
 	GUISupportClasses.ChatWindow chat;
 	private boolean host;
-	private boolean isInALobby = false;
-	private boolean isInAGame = false;
+	private boolean isInALobby ;
+	private boolean isInAGame ;
 	private GamePaneController gamePane;
 	private GameHandler gameHandler;
 
@@ -96,6 +96,8 @@ public class Client {
 		this.profile = profile;
 		this.userName = profile.getUserName();
 		this.socket = socket;
+		isInALobby = false;
+		isInAGame = false;
 		try {
 			// update
 			this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -235,15 +237,15 @@ public class Client {
 											.anyMatch(player -> player.getID() == profileFrom.getId())
 											&& lobby.getHumanPlayerList().stream()
 													.anyMatch(player -> player.getID() == profile.getId()));
-
+							System.out.println(isInALobby + "reciever");
 							if (isInLobby) {
 								if (isSenderInSameLobby) {
-									chat.addLabel(((MessageSend) message).getMessage());
+									chat.addLabel(profileFrom.getUserName()+": " + ((MessageSend) message).getMessage());
 								}
 
 							} else {
 								if (!isInALobby) {
-									chat.addLabel(((MessageSend) message).getMessage());
+									chat.addLabel(profileFrom.getUserName()+": " + ((MessageSend) message).getMessage());
 
 								}
 
@@ -281,6 +283,7 @@ public class Client {
 								sendMessage(new MessageUpdateLobbyList(lobbies,
 										((MessageConnect) message).getProfile().getId()));
 							}
+							
 							break;
 						case Disconnect:
 							System.out.println("case MessageConnect Success 2 ");
@@ -329,6 +332,8 @@ public class Client {
 							// chat.addLabel(((MessageToPerson)message).getFromProfile().getUserName()+" : "
 							// + ((MessageToPerson)message).getStringMessage());
 							break;
+							
+							
 						case MessageProfile:
 							// ithe new client adds the other clients in his list and db
 							if (!profiles.contains(((MessageProfile) message).getProfile())) {
@@ -345,7 +350,7 @@ public class Client {
 						case MessageCreateLobby:
 
 							MessageCreateLobby mCL = (MessageCreateLobby) message;
-
+							
 							LobbyGUI lobbyGUI = new LobbyGUI(mCL.getLobby());
 
 							lobbyGUI.setOnAction(new EventHandler<ActionEvent>() {
@@ -366,7 +371,6 @@ public class Client {
 							ServerMainWindowController.getSearchButton().fire();
 							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
 
-							lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
 
 							break;
 						case MessageJoinLobby:

@@ -63,7 +63,7 @@ import network.messages.MessageUpdateLobby;
 
 /**
  * 
- * @author pmalamov 
+ * @author pmalamov
  * 
  */
 
@@ -116,7 +116,6 @@ public class ServerMainWindowController extends VBox {
 	private static StackPane topContainer;
 	private static GameSound gameSound = AppController.getGameSound();
 
-
 	static Server server;
 	static Client client;
 	private static boolean hostView;
@@ -129,18 +128,18 @@ public class ServerMainWindowController extends VBox {
 		this.ratioBanner = Math.min(1, this.ratio + 0.1);
 		this.setup();
 		this.actionEventsSetup();
-		
+
 	}
 
 	public void setup() throws Exception {
 
 		lobbyGUIList = new HashMap<String, LobbyGUI>();
 		topContainer = new StackPane();
-		
+
 		/*
 		 * to be returned StackPane
 		 */
-		
+
 		backgroundPic = new HBox();
 
 		menu = new HBox();
@@ -307,12 +306,12 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * assembling the menu
 		 */
-		
+
 		rankText = new Text();
 		rankText.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 20 * ratio));
 		rankText.setFill(Color.WHITE);
 
-		menu.getChildren().addAll(searchBar, new Spacing(1),rankText,new Spacing(1), cancelButton);
+		menu.getChildren().addAll(searchBar, new Spacing(1), rankText, new Spacing(1), cancelButton);
 		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
 
 		/*
@@ -343,9 +342,9 @@ public class ServerMainWindowController extends VBox {
 		vBoxLobbyMenuController.setVisible(false);
 		vBoxLobbyMenuController.setPickOnBounds(true);
 
-		topContainer.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane,
-				vBoxLobbyMenuController);
-		
+		topContainer.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent,
+				chatPane, vBoxLobbyMenuController);
+
 		this.getChildren().add(topContainer);
 	}
 
@@ -363,11 +362,11 @@ public class ServerMainWindowController extends VBox {
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
 					chatPane.setVisible(false);
-					System.out.println(chatPane.isVisible()+ " SERVERMAIN set on 'false' ");
+					System.out.println(chatPane.isVisible() + " SERVERMAIN set on 'false' ");
 				} else {
 					chatButton.setSelected(true);
 					chatPane.setVisible(true);
-					System.out.println(chatPane.isVisible()+ " SERVERMAIN set on 'true' ");
+					System.out.println(chatPane.isVisible() + " SERVERMAIN set on 'true' ");
 				}
 				System.out.println(chatPane.getParent() + " ist chats vater in SMW");
 
@@ -379,21 +378,20 @@ public class ServerMainWindowController extends VBox {
 			public void handle(ActionEvent event) {
 				// TODO implement search method
 				String lobbyName = searchField.getText();
-				if(!lobbyName.isEmpty()) {
-				lobbyGUIListSearch = new HashMap<String,LobbyGUI>();
-				
-				for (String key : lobbyGUIList.keySet()) {
-					if(key.contains(lobbyName)) {
-						lobbyGUIListSearch.put(key, lobbyGUIList.get(key));
+				if (!lobbyName.isEmpty()) {
+					lobbyGUIListSearch = new HashMap<String, LobbyGUI>();
+
+					for (String key : lobbyGUIList.keySet()) {
+						if (key.contains(lobbyName)) {
+							lobbyGUIListSearch.put(key, lobbyGUIList.get(key));
+						}
 					}
-				}
-				
-				drawLobbies(false);
-				
+
+					drawLobbies(false);
+
 				} else {
 					drawLobbies(true);
 				}
-				
 
 			}
 
@@ -418,15 +416,15 @@ public class ServerMainWindowController extends VBox {
 				cancelButton.setRotate(cancelButton.getRotate() + 60);
 				searchField.setText("");
 				searchButton.fire();
-            	Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1)));    
-        		timer.play();
-            	timer.setOnFinished(x -> {
-        			cancelButton.setRotate(0);
-        		});
-            	System.out.println(cancelButton.getRotate());
-            	if(cancelButton.getRotate() == 180) {
-            		AppController.getGameSound().buttonClickHelicopterSound();
-            	}
+				Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1)));
+				timer.play();
+				timer.setOnFinished(x -> {
+					cancelButton.setRotate(0);
+				});
+				System.out.println(cancelButton.getRotate());
+				if (cancelButton.getRotate() == 180) {
+					AppController.getGameSound().buttonClickHelicopterSound();
+				}
 			}
 
 		});
@@ -457,7 +455,7 @@ public class ServerMainWindowController extends VBox {
 
 			}
 		});
-		
+
 		hostGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -468,11 +466,11 @@ public class ServerMainWindowController extends VBox {
 				// lobby of the other person
 
 				Lobby aLobby = new Lobby(client.getProfile().getId());
-			
+
 				aLobby.joinLobby(new PlayerSingle(client.getProfile()));
-				
-				//checks if the lobbyname is taken
-				
+
+				// checks if the lobbyname is taken
+
 				BiConsumer<String, Lobby> addLobby = (clientUsername, lobby) -> {
 					int i = 1;
 					String newUsername = clientUsername;
@@ -485,14 +483,13 @@ public class ServerMainWindowController extends VBox {
 				};
 				addLobby.accept(client.getProfile().getUserName(), aLobby);
 				System.out.println(aLobby.getLobbyName());
-				client.setInALobby(true);
 				client.sendMessage(new MessageCreateLobby(aLobby));
+				client.setInALobby(true);
 				drawLobbyMenu(aLobby);
-				Platform.runLater(()->{
-					lobbyMenuController.getBackButton().fire();
+				Platform.runLater(() -> {
 					lobbyMenuController.getReadyBtn().fire();
 				});
-				
+
 				System.out.println("im in lobby " + aLobby.getLobbyName());
 				// stage.getScene().setRoot(lobbyMenuController);
 
@@ -512,7 +509,8 @@ public class ServerMainWindowController extends VBox {
 						selectedLobby = lobbyEnt.getLobby();
 					}
 				}
-				if ((selectedLobby != null) && (selectedLobby.getPlayerList().size() < selectedLobby.getMaxNumberOfPlayers())) {
+				if ((selectedLobby != null)
+						&& (selectedLobby.getPlayerList().size() < selectedLobby.getMaxNumberOfPlayers())) {
 
 					selectedLobby.joinLobby(new PlayerSingle(client.getProfile()));
 					client.sendMessage(new MessageJoinLobby(selectedLobby));
@@ -520,45 +518,47 @@ public class ServerMainWindowController extends VBox {
 					drawLobbyMenu(selectedLobby);
 
 				}
-				
+
 				// TODO join the lobby and send a message to the server so that the lobby knows
 				// who the new paticipant is
 			}
 		});
 
 	}
-	
+
 	public static void drawLobbies(boolean all) {
-		
+
 		Platform.runLater(() -> {
-			
+
 			vbox.getChildren().clear();
-			
+
 			if (all) {
-				
+
 				for (String key : lobbyGUIList.keySet()) {
 					vbox.getChildren().add(lobbyGUIList.get(key));
 				}
 				System.out.println("Number of Lobbies" + lobbyGUIList.size());
 			} else {
-				
+
 				for (String key : lobbyGUIListSearch.keySet()) {
 					vbox.getChildren().add(lobbyGUIListSearch.get(key));
 				}
 				System.out.println("Number of Lobbies" + lobbyGUIList.size());
 			}
-			
+
 			lobbyListContainer.setContent(vbox);
-			//sets the selected Lobby empty so that it doesnt connect to the lobby with the old information
+			// sets the selected Lobby empty so that it doesnt connect to the lobby with the
+			// old information
 			selectedLobby = null;
 		});
-		
+
 	}
 
 	/*
-	 * creating a new LobbyMenuController with the new lobby information and drawing it
+	 * creating a new LobbyMenuController with the new lobby information and drawing
+	 * it
 	 */
-	
+
 	public static void drawLobbyMenu(Lobby lobby) {
 		Platform.runLater(() -> {
 
@@ -575,16 +575,17 @@ public class ServerMainWindowController extends VBox {
 						lobbyMenuController.getChatWindow();
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
-								
+
 								// changes the lobbyHost/Owner
-								if(lobby.getLobbyHost() == client.getProfile().getId()&&lobby.getHumanPlayerList().size()>1) {
-									
+								if (lobby.getLobbyHost() == client.getProfile().getId()
+										&& lobby.getHumanPlayerList().size() > 1) {
+
 									lobby.setLobbyHost(lobby.getHumanPlayerList().get(1).getID());
-									
+
 									for (Player playerRemain : lobby.getHumanPlayerList()) {
-											lobbyMenuController.enableForNewHost(playerRemain.getID());
+										lobbyMenuController.enableForNewHost(playerRemain.getID());
 									}
-									
+
 								}
 								lobby.leaveLobby(player);
 								client.setInALobby(false);
@@ -592,15 +593,14 @@ public class ServerMainWindowController extends VBox {
 								searchButton.fire();
 							}
 						}
-						
-						
+
 					}
 				});
-				
+
 				/*
 				 * updating the LobbyMenuGUI
 				 */
-				
+
 				vBoxLobbyMenuController.getChildren().clear();
 				vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
 				for (Player player : lobby.getHumanPlayerList()) {
@@ -616,15 +616,16 @@ public class ServerMainWindowController extends VBox {
 
 		});
 	}
+
 	/*
 	 * adding chatPane to SMW parent when leaving a lobby
 	 */
 	public static void setChatPain(ChatWindow chatWindow) {
 		chatPane = chatWindow;
 		topContainer.getChildren().clear();
-		topContainer.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent, chatPane,
-				vBoxLobbyMenuController);
-		
+		topContainer.getChildren().addAll(backgroundPic, backgroundColor, menuAndScrollAndButtons, topBannerParent,
+				chatPane, vBoxLobbyMenuController);
+
 	}
 
 	public static void initServer() {
@@ -641,10 +642,8 @@ public class ServerMainWindowController extends VBox {
 			client.setChat(chatPane);
 			chatPane.addLabel(host);
 			client.setHost(true);
-			int rank = 100 + (client.getProfile().getWins()*3-client.getProfile().getLoses());
-			rankText.setText("Your Rating: " 
-					+ rank
-					+ " \u2605");
+			int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
+			rankText.setText("Your Rating: " + rank + " \u2605");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -658,10 +657,8 @@ public class ServerMainWindowController extends VBox {
 		client.setChat(chatPane);
 		this.hostView = false;
 		client.setHost(false);
-		int rank = 100 + (client.getProfile().getWins()*3-client.getProfile().getLoses());
-		rankText.setText("Your Rating: " 
-				+ rank
-				+ " \u2605");
+		int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
+		rankText.setText("Your Rating: " + rank + " \u2605");
 
 	}
 
@@ -676,27 +673,26 @@ public class ServerMainWindowController extends VBox {
 	public static DesignButton getSearchButton() {
 		return searchButton;
 	}
-	
-	
-	public static  void startMultyplayerGame(Lobby lobby){
-		
+
+	public static void startMultyplayerGame(Lobby lobby) {
+
 		try {
 			Stage stage = (Stage) topContainer.getScene().getWindow();
-			FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource( "gameFrame.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource("gameFrame.fxml"));
 			AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
 			GamePaneController gamePaneController = fxmlLoader.getController();
 			gamePaneController.initMultiPlayer(client, lobby);
-			
+
 //			GameStatistic gameStatistic = new GameStatistic(LocalDateTime.now(), lobby.getPlayerList().size());
 //			AppController.createGameStatistic(gameStatistic);
-		//TODO
-			//	messageReadyToPlay.setGameStatistic(gameStatistic);
+			// TODO
+			// messageReadyToPlay.setGameStatistic(gameStatistic);
 			client.setGamePane(gamePaneController);
 			stage.getScene().setRoot(anchorPane);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 }
