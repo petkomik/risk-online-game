@@ -1814,6 +1814,31 @@ public class GamePaneController implements Initializable{
 	}
 	
 	private void clickLeaveGameButton(ActionEvent e) {
+	    Node node = (Node) e.getSource();
+	    Stage stage = (Stage)node.getScene().getWindow();	    
+	    MainMenuPaneController mainMenu;
+	    switch (gameType) {
+		case SinglePlayer:	
+		    try {
+			mainMenu = new MainMenuPaneController();
+			stage.getScene().setRoot(mainMenu);
+		    } catch (FileNotFoundException ev) {
+			ev.printStackTrace();
+		    }
+		    break;
+		case Tutorial:
+		    try {
+			mainMenu = new MainMenuPaneController();
+			stage.getScene().setRoot(mainMenu);
+		    } catch (FileNotFoundException ev) {
+			ev.printStackTrace();
+		    }
+		    break;
+		case Multiplayer:
+		    break;
+		default:
+		    break;
+		}
 		
 	}
 	

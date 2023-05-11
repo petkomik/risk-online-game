@@ -47,9 +47,9 @@ import network.Client;
  * 
  */
 
-public class BattleFrameController extends VBox {
+public class BattleFrameController extends StackPane {
 	
-	// TODO
+	private VBox root;
 	private int lastThrow;
 	private int maxDiceToThrow;
 	private int defendingDice;
@@ -67,9 +67,6 @@ public class BattleFrameController extends VBox {
 	private GameType gameType;
 	private SinglePlayerHandler singleplayerHandler;
 	private Client client;
-//	TODO
-//	priavte MultiPlayerHandler mult...
-	
 	private HBox chatDiv;
 	private ChatButton chatButton;
 	private ChatWindow chatWindow;
@@ -206,9 +203,11 @@ public class BattleFrameController extends VBox {
 		/* 
 		 * setting up root panel root
 		 */
-		
+	    
+	    	this.root = new VBox();
+	    	this.root.setAlignment(Pos.CENTER);
+	    	this.root.setFillWidth(true);
 		this.setAlignment(Pos.CENTER);
-		this.setFillWidth(true);
 		this.setStyle("-fx-background-color: rgb(225, 211, 184);");
 		
 		/*
@@ -286,7 +285,7 @@ public class BattleFrameController extends VBox {
 		 */
 		
 		Spacing spacingRoot = new Spacing();
-		this.getChildren().addAll(chatDiv, imgTerritories, spacingRoot);
+		root.getChildren().addAll(chatDiv, imgTerritories, spacingRoot);
 		VBox.setVgrow(spacingRoot, Priority.SOMETIMES);
 		VBox.setVgrow(imgTerritories, Priority.ALWAYS);
 		
@@ -458,8 +457,8 @@ public class BattleFrameController extends VBox {
 					break;
 				}
           
-            }	       
-	    });
+		    }		       
+		});
 		
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -498,7 +497,8 @@ public class BattleFrameController extends VBox {
 		HBox.setHgrow(spacingControls1, Priority.ALWAYS);
 		HBox.setHgrow(spacingControls2, Priority.ALWAYS);
 
-		this.getChildren().addAll(diceAndProfile);		
+		root.getChildren().addAll(diceAndProfile);	
+		this.getChildren().add(root);
 		
 		if(this.chatWindow != null) {
 		    this.getChildren().add(chatWindow);

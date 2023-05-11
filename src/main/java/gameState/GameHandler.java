@@ -174,6 +174,7 @@ public class GameHandler {
                     ArrayList<CountryName> unreachableCountries = 
                             Logic.getUnreachableTerritories(country, idOfPlayer, this.gameState);
                     this.gameState.setLastAttackingCountry(country);
+                    System.out.println("Setting last attacking to " + country.toString());
                     switch(this.gameType) {
                     case SinglePlayer:
 //                      this.singlePlayerHandler.selectTerritoryAndSetDisabledTerritoriesOnGUI(country, unreachableCountries);
@@ -751,13 +752,13 @@ public class GameHandler {
                     	if(Logic.isGameOver(gameState)) {
                     	    ArrayList<Player> podium = this.gameState.getDeadPlayers();
                     	    AppController.dbH.updateProfileInfo(AppController.dbH.getProfileByID(podium.get(0).getID()).getWins() + 1, "Wins", podium.get(0).getID());
+                    	    Collections.reverse(podium);
+                    	    this.client.gameIsOverOnGUI(podium);
                     	    for(Player p : this.lobby.getHumanPlayerList()) {
                     		if(p.getID() != podium.get(0).getID()) {
                     		    AppController.dbH.updateProfileInfo(AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses", p.getID());
                     		}
                     	    }
-                    	    Collections.reverse(podium);
-                    	    this.client.gameIsOverOnGUI(podium);
                     	}
                         }
                 

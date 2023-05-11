@@ -90,7 +90,8 @@ public class Logic {
     HashMap<Integer, Integer> playerDice = gameState.getPlayersDiceThrown();
     Integer firstPlayer = null;
     int maxDice = 0;
-    for (Integer playerId : playerDice.keySet()) {
+    for (Player player : gameState.getAlivePlayers()) {
+	int playerId = player.getID();
       if (playerDice.get(playerId) > maxDice) {
         firstPlayer = playerId;
         maxDice = playerDice.get(playerId);
