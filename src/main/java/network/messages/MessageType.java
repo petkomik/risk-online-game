@@ -27,6 +27,7 @@ public enum MessageType {
 	MessageJoinGame,
 	
 	// In Game
+	MessageGameState,
 	MessageGUIRollInitalDice, // 
 	MessageGUIRollDiceBattle,
 	MessageGUIshowExcption,

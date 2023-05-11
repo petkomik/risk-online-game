@@ -461,8 +461,15 @@ public class Client {
 						case MessageGUIRollInitalDice:
 							final MessageGUIRollInitalDice me = ((MessageGUIRollInitalDice) message);
 							Platform.runLater(() -> {
+								
+//								if(me.getGameState().getGameStateVersion() <= gameHandler.getGameState().getGameStateVersion()  ){
+//									
+//									
+//								}
+								
 								gameHandler.setGameState(me.getGameState());
 								gamePane.rollInitialDice(me.getId(), me.getValue());
+								
 
 							});
 							break;
@@ -729,7 +736,9 @@ public class Client {
 
 	// ot tuk
 	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
+		
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
 			System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " + idOfPlayer
 					+ " throes");
@@ -740,6 +749,8 @@ public class Client {
 	public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues, int troopsInAttackAt,
 			int troopsInAttackDf, int[] numberOfDice) throws FileNotFoundException {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
+
 			sendMessage(new MessageGUIRollDiceBattle(gameHandler.getGameState(), attackerDiceValues, defenderDiceValues,
 					troopsInAttackAt, troopsInAttackDf, numberOfDice, clientsLobby));
 		});
@@ -753,12 +764,14 @@ public class Client {
 
 	public void setPeriodOnGUI(Period period) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIsetPeriod(gameHandler.getGameState(), period, clientsLobby));
 		});
 	}
 
 	public void setPhaseOnGUI(Phase phase) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIsetPhase(gameHandler.getGameState(), phase, clientsLobby));
 		});
 	}
@@ -771,12 +784,14 @@ public class Client {
 
 	public void conquerCountryOnGUI(CountryName country, int id, int troops) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIconquerCountry(gameHandler.getGameState(), country, id, troops, clientsLobby));
 		});
 	}
 
 	public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			System.out.println(gameHandler.getGameState().getCurrentPlayer().getID() + "is set current player send message");
 			sendMessage(new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));
 		});
@@ -803,6 +818,7 @@ public class Client {
 
 	public void setTroopsOnTerritory(CountryName countryName, int numTroopsOfCountry) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIsetTroopsOnTerritory(gameHandler.getGameState(), countryName, numTroopsOfCountry,
 					clientsLobby));
 		});
@@ -811,6 +827,7 @@ public class Client {
 	public void setTroopsOnTerritoryAndLeftOnGUI(CountryName countryName, int numTroopsOfCountry,
 			int numTroopsOfPlayer) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIsetTroopsOnTerritoryAndLeft(gameHandler.getGameState(), countryName,
 					numTroopsOfCountry, numTroopsOfPlayer, clientsLobby));
 		});
@@ -818,6 +835,7 @@ public class Client {
 
 	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom, int numberTo) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUImoveTroopsFromTerritoryToOther(gameHandler.getGameState(), from, to, numberFrom,
 					numberTo, clientsLobby));
 		});
@@ -825,12 +843,14 @@ public class Client {
 
 	public void openBattleFrameOnGUI(Battle battle) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIOpenBattleFrame(gameHandler.getGameState(), battle, clientsLobby));
 		});
 	}
 
 	public void endBattleOnGUI() {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIendBattle(gameHandler.getGameState(), clientsLobby));
 		});
 	}
@@ -859,12 +879,15 @@ public class Client {
 
 	public void updateRanksOnGUI(int[] ranks) {
 		Platform.runLater(() -> {
-			sendMessage(new MessageGUIupdateRanks(gameHandler.getGameState(), ranks, clientsLobby));
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
+			
+			 sendMessage(new MessageGUIupdateRanks(gameHandler.getGameState(), ranks, clientsLobby));
 		});
 	}
 
 	public void gameIsOverOnGUI(ArrayList<Player> podium) {
 		Platform.runLater(() -> {
+			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIgameIsOver(gameHandler.getGameState(), podium, clientsLobby));
 		});
 	}

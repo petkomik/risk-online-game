@@ -43,7 +43,7 @@ public class GameState implements Serializable {
 	private Battle battle;
 	private boolean lastTurnWonterritory;
 	private ArrayList<Player> deadPlayers;
-
+	private int gameStateVersion ;
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
 		cards = new ArrayList<Card>();
@@ -60,6 +60,7 @@ public class GameState implements Serializable {
 		gameIsOver = false;
 		lastAttackingCountry = null;
 		lastFortifyingCounty = null;  
+		gameStateVersion = 0;
 		
 		SetTerritories.createTerritories(territories);
 		SetTerritories.setNeighboringCountrys(territories);
@@ -275,6 +276,16 @@ public class GameState implements Serializable {
 
 	public ArrayList<Player> getDeadPlayers() {
 		return deadPlayers;
+	}
+
+
+	public int getGameStateVersion() {
+		return gameStateVersion;
+	}
+
+
+	public void setGameStateVersion(int gameStateVersion) {
+		this.gameStateVersion = gameStateVersion;
 	}
 	
 	
