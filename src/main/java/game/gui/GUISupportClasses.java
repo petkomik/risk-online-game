@@ -784,17 +784,21 @@ public class GUISupportClasses {
 		}
 
 		public void addItemsInComboBox(Profile profile) {
-
+			Platform.runLater(()->{
 			items.add(profile.getUserName());
-
+			});
 		}
 
 		public void removeItemsInComboBox(Profile profile) {
-
+			Platform.runLater(()->{
 			items.remove(profile.getUserName());
-
+			});
 		}
-
+		public void clearItemsInComboBox(){
+			Platform.runLater(()->{
+			items.clear();
+			});
+		}
 		public void setxCord(double xCord) {
 			this.xCord = xCord;
 		}

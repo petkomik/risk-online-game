@@ -361,7 +361,6 @@ public class Client {
 
 								}
 							});
-
 							ServerMainWindowController.lobbyGUIList.put(mCL.getLobby().getLobbyName(), lobbyGUI);
 							ServerMainWindowController.drawLobbies(true);
 							ServerMainWindowController.getSearchButton().fire();
