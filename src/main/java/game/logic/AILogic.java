@@ -1,5 +1,11 @@
 package game.logic;
 
+import game.models.CountryName;
+import game.models.Player;
+import game.models.PlayerAI;
+import game.models.Territory;
+import gameState.GameState;
+import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,88 +17,91 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import game.models.CountryName;
-import game.models.Player;
-import game.models.PlayerAI;
-import game.models.Territory;
-import gameState.GameState;
-import javafx.util.Pair;
 /**
- * AILogic class to simulate a player
- *
+ * AILogic class to simulate a player.
+ * 
  * @author jorohr
  */
-
 public class AILogic {
-
-	public static CountryName chooseTerritoryToInitialClaim(GameState gameState, PlayerAI player) {
-		
-		HashMap<CountryName, Territory> territories = gameState.getTerritories();
-		
-		switch(player.getLevel()) {
-			case EASY:
-				return getRandomFreeCountryName(gameState);
-			case CASUAL:
-				if(Math.random() < 0.5) {
-					return getRandomFreeCountryName(gameState);
-				}
-				else {
-					if(getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
-						return getRandomFreeCountryName(gameState);
-					}
-					for(Territory t : territories.values()) {
-						if(t.getOwnedByPlayer().getID() == player.getID()) {
-							return getNearestTerritory(t.getNeighboringTerritories(), gameState);
-						}
-					}
-				}
-			case HARD:
-				if(getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
-					return getRandomFreeCountryName(gameState);
-				}
-				
-				ArrayList<Territory> playerTerr = new ArrayList<>();
-				for(Territory t : territories.values()) {
-					if(t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
-						playerTerr.add(t);
-					}
-				}
-
-				return getNearestTerritory(playerTerr, gameState);
-				
-			default:
-				return null;
-		}
-	}
-	private static CountryName getNearestTerritory(Collection<Territory> territories, GameState gameState) {
-		for(Territory t : territories) {
-			for(Territory tN : t.getNeighboringTerritories()) {
-				if(tN.getOwnedByPlayer() == null) {
-					return tN.getCountryName();
-				}
-			}
-		}
-		for(Territory t : territories) {
-			for(Territory tN : t.getNeighboringTerritories()) {
-				for(Territory tNN : tN.getNeighboringTerritories()) {
-					if(tNN.getOwnedByPlayer() == null) {
-						return tNN.getCountryName();
-					}
-				}
-			}
-		}
-		return getRandomFreeCountryName(gameState);
-	}
 	
-	private static int getNumberOfCountriesOwnedByPlayer(Collection<Territory> territories, Player player) {
-		int i = 0;
-		for(Territory t : territories) {
-			if(t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
-				i++;
-			}
-		}
-		return i;
-	}
+	/**
+	 * Selects a territory for the initial claim phase of the game.
+	 *
+	 * This method is called when an AI player is choosing a territory 
+	 * to claim during the initial claim phase of the game.
+	 *
+	 * @param gameState The current game state.
+	 * @param player The AI player choosing the territory.
+	 * @return The name of the selected territory.
+	 */
+    public static CountryName chooseTerritoryToInitialClaim(GameState gameState, PlayerAI player) {
+
+        HashMap<CountryName, Territory> territories = gameState.getTerritories();
+
+        switch (player.getLevel()) {
+            case EASY:
+                return getRandomFreeCountryName(gameState);
+            case CASUAL:
+                if (Math.random() < 0.5) {
+                    return getRandomFreeCountryName(gameState);
+                } else {
+                    if (getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
+                        return getRandomFreeCountryName(gameState);
+                    }
+                    for (Territory t : territories.values()) {
+                        if (t.getOwnedByPlayer().getID() == player.getID()) {
+                            return getNearestTerritory(t.getNeighboringTerritories(), gameState);
+                        }
+                    }
+                }
+            case HARD:
+                if (getNumberOfCountriesOwnedByPlayer(territories.values(), player) == 0) {
+                    return getRandomFreeCountryName(gameState);
+                }
+
+                ArrayList<Territory> playerTerr = new ArrayList<>();
+                for (Territory t : territories.values()) {
+                    if (t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
+                        playerTerr.add(t);
+                    }
+                }
+
+                return getNearestTerritory(playerTerr, gameState);
+
+            default:
+                return null;
+        }
+    }
+
+    private static CountryName getNearestTerritory(Collection<Territory> territories, GameState gameState) {
+        for (Territory t : territories) {
+            for (Territory tN : t.getNeighboringTerritories()) {
+                if (tN.getOwnedByPlayer() == null) {
+                    return tN.getCountryName();
+                }
+            }
+        }
+        for (Territory t : territories) {
+            for (Territory tN : t.getNeighboringTerritories()) {
+                for (Territory tNN : tN.getNeighboringTerritories()) {
+                    if (tNN.getOwnedByPlayer() == null) {
+                        return tNN.getCountryName();
+                    }
+                }
+            }
+        }
+        return getRandomFreeCountryName(gameState);
+    }
+
+    private static int getNumberOfCountriesOwnedByPlayer(Collection<Territory> territories, Player player) {
+        int i = 0;
+        for (Territory t : territories) {
+            if (t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
+                i++;
+            }
+        }
+        return i;
+    }
 	public static CountryName chooseTerritoryToInitialReinforce(GameState gameState, PlayerAI player) {
 
 		HashMap<CountryName, Territory> territories = gameState.getTerritories();
