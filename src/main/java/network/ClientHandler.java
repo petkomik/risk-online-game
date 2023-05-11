@@ -250,11 +250,11 @@ public class ClientHandler implements Runnable {
 					break;
 
 				case MessageCreateLobby:
-					broadcastMessage(messageFromClient);
+					broadcastMessageToAllIncludingMe(messageFromClient);
 					break;
 
 				case MessageJoinLobby:
-
+					//d
 					broadcastMessage(((MessageJoinLobby) messageFromClient));
 					break;
 				case MessageUpdateLobby:

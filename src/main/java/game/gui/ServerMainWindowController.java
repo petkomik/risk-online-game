@@ -487,8 +487,10 @@ public class ServerMainWindowController extends VBox {
 				System.out.println(aLobby.getLobbyName());
 				client.setInALobby(true);
 				client.sendMessage(new MessageCreateLobby(aLobby));
-				
 				drawLobbyMenu(aLobby);
+				Platform.runLater(()->{
+					lobbyMenuController.getBackButton().fire();
+				});
 				
 				System.out.println("im in lobby " + aLobby.getLobbyName());
 				// stage.getScene().setRoot(lobbyMenuController);
@@ -561,7 +563,7 @@ public class ServerMainWindowController extends VBox {
 
 			try {
 				lobbyMenuController = new LobbyMenuController(lobby, false);
-				LobbyMenuController.getBackButton().setOnAction(new EventHandler<ActionEvent>() {
+				lobbyMenuController.getBackButton().setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
 						/*
@@ -639,7 +641,7 @@ public class ServerMainWindowController extends VBox {
 			chatPane.addLabel(host);
 			client.setHost(true);
 			int rank = 100 + (client.getProfile().getWins()*3-client.getProfile().getLoses());
-			rankText.setText("your Rating: " 
+			rankText.setText("Your Rating: " 
 					+ rank
 					+ " \u2605");
 		} catch (IOException e1) {
@@ -656,7 +658,7 @@ public class ServerMainWindowController extends VBox {
 		this.hostView = false;
 		client.setHost(false);
 		int rank = 100 + (client.getProfile().getWins()*3-client.getProfile().getLoses());
-		rankText.setText("your Rating: " 
+		rankText.setText("Your Rating: " 
 				+ rank
 				+ " \u2605");
 

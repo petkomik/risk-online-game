@@ -715,7 +715,7 @@ public class LobbyMenuController extends StackPane {
 		}
 	}
 
-	public static ArrowButton getBackButton() {
+	public ArrowButton getBackButton() {
 		return backButton;
 	}
 
