@@ -101,8 +101,8 @@ public class GamePaneController implements Initializable{
 	
 	private Pane phaseBoard;
 	private VBox vbPhase;
-	private Rectangle rectPhase;
-	private ProgressBar pB;
+	private Rectangle rectLogoPhase;
+	private Rectangle rectPeriod;
 	private StackPane spPhase;
 	private Circle cirPhase;
 	private ImageView ivPhase;
@@ -217,7 +217,7 @@ public class GamePaneController implements Initializable{
 		rectangles[0].setVisible(true);
         cirPhase.setFill(Color.web(playerColors.get(0)));
         ivPhase.setImage(new Image(playerAvatar.get(0)));
-		pB.setStyle("-fx-accent: " + playerColors.get(0) + ";");
+		rectPeriod.setFill(Color.web(playerColors.get(0)));
         rectCards.setFill(Color.web(playerColors.get(0)));
         cardsImageView.setImage(new Image(Parameter.phaseLogosdir + "cards" + getColorAsString(Color.web(playerColors.get(0))) + ".png"));
         
@@ -256,7 +256,7 @@ public class GamePaneController implements Initializable{
 		rectangles[0].setVisible(true);
         cirPhase.setFill(Color.web(playerColors.get(0)));
         ivPhase.setImage(new Image(playerAvatar.get(0)));
-		pB.setStyle("-fx-accent: " + playerColors.get(0) + ";");
+		rectPeriod.setFill(Color.web(playerColors.get(0)));
         rectCards.setFill(Color.web(playerColors.get(0)));
         cardsImageView.setImage(new Image(Parameter.phaseLogosdir + "cards" + getColorAsString(Color.web(playerColors.get(0))) + ".png"));
         
@@ -558,25 +558,24 @@ public class GamePaneController implements Initializable{
 	
 	public void setUpPhaseBoard() {
 		phaseBoard = new Pane();
-		phaseBoard.setPrefSize(getRelativeHorz(645.0), getRelativeVer(130.0));
+		phaseBoard.setPrefSize(getRelativeHorz(645.0), getRelativeVer(120.0));
 		
 		vbPhase = new VBox();
-		vbPhase.setPrefSize(getRelativeHorz(300.0), getRelativeVer(130.0));
+		vbPhase.setPrefSize(getRelativeHorz(300.0), getRelativeVer(120.0));
 		vbPhase.setLayoutX(getRelativeHorz(341.0));
 		
-		rectPhase = new Rectangle(getRelativeHorz(300.0), getRelativeVer(70.0));
-		rectPhase.setArcWidth(5.0);
-        rectPhase.setFill(Color.WHITE);
-        rectPhase.setStrokeType(StrokeType.INSIDE);
-        rectPhase.setStrokeWidth(0.0);
+		rectLogoPhase = new Rectangle(getRelativeHorz(300.0), getRelativeVer(60.0));
+		rectLogoPhase.setArcWidth(5.0);
+        rectLogoPhase.setFill(Color.WHITE);
+        rectLogoPhase.setStrokeType(StrokeType.INSIDE);
+        rectLogoPhase.setStrokeWidth(0.0);
 
         // Erstelle eine Fortschrittsleiste
-        pB = new ProgressBar();
-        pB.setPrefHeight(getRelativeVer(60.0));
-        pB.setPrefWidth(getRelativeHorz(300.0));
-        pB.setProgress(1.0);
+        rectPeriod = new Rectangle();
+        rectPeriod.setHeight(getRelativeVer(60.0));
+        rectPeriod.setWidth(getRelativeHorz(300.0));
         
-        vbPhase.getChildren().addAll(rectPhase, pB);
+        vbPhase.getChildren().addAll(rectLogoPhase, rectPeriod);
         
         cirPhase = new Circle();
         cirPhase.setRadius(getRelativeHorz(42.0));
@@ -595,7 +594,7 @@ public class GamePaneController implements Initializable{
         // Füge den Kreis und das ImageView in ein StackPane
         spPhase = new StackPane();
         spPhase.setLayoutX(getRelativeHorz(282.0));
-        spPhase.setLayoutY(getRelativeVer(23.0));
+        spPhase.setLayoutY(getRelativeVer(20.0));
         spPhase.getChildren().addAll(cirPhase, ivPhase);
         
         cirNum = new Circle();
@@ -618,7 +617,7 @@ public class GamePaneController implements Initializable{
         labPhase = new Label("CLAIM");
         labPhase.setPrefSize(getRelativeHorz(300.0), getRelativeVer(40.0));
         labPhase.setLayoutX(getRelativeHorz(341.0));
-        labPhase.setLayoutY(getRelativeVer(81.0));
+        labPhase.setLayoutY(((rectPeriod.getHeight() - labPhase.getPrefHeight()) / 2.0) + rectLogoPhase.getHeight());
         labPhase.setAlignment(Pos.CENTER);
         labPhase.setFont(Font.font("Cooper Black", FontWeight.BOLD, getRelativeHorz(30.0)));
         labPhase.setTextFill(Color.WHITE);
@@ -627,7 +626,7 @@ public class GamePaneController implements Initializable{
         firstPhaseLogo.setFitHeight(getRelativeVer(35.0));
         firstPhaseLogo.setFitWidth(getRelativeHorz(35.0));
         firstPhaseLogo.setLayoutX(getRelativeHorz(400.0));
-        firstPhaseLogo.setLayoutY(getRelativeVer(27.0));
+        firstPhaseLogo.setLayoutY((rectLogoPhase.getHeight() - firstPhaseLogo.getFitHeight()) / 2.0);
         firstPhaseLogo.setPickOnBounds(true);
         firstPhaseLogo.setPreserveRatio(true);
         firstPhaseLogo.setVisible(false);
@@ -636,7 +635,7 @@ public class GamePaneController implements Initializable{
         middlePhaseLogo.setFitHeight(getRelativeVer(35.0));
         middlePhaseLogo.setFitWidth(getRelativeHorz(35.0));
         middlePhaseLogo.setLayoutX(getRelativeHorz(473.5));
-        middlePhaseLogo.setLayoutY(getRelativeVer(27.0));
+        middlePhaseLogo.setLayoutY((rectLogoPhase.getHeight() - middlePhaseLogo.getFitHeight()) / 2.0);
         middlePhaseLogo.setPickOnBounds(true);
         middlePhaseLogo.setPreserveRatio(true);
         
@@ -644,7 +643,7 @@ public class GamePaneController implements Initializable{
         lastPhaseLogo.setFitHeight(getRelativeVer(35.0));
         lastPhaseLogo.setFitWidth(getRelativeHorz(35.0));
         lastPhaseLogo.setLayoutX(getRelativeHorz(548.0));
-        lastPhaseLogo.setLayoutY(getRelativeVer(27.0));
+        lastPhaseLogo.setLayoutY((rectLogoPhase.getHeight() - lastPhaseLogo.getFitHeight()) / 2.0);
         lastPhaseLogo.setPickOnBounds(true);
         lastPhaseLogo.setPreserveRatio(true);
         lastPhaseLogo.setVisible(false);
@@ -938,9 +937,6 @@ public class GamePaneController implements Initializable{
 		tutorialMainPane.setVisible(true);
 	}
 	
-	public void decreaseProgressbar() {
-		pB.setProgress(pB.getProgress()-1);
-	}
 	
 	public void clickCountry(MouseEvent e) {
 		String countryName = ((SVGPath) e.getSource()).getId();
@@ -1010,7 +1006,7 @@ public class GamePaneController implements Initializable{
 		}
 		cirPhase.setFill(Color.web(playerColors.get(turn)));
 		ivPhase.setImage(new Image(playerAvatar.get(turn)));
-		pB.setStyle("-fx-accent: " + playerColors.get(turn) + ";");
+		rectPeriod.setFill(Color.web(playerColors.get(turn)));;
 		tradeButton.setDisable(this.currentPlayerID != this.playerOnGUI.getID());
 	}
 	
