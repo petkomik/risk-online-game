@@ -461,7 +461,7 @@ public class Logic {
         if (gameState.getCurrentGamePeriod().equals(Period.MAINPERIOD)) {
           if (gameState.getCurrentTurnPhase().equals(phase)) {
             if (phase.equals(Phase.REINFORCE)) {
-              return gameState.getPlayerTroopsLeft().get(idOfPlayer) == 0;
+              return gameState.getPlayerTroopsLeft().get(idOfPlayer) == 0 && gameState.getRiskCardsInPlayers().get(idOfPlayer).size() <= 5;
             }
             return true;
           }
@@ -713,7 +713,7 @@ public class Logic {
       }
       troopN += gameState.getPlayerTroopsLeft().get(plyId);
       ranks.put(plyId, troopN * terrN);
-      ranksList.add(troopN * terrN);
+      ranksList.add((troopN * terrN) == 0 ? -1 : troopN * terrN);
     }
 
     Collections.sort(ranksList, Collections.reverseOrder());

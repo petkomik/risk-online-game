@@ -654,7 +654,7 @@ public class GamePaneController implements Initializable{
         rectCards.setArcHeight(5.0);
         rectCards.setArcWidth(5.0);
         rectCards.setHeight(getRelativeVer(60.0));
-        rectCards.setLayoutX(getRelativeHorz(99.0));
+        rectCards.setLayoutX(getRelativeHorz(95.0));
         rectCards.setLayoutY(getRelativeVer(23.0));
         rectCards.setStrokeType(StrokeType.INSIDE);
         rectCards.setStrokeWidth(0.0);
