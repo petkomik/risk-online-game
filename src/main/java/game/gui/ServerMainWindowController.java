@@ -490,6 +490,7 @@ public class ServerMainWindowController extends VBox {
 				drawLobbyMenu(aLobby);
 				Platform.runLater(()->{
 					lobbyMenuController.getBackButton().fire();
+					lobbyMenuController.getReadyBtn().fire();
 				});
 				
 				System.out.println("im in lobby " + aLobby.getLobbyName());

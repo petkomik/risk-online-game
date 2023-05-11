@@ -219,6 +219,10 @@ public class BattleFrameController extends StackPane {
 				10 * menuRatio, 20 * menuRatio), 30, 28 * menuRatio, 170 * menuRatio, true);
 		chatButton.setAlignment(Pos.CENTER);
 		chatButton.setSelected(chatWindow.isVisible());
+		if(client.getClientsLobby().getHumanPlayerList().size() == 1 ){
+			chatButton.setDisable(true);
+			
+		}
 		chatDiv = new HBox();
 		chatDiv.getChildren().add(chatButton);
 		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
@@ -344,7 +348,8 @@ public class BattleFrameController extends StackPane {
 		
 		playerAt.getChildren().add(stackTroopsAt);
 		
-		/*
+		/*chat
+		 * 
 		 * Setting up playerDf
 		 * Includes Circle with player color (circleDf)
 		 * 			Player avatar (avatarDf)
@@ -464,7 +469,6 @@ public class BattleFrameController extends StackPane {
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
 					chatWindow.setVisible(false);

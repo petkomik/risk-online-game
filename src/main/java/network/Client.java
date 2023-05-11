@@ -425,11 +425,12 @@ public class Client {
 							}
 
 							lobbies.forEach((key, value) -> {
+								
 								if (!ServerMainWindowController.lobbyGUIList.containsKey(key)) {
 									ServerMainWindowController.lobbyGUIList.put(key, new LobbyGUI(value));
 								}
 							});
-
+							
 							ServerMainWindowController.drawLobbies(true);
 							ServerMainWindowController.getSearchButton().fire();
 							break;
@@ -455,6 +456,7 @@ public class Client {
 							}
 							// TODO has to be checked
 							lobbies.remove(lobbyWithAvatars.getLobbyName());
+							
 							ServerMainWindowController.lobbyGUIList.remove(lobbyWithAvatars.getLobbyName());
 							ServerMainWindowController.drawLobbies(true);
 							

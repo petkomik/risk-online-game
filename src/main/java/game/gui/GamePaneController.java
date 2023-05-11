@@ -250,7 +250,7 @@ public class GamePaneController implements Initializable {
 	}
 
 	public void initMultiPlayer(Client client, Lobby lobby) {
-		setUpChatButton();
+		
 		this.gameType = GameType.Multiplayer;
 		this.client = client;
 		this.currentPeriod = Period.DICETHROW;
@@ -260,7 +260,7 @@ public class GamePaneController implements Initializable {
 		this.playerIDs = new ArrayList<>();
 		this.playerIdHash = new HashMap<>();
 		this.cardsPlayerOnGUI = new ArrayList<>();
-
+		setUpChatButton();
 		for (Player p : this.lobby.getPlayerList()) {
 			playerColors.add(p.getColor());
 			playerAvatar.add(p.getAvatar());
@@ -500,7 +500,11 @@ public class GamePaneController implements Initializable {
 		chatButton.setLayoutY((40.0 / 864.0) * h);
 		chatButton.setPickOnBounds(true);
 		chatButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, (18.0 / 1536.0) * w));
-
+		if(lobby.getHumanPlayerList().size() == 1){
+			
+			chatButton.setDisable(true);
+			
+		}
 		chatButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

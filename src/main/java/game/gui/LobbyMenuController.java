@@ -132,6 +132,10 @@ public class LobbyMenuController extends StackPane {
 	private HBox readyButtonPane;
 	private DesignButton readyBtn;
 
+	public DesignButton getReadyBtn() {
+		return readyBtn;
+	}
+
 	double ratio;
 	boolean singleplayerLobby;
 	private String dirAvatarOnThisPC;
