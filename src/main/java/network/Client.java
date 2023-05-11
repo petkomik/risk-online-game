@@ -102,14 +102,8 @@ public class Client {
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
-
-			// this.sendMessage(new MessageConnect(profile));
-			// newlineofCode
 		} catch (Exception e) {
 			System.out.println("DSICONNECT");
-			// System.out.println(
-			// "Player " + (((MessageConnect) message).getPlayername()) + " has been
-			// connected ");
 			MessageDisconnect disconnectMessage = new MessageDisconnect(profile);
 			sendMessage(disconnectMessage);
 			closeEverything(socket, inputStream, outputStream);
@@ -133,13 +127,8 @@ public class Client {
 			this.inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream.writeObject(new MessageProfile(profile));
 			outputStream.flush();
-			// this.sendMessage(new MessageConnect(profile));
-			// newlineofCode
 		} catch (IOException e) {
 			System.out.println("DSICONNECT");
-			// System.out.println(
-			// "Player " + (((MessageConnect) message).getPlayername()) + " has been
-			// connected ");
 			MessageDisconnect disconnectMessage = new MessageDisconnect(profile);
 			sendMessage(disconnectMessage);
 			closeEverything(socket, inputStream, outputStream);
@@ -173,45 +162,13 @@ public class Client {
 
 	}
 
-//	public void sendMessageViaConsole() {
-//
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//
-//				try {
-//					Scanner scanner = new Scanner(System.in);
-//					while (socket.isConnected()) {
-//					//	outputStream.writeObject(new MessageSend(userName + ": " + scanner.nextLine()));
-//						outputStream.flush();
-//					}
-//
-//				} catch (Exception e) {
-//					closeEverything(socket, inputStream, outputStream);
-//				}
-//			}
-//		}).start();
-//	}
-
-//	public void sendMessage(String message) {
-//		try {
-//			outputStream.writeObject(new MessageSend(userName + ": " + message));
-//			outputStream.flush();
-//		} catch (IOException e) {
-//			closeEverything(socket, inputStream, outputStream);
-//			e.printStackTrace();
-//		}
-//	}
 
 	public static Client createClient(String host, int port) throws IOException {
-		AppController.getInstance();
 		Profile profile = AppController.getProfile();
 		Socket socket;
 		Client client;
 		socket = new Socket(host, port);
 		client = new Client(socket, profile);
-
 		return client;
 	}
 

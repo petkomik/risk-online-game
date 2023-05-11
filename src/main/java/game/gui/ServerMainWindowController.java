@@ -643,7 +643,6 @@ public class ServerMainWindowController extends VBox {
 		client.setChat(chatPane);
 		this.hostView = false;
 		client.setHost(false);
-		// client.sendMessage(new MessageConnect(AppController.getProfile()));
 
 	}
 
