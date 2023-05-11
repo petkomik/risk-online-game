@@ -55,7 +55,7 @@ public class EndGamePodiumController extends StackPane {
 	private HBox backgroundColor;									//*
 	private ImageView imgBackground;								//*
 	private ImageViewPane imgBackgroundPane;						//*
-	
+	public ArrayList<String> pathsEndGame;
 	private HBox topBannerParent;									//banner
 	private HBox topBannerContent;									//*
 	private Label lobbyTextBanner;									//*
@@ -169,6 +169,21 @@ public class EndGamePodiumController extends StackPane {
 		secondP = new StackPane();
 		thirdP = new StackPane();
 
+		for (Player player: this.playerList) {
+			
+			
+			
+			for (String avatar : Parameter.allAvatars) {
+				if (player.getAvatar().contains(avatar)) {
+					pathsEndGame.add(Parameter.avatarsdir + avatar);
+				}
+			}
+			
+			
+		}
+
+		
+		
 		/*
 		 * image and shape for the first avatar
 		 */
@@ -182,7 +197,7 @@ public class EndGamePodiumController extends StackPane {
 
 		firstP.getChildren().add(circleFirstP);
 
-		circleFirstI.setImage(new Image(new FileInputStream(this.playerList.get(0).getAvatar())));
+		circleFirstI.setImage(new Image(new FileInputStream(pathsEndGame.get(0))));
 		circleFirstI.setFitWidth(180 * ratio);
 		circleFirstI.setFitHeight(180 * ratio);
 		circleFirstI.setPreserveRatio(true);
@@ -204,7 +219,7 @@ public class EndGamePodiumController extends StackPane {
 
 		secondP.getChildren().add(circleSecondP);
 
-		circleSecondI.setImage(new Image(new FileInputStream(this.playerList.get(1).getAvatar())));
+		circleSecondI.setImage(new Image(new FileInputStream(pathsEndGame.get(1))));
 		circleSecondI.setFitWidth(180 * ratio);
 		circleSecondI.setFitHeight(180 * ratio);
 		circleSecondI.setPreserveRatio(true);
@@ -237,7 +252,7 @@ public class EndGamePodiumController extends StackPane {
 		
 		if (players > 2) {
 			circleThirdP.setFill(Color.web(this.playerList.get(2).getColor()));
-			circleThirdI.setImage(new Image(new FileInputStream(this.playerList.get(2).getAvatar())));
+			circleThirdI.setImage(new Image(new FileInputStream(pathsEndGame.get(2))));
 			thirdP.setVisible(true);
 			circleThirdI.setVisible(true);
 	
