@@ -537,6 +537,7 @@ public class GamePaneController implements Initializable {
 		gameBoard.getChildren().add(leaveGameButton);
 	}
 
+
 	/**
 	 * Sets up the next phase button, it's kind of confirming button for changing
 	 * the turn, phase and period

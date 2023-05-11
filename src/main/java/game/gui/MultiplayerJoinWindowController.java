@@ -26,6 +26,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -94,7 +96,6 @@ public class MultiplayerJoinWindowController extends StackPane {
 		 * First layer of stack
 		 * Background map image
 		 */
-		
 		vBox = new VBox();
 		vBox.setAlignment(Pos.CENTER);
 		vBox.setFillWidth(true);
@@ -281,6 +282,25 @@ public class MultiplayerJoinWindowController extends StackPane {
 				stage.show();
 		    }
 	   });
+		
+		ipAddressField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.ENTER) {
+					joinButton.fire();
+					
+				}
+			}
+		});
+		portNumberField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.ENTER) {
+					joinButton.fire();
+					
+				}
+			}
+		});
 	}
 		
 	private static Parent loadFXML(String fxml) throws IOException {
