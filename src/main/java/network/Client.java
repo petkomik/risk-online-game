@@ -455,7 +455,9 @@ public class Client {
 							}
 							// TODO has to be checked
 							lobbies.remove(lobbyWithAvatars.getLobbyName());
+							ServerMainWindowController.lobbyGUIList.remove(lobbyWithAvatars.getLobbyName());
 							ServerMainWindowController.drawLobbies(true);
+							
 
 							break;
 						case MessageGUIRollInitalDice:
