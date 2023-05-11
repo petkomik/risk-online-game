@@ -249,7 +249,7 @@ public class LobbyMenuController extends StackPane {
 		chatDiv.setPrefHeight(100 * ratio);
 		chatDiv.setPadding(new Insets(0, 50 * ratio, 0, 0));
 		chatDiv.setAlignment(Pos.CENTER);	
-		chatDiv.setVisible(this.singleplayerLobby);
+		chatDiv.setVisible(!this.singleplayerLobby);
 	
 		
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
