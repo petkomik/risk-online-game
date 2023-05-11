@@ -96,6 +96,8 @@ public class ServerMainWindowController extends VBox {
 	private HBox searchBar; // searchField + Button
 	private TextField searchField; // *
 	private static DesignButton searchButton; // *
+	private static Text rankText;
+	private int personalRank;
 
 	private HBox buttonsHBox; // Join and Host buttons
 	private DesignButton hostGameButton; // *
@@ -134,9 +136,11 @@ public class ServerMainWindowController extends VBox {
 
 		lobbyGUIList = new HashMap<String, LobbyGUI>();
 		topContainer = new StackPane();
+		
 		/*
 		 * to be returned StackPane
 		 */
+		
 		backgroundPic = new HBox();
 
 		menu = new HBox();
@@ -303,8 +307,12 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * assembling the menu
 		 */
+		
+		rankText = new Text();
+		rankText.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 20 * ratio));
+		rankText.setFill(Color.WHITE);
 
-		menu.getChildren().addAll(searchBar, new Spacing(1), cancelButton);
+		menu.getChildren().addAll(searchBar, new Spacing(1),rankText,new Spacing(1), cancelButton);
 		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
 
 		/*
@@ -630,6 +638,9 @@ public class ServerMainWindowController extends VBox {
 			client.setChat(chatPane);
 			chatPane.addLabel(host);
 			client.setHost(true);
+			rankText.setText("your Rating: " 
+					+ 100 + (client.getProfile().getWins()*3-client.getProfile().getLoses())
+					+ " \u2605");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
