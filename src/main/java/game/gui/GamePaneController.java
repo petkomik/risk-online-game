@@ -172,7 +172,6 @@ public class GamePaneController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		setUpMapComponents();
-		setUpChatButton();
 		setUpLeaveGameButton();
 		setUpPhaseBoard();
 		setUpNextPhaseButton();
@@ -227,6 +226,7 @@ public class GamePaneController implements Initializable{
 	}
 	
 	public void initMultiPlayer(Client client, Lobby lobby) {
+		setUpChatButton();
 		this.gameType = GameType.Multiplayer;
 		this.client = client;
 		this.currentPeriod = Period.DICETHROW;
@@ -449,12 +449,14 @@ public class GamePaneController implements Initializable{
 		gameBoard.getChildren().add(vbPlayerList);
 	}
 	private void setUpChatWindow() {
+	    if(this.gameType.equals(gameType.Multiplayer)) {
 		chatWindow = ServerMainWindowController.getChatPane();
 		chatWindow.setVisible(false);
 		chatWindow.setPickOnBounds(true);
 		chatWindow.setLayoutX(0.5 * w - chatWindow.getMaxWidth() / 2);
 		chatWindow.setLayoutY((0.5 * h - chatWindow.getPrefHeight() / 2));
-		gameBoard.getChildren().add(chatWindow);
+		gameBoard.getChildren().add(chatWindow);		
+	    }
 		
 	}
 	
@@ -1492,10 +1494,12 @@ public class GamePaneController implements Initializable{
 	
 	public void closeBattleFrame() {
 		this.battlePane.setVisible(false);
-		this.gameBoard.getChildren().remove(chatWindow);
-		this.chatWindow = ((BattleFrameController)this.battlePane.getChildren().get(0)).getChatWindow();
-		this.gameBoard.getChildren().add(chatWindow);
-		this.battlePane.getChildren().removeIf(x -> true);
+		if(this.gameType.equals(GameType.Multiplayer)) {
+		    this.gameBoard.getChildren().remove(chatWindow);
+		    this.chatWindow = ((BattleFrameController)this.battlePane.getChildren().get(0)).getChatWindow();
+		    this.gameBoard.getChildren().add(chatWindow);
+		    this.battlePane.getChildren().removeIf(x -> true);		    
+		}
 	
 		
 	}

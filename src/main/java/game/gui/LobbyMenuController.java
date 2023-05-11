@@ -241,17 +241,21 @@ public class LobbyMenuController extends StackPane {
 		chatButton = new ChatButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio,
 				170 * ratio, true);
 		chatButton.setAlignment(Pos.CENTER);
+
 		chatDiv = new HBox();
 		chatDiv.getChildren().add(chatButton);
 		chatDiv.minHeightProperty().bind(chatDiv.maxHeightProperty());
 		chatDiv.maxHeightProperty().bind(chatDiv.prefHeightProperty());
 		chatDiv.setPrefHeight(100 * ratio);
 		chatDiv.setPadding(new Insets(0, 50 * ratio, 0, 0));
-		chatDiv.setAlignment(Pos.CENTER);
-
+		chatDiv.setAlignment(Pos.CENTER);	
+		chatDiv.setVisible(this.singleplayerLobby);
+	
+		
 		topBannerContent.getChildren().addAll(backButton, bannerContentSpacing, lobbyTextBanner);
 		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing, chatDiv);
 
+		
 		/*
 		 * Setting up the main content Includes mainContent pane with playerCardsPane
 		 * and settingsReadyPane playerCardsPane holds the cards of the joined players
@@ -632,11 +636,6 @@ public class LobbyMenuController extends StackPane {
 							FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
 							AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
 							GamePaneController gamePaneController = fxmlLoader.getController();
-							
-							GameStatistic gameStatistic = new GameStatistic(LocalDateTime.now(), lobby.getPlayerList().size());
-							AppController.createGameStatistic(gameStatistic);
-							lobby.setGameStatistic(gameStatistic);
-							
 							SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby, gamePaneController);
 							gamePaneController.initSinglePlayer(singleHandler, lobby);
 							stage.getScene().setRoot(anchorPane);
@@ -654,11 +653,10 @@ public class LobbyMenuController extends StackPane {
 								lobby.setReady(player, false);
 							} else {
 								lobby.setReady(player, true);
-
 							}
 						}
 					}
-					if((lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1)){
+					if(lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1) {
 						client.sendMessage(new MessageReadyToPlay(lobby));
 					}else{
 						client.sendMessage(new MessageUpdateLobby(lobby));

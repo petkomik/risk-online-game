@@ -180,12 +180,13 @@ public class DatabaseHandler extends Database {
 
   public void createGameStatistic(GameStatistic g) {
     try {
-      String sql = "INSERT INTO Games(GameID, StartTime, NumberOfPlayers) VALUES (?,?,?);";
+      String sql = "INSERT INTO Games(GameID, StartTime, NumberOfPlayers, Length) VALUES (?,?,?,?);";
       stm1 = super.connection.prepareStatement(sql);
 
       stm1.setInt(1, g.getGameID());
       stm1.setString(2, g.getStartTime().toString());
       stm1.setInt(3, g.getNumberOfPlayers());
+      stm1.setInt(4, 0);
 
       stm1.executeUpdate();
       this.connection.commit();

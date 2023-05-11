@@ -140,6 +140,7 @@ public class BattleFrameController extends VBox {
 		this.defenderColor = Parameter.greenColor;
 		this.gameType = GameType.SinglePlayer;
 		setup();
+
 	
 	}
 	
@@ -164,6 +165,8 @@ public class BattleFrameController extends VBox {
 		this.singleplayerHandler = singlePlayerHandler;
 		setup();
 		this.throwBtn.setVisible(attacker);
+		this.chatDiv.setVisible(false);
+		this.chatButton.setVisible(false);
 	}
 	
 	public BattleFrameController(Battle battle, Client client, boolean attacker, ChatWindow chatWindow) throws Exception {
@@ -495,7 +498,11 @@ public class BattleFrameController extends VBox {
 		HBox.setHgrow(spacingControls1, Priority.ALWAYS);
 		HBox.setHgrow(spacingControls2, Priority.ALWAYS);
 
-		this.getChildren().addAll(diceAndProfile,chatWindow);		
+		this.getChildren().addAll(diceAndProfile);		
+		
+		if(this.chatWindow != null) {
+		    this.getChildren().add(chatWindow);
+		}
 	}
 	
 	public FlowPane diceImageFactory (int k, boolean at) throws FileNotFoundException {
