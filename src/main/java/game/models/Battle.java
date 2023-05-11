@@ -1,201 +1,223 @@
 package game.models;
 
+import gameState.GameType;
 import java.io.Serializable;
 
-import gameState.GameType;
-import gameState.SinglePlayerHandler;
-
 /**
- * class for modelling a battle and saving it in the state
+ * Modells a batle during the game contains all the needed information to paint the GUI and keeping
+ * record of the current battle state.
+ *
  * @author pmikov
  *
  */
+
 public class Battle implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private final int troopsInAttackAtFinal;
-	private Continent continentAt;
-	private CountryName countryNameAt;
-	private	Continent continentDf;
-	private CountryName countryNameDf;
-	private String attackingPNG;
-	private String defendingPNG;
-	private int troopsInAttackAt;
-	private int troopsInAttackDf;
-	private String attackingAvatar;
-	private String defendingAvatar;
-	private String attackerColor;
-	private String defenderColor;
-	private int maxDiceToThrow;
-	private int defendingDice;
-	private GameType gameType; 
-	private int attackerID;
-	private int defenderID;
+  private static final long serialVersionUID = 1L;
+  private final int troopsInAttackAtFinal;
+  private Continent continentAt;
+  private CountryName countryNameAt;
+  private Continent continentDf;
+  private CountryName countryNameDf;
+  private String attackingPng;
+  private String defendingPng;
+  private int troopsInAttackAt;
+  private int troopsInAttackDf;
+  private String attackingAvatar;
+  private String defendingAvatar;
+  private String attackerColor;
+  private String defenderColor;
+  private int maxDiceToThrow;
+  private int defendingDice;
+  private GameType gameType;
+  private int attackerId;
+  private int defenderId;
 
-	public Battle(Continent continentAt, CountryName countryNameAt, Continent continentDf, CountryName countryNameDf,
-			String attackingPNG, String defendingPNG, int troopsInAttackAt, int troopsInAttackDf,
-			String attackingAvatar, String defendingAvatar, String attackerColor, String defenderColor, 
-			int maxDiceToThrow, int defendingDice, GameType gameType, int attackerID, int defenderID) {
-		super();
-		this.continentAt = continentAt;
-		this.countryNameAt = countryNameAt;
-		this.continentDf = continentDf;
-		this.countryNameDf = countryNameDf;
-		this.attackingPNG = attackingPNG;
-		this.defendingPNG = defendingPNG;
-		this.attackingAvatar = attackingAvatar;
-		this.defendingAvatar = defendingAvatar;
-		this.attackerColor = attackerColor;
-		this.defenderColor = defenderColor;
-		this.troopsInAttackAtFinal = troopsInAttackAt;
-		this.troopsInAttackAt = troopsInAttackAt;
-		this.troopsInAttackDf = troopsInAttackDf;
-		this.maxDiceToThrow = maxDiceToThrow;
-		this.defendingDice = defendingDice;
+  /**
+   * Consturctor for the class. Takes all the needed values as parameters.
+   *
+   * @author pmikov
+   * @param continentAt Continent enum of the attacker
+   * @param countryNameAt CountryName enum of the attacker
+   * @param continentDf Continent enum of the defender
+   * @param countryNameDf CountryName enum of the defender
+   * @param attackingPng Address of the PNG of attacker territory
+   * @param defendingPng Address of the PNG of defender territory
+   * @param troopsInAttackAt Number of attacking troops
+   * @param troopsInAttackDf Number of defending troops
+   * @param attackingAvatar Address of the avatar of the attacker in resources
+   * @param defendingAvatar Address of the avatar of the defender in resources
+   * @param attackerColor Color of attacker as hex code
+   * @param defenderColor Color of defender as hex code
+   * @param maxDiceToThrow Max number of dice that the attacker can throw (<= 3)
+   * @param defendingDice Max number of dice that the defender can throw (<= 2)
+   * @param gameType GameType Enum value
+   * @param attackerId ID of attacker profile
+   * @param defenderId ID of defender profile
+   */
 
-		this.gameType = gameType;
-		this.attackerID = attackerID;
-		this.defenderID = defenderID;
-	}
-	
-	public int getDefenderID() {
-		return defenderID;
-	}
+  public Battle(Continent continentAt, CountryName countryNameAt, Continent continentDf,
+      CountryName countryNameDf, String attackingPng, String defendingPng, int troopsInAttackAt,
+      int troopsInAttackDf, String attackingAvatar, String defendingAvatar, String attackerColor,
+      String defenderColor, int maxDiceToThrow, int defendingDice, GameType gameType,
+      int attackerId, int defenderId) {
+    super();
+    this.continentAt = continentAt;
+    this.countryNameAt = countryNameAt;
+    this.continentDf = continentDf;
+    this.countryNameDf = countryNameDf;
+    this.attackingPng = attackingPng;
+    this.defendingPng = defendingPng;
+    this.attackingAvatar = attackingAvatar;
+    this.defendingAvatar = defendingAvatar;
+    this.attackerColor = attackerColor;
+    this.defenderColor = defenderColor;
+    this.troopsInAttackAtFinal = troopsInAttackAt;
+    this.troopsInAttackAt = troopsInAttackAt;
+    this.troopsInAttackDf = troopsInAttackDf;
+    this.maxDiceToThrow = maxDiceToThrow;
+    this.defendingDice = defendingDice;
 
-	public int getAttackerID() {
-		return attackerID;
-	}
+    this.gameType = gameType;
+    this.attackerId = attackerId;
+    this.defenderId = defenderId;
+  }
 
-	public void setAttackerID(int attackerID) {
-		this.attackerID = attackerID;
-	}
+  public int getDefenderId() {
+    return defenderId;
+  }
 
-	public Continent getContinentAt() {
-		return continentAt;
-	}
+  public int getAttackerId() {
+    return attackerId;
+  }
 
-	public void setContinentAt(Continent continentAt) {
-		this.continentAt = continentAt;
-	}
+  public void setAttackerId(int attackerId) {
+    this.attackerId = attackerId;
+  }
 
-	public CountryName getCountryNameAt() {
-		return countryNameAt;
-	}
+  public Continent getContinentAt() {
+    return continentAt;
+  }
 
-	public void setCountryNameAt(CountryName countryNameAt) {
-		this.countryNameAt = countryNameAt;
-	}
+  public void setContinentAt(Continent continentAt) {
+    this.continentAt = continentAt;
+  }
 
-	public Continent getContinentDf() {
-		return continentDf;
-	}
+  public CountryName getCountryNameAt() {
+    return countryNameAt;
+  }
 
-	public void setContinentDf(Continent continentDf) {
-		this.continentDf = continentDf;
-	}
+  public void setCountryNameAt(CountryName countryNameAt) {
+    this.countryNameAt = countryNameAt;
+  }
 
-	public CountryName getCountryNameDf() {
-		return countryNameDf;
-	}
+  public Continent getContinentDf() {
+    return continentDf;
+  }
 
-	public void setCountryNameDf(CountryName countryNameDf) {
-		this.countryNameDf = countryNameDf;
-	}
+  public void setContinentDf(Continent continentDf) {
+    this.continentDf = continentDf;
+  }
 
-	public String getAttackingPNG() {
-		return attackingPNG;
-	}
+  public CountryName getCountryNameDf() {
+    return countryNameDf;
+  }
 
-	public void setAttackingPNG(String attackingPNG) {
-		this.attackingPNG = attackingPNG;
-	}
+  public void setCountryNameDf(CountryName countryNameDf) {
+    this.countryNameDf = countryNameDf;
+  }
 
-	public String getDefendingPNG() {
-		return defendingPNG;
-	}
+  public String getAttackingPng() {
+    return attackingPng;
+  }
 
-	public void setDefendingPNG(String defendingPNG) {
-		this.defendingPNG = defendingPNG;
-	}
+  public void setAttackingPng(String attackingPng) {
+    this.attackingPng = attackingPng;
+  }
 
-	public int getTroopsInAttackAt() {
-		return troopsInAttackAt;
-	}
+  public String getDefendingPng() {
+    return defendingPng;
+  }
 
-	public void setTroopsInAttackAt(int troopsInAttackAt) {
-		this.troopsInAttackAt = troopsInAttackAt;
-	}
+  public void setDefendingPng(String defendingPng) {
+    this.defendingPng = defendingPng;
+  }
 
-	public int getTroopsInAttackDf() {
-		return troopsInAttackDf;
-	}
+  public int getTroopsInAttackAt() {
+    return troopsInAttackAt;
+  }
 
-	public void setTroopsInAttackDf(int troopsInAttackDf) {
-		this.troopsInAttackDf = troopsInAttackDf;
-	}
+  public void setTroopsInAttackAt(int troopsInAttackAt) {
+    this.troopsInAttackAt = troopsInAttackAt;
+  }
 
-	public String getAttackingAvatar() {
-		return attackingAvatar;
-	}
+  public int getTroopsInAttackDf() {
+    return troopsInAttackDf;
+  }
 
-	public void setAttackingAvatar(String attackingAvatar) {
-		this.attackingAvatar = attackingAvatar;
-	}
+  public void setTroopsInAttackDf(int troopsInAttackDf) {
+    this.troopsInAttackDf = troopsInAttackDf;
+  }
 
-	public String getDefendingAvatar() {
-		return defendingAvatar;
-	}
+  public String getAttackingAvatar() {
+    return attackingAvatar;
+  }
 
-	public void setDefendingAvatar(String defendingAvatar) {
-		this.defendingAvatar = defendingAvatar;
-	}
+  public void setAttackingAvatar(String attackingAvatar) {
+    this.attackingAvatar = attackingAvatar;
+  }
 
-	public String getAttackerColor() {
-		return attackerColor;
-	}
+  public String getDefendingAvatar() {
+    return defendingAvatar;
+  }
 
-	public void setAttackerColor(String attackerColor) {
-		this.attackerColor = attackerColor;
-	}
+  public void setDefendingAvatar(String defendingAvatar) {
+    this.defendingAvatar = defendingAvatar;
+  }
 
-	public String getDefenderColor() {
-		return defenderColor;
-	}
+  public String getAttackerColor() {
+    return attackerColor;
+  }
 
-	public void setDefenderColor(String defenderColor) {
-		this.defenderColor = defenderColor;
-	}
+  public void setAttackerColor(String attackerColor) {
+    this.attackerColor = attackerColor;
+  }
 
+  public String getDefenderColor() {
+    return defenderColor;
+  }
 
-	public int getMaxDiceToThrow() {
-		return maxDiceToThrow;
-	}
-
-	public void setMaxDiceToThrow(int maxDiceToThrow) {
-		this.maxDiceToThrow = maxDiceToThrow;
-	}
-
-	public int getDefendingDice() {
-		return defendingDice;
-	}
-
-	public void setDefendingDice(int defendingDice) {
-		this.defendingDice = defendingDice;
-	}
+  public void setDefenderColor(String defenderColor) {
+    this.defenderColor = defenderColor;
+  }
 
 
-	public GameType getGameType() {
-		return gameType;
-	}
+  public int getMaxDiceToThrow() {
+    return maxDiceToThrow;
+  }
 
-	public void setGameType(GameType gameType) {
-		this.gameType = gameType;
-	}
+  public void setMaxDiceToThrow(int maxDiceToThrow) {
+    this.maxDiceToThrow = maxDiceToThrow;
+  }
 
-	public int getTroopsInAttackAtFinal() {
-		return troopsInAttackAtFinal;
-	}
+  public int getDefendingDice() {
+    return defendingDice;
+  }
 
-	
-	
+  public void setDefendingDice(int defendingDice) {
+    this.defendingDice = defendingDice;
+  }
+
+
+  public GameType getGameType() {
+    return gameType;
+  }
+
+  public void setGameType(GameType gameType) {
+    this.gameType = gameType;
+  }
+
+  public int getTroopsInAttackAtFinal() {
+    return troopsInAttackAtFinal;
+  }
 }

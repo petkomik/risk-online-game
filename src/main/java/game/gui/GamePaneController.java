@@ -1425,7 +1425,7 @@ public class GamePaneController implements Initializable{
 		battlePane.setPrefSize(w, h);
 		battlePane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
-		boolean attacker = this.playerOnGUI.getID() == battle.getAttackerID();
+		boolean attacker = this.playerOnGUI.getID() == battle.getAttackerId();
 
 		switch (gameType) {
 		case SinglePlayer:
