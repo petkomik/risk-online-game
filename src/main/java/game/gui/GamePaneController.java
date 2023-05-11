@@ -1162,7 +1162,8 @@ public class GamePaneController implements Initializable{
 				
 				if(dropOnPane1.getChildren().size() != 0 
 						&& dropOnPane2.getChildren().size() != 0 
-						&& dropOnPane3.getChildren().size() != 0) {
+						&& dropOnPane3.getChildren().size() != 0
+						&& this.currentPhase.equals(Phase.REINFORCE)) {
 					tradeButton.setDisable(false);
 					tradeButton.setText("TRADE");
 				}

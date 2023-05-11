@@ -381,7 +381,7 @@ public class GameHandler {
             if(Logic.playerEndsPhase(phase, idOfPlayer, this.gameState)) {
                 switch (phase) {
                 case REINFORCE:
-                    if(this.gameState.getRiskCardsInPlayers().size() < 5) {
+                    if(this.gameState.getRiskCardsInPlayers().get(idOfPlayer).size() < 5) {
                         this.gameState.setCurrentTurnPhase(Phase.ATTACK);
                         switch(this.gameType) {
                         case SinglePlayer:
@@ -655,6 +655,8 @@ public class GameHandler {
             int[] numberOfDices = new int[] {changed.getMaxDiceToThrow(), changed.getDefendingDice()};
             boolean overAt = changed.getTroopsInAttackAt() == 0; 
             boolean overDf = changed.getTroopsInAttackDf() == 0;
+            Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1)));
+
             if(overDf) {
                 this.gameState.setLastTurnWonterritory(true);
                 this.gameState.getTerritories().get(changed.getCountryNameDf()).setOwnedByPlayer(
@@ -663,6 +665,9 @@ public class GameHandler {
                     if(this.gameState.getAlivePlayers().size() <= 3) {
                         this.gameState.addDeadPlayer(changed.getDefenderId());
                     }
+                    this.gameState.getRiskCardsInPlayers().get(changed.getAttackerId())
+                	.addAll(this.gameState.getRiskCardsInPlayers().get(changed.getDefenderId()));
+                    this.gameState.getRiskCardsInPlayers().get(changed.getDefenderId()).removeIf(x -> true);
                     this.gameState.removeDeadPlayer(changed.getDefenderId());
                     System.out.println("player died left are " + gameState.getAlivePlayers().size());
                     if(Logic.isGameOver(gameState)) {
@@ -686,6 +691,8 @@ public class GameHandler {
                     this.singlePlayerHandler.rollDiceBattleOnGUI(diceValuesAt, diceValuesDf, 
                             changed.getTroopsInAttackAt(), changed.getTroopsInAttackDf(),
                             numberOfDices);
+                    timer.play();
+                    timer.setOnFinished(x -> this.singlePlayerHandler.endBattleOnGUI());
                     if(overAt || overDf) {
                         this.singlePlayerHandler.endBattleOnGUI();
                         this.singlePlayerHandler.setTroopsOnTerritory(changed.getCountryNameAt(),
@@ -719,6 +726,8 @@ public class GameHandler {
                     this.client.rollDiceBattleOnGUI(diceValuesAt, diceValuesDf, 
                             changed.getTroopsInAttackAt(), changed.getTroopsInAttackDf(),
                             numberOfDices);
+                    timer.play();
+                    timer.setOnFinished(x -> this.client.endBattleOnGUI());
                     if(overAt || overDf) {
                         this.client.endBattleOnGUI();
                         this.client.setTroopsOnTerritory(changed.getCountryNameAt(),
@@ -764,7 +773,7 @@ public class GameHandler {
         switch(gameState.getCurrentGamePeriod()) {
         case DICETHROW:            
             this.playerThrowsInitialDice(player.getID());
-            Timeline timer = new Timeline(new KeyFrame(Duration.seconds(2)));
+            Timeline timer = new Timeline(new KeyFrame(Duration.seconds(3)));
             timer.play();
             timer.setOnFinished(x -> this.endPhaseTurn(this.gameState.getCurrentGamePeriod(), this.gameState.getCurrentTurnPhase(), this.gameState.getCurrentPlayer().getID()));
             break;
