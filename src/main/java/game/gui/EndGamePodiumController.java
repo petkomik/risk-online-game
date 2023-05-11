@@ -88,6 +88,7 @@ public class EndGamePodiumController extends StackPane {
 		this.ratio = Math.min(ratio + 0.3, 1);
 		this.players = podiumPlayers.size();
 		this.playerList = (ArrayList<Player>) podiumPlayers;
+		pathsEndGame = new ArrayList<String>();
 		this.singleplayer = singleplayer;
 		this.setup();
 		actionEventsSetup();
