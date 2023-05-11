@@ -638,8 +638,9 @@ public class ServerMainWindowController extends VBox {
 			client.setChat(chatPane);
 			chatPane.addLabel(host);
 			client.setHost(true);
+			int rank = 100 + (client.getProfile().getWins()*3-client.getProfile().getLoses());
 			rankText.setText("your Rating: " 
-					+ 100 + (client.getProfile().getWins()*3-client.getProfile().getLoses())
+					+ rank
 					+ " \u2605");
 		} catch (IOException e1) {
 			e1.printStackTrace();
