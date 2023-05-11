@@ -724,6 +724,7 @@ public class BattleFrameController extends StackPane {
 	}
 	
 	public ChatWindow getChatWindow() {
+		chatWindow.setVisible(false);
 		return chatWindow;
 	}
 	
