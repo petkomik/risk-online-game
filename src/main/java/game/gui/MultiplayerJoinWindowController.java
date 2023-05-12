@@ -53,8 +53,6 @@ import javafx.scene.Parent;
 
 public class MultiplayerJoinWindowController extends StackPane {
 	
-	private double w = MainApp.screenWidth;
-	private double h = MainApp.screenHeight;
 	private GameSound gameSound = AppController.getGameSound();
 	private Stage stage;	
 	private VBox vBox;
@@ -77,8 +75,6 @@ public class MultiplayerJoinWindowController extends StackPane {
 	private DesignButton joinButton;
 	private double ratio;
 	
-	private AnchorPane anchorPane;
-
 	
 	public MultiplayerJoinWindowController() throws FileNotFoundException {
 		super();

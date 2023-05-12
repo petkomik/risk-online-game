@@ -2,35 +2,26 @@ package game.gui;
 
 import java.io.FileNotFoundException;
 import java.io.Serializable;
-
-import database.Profile;
-import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Lobby;
-import game.models.PlayerSingle;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
-import javafx.stage.Stage;
 
+/**
+ * the class is responsible for representing a lobby as a GUI.
+ * 
+ * @author pmalamov
+ *
+ */
 public class LobbyGUI extends ToggleButton implements Serializable {
 
-	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private double ratio;
 	private int numberOfPlayersJoined;
@@ -45,19 +36,11 @@ public class LobbyGUI extends ToggleButton implements Serializable {
 
 	private Label playersJoined;
 	
-	public LobbyGUI() {
-		super();
-		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
-				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-		this.ratio = Math.min(ratio + 0.3, 1);
-		this.ratingString = (int) (Math.random() * 100);
-		this.numberOfPlayersJoined = 1;
-		this.maxNumberOfPlayers = 6;
-		setup();
-	
-		
-	}
-	
+	/**
+	 * Constructor for the class
+	 * 
+	 * @param lobby information needed to visualize it 
+	 */
 	public LobbyGUI(Lobby lobby) {
 		super();
 		this.lobby = lobby;
@@ -71,14 +54,11 @@ public class LobbyGUI extends ToggleButton implements Serializable {
 		setup();
 	}
 	
-	public LobbyGUI(String name, int joinedPlayers, int maxPlayers, int rank) {
-		
-	}
-	
-	public HBox getVisual() {
-		return hBox;
-	}
-
+	/**
+	 * initializes all the GUI items that are needed for the construction of the LobbyGUI
+	 * and places them on the previously planned out place.
+	 * 
+	 */
 	public void setup() {
 		
 		this.setStyle("-fx-background-color: rgba(92,64,51);"
@@ -143,19 +123,8 @@ public class LobbyGUI extends ToggleButton implements Serializable {
 
 	}
 	
-	public String getRating() {
-		return rating.getText();
-	}
-	
 	public Lobby getLobby() {
 		return lobby;
 	}
 
-	public void setLobbyName(String newUsername) {
-		lobbyNameString = newUsername;
-		
-	}
-	public String getLobbyNameString() {
-		return lobbyNameString;
-	}
 }

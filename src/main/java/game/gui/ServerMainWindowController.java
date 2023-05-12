@@ -3,8 +3,6 @@ package game.gui;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.Socket;
-import java.sql.ClientInfoStatus;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
@@ -17,33 +15,26 @@ import game.gui.GUISupportClasses.Spacing;
 import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
-import gameState.GameHandler;
 import general.*;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -51,17 +42,17 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import network.Client;
-import network.ClientHandler;
 import network.Server;
-import network.messages.MessageConnect;
 import network.messages.MessageCreateLobby;
 import network.messages.MessageDisconnect;
 import network.messages.MessageJoinLobby;
-import network.messages.MessageSend;
 import network.messages.MessageServerCloseConnection;
 import network.messages.MessageUpdateLobby;
 
 /**
+ * this class is responsible for constructing the GUI pane, 
+ * when you have joined a server or hosted one.
+ * its the server main menu with all the available lobbies in it. 
  * 
  * @author pmalamov
  * 
@@ -69,48 +60,44 @@ import network.messages.MessageUpdateLobby;
 
 public class ServerMainWindowController extends VBox {
 
-	/*
-	 * all containers for easier understanding of the construction
-	 */
 	static int counter = 0;
 	private double ratio;
 	private double ratioBanner;
 	private Stage stage;
 
-	private static VBox menuAndScrollAndButtons; // top level container
-	private static HBox backgroundPic; // background
-	private static HBox backgroundColor; // *
-	private ImageView imgBackground; // *
-	private ImageViewPane imgBackgroundPane; // *
+	private static VBox menuAndScrollAndButtons;
+	private static HBox backgroundPic;
+	private static HBox backgroundColor;
+	private ImageView imgBackground;
+	private ImageViewPane imgBackgroundPane;
 
-	private static HBox topBannerParent; // banner
-	private HBox topBannerContent; // *
-	private Label lobbyTextBanner; // *
-	private ArrowButton backButton; // *
+	private static HBox topBannerParent;
+	private HBox topBannerContent;
+	private Label lobbyTextBanner;
+	private ArrowButton backButton;
 
-	private HBox chatDiv; // chatdiv with button
-	private ChatButton chatButton; // *
-	private static ChatWindow chatPane; // chatPane
+	private HBox chatDiv;
+	private ChatButton chatButton;
+	private static ChatWindow chatPane;
 
-	private HBox menu; // menu
-	private HBox searchBar; // searchField + Button
-	private TextField searchField; // *
-	private static DesignButton searchButton; // *
+	private HBox menu;
+	private HBox searchBar;
+	private TextField searchField;
+	private static DesignButton searchButton;
 	private static Text rankText;
-	private int personalRank;
 
-	private HBox buttonsHBox; // Join and Host buttons
-	private DesignButton hostGameButton; // *
-	private DesignButton joinGameButton; // *
-	private Button cancelButton; // *
+	private HBox buttonsHBox;
+	private DesignButton hostGameButton;
+	private DesignButton joinGameButton;
+	private Button cancelButton;
 
 	private static LobbyMenuController lobbyMenuController;
 	private static VBox vBoxLobbyMenuController;
 
-	private static ScrollPane lobbyListContainer; // ScrollPane that will include the Lobbies
-	private static volatile VBox vbox; // Lobbies in the scrollPane
-	public static HashMap<String, LobbyGUI> lobbyGUIList; // Hashmap with all the Lobbies
-	public static HashMap<String, LobbyGUI> lobbyGUIListSearch; // Hashmap with all the Lobbies
+	private static ScrollPane lobbyListContainer;
+	private static volatile VBox vbox;
+	public static HashMap<String, LobbyGUI> lobbyGUIList;
+	public static HashMap<String, LobbyGUI> lobbyGUIListSearch;
 	public static Lobby selectedLobby;
 
 	private static StackPane topContainer;
@@ -118,9 +105,14 @@ public class ServerMainWindowController extends VBox {
 
 	static Server server;
 	static Client client;
-	private static boolean hostView;
-
-	public ServerMainWindowController() throws Exception {
+	
+	/**
+	 * Constructor for the class.
+	 * 
+	 * @throws FileNotFoundException is thrown because of the background and avatar images
+	 */
+	
+	public ServerMainWindowController() throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
@@ -130,8 +122,15 @@ public class ServerMainWindowController extends VBox {
 		this.actionEventsSetup();
 
 	}
+	
+	/**
+	 * initializes all the GUI items that are needed for the construction of the GUI
+	 * and places them on the previously planned out place.
+	 * 
+	 * @throws FileNotFoundException is thrown because of the background and avatar images
+	 */
 
-	public void setup() throws Exception {
+	public void setup() throws FileNotFoundException {
 
 		lobbyGUIList = new HashMap<String, LobbyGUI>();
 		topContainer = new StackPane();
@@ -139,7 +138,7 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * to be returned StackPane
 		 */
-
+		
 		backgroundPic = new HBox();
 
 		menu = new HBox();
@@ -149,7 +148,7 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * setting up background image
 		 */
-
+		
 		imgBackground = new ImageView();
 		imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
 		imgBackground.setPreserveRatio(false);
@@ -169,7 +168,7 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * setting up banner layer with chat button
 		 */
-
+		
 		topBannerParent = new HBox();
 		topBannerParent.setAlignment(Pos.TOP_LEFT);
 		StackPane.setMargin(topBannerParent, new Insets(50 * ratioBanner, 0, 0, 0));
@@ -220,13 +219,15 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * initializing the chat
 		 */
+		
 		chatPane = new ChatWindow();
 		chatPane.setVisible(false);
 		chatPane.setPickOnBounds(true);
+		
 		/*
 		 * setting up ScrollPane
 		 */
-
+		
 		lobbyListContainer.getStylesheets().add(this.getClass().getResource("application.css").toExternalForm());
 		lobbyListContainer.setPrefSize(ratio * 900, ratio * 500);
 		lobbyListContainer.setMaxSize(ratio * 900, ratio * 500);
@@ -240,10 +241,11 @@ public class ServerMainWindowController extends VBox {
 		vbox = new VBox();
 		vbox.setAlignment(Pos.CENTER);
 		vbox.setSpacing(15);
+		
 		/*
 		 * Setting up the menu visuals
 		 */
-
+		
 		menu.setPrefSize(ratio * 900, ratio * 100);
 		menu.setMaxSize(ratio * 900, ratio * 100);
 		menu.setStyle("-fx-background-color: rgba(92,64,51); -fx-background-radius: 10 10 0 0");
@@ -254,6 +256,7 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * setting up button & text
 		 */
+		
 		hostGameButton = new DesignButton(new Insets(ratio * 20, ratio * 10, ratio * 20, ratio * 10), 50, ratio * 30,
 				ratio * 350);
 		hostGameButton.setText("CREATE LOBBY");
@@ -315,7 +318,7 @@ public class ServerMainWindowController extends VBox {
 		menu.setPadding(new Insets(ratio * 20, ratio * 20, ratio * 20, ratio * 20));
 
 		/*
-		 * assemblingthe host and join buttons
+		 * assembling the host and join buttons
 		 */
 
 		buttonsHBox = new HBox();
@@ -335,6 +338,7 @@ public class ServerMainWindowController extends VBox {
 		/*
 		 * adding elements to the main container
 		 */
+		
 		lobbyMenuController = new LobbyMenuController();
 		vBoxLobbyMenuController = new VBox();
 
@@ -348,8 +352,9 @@ public class ServerMainWindowController extends VBox {
 		this.getChildren().add(topContainer);
 	}
 
-	/*
-	 * setting up buttons action events
+	/**
+	 *  method for setting up the action events of the buttons.
+	 *  it is separated from the setup method for more clarity.
 	 */
 
 	public void actionEventsSetup() {
@@ -362,21 +367,16 @@ public class ServerMainWindowController extends VBox {
 				if (!chatButton.isSelected()) {
 					chatButton.setSelected(false);
 					chatPane.setVisible(false);
-					System.out.println(chatPane.isVisible() + " SERVERMAIN set on 'false' ");
 				} else {
 					chatButton.setSelected(true);
 					chatPane.setVisible(true);
-					System.out.println(chatPane.isVisible() + " SERVERMAIN set on 'true' ");
 				}
-				System.out.println(chatPane.getParent() + " ist chats vater in SMW");
-
 			}
 		});
 
 		searchButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO implement search method
 				String lobbyName = searchField.getText();
 				if (!lobbyName.isEmpty()) {
 					lobbyGUIListSearch = new HashMap<String, LobbyGUI>();
@@ -388,7 +388,6 @@ public class ServerMainWindowController extends VBox {
 					}
 
 					drawLobbies(false);
-
 				} else {
 					drawLobbies(true);
 				}
@@ -421,7 +420,6 @@ public class ServerMainWindowController extends VBox {
 				timer.setOnFinished(x -> {
 					cancelButton.setRotate(0);
 				});
-				System.out.println(cancelButton.getRotate());
 				if (cancelButton.getRotate() == 180) {
 					AppController.getGameSound().buttonClickHelicopterSound();
 				}
@@ -460,13 +458,8 @@ public class ServerMainWindowController extends VBox {
 			@Override
 			public void handle(ActionEvent event) {
 				gameSound.buttonClickForwardSound();
-				// send profile createLobby message
-				// TODO have to set the my lobby here
-				// the lobby in that we get in client and set as myLobby(clientsLobby) is the
-				// lobby of the other person
 
 				Lobby aLobby = new Lobby(client.getProfile().getId());
-
 				aLobby.joinLobby(new PlayerSingle(client.getProfile()));
 
 				// checks if the lobbyname is taken
@@ -482,7 +475,6 @@ public class ServerMainWindowController extends VBox {
 					lobby.setLobbyName(newUsername);
 				};
 				addLobby.accept(client.getProfile().getUserName(), aLobby);
-				System.out.println(aLobby.getLobbyName());
 				client.sendMessage(new MessageCreateLobby(aLobby));
 				client.setInALobby(true);
 				drawLobbyMenu(aLobby);
@@ -491,17 +483,13 @@ public class ServerMainWindowController extends VBox {
 				});
 
 				System.out.println("im in lobby " + aLobby.getLobbyName());
-				// stage.getScene().setRoot(lobbyMenuController);
-
 			}
 
-			// TODO send message to CLientHandler to create a lobby
 		});
 
 		joinGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO add if the lobby is full not joining
 				gameSound.buttonClickForwardSound();
 
 				for (LobbyGUI lobbyEnt : lobbyGUIList.values()) {
@@ -519,12 +507,18 @@ public class ServerMainWindowController extends VBox {
 
 				}
 
-				// TODO join the lobby and send a message to the server so that the lobby knows
-				// who the new paticipant is
 			}
 		});
 
 	}
+	
+	/**
+	 * this method draws the lobbyGUIs in the ServerMainWindow.
+	 * LobbyGUI is the representation of the lobby class in the GUI
+	 * 
+	 * @param all is a boolean to check if all lobbies 
+	 * should be drawn or only ones from the search bar
+	 */
 
 	public static void drawLobbies(boolean all) {
 
@@ -537,26 +531,27 @@ public class ServerMainWindowController extends VBox {
 				for (String key : lobbyGUIList.keySet()) {
 					vbox.getChildren().add(lobbyGUIList.get(key));
 				}
-				System.out.println("Number of Lobbies" + lobbyGUIList.size());
 			} else {
 
 				for (String key : lobbyGUIListSearch.keySet()) {
 					vbox.getChildren().add(lobbyGUIListSearch.get(key));
 				}
-				System.out.println("Number of Lobbies" + lobbyGUIList.size());
 			}
 
 			lobbyListContainer.setContent(vbox);
-			// sets the selected Lobby empty so that it doesnt connect to the lobby with the
-			// old information
+			/*
+			 *  sets the selected Lobby empty so that it doesn't connect to the lobby with the
+			 *	 old information
+			 */
 			selectedLobby = null;
 		});
 
 	}
 
-	/*
-	 * creating a new LobbyMenuController with the new lobby information and drawing
-	 * it
+	/**
+	 * this method creates a new LobbyMenuController with the new lobby information and draws it.
+	 * 
+	 * @param lobby is used to draw the LobbyMenuController with the lobby information
 	 */
 
 	public static void drawLobbyMenu(Lobby lobby) {
@@ -568,7 +563,7 @@ public class ServerMainWindowController extends VBox {
 					@Override
 					public void handle(ActionEvent event) {
 						/*
-						 * setting the top layer(vBoxLobbyMenuController invisible
+						 * setting the top layer(vBoxLobbyMenuController) invisible
 						 */
 						gameSound.buttonClickBackwardSound();
 						vBoxLobbyMenuController.setVisible(false);
@@ -576,7 +571,10 @@ public class ServerMainWindowController extends VBox {
 						for (Player player : lobby.getHumanPlayerList()) {
 							if (player.getID() == client.getProfile().getId()) {
 
-								// changes the lobbyHost/Owner
+								/*
+								 *  changes the lobbyHost/Owner
+								 */
+								
 								if (lobby.getLobbyHost() == client.getProfile().getId()
 										&& lobby.getHumanPlayerList().size() > 1) {
 
@@ -603,6 +601,10 @@ public class ServerMainWindowController extends VBox {
 
 				vBoxLobbyMenuController.getChildren().clear();
 				vBoxLobbyMenuController.getChildren().add(lobbyMenuController);
+				
+				/*
+				 * disables the lobby settings for the lobby guests
+				 */
 				for (Player player : lobby.getHumanPlayerList()) {
 					if (player.getID() == client.getProfile().getId()) {
 						lobbyMenuController.disableForGuest(client.getProfile().getId());
@@ -610,15 +612,16 @@ public class ServerMainWindowController extends VBox {
 				}
 				vBoxLobbyMenuController.setVisible(true);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		});
 	}
 
-	/*
-	 * adding chatPane to SMW parent when leaving a lobby
+	/**
+	 * a method for adding the chatPane to the ServerMainWindow parent when leaving a lobby.
+	 * 
+	 * @param chatWindow the ChatWindow instance that is used as a chat
 	 */
 	public static void setChatPain(ChatWindow chatWindow) {
 		chatPane = chatWindow;
@@ -627,7 +630,10 @@ public class ServerMainWindowController extends VBox {
 				chatPane, vBoxLobbyMenuController);
 
 	}
-
+	
+	/**
+	 * a method for initializing a server and a client when starting the ServerMainWindow pane.
+	 */
 	public static void initServer() {
 
 		int port = AppController.getPortNumber();
@@ -647,35 +653,30 @@ public class ServerMainWindowController extends VBox {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		hostView = true;
 	}
-
+	
+	/**
+	 * a method for initializing a client when starting the ServerMainWindow pane.
+	 */
 	public void initClient() {
 		client = AppController.getClient();
 		client.listenForMessage();
 		chatPane.setClient(client);
 		client.setChat(chatPane);
-		this.hostView = false;
 		client.setHost(false);
 		int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
 		rankText.setText("Your Rating: " + rank + " \u2605");
 
 	}
 
-	public static ChatWindow getChatPane() {
-		return chatPane;
-	}
-
-	public static Lobby getSelectedLobby() {
-		return selectedLobby;
-	}
-
-	public static DesignButton getSearchButton() {
-		return searchButton;
-	}
-
+	/**
+	 * a method for changing the pane from the ServerMainWindow to the GamePaneController.
+	 * it is used when all participants in a lobby are ready.
+	 * 
+	 * @param lobby	hands over the players information so taht the GamePaneController can be created
+	 * e.g. PlayerAI or PlayerSingle, playersavatar and so on 
+	 */
 	public static void startMultyplayerGame(Lobby lobby) {
-
 		try {
 			Stage stage = (Stage) topContainer.getScene().getWindow();
 			FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource("gameFrame.fxml"));
@@ -683,16 +684,24 @@ public class ServerMainWindowController extends VBox {
 			GamePaneController gamePaneController = fxmlLoader.getController();
 			gamePaneController.initMultiPlayer(client, lobby);
 
-//			GameStatistic gameStatistic = new GameStatistic(LocalDateTime.now(), lobby.getPlayerList().size());
-//			AppController.createGameStatistic(gameStatistic);
-			// TODO
-			// messageReadyToPlay.setGameStatistic(gameStatistic);
 			client.setGamePane(gamePaneController);
 			stage.getScene().setRoot(anchorPane);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public static ChatWindow getChatPane() {
+		return chatPane;
+	}
+	
+	public static Lobby getSelectedLobby() {
+		return selectedLobby;
+	}
+	
+	public static DesignButton getSearchButton() {
+		return searchButton;
 	}
 
 }

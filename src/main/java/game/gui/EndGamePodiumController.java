@@ -29,7 +29,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
- * this class is responsible for construct the GUI of the pane 
+ * this class is responsible for constructing the GUI pane 
  * that comes after a game has finished. 
  * 
  * @author pmalamov
@@ -68,8 +68,7 @@ public class EndGamePodiumController extends StackPane {
 	private ImageView firstPlaceCup, secondPlaceCup, thirdPlaceCup;
 	
 	/**
-	 * Contructor for the class
-	 * 
+	 * Constructor for the class.
 	 * 
 	 * @param podiumPlayers has the top 3 players saved, we use their avatar to construct the GUI
 	 * @param singleplayer is a boolean parameter that we use to define how the back button will work
@@ -91,10 +90,11 @@ public class EndGamePodiumController extends StackPane {
 	
 	/**
 	 * initializes all the GUI items that are needed for the construction of the GUI
-	 * and places them on the previously planned out place
-	 * @throws FileNotFoundException
+	 * and places them on the previously planned out place.
 	 * 
+	 * @throws FileNotFoundException is thrown because of the background and avatar images
 	 */
+	
 	public void setup() throws FileNotFoundException {
 		vBoxIcons = new VBox();
 		vBoxIcons.setAlignment(Pos.CENTER);
@@ -261,9 +261,7 @@ public class EndGamePodiumController extends StackPane {
 		 * adding the avatars to their box
 		 */
 		
-
 		avatars.getChildren().addAll(secondP, firstP, thirdP);
-		
 		avatars.setPadding(new Insets(20, 0, 20, 0));
 
 		/*
@@ -343,8 +341,8 @@ public class EndGamePodiumController extends StackPane {
 	}
 	
 	/**
-	 *  method for setting up the action events of the buttons
-	 *  it is separated from the setup method for more clarity
+	 *  method for setting up the action events of the buttons.
+	 *  it is separated from the setup method for more clarity.
 	 */
 	
 	public void actionEventsSetup() {
