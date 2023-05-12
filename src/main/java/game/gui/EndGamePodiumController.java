@@ -5,24 +5,16 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import database.Profile;
 import game.gui.GUISupportClasses.ArrowButton;
-import game.gui.GUISupportClasses.ChatButton;
-import game.gui.GUISupportClasses.ChatWindow;
-import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
-import game.models.Lobby;
 import game.models.Player;
 import general.*;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,68 +25,77 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Popup;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
+ * this class is responsible for construct the GUI of the pane 
+ * that comes after a game has finished. 
  * 
  * @author pmalamov
  *
  */
 
 public class EndGamePodiumController extends StackPane {
+	private GameSound gameSound = AppController.getGameSound();
 
 	private int players;
-	private double ratio;
-	private ArrayList<Profile> ranking; 							//ranking at the end of the game 
-	// public int players = game.Lobby.getPlayerList().size();
-	private Stage stage;
-		
-	private HBox backgroundPic;										//background
-	private HBox backgroundColor;									//*
-	private ImageView imgBackground;								//*
-	private ImageViewPane imgBackgroundPane;						//*
-	public ArrayList<String> pathsEndGame;
-	private HBox topBannerParent;									//banner
-	private HBox topBannerContent;									//*
-	private Label lobbyTextBanner;									//*
-	private ArrowButton backButton;			
-	
-	private VBox vBoxIcons;											//VBox with the caption,avatars and place	
-	private Text caption;											//caption
-	
-	private HBox captionBox;
-	private HBox avatars;											//avatars
-	private StackPane firstP, secondP, thirdP;						//*
-	private Circle circleFirstP, circleSecondP, circleThirdP;		//*
-	private ImageView circleFirstI, circleSecondI, circleThirdI;	//*
-	
-	private HBox place;												//places
-	private ImageView firstPlaceCup, secondPlaceCup, thirdPlaceCup;	//*
-	
-	private HBox chatDiv;											//chatdiv with button
-	private ChatButton chatButton;									//*
-	private ChatWindow chatPane;									//chatPane
-	private GameSound gameSound = AppController.getGameSound();
-	
 	private ArrayList<Player> playerList;
 	private boolean singleplayer;
+	private double ratio;
+	private Stage stage;
+		
+	private HBox backgroundPic;
+	private HBox backgroundColor;
+	private ImageView imgBackground;
+	private ImageViewPane imgBackgroundPane;
+	public ArrayList<String> pathsEndGame;
+	private HBox topBannerParent;
+	private HBox topBannerContent;
+	private Label lobbyTextBanner;
+	private ArrowButton backButton;			
 	
-	public EndGamePodiumController(List<Player> podiumPlayers, boolean singleplayer) throws Exception {
+	private VBox vBoxIcons;
+	private Text caption;
+	
+	private HBox captionBox;
+	private HBox avatars;
+	private StackPane firstP, secondP, thirdP;
+	private Circle circleFirstP, circleSecondP, circleThirdP;
+	private ImageView circleFirstI, circleSecondI, circleThirdI;
+	
+	private HBox place;
+	private ImageView firstPlaceCup, secondPlaceCup, thirdPlaceCup;
+	
+	/**
+	 * Contructor for the class
+	 * 
+	 * 
+	 * @param podiumPlayers has the top 3 players saved, we use their avatar to construct the GUI
+	 * @param singleplayer is a boolean parameter that we use to define how the back button will work
+	 * @throws FileNotFoundException is thrown because of the background and avatar images
+	 */
+	
+	public EndGamePodiumController(List<Player> podiumPlayers, boolean singleplayer) throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
 				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
 		this.players = podiumPlayers.size();
 		this.playerList = (ArrayList<Player>) podiumPlayers;
-		pathsEndGame = new ArrayList<String>();
+		this.pathsEndGame = new ArrayList<String>();
 		this.singleplayer = singleplayer;
 		this.setup();
-		actionEventsSetup();
+		this.actionEventsSetup();
 	}
-
-	public void setup() throws Exception {
+	
+	/**
+	 * initializes all the GUI items that are needed for the construction of the GUI
+	 * and places them on the previously planned out place
+	 * @throws FileNotFoundException
+	 * 
+	 */
+	public void setup() throws FileNotFoundException {
 		vBoxIcons = new VBox();
 		vBoxIcons.setAlignment(Pos.CENTER);
 
@@ -169,11 +170,13 @@ public class EndGamePodiumController extends StackPane {
 		firstP = new StackPane();
 		secondP = new StackPane();
 		thirdP = new StackPane();
-
+		
+		/*
+		 * replacing the avatar dir that has been received from the other user
+		 * else it tries to access the dir of the game host and it blows up
+		 */
+		
 		for (Player player: this.playerList) {
-			
-			
-			
 			for (String avatar : Parameter.allAvatars) {
 				if (player.getAvatar().contains(avatar)) {
 					pathsEndGame.add(Parameter.avatarsdir + avatar);
@@ -183,15 +186,12 @@ public class EndGamePodiumController extends StackPane {
 			
 		}
 
-		
-		
 		/*
 		 * image and shape for the first avatar
 		 */
 
 		circleFirstP = new Circle(90 * ratio);
 		circleFirstI = new ImageView();
-		// TODO set up the right color
 		circleFirstP.setFill(Color.web(this.playerList.get(0).getColor()));
 		circleFirstP.setStroke(Color.WHITE);
 		circleFirstP.setStrokeWidth(8 * ratio);
@@ -213,7 +213,6 @@ public class EndGamePodiumController extends StackPane {
 
 		circleSecondP = new Circle(90 * ratio);
 		circleSecondI = new ImageView();
-		// TODO set up the right color
 		circleSecondP.setFill(Color.web(this.playerList.get(1).getColor()));
 		circleSecondP.setStroke(Color.WHITE);
 		circleSecondP.setStrokeWidth(8 * ratio);
@@ -235,7 +234,6 @@ public class EndGamePodiumController extends StackPane {
 
 		circleThirdP = new Circle(90 * ratio);
 		circleThirdI = new ImageView();
-	// TODO set up the right color
 		circleThirdP.setStroke(Color.WHITE);
 		circleThirdP.setStrokeWidth(8 * ratio);
 
@@ -307,9 +305,6 @@ public class EndGamePodiumController extends StackPane {
 		 * adding endgame text
 		 */
 		
-		/*
-         * adding endgame text
-         */
         captionBox = new HBox();
         captionBox.setAlignment(Pos.CENTER);
         captionBox.setStyle("-fx-background-color: "
@@ -340,18 +335,16 @@ public class EndGamePodiumController extends StackPane {
 		 * adding everything to the top container
 		 */
 		
-		
 		this.getChildren().addAll(backgroundPic, backgroundColor, vBoxIcons, topBannerParent);
 		StackPane.setMargin(topBannerParent, new Insets(50 * ratio,0,0,0));
 
-		//TODO remove when main is removed
 		actionEventsSetup();
 
 	}
 	
-
-	/*
-	 * Action handler for the button
+	/**
+	 *  method for setting up the action events of the buttons
+	 *  it is separated from the setup method for more clarity
 	 */
 	
 	public void actionEventsSetup() {
