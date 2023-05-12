@@ -17,14 +17,15 @@ import game.models.Player;
 import game.models.Territory;
 import general.AppController;
 
-public class GameState implements Serializable {
+/**
+ * Modells the State of game. All information about the player, territories are saved.
+ * Consists mostly of getter and setter methods.
+ * 
+ * @author pmikov
+ */
 
-	/**
-	 * Class for the gameState for client-logic/representation
-	 * 
-	 * @author petko,jo , majd, petar & dignatov
-	 *
-	 */
+public class GameState implements Serializable {
+    
 	private HashMap<CountryName, Territory> territories;
 	private HashMap<Continent, ArrayList<CountryName>> continents;
 	private HashMap<Integer, Player> players;
@@ -44,6 +45,13 @@ public class GameState implements Serializable {
 	private boolean lastTurnWonterritory;
 	private ArrayList<Player> deadPlayers;
 	private int gameStateVersion ;
+	
+	/**
+	 * Constructor for the class. Initializes all the variables 
+	 * and sets values to default for beginning of the game.
+	 * 
+	 * @param lobby Lobby instance of the game played
+	 */
 	
 	public GameState(Lobby lobby) {
 		continents = new HashMap<Continent, ArrayList<CountryName>>();
@@ -77,12 +85,17 @@ public class GameState implements Serializable {
 		
 	}
 	
-
-	
 	public void addTroopsToPlayer(int idPlayer, int numberOfTroops){
 		this.getPlayerTroopsLeft().replace(idPlayer,
 				this.getPlayerTroopsLeft().get(idPlayer) + numberOfTroops);
 	}
+	
+	/**
+	 * Removes number of troops left to deploy from player.
+	 *
+	 * @param idPlayer whose troops are getting changed
+	 * @param numberOfTroops substracted from avaiable
+	 */
 	
 	public void subtractTroopsToPlayer(Integer idPlayer, int numberOfTroops){
 		if(this.playerTroopsLeft.get(idPlayer) >= numberOfTroops) {
@@ -93,6 +106,12 @@ public class GameState implements Serializable {
 		}
 		
 	}
+	
+	/**
+	 * Player turns in a correct set of risk cards. The bonus troops are calculated.
+	 *
+	 * @return int number of bonus troops the player receives
+	 */
 	
 	public int playerTurnsInCard() {
 	    this.numberOfCardsTurnedIn++;
@@ -115,11 +134,19 @@ public class GameState implements Serializable {
 	    
 	}
 	
+	/** Method to update the List of Risk Cards owned by player. */
+	
 	public void editRiskCardsInPlayers(ArrayList<Card> cards, int idOfPlayer) {
 	    this.cards.addAll(this.riskCardsInPlayers.get(idOfPlayer));
 	    this.riskCardsInPlayers.replace(idOfPlayer, cards);
 	    this.cards.removeAll(this.riskCardsInPlayers.get(idOfPlayer));
 	}
+	
+	/**
+	 * Method to receive a random Risk card for player wih id in param. 
+	 *
+	 * @param idOfPlayer to receive the risk card.
+	 */
 	
 	public void receiveRandomRiskCard(int idOfPlayer) {
 	    Random generator = new Random();
@@ -133,6 +160,12 @@ public class GameState implements Serializable {
 
 	}
 	
+	/**
+	 * Sets the initial troops for each player. Called after Dice Throw period. 
+	 *
+	 * @param troops number of troops to be set
+	 */
+	
 	public void setInitialTroops(int troops) {
 	    for(Integer playerId : this.players.keySet()) {
 		this.playerTroopsLeft.put(playerId, 0);
@@ -140,11 +173,6 @@ public class GameState implements Serializable {
 	    for(Integer playerId : this.players.keySet()) {
 		this.addTroopsToPlayer( playerId, troops);
 	    }
-	}
-
-	public void updateTerritory(CountryName countryName, Player player, int numberTroops) {
-		this.territories.get(countryName).setOwnedByPlayer(player);
-		this.territories.get(countryName).addNumberOfTroops(numberTroops);
 	}
 
 	public HashMap<Integer, Integer> getPlayersDiceThrown() {

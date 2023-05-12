@@ -20,11 +20,26 @@ import game.models.Lobby;
 import game.models.Player;
 import javafx.scene.paint.Color;
 
+/**
+ * This class connects the GUI and GameHandler for Offline Games.
+ * Takes user input from GUI. Takes decision from GameHandler and changes GUI.
+ *
+ * @author pmikov
+ *
+ */
+
 public class SinglePlayerHandler {
 	
 	private GameHandler gameHandler;
 	private Lobby lobby;
 	private GamePaneController gamePaneController;
+	
+	/**
+	 * Constructor for the class.
+	 * 
+	 * @param lobby Lobby instance for the game
+	 * @param gamePaneController GamePane 
+	 */
 
 	public SinglePlayerHandler(Lobby lobby, GamePaneController gamePaneController) {
 		this.gameHandler = new GameHandler(lobby);
@@ -34,73 +49,102 @@ public class SinglePlayerHandler {
 		
 	}
 	
-	/*
-	 * gets called from GUI when player throws initial dice to 
-	 * decide who gets to be first 
-	 * returns the value of the dice for the player
-	 * 
-	 * Input DICE_THROW Period 
-	 * 
-	 * INPUT + OUTPUT to GUI
+	/**
+	 * Called From GUI during Initial Dice Period.
+	 * Player wants to throw dice.
+	 *
+	 * @param idOfPlayer that interacts with GUI
 	 */
 	
 	public void playerThrowsInitialDice(int idOfPlayer) {
 		this.gameHandler.playerThrowsInitialDice(idOfPlayer);
 	}
-
-	/*
-	 * COUNTRYPOSESSION  Period
-	 * INITIALREINFORCEMENT Period
-	 * MAINPERIOD Period
+	
+	/**
+	 * Called from GUI at any point in Game.
+	 *
+	 * @param id of player interacting 
+	 * @param country CountryName of territory clicked
 	 */
 	
 	public void clickCountry(int id, CountryName country) {
 		this.gameHandler.clickCountry(id, country);
 	}
 	
+	/**
+	 * Called from GUI.
+	 * Player decides to close choose number of troops pane.
+	 * Allowed for any other than ATTACK_COLONISE.
+	 * 
+	 * @param country CountryName of territory attacked or sending troops to
+	 * @param choosePane ChoosePane enum for the pane
+	 * @param idOfPlayer player interacting
+	 */
+	
 	public void cancelNumberOfTroops(CountryName country, ChoosePane choosePane, int idOfPlayer) {
 		this.gameHandler.cancelNumberOfTroops(country, choosePane, idOfPlayer);
 	}
 
-	/*
-	 * Called in the action event of confirm numbe ChoosingTroopsPane
-	 * REINFORCE, ATTACK, FORTIFY
+	/**
+	 * Called from GUI.
+	 * Player confirms choice for number of troops in choosing number of troops pane.
+	 * 
+	 * @param country CountryName of territory attacked or sending troops to
+	 * @param choosePane ChoosePane enum for the pane
+	 * @param troops Amount of troops chosen
+	 * @param idOfPlayer player interacting
 	 */
 	
 	public void confirmNumberOfTroops(CountryName country, int troops, ChoosePane choosePane, int idOfPlayer) {
 		this.gameHandler.confirmTroopsToCountry(country, troops, choosePane, idOfPlayer);
 	}
 	
-	/*
-	 * Called when player turns in risk cards, player's turn
-	 * REINFORCE Phase
+	/**
+	 * Called from GUI.
+	 * Player wants to turn in a set of risk cards.
+	 *
+	 * @param cards List with cards getting turned in
+	 * @param idOfPlayer Player turning in cards
 	 */
-
+	
+	
 	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
 		this.gameHandler.turnInRiskCards(cards, idOfPlayer);
 	}
 	
-	/*
-	 * Called to end any of the three phase from player with idOfPlayer
-	 * during his turn, calling during Fortify ends turn
-	 * REINFORCE, ATTACK, FORTIFY
+	/**
+	 * Called from GUI.
+	 * Player clicks on end turn / phase.
+	 *
+	 * @param period Current Period on GUI
+	 * @param phase Current Phase on GUI
+	 * @param idOfPlayer Player interacting
 	 */
 	
 	public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
 		this.gameHandler.endPhaseTurn(period, phase, idOfPlayer);
 	}
 	
-	/*
-	 * Called from attacking player during his attack
-	 * Dice animation starts for him
-	 * Tell everyone to start animatio
-	 * Decide dice values and transmit them to everyone
-	 * ATTACK Phase
+	/**
+	 * Called from GUI.
+	 * Attacker clicks on Throw dice in the battle frame.
 	 */
 	
 	public void battleDiceThrow() {
 		this.gameHandler.battleDiceThrow();
 	}
+	
+	/**
+	 * Called from GameHandler. 
+	 * Throwing Battle dice is confirmed. Sending new Dice Values and updated number of troops.
+	 *
+	 * @param attackerDiceValues Dices thrwon by attacker
+	 * @param defenderDiceValues Dices throw by defender
+	 * @param troopsInAttackAt Number of troops in Attack  Attacking
+	 * @param troopsInAttackDf Number of troops in Attack Defending
+	 * @param numberOfDice Updated number of dice to throw for both players
+	 * @throws FileNotFoundException For dice images 
+	 */
 	
 	public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues,
 			int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice)
@@ -109,28 +153,45 @@ public class SinglePlayerHandler {
 				troopsInAttackAt, troopsInAttackDf, numberOfDice);
 	}
 	
+	/**
+	 * Called from GameHandler.
+	 * Confirms roll intiial dice and gives the value of the dice.
+	 * 
+	 * @param idOfPlayer whose dice is thrown
+	 * @param i final value of the dice
+	 */
+	
 	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
 		this.gamePaneController.rollInitialDice(idOfPlayer, i);
 	}
+	
+	/**
+	 * Called from GameHandler.
+	 * Displays an Exception Alert in GUI
+	 * 
+	 * @param e Exception to be shown
+	 */
 
 	public void showExeceptionOnGUI(Exception e) {
 		this.gamePaneController.showException(e.toString());
 	}
 	
-	/*
+	/**
+	 * Called from GameHandler.
 	 * Sets the the given period on the GUI. Based on the period
-	 * the bottom pane displays different info / buttons
+	 * the bottom pane displays different info / buttons.
 	 * 
-	 * @param period the period to be set
+	 * @param period to be set
 	 */
 	
 	public void setPeriodOnGUI(Period period) {
 		this.gamePaneController.setPeriod(period);
 	}
 	
-	/*
-	 * Sets the the given phase on the GUI. Phases are relevant only during
-	 * MAINPERIOD, follow a specific order
+	/**
+	 * Called from GameHandler.
+	 * Sets the the given phase on the GUI. Based on the phase
+	 * the bottom pane displays different info / buttons.
 	 * 
 	 * @param phase the phase to be set
 	 */
@@ -139,26 +200,36 @@ public class SinglePlayerHandler {
 		this.gamePaneController.setPhase(phase);
 	}
 	
-	/*
+	/**
+	 * Called from GameHandler.
 	 * Paint the country in the color of player with id and places 
 	 * one troop on it. 
 	 * 
 	 * @param country the CountryName enum of the territory to be claimed
 	 * @param id 	  the id of player that has claimed territory
 	 */
-	
+
 	public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
 		this.gamePaneController.claimCountry(country, id);
 		this.gamePaneController
 		.setAmountOfTroopsLeftToDeploy(troopsLeft);
 	}
 	
+	/**
+	 * Called from GameHandler.
+	 * Paint the country in the color of player with id.
+	 * 
+	 * @param country the CountryName enum of the territory to be claimed
+	 * @param id 	  the id of player that has claimed territory
+	 */
+	
 	public void conquerCountryOnGUI(CountryName country, int id, int troops) {
 		this.gamePaneController
 		.conquerCountry(country, id, troops);
 	}
 	
-	/*
+	/**
+	 * Called from GameHandler.
 	 * Changes the current player on the GUI by swapping to the correct
 	 * color and avatar, and setting the corrct number of troops
 	 * 
@@ -171,48 +242,105 @@ public class SinglePlayerHandler {
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(troopsLeft);
 	}
 	
+	/**
+	 * Called from GameHandler.
+	 * Changes the player which is playing from the instance. 
+	 *
+	 * @param id ID of player set
+	 * @param cards List with cards currently possesed by player
+	 */
+	
 	public void chnagePlayerOnGUI(int id, ArrayList<Card> cards) {
 		this.gamePaneController.setPlayerOnGUI(id, cards);
 	}
 
-	/*
-	 * Opens a menu where the player chooses how many troops to deploy
-	 * 
-	 * @param 
+	/**
+	 * Called from GameHandler.
+	 * Opens Chooosing Troops Pane, where the player decides on how many troops to deploy / move / attack with.
+	 *
+	 * @param country Getting attacked / foritfied / reinforced
+	 * @param min minimum troops to choose
+	 * @param max maximum troops to choose
+	 * @param choosePane ChoosePane enum for the type of Pane
 	 */
-	
 
 	public void chooseNumberOfTroopsOnGUI(CountryName country, int min, int max, ChoosePane choosePane) {
 		System.out.println("Opening choose troops with " +  country.toString() + " " + choosePane.toString());
 		this.gamePaneController.showChoosingTroopsPane(country, min, max, choosePane);
 	}
 	
+	/** Called from GameHandler. Close choosing troops Pane. */
+	
 	public void closeTroopsPaneOnGUI() {
 		this.gamePaneController.closeChoosingTroopsPane();
 	}
 	
+	/**
+	 * Called from GameHandler.
+	 * Sets a number of troops on the specified territory.
+	 * 
+	 * @param countryName enum of the Territory.
+	 * @param numTroopsOfCountry number of troops to be set
+	 */
+	
 	public void setTroopsOnTerritory(CountryName countryName, int numTroopsOfCountry) {
 		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
 	}
+	
+	/**
+	 * Called from GameHandler.
+	 * Sets a number of troops on the specified territory.
+	 * Sets troops left to deploy for the player.
+	 * 
+	 * @param countryName 		enum of the Territory
+	 * @param numTroopsOfCountry 	number of troops to be set on territory
+	 * @param numTroopsOfPlayer 	number of troops left to deploy
+	 */
 	
 	public void setTroopsOnTerritoryAndLeftOnGUI(CountryName countryName, int numTroopsOfCountry, int numTroopsOfPlayer) {
 		this.gamePaneController.setNumTroops(countryName, numTroopsOfCountry);
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(numTroopsOfPlayer);
 	}
 	
+	/**
+	 * Called from GameHandler.
+	 * Moves troops from one territory toanother on GUI and updates their number of troops.
+	 *
+	 * @param from 		CountryName of Territory from
+	 * @param to 		CountryName of Territory to
+	 * @param numberFrom 	updated troops in from Territory
+	 * @param numberTo 	updated troops in to Territory
+	 */
+	
 	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom, int numberTo) {
 		this.gamePaneController.setNumTroops(from, numberFrom);		
 		this.gamePaneController.setNumTroops(to, numberTo);
-		//simply move from one to other
 	}
+	
+	/**
+	 * Opens the battle frame in GUI.
+	 *
+	 * @param battle Battle instance to initialize the Frame with.
+	 */
 	
 	public void openBattleFrameOnGUI(Battle battle) {
 		this.gamePaneController.openBattleFrame(battle);
 	}
 	
+	/** Closes the battle frame. */
+	
 	public void endBattleOnGUI() {
 		this.gamePaneController.closeBattleFrame();
 	}
+	
+	/**
+	 * Risk cards have been turned in scuccessfully. 
+	 * Update Cards avaible for player on GUI and troops left to deploy.
+	 *
+	 * @param card 		Updated list with cards avaiable to the player
+	 * @param idOfPlayer	ID of player that turned in cards
+	 * @param bonusTroops 	Bonus troops received
+	 */
 	
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
 		this.gamePaneController.setAmountOfTroopsLeftToDeploy(bonusTroops);
@@ -222,24 +350,36 @@ public class SinglePlayerHandler {
 		}
 	}
 	
+	/**
+	 * Sets Territories disabled. And "Points up" a country. Used during fortifying and attacking.
+	 *
+	 * @param countryName 		Country to point up
+	 * @param unreachableCountries	List with unreachable Territories to disable
+	 */
+	
 	public void selectTerritoryAndSetDisabledTerritoriesOnGUI(CountryName countryName, 
 			ArrayList<CountryName> unreachableCountries) {
 		this.gamePaneController.pointUpCountry(countryName);
 		for(CountryName country : unreachableCountries) {
 			this.gamePaneController.deactivateCountry(country);
 		}
-		// for attack and fortify phase when player clicks on the "from" territory
 	}
 	
-	public void resetAllOnGUI() {
-//		sets all countries enableed
-//		all button enabled
-//		no point up
-	}
+	/**
+	 * Updates the in game ranks of all player. 
+	 * 
+	 * @param ranks Array with the ranks of player in the order of Players List in the Lobby.
+	 */
 
 	public void updateRanksOnGUI(int[] ranks) {
 		this.gamePaneController.setPlayersRanking(ranks);
 	}
+	
+	/**
+	 * Ends the game and displays the End Game Podium.
+	 * 
+	 * @param podium List with the Player. Startting from Winner.
+	 */
 
 	public void gameIsOverOnGUI(ArrayList<Player> podium) {
 		this.gamePaneController.endGame(podium);

@@ -18,11 +18,17 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 import network.Client;
 
+/**
+ * This class manages player action, checks validity, 
+ * updates GameState and repaint the Game Pane GUI.
+ * To communicate back to the GUI this class calls
+ * either a SinglePlayerHandler or a Client depending on GameType.
+ * 
+ * @author pmikov
+ *
+ */
+
 public class GameHandler {
-  // Gamelogic Ausführung der Methoden
-  // Kommunikation zu SingleHandler und ClientHandler
-  // Übergabe an GameState
-  // GamePane
 
   private SinglePlayerHandler singlePlayerHandler;
   private GameState gameState;
@@ -30,6 +36,12 @@ public class GameHandler {
   private GameType gameType;
   private Client client;
 
+  /**
+   * Default Constructor. Initializes a new Handler for the Lobby.
+   *
+   * @param lobby Lobby instance for the game
+   */
+  
   public GameHandler(Lobby lobby) {
     this.gameState = new GameState(lobby);
     this.lobby = lobby;
@@ -38,7 +50,7 @@ public class GameHandler {
     gameState.setInitialTroops(Logic.setInitialTroopsSize(this.gameState));
     gameState.setCurrentPlayer(lobby.getPlayerList().get(0).getID());
   }
-
+  
   public void initSingleplayer(SinglePlayerHandler singlePlayerHandler) {
     this.singlePlayerHandler = singlePlayerHandler;
     this.gameType = GameType.SinglePlayer;
@@ -53,8 +65,11 @@ public class GameHandler {
     this.gameState.setPlayersDiceThrown(Logic.diceThrowToDetermineTheBeginner(gameState));
   }
 
-  /*
-   * gets the order of the player turns you get the first and then continiue down the ArrayList
+
+  /**
+   * Called from SinglePlayerHandler. Player Wants to throw dice.
+   *
+   * @param idOfPlayer
    */
 
   public void playerThrowsInitialDice(int idOfPlayer) {
@@ -86,6 +101,15 @@ public class GameHandler {
     return this.gameState;
   }
 
+  /**
+   * Called from GUI.
+   * Player clicks on Country. This method checks if it 
+   * is a valid move and decides what to do with it. 
+   *
+   * @param idOfPlayer 	that clicked on a Territory
+   * @param country	CountryName enum of Territroy clicked	
+   */
+  
   public void clickCountry(int idOfPlayer, CountryName country) {
     Player player = this.gameState.getPlayers().get(idOfPlayer);
     switch (this.gameState.getCurrentGamePeriod()) {
@@ -175,7 +199,6 @@ public class GameHandler {
                       country, 1, this.gameState.getTerritories()
                           .get(this.gameState.getLastAttackingCountry()).getNumberOfTroops() - 1,
                       ChoosePane.ATTACK_ATTACK);
-                  // this.singlePlayerHandler.resetAllOnGUI();
                   break;
                 case Multiplayer:
                   this.client.chooseNumberOfTroopsOnGUI(
@@ -200,8 +223,6 @@ public class GameHandler {
                       .getOwnedByPlayer().equals(player));
                   switch (this.gameType) {
                     case SinglePlayer:
-                      // this.singlePlayerHandler.selectTerritoryAndSetDisabledTerritoriesOnGUI(country,
-                      // enemyCountries);
                       break;
                     case Multiplayer:
                       break;
@@ -246,6 +267,15 @@ public class GameHandler {
     }
   }
 
+  /**
+   * Called from GUI.
+   * Player confirms number of troops in the choose pane.
+   *
+   * @param country 	CountryName to send troops to / attack
+   * @param troops 	Number of troops chosen
+   * @param choosePane	ChoosePane enum for the type of confirmation
+   * @param idOfPlayer	ID of player that confirms
+   */
   public void confirmTroopsToCountry(CountryName country, int troops, ChoosePane choosePane,
       int idOfPlayer) {
     switch (choosePane) {
@@ -352,6 +382,15 @@ public class GameHandler {
         break;
     }
   }
+  
+  /**
+   * Called from GUI.
+   * Player clicks cancel in Choosinf Troops Pane. Attacked / Fortify / Deploy Called off.
+   * 
+   * @param country 	The CountryName from the Choose Pane
+   * @param choosePane 	Enum for the type of choose pane
+   * @param idOfPlayer	ID of player interacting
+   */
 
   public void cancelNumberOfTroops(CountryName country, ChoosePane choosePane, int idOfPlayer) {
     switch (choosePane) {
@@ -374,6 +413,14 @@ public class GameHandler {
     }
   }
 
+  /**
+   * Player wants to end turn.
+   *
+   * @param period Current Period as Enum 
+   * @param phase  Current Phase as Enum
+   * @param idOfPlayer ID of player
+   */
+  
   public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
     System.out.println("End Phase Turn Called in the Game Handler by " + idOfPlayer);
     if (period.equals(Period.MAINPERIOD)) {
@@ -615,6 +662,7 @@ public class GameHandler {
 
   }
 
+  /** Updated the In-Game Ranking based on current gameState. */
   public void updateInGameLeaderBoard() {
     int[] ranks = Logic.getInGameRanks(this.gameState, this.lobby);
     switch (this.gameType) {
@@ -628,6 +676,14 @@ public class GameHandler {
         break;
     }
   }
+  
+  /**
+   * Called from GUI.
+   * Player turns in a set of risk cards. 
+   *
+   * @param cards
+   * @param idOfPlayer
+   */
 
   public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
     ArrayList<Card> cardsCards =
@@ -660,6 +716,8 @@ public class GameHandler {
       }
     }
   }
+  
+  /** Player throws dice during battle. Updates the battle instance. */
 
   public void battleDiceThrow() {
     if (Logic.battleDiceThrowIsOk(gameState)) {
@@ -788,6 +846,14 @@ public class GameHandler {
       }
     }
   }
+  
+  /**
+   * Method to simulate AI behaviour. 
+   * Called from GameHandler when a player end turn and next on is AI.
+   *
+   * @param gameState Current GameState
+   * @param player PlayerAI instance of the player that is to be simulated.
+   */
 
   public void simulateAI(GameState gameState, PlayerAI player) {
     CountryName country = null;

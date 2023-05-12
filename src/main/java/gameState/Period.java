@@ -1,5 +1,11 @@
 package gameState;
 
+/**
+ * Enums do the game periods.
+ * 
+ * @author pmikov
+ */
+
 public enum Period {
 	DICETHROW {
        @Override
