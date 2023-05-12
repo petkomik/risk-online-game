@@ -17,12 +17,11 @@ import general.Parameter;
  * 
  * @author pmikov
  * 
- * To Implement: Player score -> Lobby Rank
  */
 
 public class Lobby implements Serializable{
 
-
+    	private static final long serialVersionUID = 1L;
 	static String[] colors = Parameter.allColors;
 	static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
 			Parameter.bruntetteBoy, Parameter.mustacheMan,
@@ -44,6 +43,10 @@ public class Lobby implements Serializable{
 	private int  maxNumberOfPlayers;
 	private GameStatistic gameStatistic;
 	
+	/**
+	 * Default constructor. Sets values to default value.
+	 */
+	
 	public Lobby() {
 		this.playersJoined = new ArrayList<Player>();
 		this.lobbyRank = 0;
@@ -64,11 +67,19 @@ public class Lobby implements Serializable{
 		this.readyHashMap = new HashMap<Player, Boolean>();
 		this.setDifficultyOfAI(Difficulty.EASY);
 	}
+	
+	/** Sets Id of lobby admin and calls default constructor. */
+	
 	public Lobby(int lobbyHost) {
 		this();
 		this.lobbyHost = lobbyHost;
 	}
 	
+	/**
+	 * Player joins lobby. Appropriate Color and Avatars are set to the player.
+	 * 
+	 * @param toAdd Player instance that we want to add
+	 */
 	
 	public void joinLobby(Player toAdd) {
 		if(!this.playersJoined.contains(toAdd)) {
@@ -79,6 +90,12 @@ public class Lobby implements Serializable{
 		}
 	}
 	
+	/**
+	 * Leave method. Removes player instance from the lobby instance.
+	 * 
+	 * @param toLeave
+	 */
+	
 	public void leaveLobby(Player toLeave) {
 		if(this.playersJoined.contains(toLeave)) {
 			this.playersJoined.remove(toLeave);
@@ -86,7 +103,9 @@ public class Lobby implements Serializable{
 			removeColorAvatar(toLeave);
 		}
 	}
-		
+	
+	/** Recalculates the score for the lobby. */
+
 	private void updateScore() {
 		int k = 0;
 		for (Player i : this.playersJoined) {
@@ -102,11 +121,7 @@ public class Lobby implements Serializable{
 		
 	}
 	
-	
-	public List<Player> getPlayerList(){
-		return playersJoined;
-
-	}
+	/** Returns a List with Ai Players present in the lobby. */
 	
 	public List<Player> getAIPlayerList(){
 		ArrayList<Player> AIplayersInLobby = new ArrayList<Player>();
@@ -122,6 +137,8 @@ public class Lobby implements Serializable{
 		return AIplayersInLobby;
 	}
 	
+	/** Returns a list with the human players in the lobby. */
+	
 	public List<Player> getHumanPlayerList(){
 		ArrayList<Player> players= new ArrayList<Player>();
 		Iterator<Player> itt = playersJoined.iterator();
@@ -134,10 +151,16 @@ public class Lobby implements Serializable{
 		}
 		return players;
 	}
-	// 
+	
+	/** 
+	 * Sets non overlapping color and avatar to the player. 
+	 * Updates the list with left avaiable.
+	 *
+	 * @param ply Player instance that we want to add
+	 * @return Player instance with correctly set color and avatars.
+	 */
 	
 	private Player addColorAvatar(Player ply) {
-		// TODO
 		String prefC;					
 		String prefAv;
 		
@@ -172,15 +195,14 @@ public class Lobby implements Serializable{
 		return ply;
 	}
 	
+	/** For when a player leaves. Adding Player's color avatar back to avaiable list. */
+	
 	private void removeColorAvatar(Player toLeave) {
 		this.avaiableAvatars.add(toLeave.getAvatar());
 		this.avaiableColors.add(toLeave.getColor());
 	}
 
-	
-	public int getLobbyRank() {
-		return this.lobbyRank;
-	}
+	/** Adds an Ai Player to the lobby. */
 	
 	public void addAI() {
 		String aiN = avaiableAINames.get(this.avaiableAINames.size() - 1);
@@ -198,6 +220,8 @@ public class Lobby implements Serializable{
 	
 	}
 	
+	/** Updates the file image path to the dir of local pc. */
+	
 	public void updateAvatarDir() {
 		for(Player ply : this.playersJoined) {
 			for (String avatar : Parameter.allAvatars) {
@@ -208,6 +232,8 @@ public class Lobby implements Serializable{
 		}	
 	}
 
+	/** Removes one of the Ai instances. */
+	
 	public void removeAI() {
 		if (this.getAIPlayerList().size() > 0) {
 			Player k = this.getAIPlayerList().get(this.getAIPlayerList().size() - 1);
@@ -219,6 +245,8 @@ public class Lobby implements Serializable{
 		}
 	}
 	
+	/** Updates the Difficulty of Ai player to match lobby settings. */
+	
 	public void updateAILevel() {
 		for(Player ply : this.playersJoined) {
 			if(ply instanceof PlayerAI) {
@@ -226,6 +254,8 @@ public class Lobby implements Serializable{
 			}
 		}
 	}
+	
+	/** Checks if everyone is ready. */
 	
 	public boolean isEveryoneReady() {
 		for(boolean p : this.readyHashMap.values()) {
@@ -236,6 +266,7 @@ public class Lobby implements Serializable{
 		return true;
 	}
 	
+	/** Converts a Color instance to a hex code as a String. */
 	
 	public static String colorToHexCode( Color color ) {
         return String.format( "#%02X%02X%02X",
@@ -246,6 +277,15 @@ public class Lobby implements Serializable{
 	
 	public void setReady(Player ply, boolean ready) {
 		this.readyHashMap.put(ply, ready);
+	}
+
+	public List<Player> getPlayerList(){
+	    return playersJoined;
+	    
+	}
+	
+	public int getLobbyRank() {
+	    return this.lobbyRank;
 	}
 	
 	public boolean isReady(Player ply) {

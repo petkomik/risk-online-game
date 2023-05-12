@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * class for game card representation
+ * Class to model a Risk card. Includes attributes to display it properly in GUI.
+ *
  * @author pmikov
  *
  */
@@ -30,6 +31,14 @@ public class Card implements Serializable{
 			CountryName.NewGuinea, CountryName.NorthernEurope, CountryName.Ontario, 
 			CountryName.Peru, CountryName.SouthernEurope, CountryName.Ural, CountryName.Yakutsk};
 	
+	/**
+	 * Constructor for non-Joker cards.
+	 *
+	 * @param name CountryName enum of the card
+	 * @param id od the Card
+	 * @param pngDir Path to the image of Territory
+	 */
+	
 	public Card(CountryName name, int id, String pngDir) {
 		this.countryName = name;
 		if(Arrays.asList(Card.infantrySymbol).contains(name)) {
@@ -44,6 +53,13 @@ public class Card implements Serializable{
 		this.pngDir = pngDir;
 	} 
 	
+	/** 
+	 * Constructor for a joker card.
+	 * 
+	 * @param isJoker should be true
+	 * @param id of the risk card
+	 */
+	
 	public Card(boolean isJoker, int id) {
 		this.isJoker = true;
 		this.countryName = null;
@@ -51,6 +67,12 @@ public class Card implements Serializable{
 		this.pngDir = "";
 		this.ID = id;
 	}
+	
+	/**
+	 * Construvotr for cloning a card.
+	 *
+	 * @param c card to be cloned
+	 */
 	
 	public Card(Card c) {
 		this.isJoker = c.isJoker;
@@ -80,9 +102,9 @@ public class Card implements Serializable{
 		return ID;
 	}
 
-    @Override
-    public String toString() {
-        return this.isJoker() ? "Joker" : this.countryName.toString();
-    }
+        @Override
+        public String toString() {
+            return this.isJoker() ? "Joker" : this.countryName.toString();
+        }
 	
 }
