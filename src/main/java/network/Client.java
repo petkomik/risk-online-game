@@ -614,7 +614,21 @@ public class Client {
 								gameHandler.setGameState(((MessageGUIgameIsOver) mesGaOv).getGameState());
 								gamePane.endGame(((MessageGUIgameIsOver) mesGaOv).getPodium());
 							});
-
+								
+							if (!mesGaOv.getPodium().get(0).isAI()) {
+				                  AppController.dbH.updateProfileInfo(
+				                      AppController.dbH.getProfileByID(mesGaOv.getPodium().get(0).getID()).getWins() + 1, "Wins",
+				                      mesGaOv.getPodium().get(0).getID());
+				                }
+							 for (Player p : mesGaOv.getLobby().getHumanPlayerList()) {
+				                  if (p.getID() != mesGaOv.getLobby().getHumanPlayerList().get(0).getID() && !p.isAI()) {
+				                    AppController.dbH.updateProfileInfo(
+				                        AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses",
+				                        p.getID());
+				                  }
+				                }
+							
+							
 							break;
 
 						default:
