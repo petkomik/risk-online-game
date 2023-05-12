@@ -92,8 +92,7 @@ public class Database {
           + "Photo TEXT, "
           + "Loses INTEGER, "
           + "Password TEXT NOT NULL, "
-          + "Score INTEGER, "
-          + "IsPersonal BIT NOT NULL);";
+          + "Score INTEGER);";
       stm.executeUpdate(sql);
       connection.commit();
 

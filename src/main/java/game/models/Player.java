@@ -2,12 +2,6 @@ package game.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.stream.Collectors;
-
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 /**
  * Player class to model the player entity
@@ -17,79 +11,83 @@ import javafx.scene.paint.Color;
 
 public abstract class Player implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private String username;
-	private String color;
-	private String avatar;
-	protected int id;
-	protected boolean isAI;
-	private int rank;
-	private LocalDateTime gameEndTime;
+  private static final long serialVersionUID = 1L;
 
+  private String username;
+  private String color;
+  private String avatar;
+  protected int id;
+  protected boolean isAI;
+  private int rank;
+  private LocalDateTime gameEndTime;
 
-	public Player(String name, int id) {
-		this.username = name;
-		this.id = id;
-		// set Random avatar
-	}
-	
-	public Player(String name, int id, String imagePath) {
-		this.username = name;
-		this.id = id;
-		this.avatar = imagePath;
-	}
+  /**
+   * Constructor. Sets the name and the id of a player.
+   */
+  public Player(String name, int id) {
+    this.username = name;
+    this.id = id;
+  }
 
-	/**constructor for defensive copying*/
-	public Player(Player player) {
-	    this.username = new String(player.getName());
-	    this.color = player.getColor();
-	    this.id = player.getID();
-	    this.rank = player.getRank();
-	    this.gameEndTime = player.getGameEndTime();
-	    this.avatar = player.avatar;
-	}
+  /**
+   * Constructor. Sets the name, id and the imgae Path of a player.
+   */
+  public Player(String name, int id, String imagePath) {
+    this.username = name;
+    this.id = id;
+    this.avatar = imagePath;
+  }
 
-	public int getID() {
-		return this.id;
-	}
+  /** constructor for defensive copying */
+  public Player(Player player) {
+    this.username = new String(player.getName());
+    this.color = player.getColor();
+    this.id = player.getID();
+    this.rank = player.getRank();
+    this.gameEndTime = player.getGameEndTime();
+    this.avatar = player.avatar;
+  }
 
-	public String getName() {
-		return this.username;
-	}
+  public int getID() {
+    return this.id;
+  }
 
-	public LocalDateTime getGameEndTime() {
-		return gameEndTime;
+  public String getName() {
+    return this.username;
+  }
 
-	}
+  public LocalDateTime getGameEndTime() {
+    return gameEndTime;
 
-	public String getColor() {
-		return color;
-	}
+  }
 
-	public void setColor(String color) {
-		this.color = color;
-	}
+  public String getColor() {
+    return color;
+  }
 
-	public int getRank() {
-		return rank;
-	}
+  public void setColor(String color) {
+    this.color = color;
+  }
 
-	public void setRank(int rank) {
-		this.rank = rank;
-	}
+  public int getRank() {
+    return rank;
+  }
 
-	public String getAvatar() {
-		return this.avatar;
-	}
-	
-	public void setAvatar(String imagePath) {
-		this.avatar = imagePath;
-	}
+  public void setRank(int rank) {
+    this.rank = rank;
+  }
 
-	public boolean isAI() {
-		// TODO Auto-generated method stub
-		return this.isAI;
-	}
+  public String getAvatar() {
+    return this.avatar;
+  }
+
+  public void setAvatar(String imagePath) {
+    this.avatar = imagePath;
+  }
+
+  public boolean isAI() {
+    // TODO Auto-generated method stub
+    return this.isAI;
+  }
 
 }

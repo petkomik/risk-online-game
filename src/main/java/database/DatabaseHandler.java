@@ -14,7 +14,6 @@ import java.util.ArrayList;
  */
 public class DatabaseHandler extends Database {
   private PreparedStatement stm1;
-  private PreparedStatement stm2;
 
   /**
    * Creates a new instance of DatabaseHandler.
@@ -43,7 +42,6 @@ public class DatabaseHandler extends Database {
       stm1.setInt(7, p.getLoses());
       stm1.setString(8, p.getPhoto());
       stm1.setString(9, p.getPassword());
-      stm1.setInt(10, p.isPersonal());
 
       stm1.executeUpdate();
       this.connection.commit();
@@ -120,8 +118,7 @@ public class DatabaseHandler extends Database {
         String password = rs.getString("password");
         int isPersonal = 1;
 
-        return new Profile(id, userName, firstName, lastName, color, wins, loses, photo, password,
-            isPersonal);
+        return new Profile(id, userName, firstName, lastName, color, photo, wins, loses, password);
       }
       rs.close();
     } catch (SQLException e) {
@@ -130,6 +127,13 @@ public class DatabaseHandler extends Database {
     return null;
   }
 
+  /**
+   * 
+   * Retrieves all profiles from the Profiles table in the database and returns them as an ArrayList
+   * of Profile objects.
+   * 
+   * @return ArrayList of Profile objects representing all profiles in the database
+   */
   public ArrayList<Profile> getAllProfiles() {
     ArrayList<Profile> list = new ArrayList<Profile>();
     try (Statement stm = this.connection.createStatement()) {
@@ -146,10 +150,9 @@ public class DatabaseHandler extends Database {
         int loses = rs.getInt("Loses");
         String photo = rs.getString("Photo");
         String password = rs.getString("password");
-        int isPersonal = 1;
 
-        list.add(new Profile(id, userName, firstName, lastName, color, wins, loses, photo, password,
-            isPersonal));
+        list.add(
+            new Profile(id, userName, firstName, lastName, color, photo, wins, loses, password));
       }
       rs.close();
     } catch (SQLException e) {
@@ -158,6 +161,15 @@ public class DatabaseHandler extends Database {
     return list;
   }
 
+  /**
+   * 
+   * Retrieves the game statistic with the specified game ID from the Games table in the database.
+   * 
+   * @param gameID the ID of the game whose statistic is to be retrieved
+   * 
+   * @return the GameStatistic object with the specified game ID, or null if no such statistic is
+   *         found
+   */
   public GameStatistic getGameStatistic(int gameID) {
     try (Statement stm = this.connection.createStatement()) {
       String sql = "SELECT * FROM Games WHERE GameID = " + gameID + ";";
@@ -178,9 +190,16 @@ public class DatabaseHandler extends Database {
     return null;
   }
 
+  /**
+   * 
+   * Inserts a new game statistic into the Games table in the database.
+   * 
+   * @param g the GameStatistic object to be inserted
+   */
   public void createGameStatistic(GameStatistic g) {
     try {
-      String sql = "INSERT INTO Games(GameID, StartTime, NumberOfPlayers, Length) VALUES (?,?,?,?);";
+      String sql =
+          "INSERT INTO Games(GameID, StartTime, NumberOfPlayers, Length) VALUES (?,?,?,?);";
       stm1 = super.connection.prepareStatement(sql);
 
       stm1.setInt(1, g.getGameID());
@@ -196,6 +215,14 @@ public class DatabaseHandler extends Database {
     }
   }
 
+  /**
+   * 
+   * Updates a specified attribute of a game statistic in the Games table in the database.
+   * 
+   * @param value the new value to be assigned to the attribute
+   * @param attribute the name of the attribute to be updated
+   * @param g1 the GameStatistic object whose attribute is to be updated
+   */
   public void updateGameStatistic(String value, String attribute, GameStatistic g1) {
     try {
       String sql =
