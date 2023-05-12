@@ -162,6 +162,8 @@ public class GamePaneController implements Initializable {
 
 	private ChatButton chatButton;
 	private ChatWindow chatWindow;
+	
+	private ArrayList<Card> cards = new ArrayList<>();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -1084,6 +1086,9 @@ public class GamePaneController implements Initializable {
 
 	public void conquerCountry(CountryName country, int id, int troops) {
 		this.claimCountry(country, id);
+		if(troops > 99) {
+			labelTroopsDisplay.get(country.toString()).setStyle("-fx-font-weight: bold;" + "-fx-font-size: 70px;");
+		}
 		labelTroopsDisplay.get(country.toString()).setText(String.valueOf(troops));
 	}
 
@@ -1127,8 +1132,11 @@ public class GamePaneController implements Initializable {
 	 * @param numTroops
 	 */
 	public void setNumTroops(CountryName countryName, int numTroops) {
+		if(numTroops > 99) {
+			labelTroopsDisplay.get(countryName.toString()).setStyle("-fx-font-weight: bold;" + "-fx-font-size: 70px;");
+		}
 		labelTroopsDisplay.get(countryName.toString()).setText(String.valueOf(numTroops));
-		;
+		
 	}
 
 	/**
@@ -1256,7 +1264,7 @@ public class GamePaneController implements Initializable {
 		dropOnPane2.getChildren().removeIf(x -> x instanceof VBox);
 		dropOnPane3.getChildren().removeIf(x -> x instanceof VBox);
 
-		ArrayList<Card> cards = this.cardsPlayerOnGUI;
+		
 		ArrayList<String> selectedCards = new ArrayList<>();
 
 		AnchorPane cardsAnchorPane = new AnchorPane();
@@ -1416,7 +1424,11 @@ public class GamePaneController implements Initializable {
 						.replaceAll("([a-zA-Z])([A-Z])", "$1 $2"));
 				countryNameLabel.setAlignment(Pos.CENTER);
 				countryNameLabel.setPadding(new Insets(10, 10, 10, 10));
-				countryNameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20.0)));
+				double fontSize = getRelativeHorz(20.0);
+				if(c.getName() == CountryName.WesternUnitedStates || c.getName() == CountryName.EasternUnitedStates) {
+					fontSize = getRelativeHorz(12.0);
+				}
+				countryNameLabel.setFont(Font.font("Cooper Black", FontWeight.NORMAL, fontSize));
 				countryNameLabel.setTextAlignment(TextAlignment.CENTER);
 
 				countryNamePane.getChildren().add(countryNameLabel);
@@ -1505,7 +1517,13 @@ public class GamePaneController implements Initializable {
 		// Update the player and cards data
 		this.playerOnGUI = this.playerIdHash.get(idOfPlayer);
 		this.cardsPlayerOnGUI = cards;
-
+		
+		if(this.currentPhase == Phase.REINFORCE) {
+			this.cards.removeIf(x -> x instanceof Card);
+			for(Card c : this.cardsPlayerOnGUI) {
+				this.cards.add(c);
+			}
+		}
 		// Update cards-related GUI elements based on the color of the player
 		for (int i = 0; i < playerIDs.size(); i++) {
 			if (playerIDs.get(i) == idOfPlayer) {
