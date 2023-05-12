@@ -30,7 +30,7 @@ public class DatabaseHandler extends Database {
   public void createProfileData(Profile p) {
     try {
       String sql =
-          "INSERT INTO Profiles(PlayerID, UserName, FirstName, LastName, Color, Wins, Loses, Photo, Password, IsPersonal) VALUES (?,?,?,?,?,?,?,?,?,?);";
+          "INSERT INTO Profiles(PlayerID, UserName, FirstName, LastName, Color, Wins, Loses, Photo, Password) VALUES (?,?,?,?,?,?,?,?,?);";
       stm1 = super.connection.prepareStatement(sql);
 
       stm1.setInt(1, p.getId());
@@ -116,7 +116,6 @@ public class DatabaseHandler extends Database {
         int loses = rs.getInt("Loses");
         String photo = rs.getString("Photo");
         String password = rs.getString("password");
-        int isPersonal = 1;
 
         return new Profile(id, userName, firstName, lastName, color, photo, wins, loses, password);
       }
