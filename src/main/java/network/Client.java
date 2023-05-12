@@ -271,6 +271,11 @@ public class Client {
 							if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
 								AppController.dbH.createProfileData(profilee);
 							}
+							 // if is person
+							AppController.dbH.updateProfileInfo(
+				                      AppController.dbH.getProfileByID((profilee.getId())).getWins() +1, "Wins",
+				                      profilee.getId());
+							
 							profiles.add(profilee);
 							chat.addItemsInComboBox(profilee);
 							// The client who received the new Connected Client sends own profile
@@ -344,6 +349,10 @@ public class Client {
 								AppController.dbH.createProfileData(profilee1);
 								System.out.println("profileadding works");
 							}
+							AppController.dbH.updateProfileInfo(
+				                      AppController.dbH.getProfileByID((profilee1.getId())).getWins() +1, "Wins",
+				                      profilee1.getId());
+							
 							chat.addItemsInComboBox(profilee1);
 							System.out.println("MessageProfile");
 							break;
