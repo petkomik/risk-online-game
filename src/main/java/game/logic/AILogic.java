@@ -710,8 +710,6 @@ public class AILogic {
 
   private static Pair<CountryName, CountryName> chooseTerritoriesPairFortifyHard(
       GameState gameState, PlayerAI player) {
-    gameState.getTerritories().values()
-        .forEach(x -> System.out.println(x.getCountryName() + ", " + x.getOwnedByPlayer().getID()));
     CountryName fromCountry = null;
     ArrayList<Territory> threeMostInner =
         getThreeMostInnerTerritories(gameState.getTerritories().values(), player);
@@ -775,11 +773,11 @@ public class AILogic {
       List<Card> jokers = gameState.getRiskCardsInPlayers().get(idPly)
 	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
       List<Card> infantry = gameState.getRiskCardsInPlayers().get(idPly)
-	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
+	      .stream().filter(x -> x.getCardSymbol() == 1 ).collect(Collectors.toList());
       List<Card> cavalry = gameState.getRiskCardsInPlayers().get(idPly)
-	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
+	      .stream().filter(x -> x.getCardSymbol() == 5).collect(Collectors.toList());
       List<Card> artillery = gameState.getRiskCardsInPlayers().get(idPly)
-	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
+	      .stream().filter(x -> x.getCardSymbol() == 10).collect(Collectors.toList());
 
       for(Card c : gameState.getRiskCardsInPlayers().get(idPly)) {
 	  copy.add(new Card(c));
@@ -789,7 +787,7 @@ public class AILogic {
 	  cards.addAll(jokers);
 	  copy.removeAll(jokers);
 	  while(cards.size() < 3) {
-	      cards.add(copy.get((int) (Math.random() * copy.size())));
+	      cards.add(copy.remove((int) (Math.random() * copy.size())));
 	  }
 	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
       }
@@ -797,6 +795,8 @@ public class AILogic {
       if(infantry.size() >= 3) {
 	  while(cards.size() < 3) {
 	      cards.add(infantry.get(0));
+	      cards.add(infantry.get(1));
+	      cards.add(infantry.get(2));
 	  }
 	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
       }
@@ -804,6 +804,8 @@ public class AILogic {
       if(cavalry.size() >= 3) {
 	  while(cards.size() < 3) {
 	      cards.add(cavalry.get(0));
+	      cards.add(cavalry.get(1));
+	      cards.add(cavalry.get(2));
 	  }
 	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
       }
@@ -811,6 +813,8 @@ public class AILogic {
       if(artillery.size() >= 3) {
 	  while(cards.size() < 3) {
 	      cards.add(artillery.get(0));
+	      cards.add(artillery.get(1));
+	      cards.add(artillery.get(2));
 	  }
 	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
       }
@@ -818,7 +822,7 @@ public class AILogic {
       if(cavalry.size() > 0 && artillery.size() > 0 && infantry.size() > 0) {
 	  cards.add(cavalry.get(0));
 	  cards.add(artillery.get(0));
-	  cards.add(artillery.get(0));
+	  cards.add(infantry.get(0));
 	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
       }
       

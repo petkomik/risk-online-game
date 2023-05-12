@@ -637,7 +637,8 @@ public class GameHandler {
             this.gameState.editRiskCardsInPlayers(newCards, idOfPlayer);
             int bonusTroops = this.gameState.playerTurnsInCard();
             this.gameState.addTroopsToPlayer(idOfPlayer, bonusTroops);
-            System.out.println(this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
+            System.out.println("Risk Cards turned in success troops left now = " 
+        	    + this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
             switch(this.gameType) {
             case SinglePlayer:
                 this.singlePlayerHandler.riskCardsTurnedInSuccessOnGUI(newCards, idOfPlayer,

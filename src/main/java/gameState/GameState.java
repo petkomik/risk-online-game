@@ -124,7 +124,13 @@ public class GameState implements Serializable {
 	public void receiveRandomRiskCard(int idOfPlayer) {
 	    Random generator = new Random();
 	    Card card = this.cards.remove(generator.nextInt(this.cards.size()));
+	    Card card2 = this.cards.remove(generator.nextInt(this.cards.size()));
+	    Card card3 = this.cards.remove(generator.nextInt(this.cards.size()));
+
 	    this.riskCardsInPlayers.get(idOfPlayer).add(card);
+	    this.riskCardsInPlayers.get(idOfPlayer).add(card2);
+	    this.riskCardsInPlayers.get(idOfPlayer).add(card3);
+
 	}
 	
 	public void setInitialTroops(int troops) {
