@@ -276,7 +276,7 @@ public class Client {
 				                      AppController.dbH.getProfileByID((profilee.getId())).getWins() , "Wins",
 				                      profilee.getId());
 							AppController.dbH.updateProfileInfo(
-				                      AppController.dbH.getProfileByID((profilee.getId())).getLoses() , "Wins",
+				                      AppController.dbH.getProfileByID((profilee.getId())).getLoses() , "Loses",
 				                      profilee.getId());
 							 
 							
@@ -357,7 +357,7 @@ public class Client {
 				                      AppController.dbH.getProfileByID((profilee1.getId())).getWins() , "Wins",
 				                      profilee1.getId());
 							AppController.dbH.updateProfileInfo(
-				                      AppController.dbH.getProfileByID((profilee1.getId())).getLoses() , "Wins",
+				                      AppController.dbH.getProfileByID((profilee1.getId())).getLoses() , "Loses",
 				                      profilee1.getId());
 							chat.addItemsInComboBox(profilee1);
 							System.out.println("MessageProfile");
