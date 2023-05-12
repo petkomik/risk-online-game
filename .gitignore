@@ -24,3 +24,5 @@ target/classes/.gitignore
 # Database
 src/main/resources/risk-database.db
 risk-database.db
+risk-database.db-journal
+
