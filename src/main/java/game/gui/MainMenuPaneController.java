@@ -36,9 +36,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
+ * Class for the Main Menu Pane. Paints GUI and sets Button action events.
  * 
- * @author majda
- * This class handles the events on the main
+ * @author pmikov
  */
 public class MainMenuPaneController extends StackPane {
 	
@@ -64,6 +64,11 @@ public class MainMenuPaneController extends StackPane {
 	
 	private AnchorPane anchorPane;
 
+	/**
+	 * Default constructor sets up the pane.
+	 *
+	 * @throws FileNotFoundException for map background not found.
+	 */
 	
 	public MainMenuPaneController() throws FileNotFoundException {
 		super();
@@ -72,6 +77,12 @@ public class MainMenuPaneController extends StackPane {
 		setup();
 		buttonEvents();
 	}
+	
+	/**
+	 * Setup method, creates and positions nodes.
+	 * 
+	 * @throws FileNotFoundException for map background image not found
+	 */
 
 	public void setup() throws FileNotFoundException {
 		
@@ -169,13 +180,14 @@ public class MainMenuPaneController extends StackPane {
 		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	}
 	
+	/** Setting up button events. */
+	
 	public void buttonEvents() {
 		playTutorialButton.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
 				gameSound.buttonClickForwardSound();
 				Node node = (Node) event.getSource();
-				// Getting the Stage where the event is happened
 				stage = (Stage)node.getScene().getWindow();
 				BattleFrameController battle;
 				try {
@@ -224,7 +236,6 @@ public class MainMenuPaneController extends StackPane {
 		    public void handle(ActionEvent event) {
 				gameSound.buttonClickForwardSound();
 				Lobby lobby = new Lobby();
-				// TODO get methods for color + avatars
 				lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
 				Node node = (Node) event.getSource();
 				stage = (Stage)node.getScene().getWindow();
@@ -236,21 +247,6 @@ public class MainMenuPaneController extends StackPane {
 					e.printStackTrace();
 				}
 				
-//				Node node = (Node) event.getSource();
-//				// Getting the Stage where the event is happened
-//				stage = (Stage)node.getScene().getWindow();
-//				// changing the AnchorPane from the main file
-//				try {
-//					anchorPane = (AnchorPane) loadFXML("gameFrame");
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//				// Setting the size of the anchorPane
-//				anchorPane.setPrefSize(w, h);
-//				// Setting the AnchorPane as a root of the main scene
-//				stage.getScene().setRoot(anchorPane);
-//				// Showing the Stage
-//				stage.show();
 		    }
 	   });
 		
@@ -291,27 +287,17 @@ public class MainMenuPaneController extends StackPane {
 		    }
 	   });
 	}
-
-//	public void clickDisplayStatistics(ActionEvent e) throws IOException {
-//		Node node = (Node)e.getSource();
-//		// Getting the Stage where the event is happened
-//		stage = (Stage)node.getScene().getWindow();
-//		// changing the AnchorPane from the main file
-//		anchorPane = (AnchorPane) loadFXML("displayStatistics");
-//		// Setting the AnchorPane as a root of the main scene
-//		stage.getScene().setRoot(anchorPane);
-//		// Showing the Stage
-//		stage.show();
-//	}
 	
 	/**
-     * 
-     * @param fxml, file name without the ending .fxml
-     * @return Parent object, to be set as a root in a Scene object
-     * @throws IOException
-     * 
-     * This method is responsible for loading a fxml file
-     */
+         * This method is responsible for loading a fxml file.
+         *
+         * @author majda
+         * @param fxml file name without the ending \.fxml
+         * @return Parent object, to be set as a root in a Scene object
+         * @throws IOException
+         * 
+         */
+	
 	private static Parent loadFXML(String fxml) throws IOException {
 		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
 		return fxmlLoader.load();

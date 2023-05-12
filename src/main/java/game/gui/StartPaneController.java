@@ -33,8 +33,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
+ * First Window shown to the player on Application load.
  * 
- * @author majda this class handles the events on the very first frame
+ * @author pmikov
+ *
  */
 public class StartPaneController extends StackPane {
 	private Stage stage;
@@ -51,6 +53,12 @@ public class StartPaneController extends StackPane {
 
 	private GameSound gameSound = AppController.getGameSound();
 
+	/**
+	 * Default Constructor. Builds the Pane.
+	 *
+	 * @throws FileNotFoundException for background map image not found
+	 */
+	
 	public StartPaneController() throws FileNotFoundException {
 		super();
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
@@ -59,6 +67,13 @@ public class StartPaneController extends StackPane {
 		setup();
 	}
 
+	/**
+	 * Setup method for the pane. Creates and places nodes. 
+	 * Sets up button events.
+	 *
+	 * @throws FileNotFoundException for background map image not found
+	 */
+	
 	public void setup() throws FileNotFoundException {
 
 		this.setAlignment(Pos.CENTER);

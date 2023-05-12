@@ -31,6 +31,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * Pane where the player chooses between log in and sign up.
+ *
+ * @author pmikov
+ */
+
 public class UserAccessPaneController extends StackPane {
 	
 	private double w = MainApp.screenWidth;
@@ -46,6 +52,12 @@ public class UserAccessPaneController extends StackPane {
 	private DesignButton logIn;
 	private DesignButton signUp;
 	private double ratio;
+	
+	/**
+	 * Default constructor. Build the pane.
+	 *
+	 * @throws FileNotFoundException for backgroud map image not found.
+	 */
 
 	public UserAccessPaneController() throws FileNotFoundException {
 		super();
@@ -54,6 +66,8 @@ public class UserAccessPaneController extends StackPane {
 		setup();
 	}
 
+	/** Set up method. Sets Button action events and build nodes. */
+	
 	public void setup() throws FileNotFoundException {
 		
 		this.setAlignment(Pos.CENTER);

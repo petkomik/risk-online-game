@@ -41,6 +41,14 @@ import general.Parameter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+/**
+ * First Multiplayer GUI Window. 
+ * Player decides whether to host or join a server.
+ *
+ * @author pmikov
+ *
+ */
+
 public class MultplayerHostJoinController extends StackPane {
 	
 	private double w = MainApp.screenWidth;
@@ -64,6 +72,11 @@ public class MultplayerHostJoinController extends StackPane {
 	
 	private AnchorPane anchorPane;
 
+	/**
+	 * Default constructor. Builds the window.
+	 *
+	 * @throws FileNotFoundException for the background map image
+	 */
 	
 	public MultplayerHostJoinController() throws FileNotFoundException {
 		super();
@@ -162,6 +175,8 @@ public class MultplayerHostJoinController extends StackPane {
 		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	}
 	
+	/** Setting up button events. */
+	
 	public void buttonEvents() {
 		hostServer.setOnAction(new EventHandler<ActionEvent>() {
 		    @Override
@@ -213,31 +228,4 @@ public class MultplayerHostJoinController extends StackPane {
 		    }
 	   });
 	}
-
-//	public void clickDisplayStatistics(ActionEvent e) throws IOException {
-//		Node node = (Node)e.getSource();
-//		// Getting the Stage where the event is happened
-//		stage = (Stage)node.getScene().getWindow();
-//		// changing the AnchorPane from the main file
-//		anchorPane = (AnchorPane) loadFXML("displayStatistics");
-//		// Setting the AnchorPane as a root of the main scene
-//		stage.getScene().setRoot(anchorPane);
-//		// Showing the Stage
-//		stage.show();
-//	}
-	
-	/**
-     * 
-     * @param fxml, file name without the ending .fxml
-     * @return Parent object, to be set as a root in a Scene object
-     * @throws IOException
-     * 
-     * This method is responsible for loading a fxml file
-     */
-	private static Parent loadFXML(String fxml) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
-		return fxmlLoader.load();
-	}
-
-
 }

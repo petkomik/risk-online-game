@@ -26,9 +26,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * Dialog box for a login/signup with a secondary profile. 
+ * Called in singleplayer lobby.
+ *
+ * @author pmikov
+ *
+ */
+
 public class SecondaryPlayerDialog {
 	
 	Profile profileToReturn;
+	
+	/**
+	 * Method to call the Dialog box.
+	 *
+	 * @return Profile instance that the user created or logged in to.
+	 */
 	
 	@SuppressWarnings("static-access")
 	public Profile addPlayerDialog() {

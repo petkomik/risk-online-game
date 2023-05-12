@@ -37,9 +37,12 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
- * 
- * @author majda The class handles the event on the create profile frame
+ * This is the class for the Sign Up GUI window. 
+ * Handles profile creation on the GUI side.
+ *
+ * @author pmikov 
  */
+
 public class CreateProfilePaneController extends StackPane {
 	
 	private double w = MainApp.screenWidth;
@@ -71,15 +74,28 @@ public class CreateProfilePaneController extends StackPane {
 	private HBox buttonRow;
 	private DesignButton createProfileButton;
 	private double ratio;
+	
+	/**
+	 * Constructor for the window.
+	 *
+	 * @throws FileNotFoundException for the avatar photos or background map image
+	 */
 
 	
 	public CreateProfilePaneController() throws FileNotFoundException {
 		super();
-		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() 
+			* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
 		setup();
 		buttonEvents();
 	}
+	
+	/**
+	 * Setup method. Creates the buttons, fields and other nodes present in the gui.
+	 *
+	 * @throws FileNotFoundException for the avatar photos or background map image
+	 */
 
 	public void setup() throws FileNotFoundException {
 		
@@ -237,6 +253,8 @@ public class CreateProfilePaneController extends StackPane {
 		contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
 		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	}
+	
+	/**Sets up the button events*/
 	
 	public void buttonEvents() {
 		createProfileButton.setOnAction(new EventHandler<ActionEvent>() {

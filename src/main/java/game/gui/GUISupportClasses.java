@@ -51,6 +51,14 @@ import network.messages.MessageToPerson;
 import general.AppController;
 import general.GameSound;
 
+/**
+ * This class consist of static inner classes 
+ * defines GUI elements presentin multiple places.
+ *
+ * @author pmikov, pmalamov, srogalsk
+ *
+ */
+
 public class GUISupportClasses {
 	static class Spacing extends Region {
 		public Spacing() {
@@ -87,8 +95,7 @@ public class GUISupportClasses {
 		public DiceFactory(int i, boolean at, double ratio) throws FileNotFoundException {
 			super();
 			String bDice = at ? "" : "b";
-			this.setImage(
-					new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bDice + ".png")));
+			this.setImage(new Image(new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bDice + ".png")));
 			this.setFitWidth(70 * ratio);
 			this.setFitHeight(70 * ratio);
 			this.setPreserveRatio(true);

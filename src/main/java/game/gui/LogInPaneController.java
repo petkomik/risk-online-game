@@ -43,6 +43,14 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * This is the class for the Log In GUI window. 
+ * Handles profile log in on the GUI side.
+ *
+ * @author mikov
+ *
+ */
+
 public class LogInPaneController extends StackPane {
 	
 	
@@ -70,6 +78,11 @@ public class LogInPaneController extends StackPane {
 	private DesignButton logInButton;
 	private double ratio;
 
+	/**
+	 * Default constructor for the window.
+	 *
+	 * @throws FileNotFoundException for map background image
+	 */
 	
 	public LogInPaneController() throws FileNotFoundException {
 		super();
@@ -79,6 +92,12 @@ public class LogInPaneController extends StackPane {
 		buttonEvents();
 	}
 
+	/**
+	 * Setup method for the window creates and position nodes.
+	 *
+	 * @throws FileNotFoundException for the background map image
+	 */
+	
 	public void setup() throws FileNotFoundException {
 		
 		this.setAlignment(Pos.CENTER);
@@ -203,6 +222,8 @@ public class LogInPaneController extends StackPane {
 		contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
 		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	}
+	
+	/** Setting up button events. */
 	
 	public void buttonEvents() {
 		logInButton.setOnAction(new EventHandler<ActionEvent>() {

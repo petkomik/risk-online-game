@@ -51,10 +51,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
- * 
- * @author pmikov jorohr
- * This class handles the profile updating
- * 
+ * Profile Settings Pane. Here user can change their profile 
+ * information and set preferred colors and avatars.
+ *
+ * @author pmikov jorohr 
  */
 
 public class UpdateSettingsController extends StackPane {
@@ -136,6 +136,13 @@ public class UpdateSettingsController extends StackPane {
 			Parameter.bruntetteBoy, Parameter.mustacheMan,
 			Parameter.earringsGirl, Parameter.hatBoy};
 
+	
+	/** 
+	 * Default constructor. Build the pane.
+	 *
+	 * @throws FileNotFoundException for the map backgroiund image and avatar images
+	 */
+	
 	public UpdateSettingsController() throws FileNotFoundException {
 		this.ratio = Screen.getPrimary().getVisualBounds().getWidth() * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
 		this.ratio = Math.min(ratio + 0.3, 1);
@@ -145,6 +152,8 @@ public class UpdateSettingsController extends StackPane {
 		this.setupPlayerInfo();
 		this.buttonEvents();
 	}
+	
+	/** Sets up the background of the pane. Map image and color filter. */
 	
 	public void setupBackground() throws FileNotFoundException {
 		this.setAlignment(Pos.CENTER);
@@ -185,6 +194,8 @@ public class UpdateSettingsController extends StackPane {
 		contentVBox.setAlignment(Pos.CENTER);
 
 	}
+	
+	/** Sets up the banner. */
 	
 	public void setupBanner() throws FileNotFoundException {
 		topBannerParent = new HBox(); 
@@ -243,6 +254,8 @@ public class UpdateSettingsController extends StackPane {
 		topBannerParent.getChildren().addAll(topBannerContent, bannerSpacing, stackAvatar);
 		this.getChildren().add(topBannerParent);
 	}
+	
+	/** Sets up the main content of the page. */
 	
 	public void setupMainContent() throws FileNotFoundException {
 		mainContent = new VBox();
@@ -378,6 +391,8 @@ public class UpdateSettingsController extends StackPane {
 		this.getChildren().add(mainContent);
 	}
 	
+	/** Fills the fields in the main content with accurate profile information. */
+	
 	public void setupPlayerInfo() throws FileNotFoundException {
 		MainApp.getAppController();
 		usernameTextField.setText(AppController.getProfile().getUserName());
@@ -407,6 +422,8 @@ public class UpdateSettingsController extends StackPane {
 			field.setEditable(false);
 		}
 	}
+	
+	/** Sets up button events. */
 	
 	public void buttonEvents() {
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -601,6 +618,13 @@ public class UpdateSettingsController extends StackPane {
 		    }
 		});
 	}
+	
+	/**
+	 * Small method to get the hex code of a Color instance.
+	 *
+	 * @param color Color to be converted
+	 * @return String wiht the hex code
+	 */
 	
 	public static String colorToHexCode( Color color ) {
         return String.format( "#%02X%02X%02X",
