@@ -136,10 +136,10 @@ public class GameState implements Serializable {
 	
 	/** Method to update the List of Risk Cards owned by player. */
 	
-	public void editRiskCardsInPlayers(ArrayList<Card> cards, int idOfPlayer) {
+	public void editRiskCardsInPlayers(ArrayList<Card> cardsNew, int idOfPlayer) {
 	    this.cards.addAll(this.riskCardsInPlayers.get(idOfPlayer));
-	    this.riskCardsInPlayers.replace(idOfPlayer, cards);
-	    this.cards.removeAll(this.riskCardsInPlayers.get(idOfPlayer));
+	    this.riskCardsInPlayers.replace(idOfPlayer, cardsNew);
+	    this.cards.removeAll(cardsNew);
 	}
 	
 	/**
@@ -150,6 +150,8 @@ public class GameState implements Serializable {
 	
 	public void receiveRandomRiskCard(int idOfPlayer) {
 	    Random generator = new Random();
+	    this.cards.stream().forEach(x -> System.out.println(x.toString()));
+	    System.out.println(this.cards.size());
 	    Card card = this.cards.remove(generator.nextInt(this.cards.size()));
 	    Card card2 = this.cards.remove(generator.nextInt(this.cards.size()));
 	    Card card3 = this.cards.remove(generator.nextInt(this.cards.size()));
