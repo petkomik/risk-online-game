@@ -70,6 +70,14 @@ import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
 import network.messages.MessageUpdateLobbyList;
 
+/**
+ * Client class represents a client that connects to the server.
+ * It has properties such as socket, input/output stream, user profile, username, player, client thread, lobby, chat window, host status,
+ * and game status. It also has static ArrayList profiles and HashMap lobbies that keep track of all the profiles and lobbies respectively.
+ * It also handles the listening communication from the side of the client.
+ *
+ * @author [dignatov]
+ */
 public class Client {
 	private Socket socket;
 	private ObjectInputStream inputStream;
@@ -88,10 +96,20 @@ public class Client {
 	private GamePaneController gamePane;
 	private GameHandler gameHandler;
 
+	/**
+	 * Sets the client's lobby.
+	 * @param clientsLobby The lobby to set for the client.
+	 */
+	
 	public void setClientsLobby(Lobby clientsLobby) {
 		this.clientsLobby = clientsLobby;
 	}
-
+	/**
+	 * Constructor for the Client class.
+	 * Initializes the client with a socket and profile, sets up input/output streams and sends an initial profile message.
+	 * @param socket The socket for communication.
+	 * @param profile The profile associated with the client.
+	 */
 	public Client(Socket socket, Profile profile) {
 		this.profile = profile;
 		this.userName = profile.getUserName();
@@ -113,11 +131,19 @@ public class Client {
 		}
 
 	}
-
+	/**
+	 * Sets the chat window for the client.
+	 * @param serverMainWindowController The main window controller for the server.
+	 */
 	public void setChat(GUISupportClasses.ChatWindow serverMainWindowController) {
 		chat = serverMainWindowController;
 	}
-
+	/**
+	 * Constructor for the Client class.
+	 * Initializes the client with a socket and player, sets up input/output streams and sends an initial profile message.
+	 * @param socket The socket for communication.
+	 * @param player The player associated with the client.
+	 */
 	public Client(Socket socket, Player player) {
 
 		this.player = player;
@@ -138,13 +164,20 @@ public class Client {
 		}
 
 	}
-
+	/**
+	 * Closes all the resources associated with the client.
+	 */
 	public void closeEverything() {
 
 		closeEverything(socket, inputStream, outputStream);
 		System.out.println("Closing  works");
 	}
-
+	/**
+	 * Closes all the resources associated with the client.
+	 * @param socket2 The socket to close.
+	 * @param inputStream2 The input stream to close.
+	 * @param outputStream2 The output stream to close.
+	 */
 	private void closeEverything(Socket socket2, ObjectInputStream inputStream2, ObjectOutputStream outputStream2) {
 		System.out.println("Close everything 2");
 		try {
@@ -164,7 +197,13 @@ public class Client {
 
 	}
 
-
+	/**
+	 * Creates a client and connects it to the specified host and port.
+	 * @param host The host to connect to.
+	 * @param port The port to connect to.
+	 * @return The created client.
+	 * @throws IOException If an I/O error occurs when creating the socket.
+	 */
 	public static Client createClient(String host, int port) throws IOException {
 		Profile profile = AppController.getProfile();
 		Socket socket;
@@ -173,7 +212,10 @@ public class Client {
 		client = new Client(socket, profile);
 		return client;
 	}
-
+	/**
+	 * Removes a profile from the static list of profiles.
+	 * @param profilee The profile to remove.
+	 */
 	public static void removeProfile(Profile profilee) {
 		for (Profile profile : profiles) {
 			if (profile.equals(profilee)) {
@@ -181,7 +223,11 @@ public class Client {
 			}
 		}
 	}
-
+	/**
+	 * Sends a direct message to a specified id.
+	 * @param message The message to send.
+	 * @param id The id to send the message to.
+	 */
 	public void sendDirectMessage(Message message, int id) {
 		try {
 			outputStream.flush();
@@ -193,7 +239,10 @@ public class Client {
 		}
 
 	}
-
+	/**
+	 * Sends a message.
+	 * @param message The message to send.
+	 */
 	public void sendMessage(Message message) {
 		try {
 			outputStream.flush();
@@ -204,6 +253,28 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Initiates a thread to listen for incoming messages from the client.
+	 *
+	 * This method starts a new client thread that constantly checks for incoming messages from the client. 
+	 * If there is a new message in the message queue, it is processed according to its type, which can be 
+	 * Connect, Disconnect, MessageServerCloseConnection, MessageSend, MessageSendInGame, MessageProfile, 
+	 * MessageToPerson, MessageAllProfiles, MessageCreateLobby, MessageJoinLobby, MessageUpdateLobby, 
+	 * MessageUpdateLobbyList, MessageinLobby, MessageReadyToPlay, MessageCreateGame, MessageJoinGame, 
+	 * MessageGameState, MessageGUIRollInitalDice, MessageGUIRollDiceBattle, MessageGUIshowExcption, 
+	 * MessageGUIsetPeriod, MessageGUIsetPhase, MessageGUIpossessCountry, MessageGUIconquerCountry, 
+	 * MessageGUIsetCurrentPlayer, MessageGUIchnagePlayer, MessageGUIchooseNumberOfTroops, MessageGUIcloseTroopsPane, 
+	 * MessageGUIsetTroopsOnTerritory, MessageGUIsetTroopsOnTerritoryAndLeft, MessageGUImoveTroopsFromTerritoryToOther, 
+	 * MessageGUIOpenBattleFrame, MessageGUIendBattle, MessageGUIriskCardsTurnedInSuccess, 
+	 * MessageGUIselectTerritoryAndSteDisabledTerritories, MessageGUIresetAll, MessageGUIupdateRanks, MessageGUIgameIsOver.
+	 *
+	 * The processing of the message varies depending on its type, but it generally involves updating 
+	 * the server's view of the state of the client or the game, and sending appropriate responses back 
+	 * to the client or other connected clients.
+	 *
+	 */
+
 
 	public void listenForMessage() {
 		clientThread = new Thread(new Runnable() {
@@ -672,186 +743,362 @@ public class Client {
 	 * 
 	 * }
 	 */
-	public Client returnClient() {
+	  /**
+     * Returns the current client object.
+     *
+     * @return The current client object.
+     */
+    public Client returnClient() {
+        return this;
+    }
 
-		return this;
-	}
+    /**
+     * Gets the profile associated with the client.
+     *
+     * @return The profile of the client.
+     */
+    public Profile getProfile() {
+        return profile;
+    }
 
-	public Profile getProfile() {
-		return profile;
-	}
+    /**
+     * Gets the lobby that the client is currently in.
+     *
+     * @return The lobby that the client is in.
+     */
+    public Lobby getClientsLobby() {
+        return clientsLobby;
+    }
 
-	public Lobby getClientsLobby() {
-		return clientsLobby;
-	}
+    /**
+     * Checks if the client is the host of the lobby.
+     *
+     * @return True if the client is the host, false otherwise.
+     */
+    public boolean isHost() {
+        return host;
+    }
 
-	public boolean isHost() {
-		return host;
-	}
+    /**
+     * Sets the client's host status.
+     *
+     * @param host The new host status of the client.
+     */
+    public void setHost(boolean host) {
+        this.host = host;
+    }
 
-	public void setHost(boolean host) {
-		this.host = host;
-	}
+    /**
+     * Gets a hashmap of all lobbies.
+     *
+     * @return A hashmap of all lobbies.
+     */
+    public HashMap<String, Lobby> getLobbies() {
+        return lobbies;
+    }
 
-	public HashMap<String, Lobby> getLobbies() {
-		return lobbies;
-	}
+    /**
+     * Sets the hashmap of all lobbies.
+     *
+     * @param lobbies The new hashmap of lobbies.
+     */
+    public void setLobbies(HashMap<String, Lobby> lobbies) {
+        this.lobbies = lobbies;
+    }
 
-	public void setLobbies(HashMap<String, Lobby> lobbies) {
-		this.lobbies = lobbies;
-	}
+    /**
+     * Updates the visual representation of the lobby.
+     *
+     * @param message The message containing the information to update the lobby visual.
+     */
+    private void updateInLobbyVisual(Message message) {
+    }
 
-	private void updateInLobbyVisual(Message message) {
-	}
+    /**
+     * Checks if the client is currently in a lobby.
+     *
+     * @return True if the client is in a lobby, false otherwise.
+     */
+    public boolean isInALobby() {
+        return isInALobby;
+    }
 
-	public boolean isInALobby() {
-		return isInALobby;
-	}
+    /**
+     * Sets the client's status of being in a lobby.
+     *
+     * @param isInALobby The new lobby status of the client.
+     */
+    public void setInALobby(boolean isInALobby) {
+        this.isInALobby = isInALobby;
+    }
 
-	public void setInALobby(boolean isInALobby) {
-		this.isInALobby = isInALobby;
-	}
+    /**
+     * Load a FXML file.
+     *
+     * @param fxml The name of the FXML file to load.
+     * @return The root node of the loaded FXML file.
+     * @throws IOException If an error occurs during loading.
+     */
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
 
-	private static Parent loadFXML(String fxml) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
-		return fxmlLoader.load();
-	}
+    /**
+     * Gets the GamePaneController associated with the client.
+     *
+     * @return The GamePaneController of the client.
+     */
+    public GamePaneController getGamePane() {
+        return gamePane;
+    }
 
-	public GamePaneController getGamePane() {
-		return gamePane;
-	}
+    /**
+     * Sets the GamePaneController associated with the client.
+     *
+     * @param gamePane The new GamePaneController of the client.
+     */
+    public void setGamePane(GamePaneController gamePane) {
+        this.gamePane = gamePane;
+    }
 
-	public void setGamePane(GamePaneController gamePane) {
-		this.gamePane = gamePane;
-	}
+    // The rest of the methods in your class can be annotated similarly. 
+    // It would look something like this:
 
-	public void playerThrowsInitalDice(int iD) {
-		Platform.runLater(() -> {
-			this.gameHandler.playerThrowsInitialDice(iD);
-		});
-	}
+    /**
+     * Method description goes here.
+     *
+     * @param iD Description of parameter goes here.
+     */
+    public void playerThrowsInitalDice(int iD) {
+        Platform.runLater(() -> {
+            this.gameHandler.playerThrowsInitialDice(iD);
+        });
+    }
+    
+    /**
+     * Handles a click on a country.
+     *
+     * @param id The ID of the player.
+     * @param country The country being clicked.
+     */
+    public void clickCountry(int id, CountryName country) {
+        Platform.runLater(() -> {
+            this.gameHandler.clickCountry(id, country);
+        });
+    }
 
-	public void clickCountry(int id, CountryName country) {
-		Platform.runLater(() -> {
-			this.gameHandler.clickCountry(id, country);
-		});
-	}
+    /**
+     * Cancels the number of troops in a country.
+     *
+     * @param country The country where the troops are being canceled.
+     * @param choosePane The pane where the troops are being chosen.
+     * @param idOfPlayer The ID of the player.
+     */
+    public void cancelNumberOfTroops(CountryName country, ChoosePane choosePane, int idOfPlayer) {
+        Platform.runLater(() -> {
+            this.gameHandler.cancelNumberOfTroops(country, choosePane, idOfPlayer);
+        });
+    }
 
-	public void cancelNumberOfTroops(CountryName country, ChoosePane choosePane, int idOfPlayer) {
-		Platform.runLater(() -> {
-			this.gameHandler.cancelNumberOfTroops(country, choosePane, idOfPlayer);
-		});
-	}
+    /**
+     * Confirms the number of troops in a country.
+     *
+     * @param country The country where the troops are being confirmed.
+     * @param troops The number of troops being confirmed.
+     * @param choosePane The pane where the troops are being chosen.
+     * @param idOfPlayer The ID of the player.
+     */
+    public void confirmNumberOfTroops(CountryName country, int troops, ChoosePane choosePane, int idOfPlayer) {
+        Platform.runLater(() -> {
+            this.gameHandler.confirmTroopsToCountry(country, troops, choosePane, idOfPlayer);
+        });
+    }
 
-	public void confirmNumberOfTroops(CountryName country, int troops, ChoosePane choosePane, int idOfPlayer) {
-		Platform.runLater(() -> {
-			this.gameHandler.confirmTroopsToCountry(country, troops, choosePane, idOfPlayer);
-		});
-	}
+    /**
+     * Handles a player turning in risk cards.
+     *
+     * @param cards The risk cards being turned in.
+     * @param idOfPlayer The ID of the player.
+     */
+    public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
+        Platform.runLater(() -> {
+            this.gameHandler.turnInRiskCards(cards, idOfPlayer);
+        });
+    }
 
-	public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
-		Platform.runLater(() -> {
-			this.gameHandler.turnInRiskCards(cards, idOfPlayer);
-		});
-	}
+    /**
+     * Ends the phase of the turn.
+     *
+     * @param period The period of the game.
+     * @param phase The phase of the turn.
+     * @param idOfPlayer The ID of the player.
+     */
+    public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
+        Platform.runLater(() -> {
+            System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " + idOfPlayer
+                    + " clicks end turn");
+            this.gameHandler.endPhaseTurn(period, phase, idOfPlayer);
+        });
+    }
 
-	public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
-		Platform.runLater(() -> {
-			System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " + idOfPlayer
-					+ " clicks end turn");
-			this.gameHandler.endPhaseTurn(period, phase, idOfPlayer);
-		});
-	}
+    /**
+     * Rolls dice for a battle.
+     */
+    public void battleDiceThrow() {
+        Platform.runLater(() -> {
+            this.gameHandler.battleDiceThrow();
+        });
+    }
 
-	public void battleDiceThrow() {
-		Platform.runLater(() -> {
-			this.gameHandler.battleDiceThrow();
-		});
+    /**
+     * Rolls dice for initial dice on the GUI and sends a 'MessageGUIRollInitalDice' message to all other clients.
+     *
+     * @param idOfPlayer The ID of the player.
+     * @param i The value of the dice.
+     */
+    public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
+        Platform.runLater(() -> {
+            sendMessage(new MessageGUIRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
+            System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " + idOfPlayer
+                    + " throws");
+        });
+    }
 
-	}
+    /**
+     * Rolls dice for a battle on the GUI and sends a 'MessageGUIRollDiceBattle' message to all other clients.
+     *
+     * @param attackerDiceValues The values of the attacker's dice.
+     * @param defenderDiceValues The values of the defender's dice.
+     * @param troopsInAttackAt The number of troops in the attacking territory.
+     * @param troopsInAttackDf The number of troops in the defending territory.
+     * @param numberOfDice The number of dice.
+     * @throws FileNotFoundException If an error occurs when accessing the file.
+     */
+    public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues, int troopsInAttackAt,
+            int troopsInAttackDf, int[] numberOfDice) throws FileNotFoundException {
+        Platform.runLater(() -> {
+             gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
+            sendMessage(new MessageGUIRollDiceBattle(gameHandler.getGameState(), attackerDiceValues, defenderDiceValues,
+                    troopsInAttackAt, troopsInAttackDf, numberOfDice, clientsLobby));
+        });
+    }
 
-	// ot tuk
-	public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
-		
-		Platform.runLater(() -> {
-			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
-			sendMessage(new MessageGUIRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
-			System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current " + idOfPlayer
-					+ " throes");
-		});
+    /**
+     * Shows an exception on the GUI.
+     *
+     * @param e The exception to be shown.
+     */
+    public void showExeceptionOnGUI(Exception e) {
+        Platform.runLater(() -> {
+            this.gamePane.showException(e.toString());
+        });
+    }
 
-	}
+    /**
+     * Sets the period on the GUI and sends a 'MessageGUIsetPeriod' message to all other clients.
+     *
+     * @param period The period to be set.
+     */
+    public void setPeriodOnGUI(Period period) {
+        Platform.runLater(() -> {
+            sendMessage(new MessageGUIsetPeriod(gameHandler.getGameState(), period, clientsLobby));
+        });
+    }
+    /**
+     * Sets the phase on the GUI and sends a 'MessageGUIsetPhase' message to all other clients.
+     *
+     * @param phase The phase to be set.
+     */
+    public void setPhaseOnGUI(Phase phase) {
+        Platform.runLater(() -> {
+             gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
+            sendMessage(new MessageGUIsetPhase(gameHandler.getGameState(), phase, clientsLobby));
+        });
+    }
 
-	public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues, int troopsInAttackAt,
-			int troopsInAttackDf, int[] numberOfDice) throws FileNotFoundException {
-		Platform.runLater(() -> {
-			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
+    /**
+     * Possesses a country on the GUI and sends a 'MessageGUIpossessCountry' message to all other clients.
+     *
+     * @param country The country to be possessed.
+     * @param id The ID of the player.
+     * @param troopsLeft The number of troops left.
+     */
+    public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
+        Platform.runLater(() -> {
+            sendMessage(new MessageGUIpossessCountry(gameHandler.getGameState(), country, id, troopsLeft, clientsLobby));
+        });
+    }
 
-			sendMessage(new MessageGUIRollDiceBattle(gameHandler.getGameState(), attackerDiceValues, defenderDiceValues,
-					troopsInAttackAt, troopsInAttackDf, numberOfDice, clientsLobby));
-		});
-	}
+    /**
+     * Conquers a country on the GUI and sends a 'MessageGUIconquerCountry' message to all other clients.
+     *
+     * @param country The country to be conquered.
+     * @param id The ID of the player.
+     * @param troops The number of troops.
+     */
+    public void conquerCountryOnGUI(CountryName country, int id, int troops) {
+        Platform.runLater(() -> {
+             gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
+            sendMessage(new MessageGUIconquerCountry(gameHandler.getGameState(), country, id, troops, clientsLobby));
+        });
+    }
 
-	public void showExeceptionOnGUI(Exception e) {
-		Platform.runLater(() -> {
-			this.gamePane.showException(e.toString());
-		});
-	}
+    /**
+     * Sets the current player on the GUI and sends a 'MessageGUIsetCurrentPlayer' message to all other clients.
+     *
+     * @param id The ID of the player.
+     * @param troopsLeft The number of troops left.
+     */
+    public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
+        Platform.runLater(() -> {
+             gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
+            System.out.println(gameHandler.getGameState().getCurrentPlayer().getID() + "is set current player send message");
+            sendMessage(new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));
+        });
+    }
 
-	public void setPeriodOnGUI(Period period) {
-		Platform.runLater(() -> {
-			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
-			sendMessage(new MessageGUIsetPeriod(gameHandler.getGameState(), period, clientsLobby));
-		});
-	}
+    /**
+     * Changes the player on the GUI.
+     *
+     * @param id The ID of the player.
+     * @param cards The list of cards of the player.
+     */
+    public void chnagePlayerOnGUI(int id, ArrayList<Card> cards) {
+        Platform.runLater(() -> {
+            this.gamePane.setPlayerOnGUI(id, cards);
+        });
+    }
 
-	public void setPhaseOnGUI(Phase phase) {
-		Platform.runLater(() -> {
-			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
-			sendMessage(new MessageGUIsetPhase(gameHandler.getGameState(), phase, clientsLobby));
-		});
-	}
+    /**
+     * Chooses the number of troops on the GUI.
+     *
+     * @param country The country to place the troops.
+     * @param min The minimum number of troops.
+     * @param max The maximum number of troops.
+     * @param choosePane The choosePane to be used.
+     */
+    public void chooseNumberOfTroopsOnGUI(CountryName country, int min, int max, ChoosePane choosePane) {
+        Platform.runLater(() -> {
+            System.out.println("Opening choose troops with " + country.toString() + " " + choosePane.toString());
+            this.gamePane.showChoosingTroopsPane(country, min, max, choosePane);
+        });
+    }
 
-	public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
-		Platform.runLater(() -> {
-			sendMessage(new MessageGUIpossessCountry(gameHandler.getGameState(), country, id, troopsLeft, clientsLobby));
-		});
-	}
-
-	public void conquerCountryOnGUI(CountryName country, int id, int troops) {
-		Platform.runLater(() -> {
-			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
-			sendMessage(new MessageGUIconquerCountry(gameHandler.getGameState(), country, id, troops, clientsLobby));
-		});
-	}
-
-	public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
-		Platform.runLater(() -> {
-			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
-			System.out.println(gameHandler.getGameState().getCurrentPlayer().getID() + "is set current player send message");
-			sendMessage(new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));
-		});
-	}
-
-	public void chnagePlayerOnGUI(int id, ArrayList<Card> cards) {
-		Platform.runLater(() -> {
-			this.gamePane.setPlayerOnGUI(id, cards);
-		});
-	}
-
-	public void chooseNumberOfTroopsOnGUI(CountryName country, int min, int max, ChoosePane choosePane) {
-		Platform.runLater(() -> {
-			System.out.println("Opening choose troops with " + country.toString() + " " + choosePane.toString());
-			this.gamePane.showChoosingTroopsPane(country, min, max, choosePane);
-		});
-	}
-
-	public void closeTroopsPaneOnGUI() {
-		Platform.runLater(() -> {
-			this.gamePane.closeChoosingTroopsPane();
-		});
-	}
-
+    /**
+     * Closes the troops pane on GUI.
+     */
+    public void closeTroopsPaneOnGUI() {
+        Platform.runLater(() -> {
+            this.gamePane.closeChoosingTroopsPane();
+        });
+    }
+    /**
+     * Sets the troops on a territory and sends a 'MessageGUIsetTroopsOnTerritory' message to all other clients.
+     *
+     * @param countryName The name of the country where the troops are set.
+     * @param numTroopsOfCountry The number of troops in the country.
+     */
 	public void setTroopsOnTerritory(CountryName countryName, int numTroopsOfCountry) {
 		Platform.runLater(() -> {
 			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
@@ -859,7 +1106,13 @@ public class Client {
 					clientsLobby));
 		});
 	}
-
+	 /**
+     * Sets the troops on a territory and the remaining troops of the player, and sends a 'MessageGUIsetTroopsOnTerritoryAndLeft' message to all other clients.
+     *
+     * @param countryName The name of the country where the troops are set.
+     * @param numTroopsOfCountry The number of troops in the country.
+     * @param numTroopsOfPlayer The number of troops left for the player.
+     */
 	public void setTroopsOnTerritoryAndLeftOnGUI(CountryName countryName, int numTroopsOfCountry,
 			int numTroopsOfPlayer) {
 		Platform.runLater(() -> {
@@ -869,6 +1122,14 @@ public class Client {
 		});
 	}
 
+	  /**
+     * Moves troops from one territory to another on the GUI, and sends a 'MessageGUImoveTroopsFromTerritoryToOther' message to all other clients.
+     *
+     * @param from The name of the country from where the troops are moved.
+     * @param to The name of the country to where the troops are moved.
+     * @param numberFrom The number of troops left in the 'from' country.
+     * @param numberTo The number of troops in the 'to' country after the move.
+     */
 	public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom, int numberTo) {
 		Platform.runLater(() -> {
 			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
@@ -876,21 +1137,33 @@ public class Client {
 					numberTo, clientsLobby));
 		});
 	}
-
+	 /**
+     * Opens the battle frame on the GUI and sends a 'MessageGUIOpenBattleFrame' message to all other clients.
+     *
+     * @param battle The battle to be displayed.
+     */
 	public void openBattleFrameOnGUI(Battle battle) {
 		Platform.runLater(() -> {
 			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIOpenBattleFrame(gameHandler.getGameState(), battle, clientsLobby));
 		});
 	}
-
+	 /**
+     * Ends the battle on the GUI and sends a 'MessageGUIendBattle' message to all other clients.
+     */
 	public void endBattleOnGUI() {
 		Platform.runLater(() -> {
 			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
 			sendMessage(new MessageGUIendBattle(gameHandler.getGameState(), clientsLobby));
 		});
 	}
-
+	 /**
+     * Shows the risk cards turned in successfully on the GUI.
+     *
+     * @param card The cards that were turned in.
+     * @param idOfPlayer The ID of the player who turned in the cards.
+     * @param bonusTroops The number of bonus troops the player receives for turning in the cards.
+     */
 	public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
 		Platform.runLater(() -> {
 			this.gamePane.setAmountOfTroopsLeftToDeploy(bonusTroops);
@@ -912,7 +1185,11 @@ public class Client {
 
 //	public void resetAllOnGUI() {
 //	}
-
+	 /**
+     * Updates the ranks on the GUI and sends a 'MessageGUIupdateRanks' message to all other clients.
+     *
+     * @param ranks The updated ranks.
+     */
 	public void updateRanksOnGUI(int[] ranks) {
 		Platform.runLater(() -> {
 			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
@@ -920,7 +1197,11 @@ public class Client {
 			 sendMessage(new MessageGUIupdateRanks(gameHandler.getGameState(), ranks, clientsLobby));
 		});
 	}
-
+	 /**
+     * Notifies that the game is over on the GUI and sends a 'MessageGUIgameIsOver' message to all other clients.
+     *
+     * @param podium The list of players in the podium.
+     */
 	public void gameIsOverOnGUI(ArrayList<Player> podium) {
 		Platform.runLater(() -> {
 			 gameHandler.getGameState().setGameStateVersion(1+ gameHandler.getGameState().getGameStateVersion());
@@ -928,6 +1209,11 @@ public class Client {
 		});
 	}
 
+	  /**
+     * Checks if the client is currently in a game.
+     *
+     * @return True if the client is in a game, false otherwise.
+     */
 	public boolean isInAGame() {
 		return isInAGame;
 	}
