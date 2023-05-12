@@ -119,7 +119,6 @@ public class ServerMainWindowController extends VBox {
 		this.ratio = Math.min(1, this.ratio + 0.2);
 		this.ratioBanner = Math.min(1, this.ratio + 0.1);
 		this.setup();
-		this.actionEventsSetup();
 
 	}
 	
@@ -223,7 +222,7 @@ public class ServerMainWindowController extends VBox {
 		chatPane = new ChatWindow();
 		chatPane.setVisible(false);
 		chatPane.setPickOnBounds(true);
-		
+
 		/*
 		 * setting up ScrollPane
 		 */
@@ -704,4 +703,8 @@ public class ServerMainWindowController extends VBox {
 		return searchButton;
 	}
 
+	public void setClient(Client client) {
+		this.client = client;
+		client.setChat(chatPane);
+	}
 }

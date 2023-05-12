@@ -1920,10 +1920,13 @@ public class GamePaneController implements Initializable {
 			try {
 				serverMainWindowController = new ServerMainWindowController();
 				stage.getScene().setRoot(serverMainWindowController);
+				serverMainWindowController.setClient(this.client);
+				serverMainWindowController.actionEventsSetup();
 				for (Lobby lobby : client.getLobbies().values()) {
 					serverMainWindowController.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
 				}
 				serverMainWindowController.drawLobbies(true);
+				
 			} catch (Exception ev) {
 				ev.printStackTrace();
 			}

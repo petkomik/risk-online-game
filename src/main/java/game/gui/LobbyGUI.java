@@ -1,6 +1,5 @@
 package game.gui;
 
-import java.io.FileNotFoundException;
 import java.io.Serializable;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Lobby;

@@ -46,6 +46,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
 /**
+ * this class is responsible for constructing the GUI pane, 
+ * before joining the server, it has a field for the IPadress and one for the port number.
+ * 
  * 
  * @author pmalamov the class handles the join server event
  *
@@ -75,6 +78,11 @@ public class MultiplayerJoinWindowController extends StackPane {
 	private DesignButton joinButton;
 	private double ratio;
 	
+	/**
+	 * constructor for the class
+	 * 
+	 * @throws FileNotFoundException for the world map image
+	 */
 	
 	public MultiplayerJoinWindowController() throws FileNotFoundException {
 		super();
@@ -83,7 +91,14 @@ public class MultiplayerJoinWindowController extends StackPane {
 		setup();
 		buttonEvents();
 	}
-
+	
+	/**
+	 * initializes all the GUI items that are needed for the construction of the GUI
+	 * and places them on the previously planned out place.
+	 * 
+	 * @throws FileNotFoundException for the world map image
+	 */
+	
 	public void setup() throws FileNotFoundException {
 		
 		this.setAlignment(Pos.CENTER);
@@ -206,6 +221,10 @@ public class MultiplayerJoinWindowController extends StackPane {
 		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 	}
 	
+	/**
+	 *  method for setting up the action events of the buttons.
+	 *  it is separated from the setup method for more clarity.
+	 */
 	
 	public void buttonEvents() {
 		joinButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -255,6 +274,7 @@ public class MultiplayerJoinWindowController extends StackPane {
 				try {
 					ServerMainWindowController serverMenu = new ServerMainWindowController();
 					serverMenu.initClient();
+					serverMenu.actionEventsSetup(); 
 					stage.getScene().setRoot(serverMenu);
 
 				} catch (Exception e) {
@@ -297,11 +317,6 @@ public class MultiplayerJoinWindowController extends StackPane {
 				}
 			}
 		});
-	}
-		
-	private static Parent loadFXML(String fxml) throws IOException {
-		FXMLLoader fxmlLoader = new FXMLLoader(StartPaneController.class.getResource(fxml + ".fxml"));
-		return fxmlLoader.load();
 	}
 
 }

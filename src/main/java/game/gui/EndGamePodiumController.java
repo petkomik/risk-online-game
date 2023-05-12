@@ -367,6 +367,8 @@ public class EndGamePodiumController extends StackPane {
 					ServerMainWindowController serverMenu;
 					try {
 						serverMenu = new ServerMainWindowController();
+						serverMenu.setClient(AppController.getClient());
+						serverMenu.actionEventsSetup();
 						stage.getScene().setRoot(serverMenu);
 					} catch (Exception e) {
 						e.printStackTrace();
