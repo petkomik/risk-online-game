@@ -729,10 +729,10 @@ public class Client {
                       "Wins", mesGaOv.getPodium().get(0).getID());
                 }
                 if (mesGaOv.getPodium().get(0).getID() == AppController.getProfile().getId()) {
-                  AppController.getProfile().setLoses(mesGaOv.getPodium().get(0).getID() + 1);
+                  AppController.getProfile().setWins(mesGaOv.getPodium().get(0).getID() +  1);
                 }
                 for (Player p : mesGaOv.getLobby().getHumanPlayerList()) {
-                  if (p.getID() != mesGaOv.getLobby().getHumanPlayerList().get(0).getID()
+                  if (p.getID() != (mesGaOv.getPodium().get(0).getID())
                       && !p.isAI()) {
                     AppController.dbH.updateProfileInfo(
                         AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses",
