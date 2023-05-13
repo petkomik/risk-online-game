@@ -8,6 +8,7 @@ import game.models.CountryName;
 import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerAI;
+import game.models.PlayerSingle;
 import game.models.Territory;
 import general.AppController;
 import java.util.ArrayList;
@@ -1056,7 +1057,7 @@ public class GameHandler {
 					AppController.dbH.getProfileByID(podium.get(0).getID()).getWins() + 1, "Wins",
 					podium.get(0).getID());
 				if (podium.get(0).getID() == AppController.getProfile().getId()) {
-				    AppController.getProfile().setWins(podium.get(0).getID() + 1);
+				    AppController.getProfile().setWins(((PlayerSingle)(podium.get(0))).getProfile().getWins() + 1);
 				}
 
 			    }
@@ -1068,7 +1069,7 @@ public class GameHandler {
 					    AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses",
 					    p.getID());
 				    if (p.getID() == AppController.getProfile().getId()) {
-					AppController.getProfile().setLoses(p.getID() + 1);
+					AppController.getProfile().setLoses(((PlayerSingle)p).getProfile().getLoses() + 1);
 				    }
 
 				}

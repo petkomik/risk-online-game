@@ -39,4 +39,8 @@ public class PlayerSingle extends Player {
     this.isAI = false;
   }
 
+public Profile getProfile() {
+	return profile;
+}
+
 }
