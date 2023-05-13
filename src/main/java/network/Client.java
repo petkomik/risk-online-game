@@ -349,6 +349,7 @@ public class Client {
                 // this one clinet
                 System.out.println("case MessageConnect Success 1 ");
                 Profile profilee = ((MessageConnect) message).getProfile();
+                System.out.println(profilee.getWins()+ " Client 352  ");
                 // Add Label that this client connected to the server
                 if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
                   AppController.dbH.createProfileData(profilee);
