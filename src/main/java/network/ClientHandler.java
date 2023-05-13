@@ -351,7 +351,7 @@ public class ClientHandler implements Runnable {
 							.getLobby());
 					break;
 				case MessageGUIgameIsOver:
-					broadcastMessageWithinLobbyWithoutMeId(messageFromClient,
+					broadcastMessageWithinLobby(messageFromClient,
 							((MessageGUIgameIsOver) messageFromClient)
 							.getLobby());
 					break;
