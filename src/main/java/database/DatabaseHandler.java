@@ -29,8 +29,8 @@ public class DatabaseHandler extends Database {
    */
   public void createProfileData(Profile p) {
     try {
-      String sql =
-          "INSERT INTO Profiles(PlayerID, UserName, FirstName, LastName, Color, Wins, Loses, Photo, Password) VALUES (?,?,?,?,?,?,?,?,?);";
+      String sql = "INSERT INTO Profiles(PlayerID, UserName, FirstName, LastName,"
+          + " Color, Wins, Loses, Photo, Password) " + "VALUES (?,?,?,?,?,?,?,?,?);";
       stm1 = super.connection.prepareStatement(sql);
 
       stm1.setInt(1, p.getId());
@@ -54,7 +54,7 @@ public class DatabaseHandler extends Database {
   /**
    * Deletes the Profile data for the given id from the database.
    * 
-   * @param id the id of the Profile data to delete.
+   * @param id the id of the Profile data to delete
    */
   public void deleteProfile(int id) {
     try {
@@ -72,7 +72,7 @@ public class DatabaseHandler extends Database {
    * 
    * @param value the new value of the attribute.
    * @param attribute the attribute to update.
-   * @param p1 the Profile object to update.
+   * @param id the Profile object to update.
    */
   public void updateProfileInfo(String value, String attribute, int id) {
     try {
@@ -85,6 +85,13 @@ public class DatabaseHandler extends Database {
     }
   }
 
+  /**
+   * Updates the given attribute of the given Profile object in the database.
+   * 
+   * @param value the new value of the attribute.
+   * @param attribute the attribute to update.
+   * @param id the Profile object to update.
+   */
   public void updateProfileInfo(int value, String attribute, int id) {
     try {
       String sql = "UPDATE Profiles SET " + attribute + " = '" + value + "' WHERE PlayerID = " + id;
@@ -102,7 +109,7 @@ public class DatabaseHandler extends Database {
    * @param id the id of the Profile data to retrieve.
    * @return the retrieved Profile object, or null if no Profile data was found for the given id.
    */
-  public Profile getProfileByID(int id) {
+  public Profile getProfileById(int id) {
     try (Statement stm = this.connection.createStatement()) {
       String sql = "SELECT * FROM Profiles WHERE PlayerID= " + id + ";";
 
@@ -127,7 +134,6 @@ public class DatabaseHandler extends Database {
   }
 
   /**
-   * 
    * Retrieves all profiles from the Profiles table in the database and returns them as an ArrayList
    * of Profile objects.
    * 
@@ -161,25 +167,23 @@ public class DatabaseHandler extends Database {
   }
 
   /**
-   * 
    * Retrieves the game statistic with the specified game ID from the Games table in the database.
    * 
    * @param gameID the ID of the game whose statistic is to be retrieved
-   * 
    * @return the GameStatistic object with the specified game ID, or null if no such statistic is
    *         found
    */
-  public GameStatistic getGameStatistic(int gameID) {
+  public GameStatistic getGameStatistic(int gameId) {
     try (Statement stm = this.connection.createStatement()) {
-      String sql = "SELECT * FROM Games WHERE GameID = " + gameID + ";";
+      String sql = "SELECT * FROM Games WHERE GameID = " + gameId + ";";
 
       ResultSet rs = stm.executeQuery(sql);
       if (rs.next()) {
         int length = rs.getInt("Length");
         LocalDateTime startTime = LocalDateTime.parse(rs.getString("StartTime"));
-        int winnerID = rs.getInt("WinnerID");
+        int winnerId = rs.getInt("WinnerID");
         int numbPlayers = rs.getInt("NumberOfPlayers");
-        return new GameStatistic(gameID, length, startTime, winnerID, numbPlayers);
+        return new GameStatistic(gameId, length, startTime, winnerId, numbPlayers);
       }
       rs.close();
 
@@ -190,7 +194,6 @@ public class DatabaseHandler extends Database {
   }
 
   /**
-   * 
    * Inserts a new game statistic into the Games table in the database.
    * 
    * @param g the GameStatistic object to be inserted
@@ -215,7 +218,6 @@ public class DatabaseHandler extends Database {
   }
 
   /**
-   * 
    * Updates a specified attribute of a game statistic in the Games table in the database.
    * 
    * @param value the new value to be assigned to the attribute

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * Player class to model the player entity
+ * Player class to model the player entity.
  *
  * @author jorohr
  */
@@ -17,7 +17,7 @@ public abstract class Player implements Serializable {
   private String color;
   private String avatar;
   protected int id;
-  protected boolean isAI;
+  protected boolean isAi;
   private int rank;
   private LocalDateTime gameEndTime;
 
@@ -38,17 +38,17 @@ public abstract class Player implements Serializable {
     this.avatar = imagePath;
   }
 
-  /** constructor for defensive copying */
+  /** constructor for defensive copying. */
   public Player(Player player) {
     this.username = new String(player.getName());
     this.color = player.getColor();
-    this.id = player.getID();
+    this.id = player.getId();
     this.rank = player.getRank();
     this.gameEndTime = player.getGameEndTime();
     this.avatar = player.avatar;
   }
 
-  public int getID() {
+  public int getId() {
     return this.id;
   }
 
@@ -85,9 +85,9 @@ public abstract class Player implements Serializable {
     this.avatar = imagePath;
   }
 
-  public boolean isAI() {
+  public boolean isAi() {
     // TODO Auto-generated method stub
-    return this.isAI;
+    return this.isAi;
   }
 
 }

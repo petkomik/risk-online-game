@@ -314,9 +314,9 @@ public class Client {
                 // and that this.profile refers to the profile of the program
                 boolean isSenderInSameLobby = lobbies.values().stream()
                     .anyMatch(lobby -> lobby.getHumanPlayerList().stream()
-                        .anyMatch(player -> player.getID() == profileFrom.getId())
+                        .anyMatch(player -> player.getId() == profileFrom.getId())
                         && lobby.getHumanPlayerList().stream()
-                            .anyMatch(player -> player.getID() == profile.getId()));
+                            .anyMatch(player -> player.getId() == profile.getId()));
                 System.out.println(isInALobby + "reciever");
                 if (isInLobby) {
                   if (isSenderInSameLobby) {
@@ -349,22 +349,22 @@ public class Client {
                 // this one clinet
                 System.out.println("case MessageConnect Success 1 ");
                 Profile profilee = ((MessageConnect) message).getProfile();
-                System.out.println(profilee.getWins()+ " Client 352  ");
+                System.out.println(profilee.getWins() + " Client 352  ");
                 // Add Label that this client connected to the server
-                if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
+                if (AppController.dbH.getProfileById(profilee.getId()) == null) {
                   AppController.dbH.createProfileData(profilee);
                 }
-               AppController.dbH.deleteProfile(profilee.getId());
-               AppController.dbH.createProfileData(profilee);
+                AppController.dbH.deleteProfile(profilee.getId());
+                AppController.dbH.createProfileData(profilee);
 
-//                AppController.dbH.updateProfileInfo(
-//                    AppController.dbH.getProfileByID((profilee.getId())).getWins(), "Wins",
-//                    profilee.getId());
-//                AppController.dbH.updateProfileInfo(
-//                    AppController.dbH.getProfileByID((profilee.getId())).getLoses(), "Loses",
-//                    profilee.getId());
-               
-                
+                // AppController.dbH.updateProfileInfo(
+                // AppController.dbH.getProfileByID((profilee.getId())).getWins(), "Wins",
+                // profilee.getId());
+                // AppController.dbH.updateProfileInfo(
+                // AppController.dbH.getProfileByID((profilee.getId())).getLoses(), "Loses",
+                // profilee.getId());
+
+
 
                 profiles.add(profilee);
                 chat.addItemsInComboBox(profilee);
@@ -407,9 +407,9 @@ public class Client {
                 // and that this.profile refers to the profile of the program
                 boolean isSenderInSameLobby1 = lobbies.values().stream()
                     .anyMatch(lobby -> lobby.getHumanPlayerList().stream()
-                        .anyMatch(player -> player.getID() == profileFrom1.getId())
+                        .anyMatch(player -> player.getId() == profileFrom1.getId())
                         && lobby.getHumanPlayerList().stream()
-                            .anyMatch(player -> player.getID() == profile.getId()));
+                            .anyMatch(player -> player.getId() == profile.getId()));
 
                 if (isInLobby1) {
                   if (isSenderInSameLobby1) {
@@ -436,15 +436,15 @@ public class Client {
                   profiles.add(((MessageProfile) message).getProfile());
                 }
                 Profile profilee1 = ((MessageProfile) message).getProfile();
-                if (AppController.dbH.getProfileByID(profilee1.getId()) == null) {
-                	
+                if (AppController.dbH.getProfileById(profilee1.getId()) == null) {
+
                   AppController.dbH.createProfileData(profilee1);
                   System.out.println("profileadding works");
-                }else {
-                    AppController.dbH.deleteProfile(profilee1.getId());
-                    AppController.dbH.createProfileData(profilee1);
+                } else {
+                  AppController.dbH.deleteProfile(profilee1.getId());
+                  AppController.dbH.createProfileData(profilee1);
                 }
-                    
+
                 chat.addItemsInComboBox(profilee1);
                 System.out.println("MessageProfile");
                 break;
@@ -482,7 +482,7 @@ public class Client {
                     new LobbyGUI(mJL.getLobby()));
 
                 for (Player player : mJL.getLobby().getPlayersJoined()) {
-                  if (profile.getId() == player.getID()) {
+                  if (profile.getId() == player.getId()) {
                     ServerMainWindowController
                         .drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
                   }
@@ -502,7 +502,7 @@ public class Client {
                     new LobbyGUI(messageUpdateLobby.getLobby()));
                 // draws in the lobby
                 for (Player player : messageUpdateLobby.getLobby().getPlayersJoined()) {
-                  if (profile.getId() == player.getID()) {
+                  if (profile.getId() == player.getId()) {
                     ServerMainWindowController
                         .drawLobbyMenu(lobbies.get(messageUpdateLobby.getLobby().getLobbyName()));
                   }
@@ -544,7 +544,7 @@ public class Client {
                 Lobby lobbyWithAvatars = messageReadyToPlay.getLobby();
                 lobbyWithAvatars.updateAvatarDir();
                 for (Player player : lobbyWithAvatars.getPlayersJoined()) {
-                  if (profile.getId() == player.getID()) {
+                  if (profile.getId() == player.getId()) {
                     Platform.runLater(() -> {
 
                       gameHandler = new GameHandler(lobbyWithAvatars);
@@ -638,7 +638,7 @@ public class Client {
                   gameHandler.setGameState(mesCur.getGameState());
                   gamePane.setCurrentPlayer(mesCur.getId());
                   gamePane.setAmountOfTroopsLeftToDeploy(mesCur.getTroopsLeft());
-                  System.out.println(gameHandler.getGameState().getCurrentPlayer().getID()
+                  System.out.println(gameHandler.getGameState().getCurrentPlayer().getId()
                       + "is set current player received message");
                 });
                 break;
@@ -725,24 +725,23 @@ public class Client {
                   gamePane.endGame(((MessageGUIgameIsOver) mesGaOv).getPodium());
                 });
 
-                if (!mesGaOv.getPodium().get(0).isAI()) {
+                if (!mesGaOv.getPodium().get(0).isAi()) {
                   AppController.dbH.updateProfileInfo(
-                      AppController.dbH.getProfileByID(mesGaOv.getPodium().get(0).getID()).getWins()
+                      AppController.dbH.getProfileById(mesGaOv.getPodium().get(0).getId()).getWins()
                           + 1,
-                      "Wins", mesGaOv.getPodium().get(0).getID());
+                      "Wins", mesGaOv.getPodium().get(0).getId());
                 }
-                if (mesGaOv.getPodium().get(0).getID() == AppController.getProfile().getId()) {
-                  AppController.getProfile().setWins(mesGaOv.getPodium().get(0).getID() +  1);
+                if (mesGaOv.getPodium().get(0).getId() == AppController.getProfile().getId()) {
+                  AppController.getProfile().setWins(mesGaOv.getPodium().get(0).getId() + 1);
                 }
                 for (Player p : mesGaOv.getLobby().getHumanPlayerList()) {
-                  if (p.getID() != (mesGaOv.getPodium().get(0).getID())
-                      && !p.isAI()) {
+                  if (p.getId() != (mesGaOv.getPodium().get(0).getId()) && !p.isAi()) {
                     AppController.dbH.updateProfileInfo(
-                        AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses",
-                        p.getID());
+                        AppController.dbH.getProfileById(p.getId()).getLoses() + 1, "Loses",
+                        p.getId());
                   }
-                  if (p.getID() == AppController.getProfile().getId()) {
-                    AppController.getProfile().setLoses(p.getID() + 1);
+                  if (p.getId() == AppController.getProfile().getId()) {
+                    AppController.getProfile().setLoses(p.getId() + 1);
                   }
                 }
 
@@ -968,7 +967,7 @@ public class Client {
    */
   public void endPhaseTurn(Period period, Phase phase, int idOfPlayer) {
     Platform.runLater(() -> {
-      System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current "
+      System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getId() + " is current "
           + idOfPlayer + " clicks end turn");
       this.gameHandler.endPhaseTurn(period, phase, idOfPlayer);
     });
@@ -994,7 +993,7 @@ public class Client {
     Platform.runLater(() -> {
       sendMessage(
           new MessageGUIRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
-      System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getID() + " is current "
+      System.out.println(this.gameHandler.getGameState().getCurrentPlayer().getId() + " is current "
           + idOfPlayer + " throws");
     });
   }
@@ -1098,7 +1097,7 @@ public class Client {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      System.out.println(gameHandler.getGameState().getCurrentPlayer().getID()
+      System.out.println(gameHandler.getGameState().getCurrentPlayer().getId()
           + "is set current player send message");
       sendMessage(
           new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));

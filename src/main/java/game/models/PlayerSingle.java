@@ -16,12 +16,12 @@ public class PlayerSingle extends Player {
 
   public PlayerSingle(String name, int id) {
     super(name, id);
-    this.isAI = false;
+    this.isAi = false;
   }
 
   public PlayerSingle(Player player) {
     super(player);
-    this.isAI = false;
+    this.isAi = false;
   }
 
   /**
@@ -36,11 +36,11 @@ public class PlayerSingle extends Player {
     this.setColor(profile.getColor());
     this.setAvatar(Parameter.avatarsdir + profile.getPhoto());
     this.setRank(100 + (profile.getWins() * 3 - profile.getLoses()));
-    this.isAI = false;
+    this.isAi = false;
   }
 
-public Profile getProfile() {
-	return profile;
-}
+  public Profile getProfile() {
+    return profile;
+  }
 
 }

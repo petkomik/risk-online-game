@@ -48,7 +48,7 @@ public class AILogic {
             return getRandomFreeCountryName(gameState);
           }
           for (Territory t : territories.values()) {
-            if (t.getOwnedByPlayer().getID() == player.getID()) {
+            if (t.getOwnedByPlayer().getId() == player.getId()) {
               return getNearestTerritory(t.getNeighboringTerritories(), gameState);
             }
           }
@@ -61,7 +61,7 @@ public class AILogic {
 
         ArrayList<Territory> playerTerr = new ArrayList<>();
         for (Territory t : territories.values()) {
-          if (t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
+          if (t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getId() == player.getId()) {
             playerTerr.add(t);
           }
         }
@@ -116,7 +116,7 @@ public class AILogic {
       Player player) {
     int i = 0;
     for (Territory t : territories) {
-      if (t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getID() == player.getID()) {
+      if (t.getOwnedByPlayer() != null && t.getOwnedByPlayer().getId() == player.getId()) {
         i++;
       }
     }
@@ -187,14 +187,14 @@ public class AILogic {
     HashMap<Integer, Integer> troopsLeft = gameState.getPlayerTroopsLeft();
     switch (player.getLevel()) {
       case EASY:
-        int randNumbTroops = (int) (Math.random() * (troopsLeft.get(player.getID()) - 1) + 1);
+        int randNumbTroops = (int) (Math.random() * (troopsLeft.get(player.getId()) - 1) + 1);
         return new Pair<CountryName, Integer>(getRandomOwnedCountryName(gameState, player),
             randNumbTroops);
       case CASUAL:
-        int randomNumTroops = (int) (Math.random() * (troopsLeft.get(player.getID()) - 1) + 1);
+        int randomNumTroops = (int) (Math.random() * (troopsLeft.get(player.getId()) - 1) + 1);
         List<Territory> list = new ArrayList<>();
         for (Territory t : gameState.getTerritories().values()) {
-          if (t.getOwnedByPlayer().getID() == player.getID()) {
+          if (t.getOwnedByPlayer().getId() == player.getId()) {
             list.add(t);
           }
         }
@@ -212,7 +212,7 @@ public class AILogic {
             minCountryName = t.getCountryName();
           }
         }
-        return new Pair<CountryName, Integer>(minCountryName, troopsLeft.get(player.getID()));
+        return new Pair<CountryName, Integer>(minCountryName, troopsLeft.get(player.getId()));
       default:
         return null;
     }
@@ -234,9 +234,9 @@ public class AILogic {
     int count = 0;
     Territory terr = null;
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-      if (set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+      if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
         for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
-          if (neighbour.getOwnedByPlayer().getID() == player.getID()) {
+          if (neighbour.getOwnedByPlayer().getId() == player.getId()) {
             count++;
           }
         }
@@ -251,9 +251,9 @@ public class AILogic {
     min = Integer.MAX_VALUE;
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
       if (set.getValue().getCountryName() != list.get(0).getCountryName()) {
-        if (set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+        if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
           for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
-            if (neighbour.getOwnedByPlayer().getID() == player.getID()) {
+            if (neighbour.getOwnedByPlayer().getId() == player.getId()) {
               count++;
             }
           }
@@ -270,9 +270,9 @@ public class AILogic {
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
       if (set.getValue().getCountryName() != list.get(0).getCountryName()
           && set.getValue().getCountryName() != list.get(1).getCountryName()) {
-        if (set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+        if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
           for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
-            if (neighbour.getOwnedByPlayer().getID() == player.getID()) {
+            if (neighbour.getOwnedByPlayer().getId() == player.getId()) {
               count++;
             }
           }
@@ -365,10 +365,10 @@ public class AILogic {
     int count = 0;
     Territory terr = null;
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-      if (set.getValue().getOwnedByPlayer().getID() == player.getID()
+      if (set.getValue().getOwnedByPlayer().getId() == player.getId()
           && set.getValue().getNumberOfTroops() > 1) {
         for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
-          if (neighbour.getOwnedByPlayer().getID() != player.getID()) {
+          if (neighbour.getOwnedByPlayer().getId() != player.getId()) {
             count++;
           }
         }
@@ -388,9 +388,9 @@ public class AILogic {
     int count = 0;
     Territory terr = null;
     for (Territory t : territories) {
-      if (t.getOwnedByPlayer().getID() == player.getID()) {
+      if (t.getOwnedByPlayer().getId() == player.getId()) {
         for (Territory neighbour : t.getNeighboringTerritories()) {
-          if (neighbour.getOwnedByPlayer().getID() != player.getID()) {
+          if (neighbour.getOwnedByPlayer().getId() != player.getId()) {
             count++;
           }
         }
@@ -410,9 +410,9 @@ public class AILogic {
     int count = 0;
     Territory terr = null;
     for (Territory t : territories) {
-      if (t.getOwnedByPlayer().getID() == player.getID() && t.getNumberOfTroops() > 1) {
+      if (t.getOwnedByPlayer().getId() == player.getId() && t.getNumberOfTroops() > 1) {
         for (Territory neighbour : t.getNeighboringTerritories()) {
-          if (neighbour.getOwnedByPlayer().getID() != player.getID()) {
+          if (neighbour.getOwnedByPlayer().getId() != player.getId()) {
             count++;
           }
         }
@@ -506,9 +506,9 @@ public class AILogic {
    */
   public static boolean isNeighbourWithLessTroops(GameState gameState, PlayerAI player) {
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-      if (set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+      if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
         for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
-          if (neighbour.getOwnedByPlayer().getID() != player.getID()
+          if (neighbour.getOwnedByPlayer().getId() != player.getId()
               && neighbour.getNumberOfTroops() < set.getValue().getNumberOfTroops()
               && neighbour.getNumberOfTroops() >= 1) {
             return true;
@@ -546,7 +546,7 @@ public class AILogic {
               (t1, t2) -> t2.getNumberOfTroops() - t1.getNumberOfTroops());
           A: for (Territory t : ownTerritories) {
             for (Territory tN : t.getNeighboringTerritories()) {
-              if (tN.getOwnedByPlayer().getID() != player.getID()) {
+              if (tN.getOwnedByPlayer().getId() != player.getId()) {
                 attacker = t;
                 break A;
               }
@@ -560,7 +560,7 @@ public class AILogic {
             (t1, t2) -> t2.getNumberOfTroops() - t1.getNumberOfTroops());
         A: for (Territory t : ownTerritories) {
           for (Territory tN : t.getNeighboringTerritories()) {
-            if (tN.getOwnedByPlayer().getID() != player.getID()) {
+            if (tN.getOwnedByPlayer().getId() != player.getId()) {
               attacker = t;
               break A;
             }
@@ -575,7 +575,7 @@ public class AILogic {
   private static ArrayList<Territory> getAllOwnTerritories(GameState gameState, PlayerAI player) {
     ArrayList<Territory> list = new ArrayList<Territory>();
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-      if (set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+      if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
         list.add(set.getValue());
       }
     }
@@ -588,7 +588,7 @@ public class AILogic {
     int max = 0;
     CountryName highNeigh = null;
     for (Territory t : territory.getNeighboringTerritories()) {
-      if (t.getNumberOfTroops() > max && t.getOwnedByPlayer().getID() != player.getID()) {
+      if (t.getNumberOfTroops() > max && t.getOwnedByPlayer().getId() != player.getId()) {
         max = t.getNumberOfTroops();
         highNeigh = t.getCountryName();
       }
@@ -601,7 +601,7 @@ public class AILogic {
     int min = Integer.MAX_VALUE;
     CountryName lowNeigh = null;
     for (Territory t : territory.getNeighboringTerritories()) {
-      if (t.getNumberOfTroops() < min && t.getOwnedByPlayer().getID() != player.getID()) {
+      if (t.getNumberOfTroops() < min && t.getOwnedByPlayer().getId() != player.getId()) {
         min = t.getNumberOfTroops();
         lowNeigh = t.getCountryName();
       }
@@ -621,13 +621,13 @@ public class AILogic {
     int numTroopsNeighbourOldTerritories = 0;
     int numTroopsNeighbourNewTerritories = 0;
     for (Territory t : oldTerritory.getNeighboringTerritories()) {
-      if (t.getOwnedByPlayer().getID() != player.getID()) {
+      if (t.getOwnedByPlayer().getId() != player.getId()) {
         numNeighbourOldTerritories++;
         numTroopsNeighbourOldTerritories += t.getNumberOfTroops();
       }
     }
     for (Territory t : newTerritory.getNeighboringTerritories()) {
-      if (t.getOwnedByPlayer().getID() != player.getID()) {
+      if (t.getOwnedByPlayer().getId() != player.getId()) {
         numNeighbourNewTerritories++;
         numTroopsNeighbourNewTerritories += t.getNumberOfTroops();
       }
@@ -724,9 +724,9 @@ public class AILogic {
       PlayerAI player) {
     ArrayList<Territory> list = new ArrayList<Territory>();
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
-      if (set.getValue().getOwnedByPlayer().getID() == player.getID()) {
+      if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
         for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
-          if (neighbour.getOwnedByPlayer().getID() != player.getID()) {
+          if (neighbour.getOwnedByPlayer().getId() != player.getId()) {
             break;
           }
         }
