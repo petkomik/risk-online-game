@@ -100,6 +100,23 @@ public class ClientHandler implements Runnable {
 			}
 		}
 	}
+
+	public void broadcastMessageWithinLobbyWithoutMeId(Message message, Lobby lobby) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				// &&this.getProfile().getId() != player.getID()
+				for (Player player : lobby.getHumanPlayerList()) {
+					if (clientHandler.getProfile().getId() == player.getID() && this.profile.getId() != player.getID()) {
+						clientHandler.objectOutputStream.writeObject(message);
+						clientHandler.objectOutputStream.flush();
+					}
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public void broadcastMessageWithinLobbyWithoutMe(Message message, Lobby lobby) {
 		for (ClientHandler clientHandler : clientHandlers) {
@@ -334,7 +351,7 @@ public class ClientHandler implements Runnable {
 							.getLobby());
 					break;
 				case MessageGUIgameIsOver:
-					broadcastMessageWithinLobby(messageFromClient,
+					broadcastMessageWithinLobbyWithoutMeId(messageFromClient,
 							((MessageGUIgameIsOver) messageFromClient)
 							.getLobby());
 					break;
