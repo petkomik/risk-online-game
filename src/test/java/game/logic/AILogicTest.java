@@ -50,7 +50,7 @@ class AILogicTest {
   @Test
   void testChooseTerritoryToInitialClaim() {
     gameState.getTerritories().get(CountryName.Alaska).setOwnedByPlayer(player2);
-    CountryName tmp = AILogic.chooseTerritoryToInitialClaim(gameState, player2);
+    CountryName tmp = AiLogic.chooseTerritoryToInitialClaim(gameState, player2);
     assertTrue(tmp == CountryName.Kamchatka || tmp == CountryName.NorthwestTerritory
         || tmp == CountryName.Alberta);
 
@@ -62,7 +62,7 @@ class AILogicTest {
     territories.get(CountryName.Quebec).setOwnedByPlayer(player1);
     territories.get(CountryName.EasternUnitedStates).setOwnedByPlayer(player1);
     territories.get(CountryName.WesternUnitedStates).setOwnedByPlayer(player1);
-    tmp = AILogic.chooseTerritoryToInitialClaim(gameState, player2);
+    tmp = AiLogic.chooseTerritoryToInitialClaim(gameState, player2);
     assertTrue(tmp == CountryName.Alaska || tmp == CountryName.CentralAmerica
         || tmp == CountryName.Iceland);
   }
@@ -85,7 +85,7 @@ class AILogicTest {
     territories.get(CountryName.Argentina).setOwnedByPlayer(player2);
 
 
-    CountryName tmp = AILogic.chooseTerritoryToInitialReinforce(gameState, player2);
+    CountryName tmp = AiLogic.chooseTerritoryToInitialReinforce(gameState, player2);
     assertTrue(
         tmp == CountryName.Ukraine || tmp == CountryName.Siberia || tmp == CountryName.Brazil);
   }
@@ -112,7 +112,7 @@ class AILogicTest {
 
     gameState.getPlayerTroopsLeft().replace(player2.getId(), 5);
 
-    Pair<CountryName, Integer> tmp = AILogic.chooseTerritoryToReinforce(gameState, player2);
+    Pair<CountryName, Integer> tmp = AiLogic.chooseTerritoryToReinforce(gameState, player2);
     assertTrue(tmp.getKey() == CountryName.Brazil && tmp.getValue().equals(5));
   }
 
@@ -146,7 +146,7 @@ class AILogicTest {
     territories.get(CountryName.Afghanistan).setNumberOfTroops(7);
     territories.get(CountryName.MiddleEast).setNumberOfTroops(2);
 
-    Pair tmp = AILogic.chooseTerritoryPairAttack(gameState, player2);
+    Pair tmp = AiLogic.chooseTerritoryPairAttack(gameState, player2);
     assertTrue(tmp.getKey() == CountryName.Ukraine && tmp.getValue() == CountryName.MiddleEast);
   }
 
@@ -166,7 +166,7 @@ class AILogicTest {
 
     territories.get(CountryName.Ukraine).setNumberOfTroops(15);
 
-    int tmp = AILogic.chooseTroopsToSendToConqueredTerritory(territories.get(CountryName.Ukraine),
+    int tmp = AiLogic.chooseTroopsToSendToConqueredTerritory(territories.get(CountryName.Ukraine),
         territories.get(CountryName.Ural), player2);
     assertTrue(tmp == 14);
 
@@ -180,7 +180,7 @@ class AILogicTest {
 
     territories.get(CountryName.Ural).setOwnedByPlayer(player2);
 
-    tmp = AILogic.chooseTroopsToSendToConqueredTerritory(territories.get(CountryName.Ukraine),
+    tmp = AiLogic.chooseTroopsToSendToConqueredTerritory(territories.get(CountryName.Ukraine),
         territories.get(CountryName.Ural), player2);
     assertTrue(tmp == 1);
 
@@ -194,7 +194,7 @@ class AILogicTest {
     territories.get(CountryName.Siberia).setNumberOfTroops(20);;
     territories.get(CountryName.Scandinavia).setNumberOfTroops(18);;
 
-    tmp = AILogic.chooseTroopsToSendToConqueredTerritory(territories.get(CountryName.Ukraine),
+    tmp = AiLogic.chooseTroopsToSendToConqueredTerritory(territories.get(CountryName.Ukraine),
         territories.get(CountryName.Ural), player2);
     assertTrue(tmp == 7);
   }
@@ -231,7 +231,7 @@ class AILogicTest {
     territories.get(CountryName.Brazil).setNumberOfTroops(14);
 
 
-    Pair tmp = AILogic.chooseTerritoriesPairFortify(gameState, player2);
+    Pair tmp = AiLogic.chooseTerritoriesPairFortify(gameState, player2);
     assertTrue(tmp.getKey() == CountryName.Brazil && tmp.getValue() == CountryName.Mongolia);
   }
 
@@ -255,7 +255,7 @@ class AILogicTest {
     cards.add(card5);
     gameState.getRiskCardsInPlayers().put(player2.getId(), cards);
 
-    List<String> tmp = AILogic.getRiskCardsTurnIn(gameState, player2.getId());
+    List<String> tmp = AiLogic.getRiskCardsTurnIn(gameState, player2.getId());
     assertNotNull(tmp);
 
     ArrayList<Card> list = new ArrayList<>();

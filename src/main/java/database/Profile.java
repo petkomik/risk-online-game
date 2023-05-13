@@ -27,6 +27,19 @@ public class Profile implements Serializable {
   static String[] avatars = new String[] {Parameter.blondBoy, Parameter.gingerGirl,
       Parameter.bruntetteBoy, Parameter.mustacheMan, Parameter.earringsGirl, Parameter.hatBoy};
 
+  /**
+   * Constructor of a new profile with the given parameters.
+   * 
+   * @param id the ID of the profile.
+   * @param userName the username of the profile.
+   * @param firstName the first name of the profile.
+   * @param lastName the last name of the profile.
+   * @param color the color of the profile.
+   * @param photo the photo of the profile.
+   * @param wins the number of wins of the profile.
+   * @param loses the number of loses of the profile.
+   * @param password the password of the profile.
+   */
   public Profile(int id, String userName, String firstName, String lastName, String color,
       String photo, int wins, int loses, String password) {
 
@@ -42,6 +55,15 @@ public class Profile implements Serializable {
 
   }
 
+  /**
+   * Constructor of a new profile with the given parameters. Generates a random color and avatar for
+   * the profile.
+   * 
+   * @param firstName the first name of the profile.
+   * @param lastName the last name of the profile.
+   * @param userName the username of the profile.
+   * @param password the password of the profile.
+   */
   public Profile(String firstName, String lastName, String userName, String password) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -132,6 +154,13 @@ public class Profile implements Serializable {
     this.loses = loses;
   }
 
+  /**
+   * Sets the value of a given attribute of the profile.
+   * 
+   * @param attribute The name of the attribute to set (i.e., "UserName", "FirstName", "LastName",
+   *        "Color", "Photo", or "Password").
+   * @param value The value to set the attribute to.
+   */
   public void setAttribute(String attribute, String value) {
     switch (attribute) {
       case "UserName":
@@ -151,6 +180,8 @@ public class Profile implements Serializable {
         break;
       case "Password":
         this.setPassword(value);
+        break;
+      default:
         break;
     }
   }

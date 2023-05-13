@@ -9,35 +9,50 @@ import java.time.LocalDateTime;
  */
 public class GameStatistic {
 
-  private int gameID;
+  private int gameId;
   private int length;
   private LocalDateTime startTime;
   private int idOfWinner;
   private int numberOfPlayers;
 
-
+  /**
+   * GameStatistic constructor with start time and number of players.
+   * 
+   * @param startTime the start time of the game
+   * @param numberOfPlayers the number of players in the game
+   */
   public GameStatistic(LocalDateTime startTime, int numberOfPlayers) {
-    this.gameID = (int) Math.round(Math.random() * 10000);
-    this.setGameID(gameID);
+    this.gameId = (int) Math.round(Math.random() * 10000);
+    this.setGameId(gameId);
     this.setStartTime(LocalDateTime.now());
     this.setNumberOfPlayers(numberOfPlayers);
   }
 
-  public GameStatistic(int gameID, int length, LocalDateTime startTime, int idOfWinner,
+  /**
+   * GameStatistic constructor with game ID, length, start time, ID of winner, and number of
+   * players.
+   * 
+   * @param gameID the ID of the game
+   * @param length the length of the game
+   * @param startTime the start time of the game
+   * @param idOfWinner the ID of the winner of the game
+   * @param numberOfPlayers the number of players in the game
+   */
+  public GameStatistic(int gameId, int length, LocalDateTime startTime, int idOfWinner,
       int numberOfPlayers) {
-    this.setGameID(gameID);
+    this.setGameId(gameId);
     this.setLength(length);
     this.setStartTime(startTime);
     this.setIdOfWinner(idOfWinner);
     this.setNumberOfPlayers(numberOfPlayers);
   }
 
-  public int getGameID() {
-    return gameID;
+  public int getGameId() {
+    return gameId;
   }
 
-  public void setGameID(int gameID) {
-    this.gameID = gameID;
+  public void setGameId(int gameId) {
+    this.gameId = gameId;
   }
 
   public int getLength() {
@@ -73,7 +88,7 @@ public class GameStatistic {
   }
 
   public String toString() {
-    return "Game with GameID: " + this.gameID + " and " + this.numberOfPlayers
+    return "Game with GameID: " + this.gameId + " and " + this.numberOfPlayers
         + " Players. It started " + this.startTime + " and durated " + this.length;
   }
 }

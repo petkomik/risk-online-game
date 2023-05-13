@@ -2,7 +2,7 @@ package gameState;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import game.logic.AILogic;
+import game.logic.AiLogic;
 import game.logic.Logic;
 import game.models.Battle;
 import game.models.Card;
@@ -1161,7 +1161,7 @@ public class GameHandler {
       case COUNTRYPOSESSION:
         Timeline timer2 = new Timeline(new KeyFrame(Duration.seconds(1)));
         Timeline timer3 = new Timeline(new KeyFrame(Duration.seconds(1)));
-        country = AILogic.chooseTerritoryToInitialClaim(gameState, player);
+        country = AiLogic.chooseTerritoryToInitialClaim(gameState, player);
         final CountryName countryNameCopy = country;
         timer2.play();
         timer2.setOnFinished(x -> {
@@ -1176,7 +1176,7 @@ public class GameHandler {
       case INITIALDEPLOY:
         Timeline timer4 = new Timeline(new KeyFrame(Duration.seconds(1)));
         Timeline timer5 = new Timeline(new KeyFrame(Duration.seconds(1)));
-        country = AILogic.chooseTerritoryToInitialReinforce(gameState, player);
+        country = AiLogic.chooseTerritoryToInitialReinforce(gameState, player);
         final CountryName countryNameCopy2 = country;
         timer4.play();
         timer4.setOnFinished(x -> {
@@ -1200,7 +1200,7 @@ public class GameHandler {
               while (this.gameState.getRiskCardsInPlayers().get(player.getId()).size() >= 5) {
                 System.out.println("While loop AI PLAYER SHOULD TURN IN CARDS");
                 ArrayList<String> cardSet =
-                    (ArrayList<String>) AILogic.getRiskCardsTurnIn(gameState, player.getId());
+                    (ArrayList<String>) AiLogic.getRiskCardsTurnIn(gameState, player.getId());
                 if (cardSet != null) {
                   for (String s : cardSet) {
                     System.out.println("One of Cards to turn in is " + s);
@@ -1210,7 +1210,7 @@ public class GameHandler {
               }
               System.out.println("Reinforce Called III");
               Pair<CountryName, Integer> pairReinforce =
-                  AILogic.chooseTerritoryToReinforce(gameState, player);
+                  AiLogic.chooseTerritoryToReinforce(gameState, player);
               this.clickCountry(player.getId(), pairReinforce.getKey());
               this.confirmTroopsToCountry(pairReinforce.getKey(), pairReinforce.getValue(),
                   ChoosePane.REINFORCE, player.getId());
@@ -1243,8 +1243,8 @@ public class GameHandler {
             timer9.setOnFinished(x -> {
               System.out.println("Attack Called II");
               Pair<CountryName, CountryName> pairAttack =
-                  AILogic.chooseTerritoryPairAttack(gameState, player);
-              int troops = AILogic.chooseTroopsToAttackWith(
+                  AiLogic.chooseTerritoryPairAttack(gameState, player);
+              int troops = AiLogic.chooseTroopsToAttackWith(
                   this.gameState.getTerritories().get(pairAttack.getKey()), player, gameState);
               this.clickCountry(player.getId(), pairAttack.getKey());
               this.clickCountry(player.getId(), pairAttack.getValue());
@@ -1258,7 +1258,7 @@ public class GameHandler {
 
               System.out.println("Attack Called IV");
 
-              int troopsColonise = AILogic.chooseTroopsToSendToConqueredTerritory(
+              int troopsColonise = AiLogic.chooseTroopsToSendToConqueredTerritory(
                   gameState.getTerritories().get(pairAttack.getKey()),
                   gameState.getTerritories().get(pairAttack.getValue()), player);
               this.confirmTroopsToCountry(pairAttack.getValue(), troopsColonise,
@@ -1269,7 +1269,7 @@ public class GameHandler {
             Timeline timer10 = new Timeline(new KeyFrame(Duration.seconds(1)));
             timer11.setOnFinished(x -> {
               System.out.println("Attack Called V");
-              if (AILogic.willAttack(gameState, player)) {
+              if (AiLogic.willAttack(gameState, player)) {
                 timer9.play();
               } else {
                 timer10.play();
@@ -1290,12 +1290,12 @@ public class GameHandler {
             System.out.println("Fortify Called I");
             timer12.play();
             timer12.setOnFinished(x -> {
-              if (AILogic.willFortify(gameState, player)) {
+              if (AiLogic.willFortify(gameState, player)) {
                 System.out.println("Fortify Called II");
 
                 Pair<CountryName, CountryName> pairFortify =
-                    AILogic.chooseTerritoriesPairFortify(gameState, player);
-                int troops = AILogic.chooseTroopsToSendFortify(
+                    AiLogic.chooseTerritoriesPairFortify(gameState, player);
+                int troops = AiLogic.chooseTroopsToSendFortify(
                     this.gameState.getTerritories().get(pairFortify.getKey()), player);
                 this.clickCountry(player.getId(), pairFortify.getKey());
                 this.clickCountry(player.getId(), pairFortify.getValue());

@@ -21,13 +21,11 @@ import javafx.util.Pair;
  * 
  * @author jorohr
  */
-public class AILogic {
+public class AiLogic {
 
   /**
-   * Selects a territory for the initial claim phase of the game.
-   *
-   * This method is called when an AI player is choosing a territory to claim during the initial
-   * claim phase of the game.
+   * Selects a territory for the initial claim phase of the game. This method is called when an AI
+   * player is choosing a territory to claim during the initial claim phase of the game.
    *
    * @param gameState The current game state.
    * @param player The AI player choosing the territory.
@@ -337,7 +335,6 @@ public class AILogic {
   }
 
   /**
-   * 
    * This method returns the name of a random owned territory in the given game state.
    * 
    * @param gameState the current game state
@@ -352,7 +349,6 @@ public class AILogic {
   }
 
   /**
-   * 
    * Returns the most outer territory owned by the specified player in the game state.
    * 
    * @param gameState the current game state
@@ -763,7 +759,6 @@ public class AILogic {
   }
 
   /**
-   * 
    * Chooses a pair of territories for fortification when AI level is hard
    * 
    * @param gameState the current state of the game

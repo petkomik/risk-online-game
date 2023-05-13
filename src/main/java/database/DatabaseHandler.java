@@ -204,7 +204,7 @@ public class DatabaseHandler extends Database {
           "INSERT INTO Games(GameID, StartTime, NumberOfPlayers, Length) VALUES (?,?,?,?);";
       stm1 = super.connection.prepareStatement(sql);
 
-      stm1.setInt(1, g.getGameID());
+      stm1.setInt(1, g.getGameId());
       stm1.setString(2, g.getStartTime().toString());
       stm1.setInt(3, g.getNumberOfPlayers());
       stm1.setInt(4, 0);
@@ -227,7 +227,7 @@ public class DatabaseHandler extends Database {
   public void updateGameStatistic(String value, String attribute, GameStatistic g1) {
     try {
       String sql =
-          "UPDATE Games SET " + attribute + " = '" + value + "' WHERE GameID = " + g1.getGameID();
+          "UPDATE Games SET " + attribute + " = '" + value + "' WHERE GameID = " + g1.getGameId();
       Statement stm = super.connection.createStatement();
       stm.executeUpdate(sql);
       this.connection.commit();
