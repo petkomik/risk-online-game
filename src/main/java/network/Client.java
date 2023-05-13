@@ -354,12 +354,12 @@ public class Client {
                   AppController.dbH.createProfileData(profilee);
                 }
 
-//                AppController.dbH.updateProfileInfo(
-//                    AppController.dbH.getProfileByID((profilee.getId())).getWins(), "Wins",
-//                    profilee.getId());
-//                AppController.dbH.updateProfileInfo(
-//                    AppController.dbH.getProfileByID((profilee.getId())).getLoses(), "Loses",
-//                    profilee.getId());
+                AppController.dbH.updateProfileInfo(
+                    AppController.dbH.getProfileByID((profilee.getId())).getWins(), "Wins",
+                    profilee.getId());
+                AppController.dbH.updateProfileInfo(
+                    AppController.dbH.getProfileByID((profilee.getId())).getLoses(), "Loses",
+                    profilee.getId());
 
 
                 profiles.add(profilee);
@@ -436,12 +436,12 @@ public class Client {
                   AppController.dbH.createProfileData(profilee1);
                   System.out.println("profileadding works");
                 }
-//                AppController.dbH.updateProfileInfo(
-//                    AppController.dbH.getProfileByID((profilee1.getId())).getWins(), "Wins",
-//                    profilee1.getId());
-//                AppController.dbH.updateProfileInfo(
-//                    AppController.dbH.getProfileByID((profilee1.getId())).getLoses(), "Loses",
-//                    profilee1.getId());
+                AppController.dbH.updateProfileInfo(
+                        AppController.dbH.getProfileByID((profilee1.getId())).getWins(), "Wins",
+                        profilee1.getId());
+                    AppController.dbH.updateProfileInfo(
+                        AppController.dbH.getProfileByID((profilee1.getId())).getLoses(), "Loses",
+                        profilee1.getId());
                 chat.addItemsInComboBox(profilee1);
                 System.out.println("MessageProfile");
                 break;
