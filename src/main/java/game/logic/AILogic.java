@@ -218,6 +218,15 @@ public class AILogic {
     }
   }
 
+  /**
+   * 
+   * Returns an ArrayList of the three territories with the fewest neighboring territories that are
+   * owned by the given player.
+   * 
+   * @param gameState the current state of the game
+   * @param player the player whose territories are being considered
+   * @return an ArrayList of the three most outer territories
+   */
   private static ArrayList<Territory> getThreeMostOuterCountries(GameState gameState,
       PlayerAI player) {
     ArrayList<Territory> list = new ArrayList<>();
@@ -342,7 +351,14 @@ public class AILogic {
     return randomValue;
   }
 
-
+  /**
+   * 
+   * Returns the most outer territory owned by the specified player in the game state.
+   * 
+   * @param gameState the current game state
+   * @param player the player for whom to find the most outer territory
+   * @return the most outer territory owned by the player, or null if none is found
+   */
   public static Territory mostOuterCountry(GameState gameState, PlayerAI player) {
 
     int max = Integer.MIN_VALUE;
@@ -390,18 +406,18 @@ public class AILogic {
 
   public static Territory mostInnerCountry(Collection<Territory> territories, PlayerAI player) {
 
-    int max = Integer.MIN_VALUE;
+    int min = Integer.MAX_VALUE;
     int count = 0;
     Territory terr = null;
     for (Territory t : territories) {
       if (t.getOwnedByPlayer().getID() == player.getID() && t.getNumberOfTroops() > 1) {
         for (Territory neighbour : t.getNeighboringTerritories()) {
-          if (neighbour.getOwnedByPlayer().getID() == player.getID()) {
+          if (neighbour.getOwnedByPlayer().getID() != player.getID()) {
             count++;
           }
         }
-        if (count > max) {
-          max = count;
+        if (count <= min) {
+          min = count;
           terr = t;
           System.out.println("Set most inner territory to " + terr.getCountryName().toString());
         }
@@ -426,17 +442,24 @@ public class AILogic {
     for (Territory t : territories) {
       territoriesCopy.add(t);
     }
-    ArrayList<Territory> mostOuterTerritories = new ArrayList<>();
+    ArrayList<Territory> mostInnerTerritories = new ArrayList<>();
 
-    mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+    mostInnerTerritories.add(mostInnerCountry(territoriesCopy, player));
+    System.out.println(
+        "MostInner: " + mostInnerCountry(territoriesCopy, player).getCountryName().toString());
     territoriesCopy
-        .removeIf(x -> x.getCountryName() == mostOuterTerritories.get(0).getCountryName());
-    mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
-    territoriesCopy.removeIf(x -> x.getCountryName() == mostOuterTerritories.get(0).getCountryName()
-        || x.getCountryName() == mostOuterTerritories.get(1).getCountryName());
-    mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+        .removeIf(x -> x.getCountryName() == mostInnerTerritories.get(0).getCountryName());
+    mostInnerTerritories.add(mostInnerCountry(territoriesCopy, player));
+    System.out.println(
+        "MostInner: " + mostInnerCountry(territoriesCopy, player).getCountryName().toString());
+    territoriesCopy
+        .removeIf(x -> (x.getCountryName() == mostInnerTerritories.get(0).getCountryName()
+            && mostInnerTerritories.get(0) != null)
+            || (x.getCountryName() == mostInnerTerritories.get(1).getCountryName()
+                && mostInnerTerritories.get(1) != null));
+    mostInnerTerritories.add(mostInnerCountry(territoriesCopy, player));
 
-    return mostOuterTerritories;
+    return mostInnerTerritories;
   }
 
   /**
@@ -458,7 +481,7 @@ public class AILogic {
           return false;
         }
       case CASUAL:
-        if (Math.random() < 0.5) {
+        if (Math.random() < 0.4) {
           if (Math.random() < 0.5) {
             return true;
           } else {
@@ -486,7 +509,8 @@ public class AILogic {
       if (set.getValue().getOwnedByPlayer().getID() == player.getID()) {
         for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
           if (neighbour.getOwnedByPlayer().getID() != player.getID()
-              && neighbour.getNumberOfTroops() < set.getValue().getNumberOfTroops()) {
+              && neighbour.getNumberOfTroops() < set.getValue().getNumberOfTroops()
+              && neighbour.getNumberOfTroops() >= 1) {
             return true;
           }
         }
@@ -513,7 +537,8 @@ public class AILogic {
         attacker = mostOuterCountry(gameState, player);
         return new Pair(attacker.getCountryName(), getNeighbourWithHighestNumb(attacker, player));
       case CASUAL:
-        if (Math.random() < 0.5) {
+        if (Math.random() < 0.25) {
+          attacker = mostOuterCountry(gameState, player);
           return new Pair(attacker.getCountryName(), getNeighbourWithHighestNumb(attacker, player));
         } else {
           ArrayList<Territory> ownTerritories = getAllOwnTerritories(gameState, player);
@@ -676,6 +701,9 @@ public class AILogic {
         // search for a country that is owned by the playerAI and is surrounded by its own
         // territories only
       case HARD:
+        if (mostInnerCountry(gameState.getTerritories().values(), player) != null) {
+          return false;
+        }
         ArrayList<Territory> territoriesOwnedByOwn =
             countriesSurroundedByOwnedCountries(gameState, player);
         if (territoriesOwnedByOwn != null) {
@@ -708,6 +736,14 @@ public class AILogic {
     return list;
   }
 
+  /**
+   * 
+   * Chooses a pair of territories for fortification when AI level is hard
+   * 
+   * @param gameState the current state of the game
+   * @param player the AI player making the decision
+   * @return a Pair object of CountryName representing the source and destination territories
+   */
   private static Pair<CountryName, CountryName> chooseTerritoriesPairFortifyHard(
       GameState gameState, PlayerAI player) {
     CountryName fromCountry = null;
@@ -715,15 +751,25 @@ public class AILogic {
         getThreeMostInnerTerritories(gameState.getTerritories().values(), player);
     int max = 0;
     for (Territory territory : threeMostInner) {
-      if (territory.getNumberOfTroops() > max) {
-        max = territory.getNumberOfTroops();
-        fromCountry = territory.getCountryName();
+      if (territory != null) {
+        if (territory.getNumberOfTroops() > max) {
+          max = territory.getNumberOfTroops();
+          fromCountry = territory.getCountryName();
+        }
       }
     }
     return new Pair(fromCountry,
         mostOuterCountry2(gameState.getTerritories().values(), player).getCountryName());
   }
 
+  /**
+   * 
+   * Chooses a pair of territories for fortification when AI level is hard
+   * 
+   * @param gameState the current state of the game
+   * @param player the AI player making the decision
+   * @return a Pair object of CountryName representing the source and destination territories
+   */
   public static Pair<CountryName, CountryName> chooseTerritoriesPairFortify(GameState gameState,
       PlayerAI player) {
     switch (player.getLevel()) {
@@ -744,6 +790,15 @@ public class AILogic {
     }
   }
 
+  /**
+   * 
+   * Determines the number of troops to send from a territory during the fortify phase, based on the
+   * AI player's difficulty level.
+   * 
+   * @param territory the territory from which troops will be sent
+   * @param player the AI player choosing how many troops to send
+   * @return the number of troops to send from the territory
+   */
   public static int chooseTroopsToSendFortify(Territory territory, PlayerAI player) {
     switch (player.getLevel()) {
       case EASY:
@@ -761,71 +816,90 @@ public class AILogic {
     }
   }
 
+  /**
+   * 
+   * Determines the number of troops to attack with from a given territory
+   * 
+   * @param territory the territory to attack from
+   * @param player the AI player initiating the attack
+   * @param gameState the current state of the game
+   * @return the number of troops to attack with
+   */
   public static int chooseTroopsToAttackWith(Territory territory, PlayerAI player,
       GameState gameState) {
     // TODO Auto-generated method stub
     return gameState.getTerritories().get(territory.getCountryName()).getNumberOfTroops() - 1;
   }
-  
-  public static List<String> getRiskCardsTurnIn(GameState gameState, int idPly) {
-      ArrayList<Card> copy = new ArrayList<Card>();
-      ArrayList<Card> cards = new ArrayList<Card>();
-      List<Card> jokers = gameState.getRiskCardsInPlayers().get(idPly)
-	      .stream().filter(x -> x.isJoker()).collect(Collectors.toList());
-      List<Card> infantry = gameState.getRiskCardsInPlayers().get(idPly)
-	      .stream().filter(x -> x.getCardSymbol() == 1 ).collect(Collectors.toList());
-      List<Card> cavalry = gameState.getRiskCardsInPlayers().get(idPly)
-	      .stream().filter(x -> x.getCardSymbol() == 5).collect(Collectors.toList());
-      List<Card> artillery = gameState.getRiskCardsInPlayers().get(idPly)
-	      .stream().filter(x -> x.getCardSymbol() == 10).collect(Collectors.toList());
 
-      for(Card c : gameState.getRiskCardsInPlayers().get(idPly)) {
-	  copy.add(new Card(c));
+  /**
+   * 
+   * Decides the combination of Risk cards that the AI player turns in for additional troops.
+   * 
+   * @param idPly the ID of the player who is turning in cards
+   * @return a list of the cards to be turned in, represented as strings, or null if no valid sets
+   *         are found
+   */
+  public static List<String> getRiskCardsTurnIn(GameState gameState, int idPly) {
+    ArrayList<Card> copy = new ArrayList<Card>();
+    ArrayList<Card> cards = new ArrayList<Card>();
+    List<Card> jokers = gameState.getRiskCardsInPlayers().get(idPly).stream()
+        .filter(x -> x.isJoker()).collect(Collectors.toList());
+    List<Card> infantry = gameState.getRiskCardsInPlayers().get(idPly).stream()
+        .filter(x -> x.getCardSymbol() == 1).collect(Collectors.toList());
+    List<Card> cavalry = gameState.getRiskCardsInPlayers().get(idPly).stream()
+        .filter(x -> x.getCardSymbol() == 5).collect(Collectors.toList());
+    List<Card> artillery = gameState.getRiskCardsInPlayers().get(idPly).stream()
+        .filter(x -> x.getCardSymbol() == 10).collect(Collectors.toList());
+
+    for (Card c : gameState.getRiskCardsInPlayers().get(idPly)) {
+      copy.add(new Card(c));
+    }
+
+    if (jokers.size() > 0) {
+      cards.addAll(jokers);
+      copy.removeAll(jokers);
+      while (cards.size() < 3) {
+        cards.add(copy.remove((int) (Math.random() * copy.size())));
       }
-      
-      if(jokers.size() > 0) {
-	  cards.addAll(jokers);
-	  copy.removeAll(jokers);
-	  while(cards.size() < 3) {
-	      cards.add(copy.remove((int) (Math.random() * copy.size())));
-	  }
-	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+    }
+
+    if (infantry.size() >= 3) {
+      while (cards.size() < 3) {
+        cards.add(infantry.get(0));
+        cards.add(infantry.get(1));
+        cards.add(infantry.get(2));
       }
-      
-      if(infantry.size() >= 3) {
-	  while(cards.size() < 3) {
-	      cards.add(infantry.get(0));
-	      cards.add(infantry.get(1));
-	      cards.add(infantry.get(2));
-	  }
-	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+    }
+
+    if (cavalry.size() >= 3) {
+      while (cards.size() < 3) {
+        cards.add(cavalry.get(0));
+        cards.add(cavalry.get(1));
+        cards.add(cavalry.get(2));
       }
-      
-      if(cavalry.size() >= 3) {
-	  while(cards.size() < 3) {
-	      cards.add(cavalry.get(0));
-	      cards.add(cavalry.get(1));
-	      cards.add(cavalry.get(2));
-	  }
-	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+      return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+    }
+
+    if (artillery.size() >= 3) {
+      while (cards.size() < 3) {
+        cards.add(artillery.get(0));
+        cards.add(artillery.get(1));
+        cards.add(artillery.get(2));
       }
-      
-      if(artillery.size() >= 3) {
-	  while(cards.size() < 3) {
-	      cards.add(artillery.get(0));
-	      cards.add(artillery.get(1));
-	      cards.add(artillery.get(2));
-	  }
-	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
-      }
-      
-      if(cavalry.size() > 0 && artillery.size() > 0 && infantry.size() > 0) {
-	  cards.add(cavalry.get(0));
-	  cards.add(artillery.get(0));
-	  cards.add(infantry.get(0));
-	  return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
-      }
-      
-      return null;
+      return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+    }
+
+    if (cavalry.size() > 0 && artillery.size() > 0 && infantry.size() > 0) {
+      cards.add(cavalry.get(0));
+      cards.add(artillery.get(0));
+      cards.add(infantry.get(0));
+      return cards.stream().map(x -> x.toString()).collect(Collectors.toList());
+    }
+
+    return null;
   }
 }
+
+
