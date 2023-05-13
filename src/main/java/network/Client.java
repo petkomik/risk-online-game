@@ -437,15 +437,14 @@ public class Client {
                 }
                 Profile profilee1 = ((MessageProfile) message).getProfile();
                 if (AppController.dbH.getProfileByID(profilee1.getId()) == null) {
+                	
                   AppController.dbH.createProfileData(profilee1);
                   System.out.println("profileadding works");
+                }else {
+                    AppController.dbH.deleteProfile(profilee1.getId());
+                    AppController.dbH.createProfileData(profilee1);
                 }
-                AppController.dbH.updateProfileInfo(
-                        AppController.dbH.getProfileByID((profilee1.getId())).getWins(), "Wins",
-                        profilee1.getId());
-                    AppController.dbH.updateProfileInfo(
-                        AppController.dbH.getProfileByID((profilee1.getId())).getLoses(), "Loses",
-                        profilee1.getId());
+                    
                 chat.addItemsInComboBox(profilee1);
                 System.out.println("MessageProfile");
                 break;
