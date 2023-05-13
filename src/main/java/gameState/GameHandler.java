@@ -1052,28 +1052,10 @@ public class GameHandler {
 
 						if (Logic.isGameOver(gameState)) {
 							ArrayList<Player> podium = this.gameState.getDeadPlayers();
-//			    if (!podium.get(0).isAI()) {
-//				AppController.dbH.updateProfileInfo(
-//					AppController.dbH.getProfileByID(podium.get(0).getID()).getWins() + 1, "Wins",
-//					podium.get(0).getID());
-//				if (podium.get(0).getID() == AppController.getProfile().getId()) {
-//				    AppController.getProfile().setWins(((PlayerSingle)(podium.get(0))).getProfile().getWins() + 1);
-//				}
-//
-//			    }
+
 							Collections.reverse(podium);
 							this.client.gameIsOverOnGUI(podium);
-//			    for (Player p : this.lobby.getHumanPlayerList()) {
-//				if (p.getID() != podium.get(0).getID() && !p.isAI()) {
-//				    AppController.dbH.updateProfileInfo(
-//					    AppController.dbH.getProfileByID(p.getID()).getLoses() + 1, "Loses",
-//					    p.getID());
-//				    if (p.getID() == AppController.getProfile().getId()) {
-//					AppController.getProfile().setLoses(((PlayerSingle)p).getProfile().getLoses() + 1);
-//				    }
-//
-//				}
-//			    }
+
 						}
 					}
 
