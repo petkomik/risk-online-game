@@ -354,14 +354,17 @@ public class Client {
                 if (AppController.dbH.getProfileByID(profilee.getId()) == null) {
                   AppController.dbH.createProfileData(profilee);
                 }
+               AppController.dbH.deleteProfile(profilee.getId());
+               AppController.dbH.createProfileData(profilee);
 
-                AppController.dbH.updateProfileInfo(
-                    AppController.dbH.getProfileByID((profilee.getId())).getWins(), "Wins",
-                    profilee.getId());
-                AppController.dbH.updateProfileInfo(
-                    AppController.dbH.getProfileByID((profilee.getId())).getLoses(), "Loses",
-                    profilee.getId());
-
+//                AppController.dbH.updateProfileInfo(
+//                    AppController.dbH.getProfileByID((profilee.getId())).getWins(), "Wins",
+//                    profilee.getId());
+//                AppController.dbH.updateProfileInfo(
+//                    AppController.dbH.getProfileByID((profilee.getId())).getLoses(), "Loses",
+//                    profilee.getId());
+               
+                
 
                 profiles.add(profilee);
                 chat.addItemsInComboBox(profilee);
