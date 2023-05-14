@@ -17,7 +17,7 @@ public class GameStatistic {
 
   /**
    * GameStatistic constructor with start time and number of players.
-   * 
+   *
    * @param startTime the start time of the game
    * @param numberOfPlayers the number of players in the game
    */
@@ -31,8 +31,8 @@ public class GameStatistic {
   /**
    * GameStatistic constructor with game ID, length, start time, ID of winner, and number of
    * players.
-   * 
-   * @param gameID the ID of the game
+   *
+   * @param gameId the ID of the game
    * @param length the length of the game
    * @param startTime the start time of the game
    * @param idOfWinner the ID of the winner of the game

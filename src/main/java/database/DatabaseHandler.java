@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * Contains methods to get the profile data from the database and store it on the database.
- * 
+ *
  * @author jorohr
  */
 public class DatabaseHandler extends Database {
@@ -24,7 +24,7 @@ public class DatabaseHandler extends Database {
 
   /**
    * Inserts the given Profile data into the database.
-   * 
+   *
    * @param p the Profile object to insert.
    */
   public void createProfileData(Profile p) {
@@ -53,7 +53,7 @@ public class DatabaseHandler extends Database {
 
   /**
    * Deletes the Profile data for the given id from the database.
-   * 
+   *
    * @param id the id of the Profile data to delete
    */
   public void deleteProfile(int id) {
@@ -69,7 +69,7 @@ public class DatabaseHandler extends Database {
 
   /**
    * Updates the given attribute of the given Profile object in the database.
-   * 
+   *
    * @param value the new value of the attribute.
    * @param attribute the attribute to update.
    * @param id the Profile object to update.
@@ -87,7 +87,7 @@ public class DatabaseHandler extends Database {
 
   /**
    * Updates the given attribute of the given Profile object in the database.
-   * 
+   *
    * @param value the new value of the attribute.
    * @param attribute the attribute to update.
    * @param id the Profile object to update.
@@ -105,7 +105,7 @@ public class DatabaseHandler extends Database {
 
   /**
    * Retrieves the Profile data for the given id from the database.
-   * 
+   *
    * @param id the id of the Profile data to retrieve.
    * @return the retrieved Profile object, or null if no Profile data was found for the given id.
    */
@@ -136,7 +136,7 @@ public class DatabaseHandler extends Database {
   /**
    * Retrieves all profiles from the Profiles table in the database and returns them as an ArrayList
    * of Profile objects.
-   * 
+   *
    * @return ArrayList of Profile objects representing all profiles in the database
    */
   public ArrayList<Profile> getAllProfiles() {
@@ -168,8 +168,8 @@ public class DatabaseHandler extends Database {
 
   /**
    * Retrieves the game statistic with the specified game ID from the Games table in the database.
-   * 
-   * @param gameID the ID of the game whose statistic is to be retrieved
+   *
+   * @param gameId the ID of the game whose statistic is to be retrieved
    * @return the GameStatistic object with the specified game ID, or null if no such statistic is
    *         found
    */
@@ -195,7 +195,7 @@ public class DatabaseHandler extends Database {
 
   /**
    * Inserts a new game statistic into the Games table in the database.
-   * 
+   *
    * @param g the GameStatistic object to be inserted
    */
   public void createGameStatistic(GameStatistic g) {
@@ -219,7 +219,7 @@ public class DatabaseHandler extends Database {
 
   /**
    * Updates a specified attribute of a game statistic in the Games table in the database.
-   * 
+   *
    * @param value the new value to be assigned to the attribute
    * @param attribute the name of the attribute to be updated
    * @param g1 the GameStatistic object whose attribute is to be updated

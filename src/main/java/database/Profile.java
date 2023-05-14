@@ -29,7 +29,7 @@ public class Profile implements Serializable {
 
   /**
    * Constructor of a new profile with the given parameters.
-   * 
+   *
    * @param id the ID of the profile.
    * @param userName the username of the profile.
    * @param firstName the first name of the profile.
@@ -58,7 +58,7 @@ public class Profile implements Serializable {
   /**
    * Constructor of a new profile with the given parameters. Generates a random color and avatar for
    * the profile.
-   * 
+   *
    * @param firstName the first name of the profile.
    * @param lastName the last name of the profile.
    * @param userName the username of the profile.
@@ -108,6 +108,8 @@ public class Profile implements Serializable {
     this.wins = wins;
   }
 
+  /* a string representation of a profile */
+  @Override
   public String toString() {
     return "Profile Data: \n" + "Username: " + this.userName + " \n" + "Firstname: "
         + this.firstName + " \n" + "Lastname: " + this.lastName + " \n" + "Wins: " + this.wins
@@ -156,7 +158,7 @@ public class Profile implements Serializable {
 
   /**
    * Sets the value of a given attribute of the profile.
-   * 
+   *
    * @param attribute The name of the attribute to set (i.e., "UserName", "FirstName", "LastName",
    *        "Color", "Photo", or "Password").
    * @param value The value to set the attribute to.
@@ -197,3 +199,4 @@ public class Profile implements Serializable {
     this.photo = avatars[(int) (Math.random() * 6)].replace(Parameter.avatarsdir, "");
   }
 }
+
