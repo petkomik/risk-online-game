@@ -7,7 +7,9 @@ import java.sql.Statement;
 import java.util.Properties;
 
 /**
- * Database class to be extended for access to the risiko-database.db
+ * Database class to be extended for access to the risk-database.db.
+ *
+ * @author jorohr
  */
 public class Database {
 

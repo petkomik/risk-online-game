@@ -1,10 +1,15 @@
 package game;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
 import database.DatabaseHandler;
 import database.Profile;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * class to test the database.
+ *
+ * @author jorohr
+ */
 public class DatabaseHandlerTest {
   DatabaseHandler dbh1 = new DatabaseHandler();
   DatabaseHandler dbh2 = new DatabaseHandler();

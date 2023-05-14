@@ -552,11 +552,13 @@ public class AiLogic {
     switch (player.getLevel()) {
       case EASY:
         attacker = mostOuterCountry(gameState, player);
-        return new Pair(attacker.getCountryName(), getNeighbourWithHighestNumb(attacker, player));
+        return new Pair<CountryName, CountryName>(attacker.getCountryName(),
+            getNeighbourWithHighestNumb(attacker, player));
       case CASUAL:
         if (Math.random() < 0.25) {
           attacker = mostOuterCountry(gameState, player);
-          return new Pair(attacker.getCountryName(), getNeighbourWithHighestNumb(attacker, player));
+          return new Pair<CountryName, CountryName>(attacker.getCountryName(),
+              getNeighbourWithHighestNumb(attacker, player));
         } else {
           ArrayList<Territory> ownTerritories = getAllOwnTerritories(gameState, player);
           Collections.sort(ownTerritories,
@@ -569,7 +571,8 @@ public class AiLogic {
               }
             }
           }
-          return new Pair(attacker.getCountryName(), getNeighbourWithLowestNumb(attacker, player));
+          return new Pair<CountryName, CountryName>(attacker.getCountryName(),
+              getNeighbourWithLowestNumb(attacker, player));
         }
       case HARD:
         ArrayList<Territory> ownTerritories = getAllOwnTerritories(gameState, player);
@@ -583,7 +586,8 @@ public class AiLogic {
             }
           }
         }
-        return new Pair(attacker.getCountryName(), getNeighbourWithLowestNumb(attacker, player));
+        return new Pair<CountryName, CountryName>(attacker.getCountryName(),
+            getNeighbourWithLowestNumb(attacker, player));
       default:
         return null;
     }
@@ -600,7 +604,15 @@ public class AiLogic {
   }
 
 
-  // gets the neighbour with the highest number of troops
+  /**
+   * Returns the name of the neighboring country with the highest number of troops that is not owned
+   * by the given player.
+   *
+   * @param territory the territory to check for neighboring countries
+   * @param player the player to exclude from neighboring countries
+   * @return the name of the neighboring country with the highest number of troops that is not owned
+   *         by the given AI player
+   */
   public static CountryName getNeighbourWithHighestNumb(Territory territory, PlayerAI player) {
     int max = 0;
     CountryName highNeigh = null;
@@ -613,7 +625,15 @@ public class AiLogic {
     return highNeigh;
   }
 
-  // gets the neighbour with the lowest number of troops
+  /**
+   * Returns the name of the neighboring country with the lowest number of troops that is not owned
+   * by the given player.
+   *
+   * @param territory the territory to check for neighboring countries
+   * @param player the player to exclude from neighboring countries
+   * @return the name of the neighboring country with the lowest number of troops that is not owned
+   *         by the given AI player
+   */
   public static CountryName getNeighbourWithLowestNumb(Territory territory, PlayerAI player) {
     int min = Integer.MAX_VALUE;
     CountryName lowNeigh = null;
@@ -667,6 +687,15 @@ public class AiLogic {
     return 1;
   }
 
+  /**
+   * Determines the number of troops to send from the old territory to the newly conquered
+   * territory.
+   *
+   * @param oldTerritory the territory from which troops are being sent
+   * @param newTerritory the newly conquered territory to which troops are being sent
+   * @param player the player who is sending the troops
+   * @return the number of troops to send from the old territory to the conquered territory
+   */
   public static int chooseTroopsToSendToConqueredTerritory(Territory oldTerritory,
       Territory newTerritory, PlayerAI player) {
     int troopsRandom = (int) (Math.random() * oldTerritory.getNumberOfTroops() - 1);
@@ -687,6 +716,13 @@ public class AiLogic {
     }
   }
 
+  /**
+   * Determines whether the player should fortify their territories or not.
+   *
+   * @param gameState the current game state
+   * @param player the player who is making the decision to fortify
+   * @return true if the player should fortify, false otherwise
+   */
   public static boolean willFortify(GameState gameState, PlayerAI player) {
     switch (player.getLevel()) {
       case EASY:
@@ -736,7 +772,15 @@ public class AiLogic {
     }
   }
 
-  // list of countries, that are surrounded by own countries only
+  /**
+   * Returns a list of all territories owned by the AI player that are surrounded only by
+   * territories also owned by the AI player.
+   *
+   * @param gameState the current game state
+   * @param player the player whose territories are being checked
+   * @return a list of all territories owned by the AI player that are surrounded only by
+   *         territories also owned by the AI player
+   */
   public static ArrayList<Territory> countriesSurroundedByOwnedCountries(GameState gameState,
       PlayerAI player) {
     ArrayList<Territory> list = new ArrayList<Territory>();
@@ -777,7 +821,7 @@ public class AiLogic {
         }
       }
     }
-    return new Pair(fromCountry,
+    return new Pair<CountryName, CountryName>(fromCountry,
         mostOuterCountry2(gameState.getTerritories().values(), player).getCountryName());
   }
 
@@ -792,11 +836,11 @@ public class AiLogic {
       PlayerAI player) {
     switch (player.getLevel()) {
       case EASY:
-        return new Pair(getRandomOwnedCountryName(gameState, player),
+        return new Pair<CountryName, CountryName>(getRandomOwnedCountryName(gameState, player),
             getRandomOwnedCountryName(gameState, player));
       case CASUAL:
         if (Math.random() < 0.5) {
-          return new Pair(getRandomOwnedCountryName(gameState, player),
+          return new Pair<CountryName, CountryName>(getRandomOwnedCountryName(gameState, player),
               getRandomOwnedCountryName(gameState, player));
         } else {
           return chooseTerritoriesPairFortifyHard(gameState, player);
