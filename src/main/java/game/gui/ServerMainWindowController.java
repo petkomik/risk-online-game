@@ -1,10 +1,5 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.function.BiConsumer;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatButton;
 import game.gui.GUISupportClasses.ChatWindow;
@@ -17,6 +12,11 @@ import game.models.PlayerSingle;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;

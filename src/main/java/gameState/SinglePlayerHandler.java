@@ -50,12 +50,7 @@ public class SinglePlayerHandler {
 
   }
 
-  /**
-   * Displays a hint on the game pane GUI.
-   * 
-   * @param title of the tutorial pane
-   * @param hint enum for the type of hint
-   */
+  /** Displays a hint on the game pane GUI. */
 
   public void showInitialHint() {
     this.gameHandler.showInitialHint();

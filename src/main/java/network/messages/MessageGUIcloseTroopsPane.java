@@ -1,6 +1,7 @@
 package network.messages;
 
 import gameState.GameState;
+
 /*
  * @author dignatov
  */

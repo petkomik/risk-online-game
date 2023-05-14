@@ -136,26 +136,30 @@ public class Logic {
     if (gameState.getCurrentPlayer().equals(player)) {
       if (gameState.getCurrentGamePeriod().equals(Period.COUNTRYPOSESSION)) {
         if (gameState.getTerritories().get(territory).getOwnedByPlayer() == null) {
-          return true;
-          // if(gameState.getAlivePlayers().get((gameState.getAlivePlayers().indexOf(player) +
-          // gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
-          // == Logic.getFirstPlayer(gameState)) {
-          // if(gameState.getPlayerTroopsLeft().get(player.getID()) >
-          // gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
-          // (gameState.getAlivePlayers().indexOf(player) +
-          // gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
-          // )) {
-          // return true;
-          // }
-          // } else {
-          // if(gameState.getPlayerTroopsLeft().get(player.getID()) ==
-          // gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
-          // (gameState.getAlivePlayers().indexOf(player) +
-          // gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
-          // )) {
-          // return true;
-          // }
-          // }
+          if (gameState.getAlivePlayers()
+              .get((gameState.getAlivePlayers().indexOf(player) + gameState.getAlivePlayers().size()
+                  + 1) % gameState.getAlivePlayers().size())
+              .getId() == Logic.getFirstPlayer(gameState)) {
+            if (gameState.getPlayerTroopsLeft().get(player.getId()) > gameState
+                .getPlayerTroopsLeft()
+                .get(gameState.getAlivePlayers()
+                    .get((gameState.getAlivePlayers().indexOf(player)
+                        + gameState.getAlivePlayers().size() + 1)
+                        % gameState.getAlivePlayers().size())
+                    .getId())) {
+              return true;
+            }
+          } else {
+            if (gameState.getPlayerTroopsLeft().get(player.getId()) == gameState
+                .getPlayerTroopsLeft()
+                .get(gameState.getAlivePlayers()
+                    .get((gameState.getAlivePlayers().indexOf(player)
+                        + gameState.getAlivePlayers().size() + 1)
+                        % gameState.getAlivePlayers().size())
+                    .getId())) {
+              return true;
+            }
+          }
         }
       }
     }
@@ -196,26 +200,30 @@ public class Logic {
         if (gameState.getTerritories().get(territory).getOwnedByPlayer().getId() == player
             .getId()) {
           if (gameState.getPlayerTroopsLeft().get(player.getId()) >= 1) {
-            return true;
-            // if(gameState.getAlivePlayers().get((gameState.getAlivePlayers().indexOf(player) +
-            // gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
-            // == Logic.getFirstPlayer(gameState)) {
-            // if(gameState.getPlayerTroopsLeft().get(player.getID()) >
-            // gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
-            // (gameState.getAlivePlayers().indexOf(player) +
-            // gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
-            // )) {
-            // return true;
-            // }
-            // } else {
-            // if(gameState.getPlayerTroopsLeft().get(player.getID()) ==
-            // gameState.getPlayerTroopsLeft().get(gameState.getAlivePlayers().get(
-            // (gameState.getAlivePlayers().indexOf(player) +
-            // gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size()).getID()
-            // )) {
-            // return true;
-            // }
-            // }
+            if (gameState.getAlivePlayers()
+                .get((gameState.getAlivePlayers().indexOf(player)
+                    + gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
+                .getId() == Logic.getFirstPlayer(gameState)) {
+              if (gameState.getPlayerTroopsLeft().get(player.getId()) > gameState
+                  .getPlayerTroopsLeft()
+                  .get(gameState.getAlivePlayers()
+                      .get((gameState.getAlivePlayers().indexOf(player)
+                          + gameState.getAlivePlayers().size() + 1)
+                          % gameState.getAlivePlayers().size())
+                      .getId())) {
+                return true;
+              }
+            } else {
+              if (gameState.getPlayerTroopsLeft().get(player.getId()) == gameState
+                  .getPlayerTroopsLeft()
+                  .get(gameState.getAlivePlayers()
+                      .get((gameState.getAlivePlayers().indexOf(player)
+                          + gameState.getAlivePlayers().size() + 1)
+                          % gameState.getAlivePlayers().size())
+                      .getId())) {
+                return true;
+              }
+            }
           }
         }
       }

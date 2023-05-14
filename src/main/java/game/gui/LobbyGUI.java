@@ -1,8 +1,8 @@
 package game.gui;
 
-import java.io.Serializable;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Lobby;
+import java.io.Serializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -15,7 +15,7 @@ import javafx.stage.Screen;
 
 /**
  * the class is responsible for representing a lobby as a GUI.
- * 
+ *
  * @author pmalamov
  *
  */

@@ -1,10 +1,5 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import database.Profile;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ChatButton;
@@ -22,6 +17,11 @@ import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -135,12 +135,10 @@ public class LobbyMenuController extends StackPane {
   }
 
   /**
-   * 
+   * This method builds and paints the lobby gui Includes action handlers for the buttons.
+   *
    * @throws FileNotFoundException if some of the images cannot be found is eihter world-map.png or
    *         any avatar png
-   * 
-   *         This method builds and paints the lobby gui Includes action handlers for the buttons
-   * 
    */
 
   public void setup() throws FileNotFoundException {
@@ -492,6 +490,7 @@ public class LobbyMenuController extends StackPane {
         try {
           setUpPlayerCards();
         } catch (FileNotFoundException e) {
+          e.printStackTrace();
         }
 
         // TODO add remove ai players
@@ -512,6 +511,8 @@ public class LobbyMenuController extends StackPane {
         try {
           setUpPlayerCards();
         } catch (FileNotFoundException e) {
+          e.printStackTrace();
+
         }
         if (!singleplayerLobby) {
           client.sendMessage(new MessageUpdateLobby(lobby));
@@ -524,7 +525,7 @@ public class LobbyMenuController extends StackPane {
       public void handle(ActionEvent event) {
         gameSound.buttonClickForwardSound();
         if (singleplayerLobby) {
-          if (lobby.getHumanPlayerList().size() < 6) {
+          if (lobby.getPlayerList().size() < 6) {
             Profile newProfile = new SecondaryPlayerDialog().addPlayerDialog();
             if (newProfile != null) {
               PlayerSingle playerSingle = new PlayerSingle(newProfile);
@@ -535,6 +536,8 @@ public class LobbyMenuController extends StackPane {
           try {
             setUpPlayerCards();
           } catch (FileNotFoundException e) {
+            e.printStackTrace();
+
           }
 
         } else {
@@ -545,6 +548,8 @@ public class LobbyMenuController extends StackPane {
           try {
             setUpPlayerCards();
           } catch (FileNotFoundException e) {
+            e.printStackTrace();
+
           }
           if (!singleplayerLobby) {
             client.sendMessage(new MessageUpdateLobby(lobby));
@@ -566,10 +571,10 @@ public class LobbyMenuController extends StackPane {
           try {
             setUpPlayerCards();
           } catch (FileNotFoundException e) {
+            e.printStackTrace();
           }
 
         } else {
-          // TODO number of players joined lobby
           if (lobby.getMaxNumberOfPlayers() > 2
               && lobby.getMaxNumberOfPlayers() > lobby.getPlayerList().size()) {
             lobby.setMaxNumberOfPlayers(lobby.getMaxNumberOfPlayers() - 1);
@@ -578,6 +583,8 @@ public class LobbyMenuController extends StackPane {
           try {
             setUpPlayerCards();
           } catch (FileNotFoundException e) {
+            e.printStackTrace();
+
           }
           if (!singleplayerLobby) {
             client.sendMessage(new MessageUpdateLobby(lobby));
@@ -604,8 +611,8 @@ public class LobbyMenuController extends StackPane {
             try {
               setUpPlayerCards();
             } catch (FileNotFoundException e) {
+              e.printStackTrace();
             }
-            System.out.println(pl.getName() + ready);
           }
           if (lobby.isEveryoneReady() && lobby.getPlayerList().size() > 1) {
             System.out.println("start game");

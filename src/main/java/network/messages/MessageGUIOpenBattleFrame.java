@@ -3,9 +3,11 @@ package network.messages;
 import game.models.Battle;
 import game.models.Lobby;
 import gameState.GameState;
+
 /**
- * The MessageGUIOpenBattleFrame class represents a message used to indicate the opening of the battle frame in the game GUI.
- * It includes the game state, the battle information, and the associated lobby.
+ * The MessageGUIOpenBattleFrame class represents a message used to indicate the opening of the
+ * battle frame in the game GUI. It includes the game state, the battle information, and the
+ * associated lobby.
  * 
  * @author dignatov
  */
@@ -15,8 +17,10 @@ public class MessageGUIOpenBattleFrame extends Message {
   private GameState gameState;
   private Battle battle;
   private Lobby lobby;
+
   /**
-   * Constructs a MessageGUIOpenBattleFrame object with the specified game state, battle information, and lobby.
+   * Constructs a MessageGUIOpenBattleFrame object with the specified game state, battle
+   * information, and lobby.
    *
    * @param gameState The game state associated with the message
    * @param battle The battle information

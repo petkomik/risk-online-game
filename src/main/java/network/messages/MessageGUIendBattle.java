@@ -2,8 +2,10 @@ package network.messages;
 
 import game.models.Lobby;
 import gameState.GameState;
+
 /**
- * The MessageGUIendBattle class represents a message used to indicate the end of a battle in the game GUI.
+ * The MessageGUIendBattle class represents a message used to indicate the end of a battle in the
+ * game GUI.
  * 
  * @author dignatov
  */
@@ -13,6 +15,7 @@ public class MessageGUIendBattle extends Message {
 
   private GameState gameState;
   private Lobby lobby;
+
   /**
    * Constructs a MessageGUIendBattle object with the specified game state and lobby.
    *

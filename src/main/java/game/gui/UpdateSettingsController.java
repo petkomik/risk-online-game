@@ -1,43 +1,32 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
 import game.exceptions.WrongTextFieldInputException;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
-import game.models.Lobby;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Optional;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -535,9 +524,8 @@ public class UpdateSettingsController extends StackPane {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Confirm Delete");
         alert.setHeaderText("Are you sure you want to delete your profile?");
-        alert.setContentText(
-            "This includes deleting all the statistics \nconnected with this profile. \nThis action cannot be undone.");
-        // Set the focus to the cancel button
+        alert.setContentText("This includes deleting all the statistics "
+            + "\nconnected with this profile. \nThis action cannot be undone.");
         Platform
             .runLater(() -> alert.getDialogPane().lookupButton(ButtonType.CANCEL).requestFocus());
 
@@ -557,7 +545,6 @@ public class UpdateSettingsController extends StackPane {
             e1.printStackTrace();
           }
           stage.show();
-        } else {
         }
       }
     });

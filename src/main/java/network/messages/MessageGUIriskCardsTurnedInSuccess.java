@@ -1,12 +1,13 @@
 package network.messages;
 
-import java.util.ArrayList;
-
 import game.models.Card;
 import gameState.GameState;
+import java.util.ArrayList;
+
 /**
- * The MessageGUIriskCardsTurnedInSuccess class represents a message used to indicate the successful turning in of Risk cards in the game GUI.
- * It includes the game state, the list of turned in cards, the ID of the player, and the bonus troops earned.
+ * The MessageGUIriskCardsTurnedInSuccess class represents a message used to indicate the successful
+ * turning in of Risk cards in the game GUI. It includes the game state, the list of turned in
+ * cards, the ID of the player, and the bonus troops earned.
  * 
  * @author dignatov
  */
@@ -18,13 +19,14 @@ public class MessageGUIriskCardsTurnedInSuccess extends Message {
   ArrayList<Card> card;
   int idOfPlayer;
   int bonusTroops;
+
   /**
-   * Constructs a MessageGUIriskCardsTurnedInSuccess object with the specified game state, list of turned in cards,
-   * player ID, and bonus troops earned.
+   * Constructs a MessageGUIriskCardsTurnedInSuccess object with the specified game state, list of
+   * turned in cards, player ID, and bonus troops earned.
    *
-   * @param gameState The game state associated with the message
-   * @param cards The list of turned in cards
-   * @param playerId The ID of the player turning in the cards
+   * @param gamestate The game state associated with the message
+   * @param card The list of turned in cards
+   * @param idOfPlayer The ID of the player turning in the cards
    * @param bonusTroops The bonus troops earned from turning in the cards
    */
   public MessageGUIriskCardsTurnedInSuccess(GameState gamestate, ArrayList<Card> card,

@@ -1,11 +1,11 @@
 package game.exceptions;
 
-import java.util.ArrayList;
 import game.models.Card;
+import java.util.ArrayList;
 
 /**
- * Exception class for wrong cards
- * 
+ * Exception class for wrong cards.
+ *
  * @author srogalsk
  *
  */

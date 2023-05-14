@@ -98,6 +98,7 @@ public class Lobby implements Serializable {
       this.playersJoined.remove(toLeave);
       this.updateScore();
       removeColorAvatar(toLeave);
+      readyHashMap.remove(toLeave);
     }
   }
 
@@ -258,7 +259,7 @@ public class Lobby implements Serializable {
     for (boolean p : this.readyHashMap.values()) {
       if (!p) {
         return false;
-      } ;
+      }
     }
     return true;
   }

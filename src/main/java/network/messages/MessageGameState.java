@@ -2,24 +2,29 @@ package network.messages;
 
 import gameState.GameState;
 
+/**
+ * This Message is used to send a Game State instance.
+ *
+ * @author dignatov
+ */
+
 public class MessageGameState extends Message {
 
 
-  /**
-   * @author Danail
-   */
   private static final long serialVersionUID = 1L;
   private GameState gameState;
+
   /**
-   * Notify message
+   * Notify message.
    */
   public MessageGameState() {
     super(MessageType.MessageGameState);
   }
+
   /**
-   * Constructs a MessageGameState 
+   * Constructs a MessageGameState.
    *
-   * @param new gameState is send 
+   * @param gameState to be send
    */
   public MessageGameState(GameState gameState) {
     super(MessageType.MessageGameState);

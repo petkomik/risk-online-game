@@ -1,12 +1,12 @@
 package game.models;
 
+import general.Parameter;
 import java.io.Serializable;
 import java.util.ArrayList;
-import general.Parameter;
 
 /**
- * Territory class handles the territories in the game as an object
- * 
+ * Territory class handles the territories in the game as an object.
+ *
  * @author srogalsk
  *
  */
@@ -23,10 +23,10 @@ public class Territory implements Serializable {
   private String addressToPNG;
 
   /**
-   * constructor for building an territory object
-   * 
-   * @param countryName
-   * @param continent
+   * Constructor for building an territory object.
+   *
+   * @param countryName of the Territory
+   * @param continent of the Territory
    */
   public Territory(CountryName countryName, Continent continent) {
     this.countryName = countryName;
@@ -36,7 +36,7 @@ public class Territory implements Serializable {
         + countryName.toString().toLowerCase() + ".png";
   }
 
-  /** constructor for defensive copying */
+  /** Constructor for defensive copying. */
   public Territory(Territory territory) {
     this.ownedByPlayer =
         territory.getOwnedByPlayer() != null ? new PlayerSingle(territory.getOwnedByPlayer())

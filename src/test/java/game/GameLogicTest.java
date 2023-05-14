@@ -1,6 +1,8 @@
 package game;
 
-import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import game.logic.Logic;
 import game.models.CountryName;
 import game.models.Lobby;
@@ -10,14 +12,13 @@ import game.models.Territory;
 import gameState.GameState;
 import gameState.Period;
 import gameState.Phase;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test class for testing the game logic
- * 
+ * Test class for testing the game logic.
+ *
  * @author srogalsk
  *
  */

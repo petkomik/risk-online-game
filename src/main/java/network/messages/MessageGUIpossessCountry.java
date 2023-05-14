@@ -3,9 +3,11 @@ package network.messages;
 import game.models.CountryName;
 import game.models.Lobby;
 import gameState.GameState;
+
 /**
- * The MessageGUIpossessCountry class represents a message used to indicate the possession of a country in the game GUI.
- * It includes the game state, the country name, the player ID, the number of troops left, and the associated lobby.
+ * The MessageGUIpossessCountry class represents a message used to indicate the possession of a
+ * country in the game GUI. It includes the game state, the country name, the player ID, the number
+ * of troops left, and the associated lobby.
  * 
  * @author dignatov
  */
@@ -17,9 +19,10 @@ public class MessageGUIpossessCountry extends Message {
   private int id;
   private int troopsLeft;
   private Lobby lobby;
+
   /**
-   * Constructs a MessageGUIpossessCountry object with the specified game state, country name, player ID,
-   * number of troops left, and lobby.
+   * Constructs a MessageGUIpossessCountry object with the specified game state, country name,
+   * player ID, number of troops left, and lobby.
    *
    * @param gameState The game state associated with the message
    * @param country The name of the possessed country
@@ -36,21 +39,21 @@ public class MessageGUIpossessCountry extends Message {
     this.gameState = gameState;
     this.lobby = clientsLobby;
   }
-  
+
   public GameState getGameState() {
-	  return gameState;
+    return gameState;
   }
-  
+
   public CountryName getCountry() {
-	  return country;
+    return country;
   }
-  
+
   public int getId() {
-	  return id;
+    return id;
   }
-  
+
   public int getTroopsLeft() {
-	  return troopsLeft;
+    return troopsLeft;
   }
 
   public Lobby getLobby() {

@@ -1,9 +1,5 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import game.exceptions.WrongTextFieldInputException;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
@@ -12,6 +8,9 @@ import game.gui.GUISupportClasses.Spacing;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

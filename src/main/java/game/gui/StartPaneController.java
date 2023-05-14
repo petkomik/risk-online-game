@@ -1,9 +1,5 @@
 package game.gui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.SettingsButton;
@@ -11,6 +7,8 @@ import game.gui.GUISupportClasses.SettingsPane;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -26,9 +24,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 

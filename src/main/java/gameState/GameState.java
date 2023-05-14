@@ -1,9 +1,5 @@
 package gameState;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 import game.models.Battle;
 import game.models.Card;
 import game.models.Continent;
@@ -11,6 +7,10 @@ import game.models.CountryName;
 import game.models.Lobby;
 import game.models.Player;
 import game.models.Territory;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Modells the State of game. All information about the player, territories are saved. Consists
@@ -148,14 +148,9 @@ public class GameState implements Serializable {
   public void receiveRandomRiskCard(int idOfPlayer) {
     Random generator = new Random();
     this.cards.stream().forEach(x -> System.out.println(x.toString()));
-    System.out.println(this.cards.size());
     Card card = this.cards.remove(generator.nextInt(this.cards.size()));
-    Card card2 = this.cards.remove(generator.nextInt(this.cards.size()));
-    Card card3 = this.cards.remove(generator.nextInt(this.cards.size()));
-
     this.riskCardsInPlayers.get(idOfPlayer).add(card);
-    this.riskCardsInPlayers.get(idOfPlayer).add(card2);
-    this.riskCardsInPlayers.get(idOfPlayer).add(card3);
+
 
   }
 

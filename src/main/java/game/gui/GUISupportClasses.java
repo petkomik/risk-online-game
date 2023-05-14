@@ -1,12 +1,11 @@
 package game.gui;
 
+import database.Profile;
+import game.models.Player;
+import general.AppController;
+import general.Parameter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
-import database.Profile;
-import game.gui.GUISupportClasses.ChatWindow;
-import game.models.Player;
-import general.Parameter;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -48,8 +47,6 @@ import network.Client;
 import network.messages.MessageSend;
 import network.messages.MessageSendInGame;
 import network.messages.MessageToPerson;
-import general.AppController;
-import general.GameSound;
 
 /**
  * This class consist of static inner classes defines GUI elements presentin multiple places.

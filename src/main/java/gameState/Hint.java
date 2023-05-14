@@ -1,8 +1,9 @@
 package gameState;
 
 /**
+ * This enum stores the different hints shown to players.
+ * 
  * @author pmikov
- *
  */
 
 public enum Hint {

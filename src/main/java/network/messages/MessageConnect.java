@@ -4,17 +4,19 @@ import database.Profile;
 
 public class MessageConnect extends Message {
 
-	/**
-	 * @author dignatov
-	 *
-	 * The MessageConnect class represents a message used for client connection.
-	 * It includes the player's name, profile, and an optional ID for targeted connection.
-	 */
-	
+  /**
+   * The MessageConnect class represents a message used for client connection. It includes the
+   * player's name, profile, and an optional ID for targeted connection.
+   *
+   * @author dignatov
+   * 
+   */
+
   private static final long serialVersionUID = 1L;
   private String playername;
   private Profile profile;
   private int idTo;
+
   /**
    * Constructs a MessageConnect object with the given profile.
    *
@@ -26,6 +28,7 @@ public class MessageConnect extends Message {
     this.profile = profile;
 
   }
+
   /**
    * Constructs a MessageConnect object with the given profile and target ID.
    *

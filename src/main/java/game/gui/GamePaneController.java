@@ -62,8 +62,12 @@ import javafx.stage.Stage;
 import network.Client;
 
 /**
- * @author majda This class handles the events on the game board
+ * This class build the game pane and handles the events, such as user interaction.
+ *
+ * @author majda
+ *
  */
+
 public class GamePaneController implements Initializable {
 
   private GameSound gameSound = AppController.getGameSound();
@@ -166,15 +170,9 @@ public class GamePaneController implements Initializable {
     setUpMapComponents(); // we bring the map's elements from the fxml file
     setUpLeaveGameButton(); // setting up the leave game button on the game board
     setUpPhaseBoard(); // setting up the phase board where the phase, period, cards and current
-                       // player
-    // are displayed
     setUpNextPhaseButton(); // setting up the next level button, it is kind of confirming button for
-    // finishing the interaction
     setUpChoosingTroopsPane(); // setting up choosing troops pane, where the player can choose how
-                               // man troops
-    // he wants to play with, in each period and phase where it is needed
     setUpCardsPopUp(); // setting up the cards popup where the player on GUI can see and select his
-    // cards
     setUpTutorialsPane(); // setting up tutorial pane for displaying the hints
   }
 
@@ -1309,7 +1307,6 @@ public class GamePaneController implements Initializable {
    * added to an ArrayList. The trade button is enabled only when three cards are selected. When the
    * trade button is clicked, the selected cards are sent to the server to be traded in for armies.
    * 
-   * @return void
    */
   public void showCardsPopUp() {
     cardsPopUp.getChildren().removeIf(x -> x instanceof HBox);
@@ -2014,11 +2011,11 @@ public class GamePaneController implements Initializable {
           stage.getScene().setRoot(serverMainWindowController);
           serverMainWindowController.setClient(this.client);
           serverMainWindowController.actionEventsSetup();
-          
+
           for (Lobby lobby : client.getLobbies().values()) {
             serverMainWindowController.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
           }
-          
+
           serverMainWindowController.drawLobbies(true);
           client.setClientsLobby(null);
           client.setInAGame(false);

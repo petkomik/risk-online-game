@@ -1,8 +1,9 @@
 package game.models;
 
 /**
- * @author pmikov
+ * This enum is used for the AI Difficulty.
  *
+ * @author pmikov
  */
 
 public enum Difficulty {

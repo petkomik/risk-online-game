@@ -451,6 +451,8 @@ public class BattleFrameController extends StackPane {
           case Tutorial:
             singleplayerHandler.battleDiceThrow();
             break;
+          default:
+            break;
         }
 
       }

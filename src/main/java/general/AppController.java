@@ -1,20 +1,19 @@
 package general;
 
-import java.util.Arrays;
 import database.DatabaseHandler;
 import database.GameStatistic;
 import database.Profile;
 import game.exceptions.WrongTextFieldInputException;
+import java.util.Arrays;
 import network.Client;
 import network.Server;
 
 /**
- * Class for the application logic handling
- * 
+ * Class for the application logic handling.
+ *
  * @author srogalsk
  *
  */
-
 
 public class AppController {
   private static Profile profile;

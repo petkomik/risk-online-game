@@ -1,15 +1,12 @@
 package game.gui;
 
-import java.io.IOException;
-
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -21,8 +18,9 @@ import network.messages.MessageDisconnect;
 import network.messages.MessageServerCloseConnection;
 
 /**
- * 
- * @author malaji This class shows the very first page
+ * This class shows the very first page.
+ *
+ * @author malaji
  */
 public class MainApp extends Application {
 
@@ -80,14 +78,6 @@ public class MainApp extends Application {
     });
     stage.show();
 
-    /**************** Sound *************************//**
-                                                       * File file = new File(Parameter.themeSong);
-                                                       * Media media = new
-                                                       * Media(file.toURI().toString());
-                                                       * System.out.println(file.toURI().toString());
-                                                       * MediaPlayer mediaPlayer = new
-                                                       * MediaPlayer(media); mediaPlayer.play();
-                                                       */
 
     gameSound.startThemeSong();
 

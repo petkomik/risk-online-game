@@ -2,13 +2,7 @@ package game.logic;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
 import game.models.Card;
 import game.models.CountryName;
 import game.models.Difficulty;
@@ -20,7 +14,21 @@ import game.models.Territory;
 import gameState.GameState;
 import gameState.Period;
 import general.Parameter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javafx.util.Pair;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+/**
+ * This class includes tests for the AI Logic.
+ * 
+ * @author majda
+ *
+ */
 
 class AILogicTest {
 
@@ -265,11 +273,7 @@ class AILogicTest {
         list.add(new Card(true, i));
       } else {
         list.add(
-            new Card(CountryName.valueOf(s), i, Parameter.territoryPNGdir + "africa-congo.png")); // country
-                                                                                                  // pic
-                                                                                                  // is
-                                                                                                  // here
-                                                                                                  // irrelevant
+            new Card(CountryName.valueOf(s), i, Parameter.territoryPNGdir + "africa-congo.png"));
       }
       i++;
     }

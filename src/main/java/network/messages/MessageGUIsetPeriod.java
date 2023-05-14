@@ -5,9 +5,10 @@ package network.messages;
 import game.models.Lobby;
 import gameState.GameState;
 import gameState.Period;
+
 /**
- * The MessageGUIsetPeriod class represents a message used to set the current period in the game GUI.
- * It includes the game state, the period, and the lobby information.
+ * The MessageGUIsetPeriod class represents a message used to set the current period in the game
+ * GUI. It includes the game state, the period, and the lobby information.
  * 
  * author dignatov
  */
@@ -19,7 +20,8 @@ public class MessageGUIsetPeriod extends Message {
   private Lobby lobby;
 
   /**
-   * Constructs a MessageGUIsetPeriod object with the specified game state, period, and lobby information.
+   * Constructs a MessageGUIsetPeriod object with the specified game state, period, and lobby
+   * information.
    *
    * @param gameState The game state associated with the message
    * @param period The period to be set in the GUI
@@ -38,10 +40,10 @@ public class MessageGUIsetPeriod extends Message {
   }
 
   public GameState getGameState() {
-	  return gameState;
+    return gameState;
   }
-  
+
   public Period getPeriod() {
-	  return period;
+    return period;
   }
 }

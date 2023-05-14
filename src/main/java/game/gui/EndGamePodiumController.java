@@ -1,9 +1,5 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
@@ -12,6 +8,10 @@ import game.models.Player;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -35,7 +35,7 @@ import javafx.stage.Stage;
 
 /**
  * this class is responsible for constructing the GUI pane that comes after a game has finished.
- * 
+ *
  * @author pmalamov
  *
  */

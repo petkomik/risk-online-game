@@ -138,6 +138,8 @@ public class GameHandler {
       case OVER:
         this.singlePlayerHandler.endTutorialOnGui();
         break;
+      default:
+        break;
     }
   }
 
@@ -616,7 +618,7 @@ public class GameHandler {
             }
             break;
           case FORTIFY:
-            if (this.gameType.equals(gameType.Tutorial)) {
+            if (this.gameType.equals(GameType.Tutorial)) {
               if (!this.gameState.getCurrentPlayer().isAi()) {
                 Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1)));
                 timer.play();

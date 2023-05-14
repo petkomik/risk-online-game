@@ -1,25 +1,19 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.DesignButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import general.AppController;
+import general.GameSound;
+import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,13 +27,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import network.Client;
-import network.Server;
-import general.AppController;
-import general.GameSound;
-import general.Parameter;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 
 /**
  * First Multiplayer GUI Window. Player decides whether to host or join a server.

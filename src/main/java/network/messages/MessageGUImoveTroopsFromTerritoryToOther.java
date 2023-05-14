@@ -3,9 +3,12 @@ package network.messages;
 import game.models.CountryName;
 import game.models.Lobby;
 import gameState.GameState;
+
 /**
- * The MessageGUImoveTroopsFromTerritoryToOther class represents a message used to indicate the movement of troops from one territory to another in the game GUI.
- * It includes the game state, the source territory, the destination territory, the number of troops to move from the source, the number of troops to move to the destination, and the associated lobby.
+ * The MessageGUImoveTroopsFromTerritoryToOther class represents a message used to indicate the
+ * movement of troops from one territory to another in the game GUI. It includes the game state, the
+ * source territory, the destination territory, the number of troops to move from the source, the
+ * number of troops to move to the destination, and the associated lobby.
  * 
  * @author dignatov
  */
@@ -20,9 +23,9 @@ public class MessageGUImoveTroopsFromTerritoryToOther extends Message {
   private Lobby lobby;
 
   /**
-   * Constructs a MessageGUImoveTroopsFromTerritoryToOther object with the specified game state, source territory,
-   * destination territory, number of troops to move from the source, number of troops to move to the destination,
-   * and lobby.
+   * Constructs a MessageGUImoveTroopsFromTerritoryToOther object with the specified game state,
+   * source territory, destination territory, number of troops to move from the source, number of
+   * troops to move to the destination, and lobby.
    *
    * @param gameState The game state associated with the message
    * @param from The source territory from which troops are being moved

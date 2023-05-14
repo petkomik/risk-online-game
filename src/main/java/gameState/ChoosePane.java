@@ -1,6 +1,8 @@
 package gameState;
 
 /**
+ * This enum is used to differentiate between different pane types in Game Pane.
+ *
  * @author pmikov
  *
  */

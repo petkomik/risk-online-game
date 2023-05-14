@@ -1,23 +1,29 @@
 package gameState;
 
+import game.models.Card;
+import game.models.Continent;
+import game.models.CountryName;
+import game.models.Territory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import game.models.Card;
-import game.models.Continent;
-import game.models.CountryName;
-import game.models.Territory;
 
 /**
- * Sets the territories, card decks and continents for the gameState of the game
+ * Sets the territories, card decks and continents for the gameState of the game.
  *
  * @author srogalsk
- *
  */
 
 public class SetTerritories {
+
+  /**
+   * Creates a HashMap where each Continent is mapped to a list with the Territories in it.
+   *
+   * @param continents hashmap to be filled
+   * @param territories initiated territories hashmap
+   */
 
   public static void createContinents(HashMap<Continent, ArrayList<CountryName>> continents,
       HashMap<CountryName, Territory> territories) {
@@ -49,6 +55,13 @@ public class SetTerritories {
 
   }
 
+  /**
+   * Fills the card deck.
+   *
+   * @param cards List to be filled
+   * @param territories initiated territories list
+   */
+
   public static void createCardDeck(ArrayList<Card> cards,
       HashMap<CountryName, Territory> territories) {
     int i = 1;
@@ -60,6 +73,8 @@ public class SetTerritories {
     i++;
     cards.add(new Card(true, i));
   }
+
+  /** Creates Territory insctances and adds them to list. */
 
   public static void createTerritories(HashMap<CountryName, Territory> territories) {
     // add territories for each country name
@@ -130,6 +145,8 @@ public class SetTerritories {
         new Territory(CountryName.SouthAfrica, Continent.Africa));
 
   }
+
+  /** Sets neighboghring Territories. */
 
   public static void setNeighboringCountrys(HashMap<CountryName, Territory> territories) {
 

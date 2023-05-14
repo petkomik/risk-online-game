@@ -4,19 +4,20 @@ import gameState.ChoosePane;
 import gameState.GameState;
 
 public class MessageGUIchooseNumberOfTroops extends Message {
-/*
- * @author dignatov
- * 
- */
-	
+  /*
+   * @author dignatov
+   * 
+   */
+
   private static final long serialVersionUID = 1L;
   private GameState gameState;
   private int min;
   private int max;
   private ChoosePane choosePane;
+
   /**
-   * Constructs a MessageGUIchooseNumberOfTroops object with the specified game state,
-   * minimum and maximum number of troops, and ChoosePane.
+   * Constructs a MessageGUIchooseNumberOfTroops object with the specified game state, minimum and
+   * maximum number of troops, and ChoosePane.
    *
    * @param gameState The game state associated with the message
    * @param min The minimum number of troops that can be chosen
