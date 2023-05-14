@@ -1005,23 +1005,15 @@ public class GamePaneController implements Initializable {
 
     Pane tutorialTextPane = new Pane();
     tutorialTextPane.setPrefSize(getRelativeHorz(800.0), getRelativeVer(600.0));
+    tutorialTextPane.setLayoutX((w - tutorialTextPane.getPrefWidth()) / 2.0);
+    tutorialTextPane.setLayoutY((h - tutorialTextPane.getPrefHeight()) / 2.0);
     tutorialTextPane.setStyle("-fx-background-color: #ecd9c6;");
 
-    cancelHintButton = new Button("CANCEL");
+    cancelHintButton = new DesignButton();
+    cancelHintButton.setText("CANCEL");
     cancelHintButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
     cancelHintButton.setLayoutX(getRelativeHorz(1265.0));
     cancelHintButton.setLayoutY(getRelativeVer(101.0));
-    cancelHintButton.setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-    cancelHintButton.hoverProperty()
-        .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
-          if (newValue) {
-            cancelHintButton
-                .setStyle("-fx-background-color: #ac7339; " + "-fx-background-radius: 15px; ");
-          } else {
-            cancelHintButton
-                .setStyle("-fx-background-color: #cc9966; -fx-background-radius: 15px;");
-          }
-        });
     cancelHintButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
     cancelHintButton.setOnAction(e -> {
       tutorialMainPane.setVisible(false);
