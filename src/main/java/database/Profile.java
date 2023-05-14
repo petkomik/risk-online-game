@@ -1,7 +1,7 @@
 package database;
 
-import java.io.Serializable;
 import general.Parameter;
+import java.io.Serializable;
 import javafx.scene.paint.Color;
 
 /**
