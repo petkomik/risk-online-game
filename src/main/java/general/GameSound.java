@@ -13,6 +13,7 @@ import javafx.util.Duration;
  * @author srogalsk
  *
  */
+
 public final class GameSound {
 	private Media media;
 	private MediaPlayer musicSoundPlayer;
