@@ -7,35 +7,36 @@ import gameState.GameState;
 
 public class MessageGUIriskCardsTurnedInSuccess extends Message {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	GameState gamestate;
-	ArrayList<Card> card;
-	int idOfPlayer;
-	int bonusTroops;
-	
-	public MessageGUIriskCardsTurnedInSuccess(GameState gamestate, ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
-		super(MessageType.MessageGUIriskCardsTurnedInSuccess);
-		this.gamestate = gamestate;
-		this.card = card;
-		this.idOfPlayer = idOfPlayer;
-		this.bonusTroops = bonusTroops;
-	}
+  GameState gamestate;
+  ArrayList<Card> card;
+  int idOfPlayer;
+  int bonusTroops;
 
-	public GameState getGamestate() {
-		return gamestate;
-	}
+  public MessageGUIriskCardsTurnedInSuccess(GameState gamestate, ArrayList<Card> card,
+      int idOfPlayer, int bonusTroops) {
+    super(MessageType.MessageGUIriskCardsTurnedInSuccess);
+    this.gamestate = gamestate;
+    this.card = card;
+    this.idOfPlayer = idOfPlayer;
+    this.bonusTroops = bonusTroops;
+  }
 
-	public ArrayList<Card> getCard() {
-		return card;
-	}
+  public GameState getGamestate() {
+    return gamestate;
+  }
 
-	public int getIdOfPlayer() {
-		return idOfPlayer;
-	}
+  public ArrayList<Card> getCard() {
+    return card;
+  }
 
-	public int getBonusTroops() {
-		return bonusTroops;
-	}
-	
+  public int getIdOfPlayer() {
+    return idOfPlayer;
+  }
+
+  public int getBonusTroops() {
+    return bonusTroops;
+  }
+
 }

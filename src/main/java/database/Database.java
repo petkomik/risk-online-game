@@ -82,17 +82,10 @@ public class Database {
    */
   private void createTable_Profiles() {
     try (Statement stm = connection.createStatement()) {
-      String sql = "CREATE TABLE IF NOT EXISTS Profiles "
-          + "(PlayerID INTGEGER PRIMARY KEY, "
-          + "UserName TEXT NOT NULL, "
-          + "FirstName TEXT NOT NULL, "
-          + "LastName TEXT NOT NULL, "
-          + "Wins INTEGER, "
-          + "Color TEXT, "
-          + "Photo TEXT, "
-          + "Loses INTEGER, "
-          + "Password TEXT NOT NULL, "
-          + "Score INTEGER);";
+      String sql = "CREATE TABLE IF NOT EXISTS Profiles " + "(PlayerID INTGEGER PRIMARY KEY, "
+          + "UserName TEXT NOT NULL, " + "FirstName TEXT NOT NULL, " + "LastName TEXT NOT NULL, "
+          + "Wins INTEGER, " + "Color TEXT, " + "Photo TEXT, " + "Loses INTEGER, "
+          + "Password TEXT NOT NULL, " + "Score INTEGER);";
       stm.executeUpdate(sql);
       connection.commit();
 
@@ -108,12 +101,9 @@ public class Database {
    */
   private void createTable_Games() {
     try (Statement stm = connection.createStatement()) {
-      String sql = "CREATE TABLE IF NOT EXISTS Games "
-          + "(GameID INTEGER PRIMARY KEY, "
-          + "Length INTEGER, "
-          + "StartTime INTEGER NOT NULL, "
-          + "NumberOfPlayers INTEGER NOT NULL, "
-          + "WinnerID INTEGER REFERENCES Players);";
+      String sql = "CREATE TABLE IF NOT EXISTS Games " + "(GameID INTEGER PRIMARY KEY, "
+          + "Length INTEGER, " + "StartTime INTEGER NOT NULL, "
+          + "NumberOfPlayers INTEGER NOT NULL, " + "WinnerID INTEGER REFERENCES Players);";
       stm.executeUpdate(sql);
       connection.commit();
 

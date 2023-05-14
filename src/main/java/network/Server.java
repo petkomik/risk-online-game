@@ -11,71 +11,71 @@ import network.messages.MessageServerCloseConnection;
 
 public class Server {
 
-	private static ServerSocket serverSocket;
-	private static ClientHandler clientHandler;
+  private static ServerSocket serverSocket;
+  private static ClientHandler clientHandler;
 
-	public Server(ServerSocket serverSocket) {
-		this.serverSocket = serverSocket;
-	}
+  public Server(ServerSocket serverSocket) {
+    this.serverSocket = serverSocket;
+  }
 
-	public void startServer() {
-		System.out.println("The Server has been started ");
+  public void startServer() {
+    System.out.println("The Server has been started ");
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					while (!serverSocket.isClosed()) {
-						Socket socket = serverSocket.accept();
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          while (!serverSocket.isClosed()) {
+            Socket socket = serverSocket.accept();
 
-						clientHandler = new ClientHandler(socket);
+            clientHandler = new ClientHandler(socket);
 
-						Thread player = new Thread(clientHandler);
-						clientHandler.setClieantHandlerThread(player);
-						player.start();
+            Thread player = new Thread(clientHandler);
+            clientHandler.setClieantHandlerThread(player);
+            player.start();
 
-					}
+          }
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
 
-		}).start();
+    }).start();
 
-	}
+  }
 
-	public static  void closeServerSocket() {
-	
-		try {
-	        if (serverSocket != null) {
-	            serverSocket.close();
-	            System.out.println("Server socket closed");
+  public static void closeServerSocket() {
 
-	            if (clientHandler != null) {
-	                clientHandler.closeEverything();
-	                System.out.println("Client socket closed");
-	            }
-	        }
-	    } catch (IOException e) {
-	        System.err.println("Error closing server socket: " + e.getMessage());
-	    }
-		
-	}
+    try {
+      if (serverSocket != null) {
+        serverSocket.close();
+        System.out.println("Server socket closed");
 
-	public static Server createServer(int port) throws IOException {
-		ServerSocket serverSocket = new ServerSocket(port);
-		Server server = new Server(serverSocket);
-		server.startServer();
+        if (clientHandler != null) {
+          clientHandler.closeEverything();
+          System.out.println("Client socket closed");
+        }
+      }
+    } catch (IOException e) {
+      System.err.println("Error closing server socket: " + e.getMessage());
+    }
 
-		System.out.println(serverSocket.getLocalSocketAddress());
-		return server;
+  }
 
-	}
+  public static Server createServer(int port) throws IOException {
+    ServerSocket serverSocket = new ServerSocket(port);
+    Server server = new Server(serverSocket);
+    server.startServer();
 
-	/**
-	 * main for specific testing public static void main(String[] args) throws
-	 * IOException { ServerSocket serverSocket = new ServerSocket(1234); Server
-	 * server = new Server(serverSocket); server.startServer(); }
-	 */
+    System.out.println(serverSocket.getLocalSocketAddress());
+    return server;
+
+  }
+
+  /**
+   * main for specific testing public static void main(String[] args) throws IOException {
+   * ServerSocket serverSocket = new ServerSocket(1234); Server server = new Server(serverSocket);
+   * server.startServer(); }
+   */
 }

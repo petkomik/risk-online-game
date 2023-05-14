@@ -5,37 +5,38 @@ import gameState.GameState;
 
 public class MessageGUIRollInitalDice extends Message {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	GameState gameState;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+  GameState gameState;
 
-	private int Id;
-	private int value;
-	private Lobby lobby;
-	
-	public MessageGUIRollInitalDice(GameState gameState, int Id, int value,Lobby lobby ) {
-		super(MessageType.MessageGUIRollInitalDice);
-		this.gameState = gameState;
-		this.Id = Id;
-		this.value = value;
-		this.lobby = lobby;
-	}
+  private int Id;
+  private int value;
+  private Lobby lobby;
 
-	public int getId() {
-		return Id;
-	}
-	public GameState getGameState() {
-		return gameState;
-	}
+  public MessageGUIRollInitalDice(GameState gameState, int Id, int value, Lobby lobby) {
+    super(MessageType.MessageGUIRollInitalDice);
+    this.gameState = gameState;
+    this.Id = Id;
+    this.value = value;
+    this.lobby = lobby;
+  }
 
-	public int getValue() {
-		return value;
-	}
+  public int getId() {
+    return Id;
+  }
 
-	public Lobby getLobby() {
-		return lobby;
-	}
+  public GameState getGameState() {
+    return gameState;
+  }
+
+  public int getValue() {
+    return value;
+  }
+
+  public Lobby getLobby() {
+    return lobby;
+  }
 
 }

@@ -39,155 +39,157 @@ import javafx.stage.Stage;
  *
  */
 public class StartPaneController extends StackPane {
-	private Stage stage;
-	private VBox vBox;
-	private ImageView imgBackground;
-	private ImageViewPane imgBackgroundPane;
-	private VBox vBoxColor;
-	private VBox contentVBox;
-	private ImageView riskLogo;
-	private DesignButton playButton;
-	private SettingsButton settingsButton;
-	private StackPane settingsPane;
-	private double ratio;
+  private Stage stage;
+  private VBox vBox;
+  private ImageView imgBackground;
+  private ImageViewPane imgBackgroundPane;
+  private VBox vBoxColor;
+  private VBox contentVBox;
+  private ImageView riskLogo;
+  private DesignButton playButton;
+  private SettingsButton settingsButton;
+  private StackPane settingsPane;
+  private double ratio;
 
-	private GameSound gameSound = AppController.getGameSound();
+  private GameSound gameSound = AppController.getGameSound();
 
-	/**
-	 * Default Constructor. Builds the Pane.
-	 *
-	 * @throws FileNotFoundException for background map image not found
-	 */
-	
-	public StartPaneController() throws FileNotFoundException {
-		super();
-		this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
-				* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-		this.ratio = Math.min(ratio + 0.3, 1);
-		setup();
-	}
+  /**
+   * Default Constructor. Builds the Pane.
+   *
+   * @throws FileNotFoundException for background map image not found
+   */
 
-	/**
-	 * Setup method for the pane. Creates and places nodes. 
-	 * Sets up button events.
-	 *
-	 * @throws FileNotFoundException for background map image not found
-	 */
-	
-	public void setup() throws FileNotFoundException {
+  public StartPaneController() throws FileNotFoundException {
+    super();
+    this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
+        * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+    this.ratio = Math.min(ratio + 0.3, 1);
+    setup();
+  }
 
-		this.setAlignment(Pos.CENTER);
+  /**
+   * Setup method for the pane. Creates and places nodes. Sets up button events.
+   *
+   * @throws FileNotFoundException for background map image not found
+   */
 
-		/*
-		 * First layer of stack Background map image
-		 */
+  public void setup() throws FileNotFoundException {
 
-		vBox = new VBox();
-		vBox.setAlignment(Pos.CENTER);
-		vBox.setFillWidth(true);
+    this.setAlignment(Pos.CENTER);
 
-		imgBackground = new ImageView();
-		imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
-		imgBackground.setPreserveRatio(false);
-		imgBackground.setSmooth(true);
-		imgBackground.setCache(true);
+    /*
+     * First layer of stack Background map image
+     */
 
-		imgBackgroundPane = new ImageViewPane(imgBackground);
-		VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
+    vBox = new VBox();
+    vBox.setAlignment(Pos.CENTER);
+    vBox.setFillWidth(true);
 
-		vBox.getChildren().add(imgBackgroundPane);
+    imgBackground = new ImageView();
+    imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
+    imgBackground.setPreserveRatio(false);
+    imgBackground.setSmooth(true);
+    imgBackground.setCache(true);
 
-		/*
-		 * Second layer of stack Color mask
-		 */
+    imgBackgroundPane = new ImageViewPane(imgBackground);
+    VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
 
-		vBoxColor = new VBox();
-		vBoxColor.setAlignment(Pos.CENTER);
-		vBoxColor.setFillWidth(true);
-		vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
+    vBox.getChildren().add(imgBackgroundPane);
 
-		contentVBox = new VBox();
-		contentVBox.setAlignment(Pos.CENTER);
+    /*
+     * Second layer of stack Color mask
+     */
 
-		riskLogo = new ImageView();
-		riskLogo.setImage(new Image(new FileInputStream(Parameter.logoImage)));
-		riskLogo.setFitWidth(650 * ratio);
-		riskLogo.setPreserveRatio(true);
-		riskLogo.setSmooth(true);
-		riskLogo.setCache(true);
-		
-		Pane home = this;
-		settingsPane = new StackPane();
-		settingsButton = new SettingsButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio), 30, 28 * ratio,
-				170 * ratio, true);
+    vBoxColor = new VBox();
+    vBoxColor.setAlignment(Pos.CENTER);
+    vBoxColor.setFillWidth(true);
+    vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
 
-		playButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
-		playButton.setText("Play");
+    contentVBox = new VBox();
+    contentVBox.setAlignment(Pos.CENTER);
 
-		contentVBox.setSpacing(30 * ratio);
+    riskLogo = new ImageView();
+    riskLogo.setImage(new Image(new FileInputStream(Parameter.logoImage)));
+    riskLogo.setFitWidth(650 * ratio);
+    riskLogo.setPreserveRatio(true);
+    riskLogo.setSmooth(true);
+    riskLogo.setCache(true);
 
-		contentVBox.getChildren().addAll(riskLogo, playButton, settingsButton);
-		contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
+    Pane home = this;
+    settingsPane = new StackPane();
+    settingsButton = new SettingsButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio),
+        30, 28 * ratio, 170 * ratio, true);
 
-		double w = MainApp.screenWidth;
-		double h = MainApp.screenHeight;
-		settingsButton.setLayoutX((40.0/1536.0) * w);
-		settingsButton.setLayoutY((40.0/864.0) * h);
-		settingsButton.setPickOnBounds(true);
-		
-		// maybe add vBoxColor
-		this.getChildren().addAll(vBox, vBoxColor, contentVBox);
+    playButton =
+        new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
+    playButton.setText("Play");
 
-		playButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				gameSound.buttonClickForwardSound();
-				Node node = (Node) event.getSource();
-				stage = (Stage) node.getScene().getWindow();
+    contentVBox.setSpacing(30 * ratio);
 
-				try {
-					UserAccessPaneController stp = new UserAccessPaneController();
-					stage.getScene().setRoot(stp);
+    contentVBox.getChildren().addAll(riskLogo, playButton, settingsButton);
+    contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
-				stage.show();
+    double w = MainApp.screenWidth;
+    double h = MainApp.screenHeight;
+    settingsButton.setLayoutX((40.0 / 1536.0) * w);
+    settingsButton.setLayoutY((40.0 / 864.0) * h);
+    settingsButton.setPickOnBounds(true);
 
-			}
-		});
-		
-		
-		
-		settingsButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				gameSound.buttonClickForwardSound();
-				settingsPane = SettingsPane.createMutePane(28 * ratio, settingsButton, ratio);
-				home.getChildren().add(settingsPane);
-				settingsPane.setVisible(true);
-				settingsButton.setDisable(true);
-				
-			}
-		});
-		// For deleting the settingsPane imidiatly
-		settingsButton.disabledProperty().addListener((ChangeListener<? super Boolean>) new ChangeListener<Boolean>() {
-		    @Override
-		    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-		    	if(!settingsPane.isVisible()) {
-					home.getChildren().removeAll(settingsPane);
-				}
-		    }
-		});
+    // maybe add vBoxColor
+    this.getChildren().addAll(vBox, vBoxColor, contentVBox);
 
-		contentVBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent keyEvent) {
-				if (keyEvent.getCode() == KeyCode.ENTER) {
-					playButton.fire();
+    playButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        gameSound.buttonClickForwardSound();
+        Node node = (Node) event.getSource();
+        stage = (Stage) node.getScene().getWindow();
 
-				}
-			}
-		});
-	}
+        try {
+          UserAccessPaneController stp = new UserAccessPaneController();
+          stage.getScene().setRoot(stp);
+
+        } catch (FileNotFoundException e1) {
+          e1.printStackTrace();
+        }
+        stage.show();
+
+      }
+    });
+
+
+
+    settingsButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        gameSound.buttonClickForwardSound();
+        settingsPane = SettingsPane.createMutePane(28 * ratio, settingsButton, ratio);
+        home.getChildren().add(settingsPane);
+        settingsPane.setVisible(true);
+        settingsButton.setDisable(true);
+
+      }
+    });
+    // For deleting the settingsPane imidiatly
+    settingsButton.disabledProperty()
+        .addListener((ChangeListener<? super Boolean>) new ChangeListener<Boolean>() {
+          @Override
+          public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
+              Boolean newValue) {
+            if (!settingsPane.isVisible()) {
+              home.getChildren().removeAll(settingsPane);
+            }
+          }
+        });
+
+    contentVBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+          playButton.fire();
+
+        }
+      }
+    });
+  }
 }

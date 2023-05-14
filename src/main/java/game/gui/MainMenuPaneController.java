@@ -41,260 +41,266 @@ import javafx.stage.Stage;
  */
 public class MainMenuPaneController extends StackPane {
 
-    private double w = MainApp.screenWidth;
-    private double h = MainApp.screenHeight;
-    private GameSound gameSound = AppController.getGameSound();
-    private Stage stage;
-    private VBox vBox;
-    private ImageView imgBackground;
-    private ImageViewPane imgBackgroundPane;
-    private VBox vBoxColor;
-    private VBox contentVBox;
-    private HBox banner;
-    private HBox topBannerContent;
-    private Label lobbyTextBanner;
-    private VBox mainContent;
-    private DesignButton playTutorialButton;
-    private DesignButton profileSettingsButton;
-    private DesignButton singleplayerButton;
-    private DesignButton multiplayerButton;
-    private DesignButton logoutButton;
-    private double ratio;
+  private double w = MainApp.screenWidth;
+  private double h = MainApp.screenHeight;
+  private GameSound gameSound = AppController.getGameSound();
+  private Stage stage;
+  private VBox vBox;
+  private ImageView imgBackground;
+  private ImageViewPane imgBackgroundPane;
+  private VBox vBoxColor;
+  private VBox contentVBox;
+  private HBox banner;
+  private HBox topBannerContent;
+  private Label lobbyTextBanner;
+  private VBox mainContent;
+  private DesignButton playTutorialButton;
+  private DesignButton profileSettingsButton;
+  private DesignButton singleplayerButton;
+  private DesignButton multiplayerButton;
+  private DesignButton logoutButton;
+  private double ratio;
 
-    private AnchorPane anchorPane;
+  private AnchorPane anchorPane;
 
-    /**
-     * Default constructor sets up the pane.
-     *
-     * @throws FileNotFoundException for map background not found.
+  /**
+   * Default constructor sets up the pane.
+   *
+   * @throws FileNotFoundException for map background not found.
+   */
+
+  public MainMenuPaneController() throws FileNotFoundException {
+    super();
+    this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
+        * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
+    this.ratio = Math.min(ratio + 0.3, 1);
+    setup();
+    buttonEvents();
+  }
+
+  /**
+   * Setup method, creates and positions nodes.
+   * 
+   * @throws FileNotFoundException for map background image not found
+   */
+
+  public void setup() throws FileNotFoundException {
+
+    this.setAlignment(Pos.CENTER);
+
+    /*
+     * First layer of stack Background map image
      */
 
-    public MainMenuPaneController() throws FileNotFoundException {
-	super();
-	this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
-		* Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
-	this.ratio = Math.min(ratio + 0.3, 1);
-	setup();
-	buttonEvents();
-    }
+    vBox = new VBox();
+    vBox.setAlignment(Pos.CENTER);
+    vBox.setFillWidth(true);
 
-    /**
-     * Setup method, creates and positions nodes.
-     * 
-     * @throws FileNotFoundException for map background image not found
+    imgBackground = new ImageView();
+    imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
+    imgBackground.setPreserveRatio(false);
+    imgBackground.setSmooth(true);
+    imgBackground.setCache(true);
+
+    imgBackgroundPane = new ImageViewPane(imgBackground);
+    VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
+
+    vBox.getChildren().add(imgBackgroundPane);
+
+    /*
+     * Second layer of stack Color mask
      */
 
-    public void setup() throws FileNotFoundException {
+    vBoxColor = new VBox();
+    vBoxColor.setAlignment(Pos.CENTER);
+    vBoxColor.setFillWidth(true);
+    vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
 
-	this.setAlignment(Pos.CENTER);
+    contentVBox = new VBox();
+    contentVBox.setAlignment(Pos.CENTER);
 
-	/*
-	 * First layer of stack Background map image
-	 */
+    banner = new HBox();
+    banner.setAlignment(Pos.TOP_LEFT);
+    VBox.setMargin(banner, new Insets(50 * ratio, 0, 0, 0));
+    banner.setPickOnBounds(false);
 
-	vBox = new VBox();
-	vBox.setAlignment(Pos.CENTER);
-	vBox.setFillWidth(true);
+    topBannerContent = new HBox();
+    topBannerContent.setAlignment(Pos.CENTER);
+    topBannerContent
+        .setStyle("-fx-background-color: " + "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
+            + "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
+    topBannerContent.setMaxWidth(800 * ratio);
+    topBannerContent.setMinWidth(500 * ratio);
+    topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
+    topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
+    topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
+    topBannerContent.setPrefHeight(100 * ratio);
+    HBox.setHgrow(topBannerContent, Priority.ALWAYS);
 
-	imgBackground = new ImageView();
-	imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
-	imgBackground.setPreserveRatio(false);
-	imgBackground.setSmooth(true);
-	imgBackground.setCache(true);
+    Spacing bannerContentSpacing = new Spacing();
+    HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
 
-	imgBackgroundPane = new ImageViewPane(imgBackground);
-	VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
+    lobbyTextBanner = new Label("MAIN MENU");
+    lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
+    lobbyTextBanner.setTextFill(Color.WHITE);
 
-	vBox.getChildren().add(imgBackgroundPane);
+    Spacing bannerSpacing = new Spacing();
+    HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
+    bannerSpacing.setVisible(false);
 
-	/*
-	 * Second layer of stack Color mask
-	 */
+    topBannerContent.getChildren().addAll(bannerContentSpacing, lobbyTextBanner);
+    banner.getChildren().addAll(topBannerContent, bannerSpacing);
 
-	vBoxColor = new VBox();
-	vBoxColor.setAlignment(Pos.CENTER);
-	vBoxColor.setFillWidth(true);
-	vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
+    mainContent = new VBox();
+    mainContent.setAlignment(Pos.CENTER);
+    mainContent.setSpacing(30 * ratio);
+    mainContent.setMaxWidth(600 * ratio);
 
-	contentVBox = new VBox();
-	contentVBox.setAlignment(Pos.CENTER);
+    playTutorialButton =
+        new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
+    playTutorialButton.setText("Play Tutorial");
 
-	banner = new HBox();
-	banner.setAlignment(Pos.TOP_LEFT);
-	VBox.setMargin(banner, new Insets(50 * ratio, 0, 0, 0));
-	banner.setPickOnBounds(false);
+    profileSettingsButton =
+        new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
+    profileSettingsButton.setText("Profile Settings");
 
-	topBannerContent = new HBox();
-	topBannerContent.setAlignment(Pos.CENTER);
-	topBannerContent.setStyle("-fx-background-color: " + "linear-gradient(to right, rgba(100, 68, 31, 1) 60%, "
-		+ "rgba(100, 68, 31, 0.7) 75%, rgba(100, 68, 31, 0) 95%);");
-	topBannerContent.setMaxWidth(800 * ratio);
-	topBannerContent.setMinWidth(500 * ratio);
-	topBannerContent.setPadding(new Insets(10 * ratio, 150 * ratio, 10 * ratio, 30 * ratio));
-	topBannerContent.minHeightProperty().bind(topBannerContent.maxHeightProperty());
-	topBannerContent.maxHeightProperty().bind(topBannerContent.prefHeightProperty());
-	topBannerContent.setPrefHeight(100 * ratio);
-	HBox.setHgrow(topBannerContent, Priority.ALWAYS);
+    singleplayerButton =
+        new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
+    singleplayerButton.setText("Singleplayer");
 
-	Spacing bannerContentSpacing = new Spacing();
-	HBox.setHgrow(bannerContentSpacing, Priority.ALWAYS);
+    multiplayerButton =
+        new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
+    multiplayerButton.setText("Multiplayer");
 
-	lobbyTextBanner = new Label("MAIN MENU");
-	lobbyTextBanner.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 60 * ratio));
-	lobbyTextBanner.setTextFill(Color.WHITE);
+    logoutButton =
+        new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
+    logoutButton.setText("Log Out");
 
-	Spacing bannerSpacing = new Spacing();
-	HBox.setHgrow(bannerSpacing, Priority.ALWAYS);
-	bannerSpacing.setVisible(false);
+    mainContent.setPadding(new Insets(0, 0, 100 * ratio, 0));
 
-	topBannerContent.getChildren().addAll(bannerContentSpacing, lobbyTextBanner);
-	banner.getChildren().addAll(topBannerContent, bannerSpacing);
+    mainContent.getChildren().addAll(playTutorialButton, profileSettingsButton, singleplayerButton,
+        multiplayerButton, logoutButton);
+    contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
+    this.getChildren().addAll(vBox, vBoxColor, contentVBox);
+  }
 
-	mainContent = new VBox();
-	mainContent.setAlignment(Pos.CENTER);
-	mainContent.setSpacing(30 * ratio);
-	mainContent.setMaxWidth(600 * ratio);
+  /** Setting up button events. */
 
-	playTutorialButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
-	playTutorialButton.setText("Play Tutorial");
+  public void buttonEvents() {
+    playTutorialButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        gameSound.buttonClickForwardSound();
+        Lobby lobby = new Lobby();
+        lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
+        lobby.addAI();
+        lobby.addAI();
+        Node node = (Node) event.getSource();
+        stage = (Stage) node.getScene().getWindow();
+        try {
+          FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
+          AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
+          GamePaneController gamePaneController = fxmlLoader.getController();
+          SinglePlayerHandler singleHandler =
+              new SinglePlayerHandler(lobby, gamePaneController, GameType.Tutorial);
+          gamePaneController.initTutorial(singleHandler, lobby);
+          stage.getScene().setRoot(anchorPane);
+          stage.show();
+          singleHandler.showInitialHint();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    });
 
-	profileSettingsButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio,
-		450 * ratio);
-	profileSettingsButton.setText("Profile Settings");
+    profileSettingsButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        gameSound.buttonClickForwardSound();
+        Node node = (Node) event.getSource();
+        stage = (Stage) node.getScene().getWindow();
+        try {
+          UpdateSettingsController settingsPane = new UpdateSettingsController();
+          stage.getScene().setRoot(settingsPane);
 
-	singleplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
-	singleplayerButton.setText("Singleplayer");
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }
 
-	multiplayerButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
-	multiplayerButton.setText("Multiplayer");
+      }
+    });
 
-	logoutButton = new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 450 * ratio);
-	logoutButton.setText("Log Out");
+    singleplayerButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        gameSound.buttonClickForwardSound();
+        Lobby lobby = new Lobby();
+        lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
+        Node node = (Node) event.getSource();
+        stage = (Stage) node.getScene().getWindow();
+        try {
+          LobbyMenuController lobbyPane = new LobbyMenuController(lobby, true);
+          stage.getScene().setRoot(lobbyPane);
 
-	mainContent.setPadding(new Insets(0, 0, 100 * ratio, 0));
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        }
 
-	mainContent.getChildren().addAll(playTutorialButton, profileSettingsButton, singleplayerButton,
-		multiplayerButton, logoutButton);
-	contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
-	this.getChildren().addAll(vBox, vBoxColor, contentVBox);
-    }
+      }
+    });
 
-    /** Setting up button events. */
+    multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        gameSound.buttonClickForwardSound();
+        Node node = (Node) event.getSource();
+        stage = (Stage) node.getScene().getWindow();
+        try {
+          MultplayerHostJoinController mlt = new MultplayerHostJoinController();
+          stage.getScene().setRoot(mlt);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
 
-    public void buttonEvents() {
-	playTutorialButton.setOnAction(new EventHandler<ActionEvent>() {
-	    @Override
-	    public void handle(ActionEvent event) {
-		gameSound.buttonClickForwardSound();
-		Lobby lobby = new Lobby();
-		lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
-		lobby.addAI();
-		lobby.addAI();
-		Node node = (Node) event.getSource();
-		stage = (Stage) node.getScene().getWindow();
-		try {
-		    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("gameFrame.fxml"));
-		    AnchorPane anchorPane = (AnchorPane) fxmlLoader.load();
-		    GamePaneController gamePaneController = fxmlLoader.getController();
-		    SinglePlayerHandler singleHandler = new SinglePlayerHandler(lobby, gamePaneController,
-			    GameType.Tutorial);
-		    gamePaneController.initTutorial(singleHandler, lobby);
-		    stage.getScene().setRoot(anchorPane);
-		    stage.show();
-		    singleHandler.showInitialHint();
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-	    }
-	});
+        stage.show();
+      }
+    });
 
-	profileSettingsButton.setOnAction(new EventHandler<ActionEvent>() {
-	    @Override
-	    public void handle(ActionEvent event) {
-		gameSound.buttonClickForwardSound();
-		Node node = (Node) event.getSource();
-		stage = (Stage) node.getScene().getWindow();
-		try {
-		    UpdateSettingsController settingsPane = new UpdateSettingsController();
-		    stage.getScene().setRoot(settingsPane);
+    logoutButton.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        gameSound.buttonClickBackwardSound();
 
-		} catch (FileNotFoundException e) {
-		    e.printStackTrace();
-		}
+        AppController.logoutAndSetValuesToNull();
+        Node node = (Node) event.getSource();
+        stage = (Stage) node.getScene().getWindow();
 
-	    }
-	});
+        try {
+          UserAccessPaneController stp = new UserAccessPaneController();
+          stage.getScene().setRoot(stp);
 
-	singleplayerButton.setOnAction(new EventHandler<ActionEvent>() {
-	    @Override
-	    public void handle(ActionEvent event) {
-		gameSound.buttonClickForwardSound();
-		Lobby lobby = new Lobby();
-		lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
-		Node node = (Node) event.getSource();
-		stage = (Stage) node.getScene().getWindow();
-		try {
-		    LobbyMenuController lobbyPane = new LobbyMenuController(lobby, true);
-		    stage.getScene().setRoot(lobbyPane);
+        } catch (FileNotFoundException e1) {
+          e1.printStackTrace();
+        }
+        stage.show();
+      }
+    });
+  }
 
-		} catch (FileNotFoundException e) {
-		    e.printStackTrace();
-		}
+  /**
+   * This method is responsible for loading a fxml file.
+   *
+   * @author majda
+   * @param fxml file name without the ending \.fxml
+   * @return Parent object, to be set as a root in a Scene object
+   * @throws IOException
+   * 
+   */
 
-	    }
-	});
-
-	multiplayerButton.setOnAction(new EventHandler<ActionEvent>() {
-	    @Override
-	    public void handle(ActionEvent event) {
-		gameSound.buttonClickForwardSound();
-		Node node = (Node) event.getSource();
-		stage = (Stage) node.getScene().getWindow();
-		try {
-		    MultplayerHostJoinController mlt = new MultplayerHostJoinController();
-		    stage.getScene().setRoot(mlt);
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-
-		stage.show();
-	    }
-	});
-
-	logoutButton.setOnAction(new EventHandler<ActionEvent>() {
-	    @Override
-	    public void handle(ActionEvent event) {
-		gameSound.buttonClickBackwardSound();
-
-		AppController.logoutAndSetValuesToNull();
-		Node node = (Node) event.getSource();
-		stage = (Stage) node.getScene().getWindow();
-
-		try {
-		    UserAccessPaneController stp = new UserAccessPaneController();
-		    stage.getScene().setRoot(stp);
-
-		} catch (FileNotFoundException e1) {
-		    e1.printStackTrace();
-		}
-		stage.show();
-	    }
-	});
-    }
-
-    /**
-     * This method is responsible for loading a fxml file.
-     *
-     * @author majda
-     * @param fxml file name without the ending \.fxml
-     * @return Parent object, to be set as a root in a Scene object
-     * @throws IOException
-     * 
-     */
-
-    private static Parent loadFXML(String fxml) throws IOException {
-	FXMLLoader fxmlLoader = new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
-	return fxmlLoader.load();
-    }
+  private static Parent loadFXML(String fxml) throws IOException {
+    FXMLLoader fxmlLoader =
+        new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
+    return fxmlLoader.load();
+  }
 
 }
