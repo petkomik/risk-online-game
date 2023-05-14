@@ -866,7 +866,6 @@ public class GUISupportClasses {
       this.setTextFill(Color.WHITE);
       this.setStyle("-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
           + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
-      // this.setSelected(false);
 
       this.hoverProperty()
           .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
@@ -916,14 +915,6 @@ public class GUISupportClasses {
       this(inst, radius, fontSize, width);
       if (settingsButton) {
         this.setText("Settings");
-        // ImageView img = new ImageView();
-        // img.setImage(new Image(new FileInputStream(Parameter.chatIcon)));
-        // img.setFitHeight(fontSize);
-        // img.setPreserveRatio(true);
-        // img.setSmooth(true);
-        // img.setCache(true);
-        // this.setGraphicTextGap(10);
-        // this.setGraphic(img);
       }
 
     }
@@ -1064,6 +1055,5 @@ public class GUISupportClasses {
 
       return stackPane;
     }
-    // TODO
   }
 }

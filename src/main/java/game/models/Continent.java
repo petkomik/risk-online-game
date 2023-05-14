@@ -8,8 +8,6 @@ import java.io.Serializable;
  * @author srogalsk
  *
  */
-
 public enum Continent implements Serializable {
-  Africa, Asia, Australia, Europe, NorthAmerica, SouthAmerica;
-
+	Africa, Asia, Australia, Europe, NorthAmerica, SouthAmerica;
 }
