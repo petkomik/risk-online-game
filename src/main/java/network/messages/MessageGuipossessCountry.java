@@ -8,10 +8,10 @@ import gameState.GameState;
  * The MessageGUIpossessCountry class represents a message used to indicate the possession of a
  * country in the game GUI. It includes the game state, the country name, the player ID, the number
  * of troops left, and the associated lobby.
- * 
+ *
  * @author dignatov
  */
-public class MessageGUIpossessCountry extends Message {
+public class MessageGuipossessCountry extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
@@ -30,7 +30,7 @@ public class MessageGUIpossessCountry extends Message {
    * @param troopsLeft The number of troops left in the country
    * @param clientsLobby The associated lobby
    */
-  public MessageGUIpossessCountry(GameState gameState, CountryName country, int id, int troopsLeft,
+  public MessageGuipossessCountry(GameState gameState, CountryName country, int id, int troopsLeft,
       Lobby clientsLobby) {
     super(MessageType.MessageGUIpossessCountry);
     this.country = country;

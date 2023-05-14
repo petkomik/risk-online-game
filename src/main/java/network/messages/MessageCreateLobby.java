@@ -3,44 +3,45 @@ package network.messages;
 import game.models.Lobby;
 
 /**
- * This Message informs players that a new lobby has been created.
- * 
+ * This message informs players that a new lobby has been created.
+ *
  * @author dignatov
  */
 
+
 public class MessageCreateLobby extends Message {
   private static final long serialVersionUID = 1L;
-  private int playerID;
+  private int playerId;
   private Lobby lobby;
   private Message message;
 
   /**
    * Constructs a MessageCreateLobby object with the given profile.
    *
-   * @param playerID of the player and aLobby which is created
+   * @param playerId of the player and aLobby which is created
    */
-  public MessageCreateLobby(int playerID, Lobby aLobby) {
+  public MessageCreateLobby(int playerId, Lobby lobby) {
     super(MessageType.MessageCreateLobby);
-    this.playerID = playerID;
-    this.lobby = aLobby;
+    this.playerId = playerId;
+    this.lobby = lobby;
   }
 
   /**
    * Constructs a MessageCreateLobby object with the given profile.
    *
-   * @param aLobby which is created
+   * @param lobby which is created
    */
-  public MessageCreateLobby(Lobby aLobby) {
+  public MessageCreateLobby(Lobby lobby) {
     super(MessageType.MessageCreateLobby);
-    lobby = aLobby;
+    this.lobby = lobby;
   }
 
   public MessageCreateLobby() {
     super(MessageType.MessageCreateLobby);
   }
 
-  public int getPlayerID() {
-    return playerID;
+  public int getPlayerId() {
+    return playerId;
   }
 
   public Lobby getLobby() {

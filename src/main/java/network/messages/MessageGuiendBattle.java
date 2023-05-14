@@ -6,10 +6,11 @@ import gameState.GameState;
 /**
  * The MessageGUIendBattle class represents a message used to indicate the end of a battle in the
  * game GUI.
- * 
- * @author dignatov
+ *
+ * @author dignotv
  */
-public class MessageGUIendBattle extends Message {
+
+public class MessageGuiendBattle extends Message {
 
   private static final long serialVersionUID = 1L;
 
@@ -22,7 +23,7 @@ public class MessageGUIendBattle extends Message {
    * @param gameState The game state associated with the message
    * @param clientsLobby The associated lobby
    */
-  public MessageGUIendBattle(GameState gameState, Lobby clientsLobby) {
+  public MessageGuiendBattle(GameState gameState, Lobby clientsLobby) {
     super(MessageType.MessageGUIendBattle);
     this.gameState = gameState;
     this.lobby = clientsLobby;

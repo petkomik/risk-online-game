@@ -112,9 +112,10 @@ public class ServerMainWindowController extends VBox {
 
   /**
    * Constructor for the class.
-   * 
-   * @throws FileNotFoundException is thrown because of the background and avatar images
+   *
+   * @throws FileNotFoundException If the background and avatar images are not found.
    */
+
 
   public ServerMainWindowController() throws FileNotFoundException {
     super();
@@ -127,11 +128,12 @@ public class ServerMainWindowController extends VBox {
   }
 
   /**
-   * initializes all the GUI items that are needed for the construction of the GUI and places them
-   * on the previously planned out place.
-   * 
-   * @throws FileNotFoundException is thrown because of the background and avatar images
+   * Initializes all the GUI items needed for constructing the GUI and places them in their
+   * designated positions.
+   *
+   * @throws FileNotFoundException If the background and avatar images are not found.
    */
+
 
   public void setup() throws FileNotFoundException {
 
@@ -529,12 +531,13 @@ public class ServerMainWindowController extends VBox {
   }
 
   /**
-   * this method draws the lobbyGUIs in the ServerMainWindow. LobbyGUI is the representation of the
-   * lobby class in the GUI
-   * 
-   * @param all is a boolean to check if all lobbies should be drawn or only ones from the search
-   *        bar
+   * This method draws the LobbyGUIs in the ServerMainWindow. LobbyGUI is the representation of the
+   * Lobby class in the GUI.
+   *
+   * @param all A boolean value to check if all lobbies should be drawn or only ones from the search
+   *        bar.
    */
+
 
   public static void drawLobbies(boolean all) {
 
@@ -565,10 +568,11 @@ public class ServerMainWindowController extends VBox {
   }
 
   /**
-   * this method creates a new LobbyMenuController with the new lobby information and draws it.
-   * 
-   * @param lobby is used to draw the LobbyMenuController with the lobby information
+   * This method creates a new LobbyMenuController with the new lobby information and draws it.
+   *
+   * @param lobby The lobby used to draw the LobbyMenuController with the lobby information.
    */
+
 
   public static void drawLobbyMenu(Lobby lobby) {
     Platform.runLater(() -> {
@@ -635,10 +639,11 @@ public class ServerMainWindowController extends VBox {
   }
 
   /**
-   * a method for adding the chatPane to the ServerMainWindow parent when leaving a lobby.
-   * 
-   * @param chatWindow the ChatWindow instance that is used as a chat
+   * A method for adding the ChatPane to the ServerMainWindow parent when leaving a lobby.
+   *
+   * @param chatWindow The ChatWindow instance that is used as a chat.
    */
+
   public static void setChatPain(ChatWindow chatWindow) {
     chatPane = chatWindow;
     topContainer.getChildren().clear();
@@ -665,7 +670,7 @@ public class ServerMainWindowController extends VBox {
       chatPane.addLabel(host);
       client.setHost(true);
       int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
-      rankText.setText("Your Rating: " + rank + " \u2605");
+      rankText.setText("Your Rating: " + rank + " ★");
     } catch (IOException e1) {
       e1.printStackTrace();
     }
@@ -684,12 +689,13 @@ public class ServerMainWindowController extends VBox {
   }
 
   /**
-   * a method for changing the pane from the ServerMainWindow to the GamePaneController. it is used
+   * A method for changing the pane from the ServerMainWindow to the GamePaneController. It is used
    * when all participants in a lobby are ready.
-   * 
-   * @param lobby hands over the players information so taht the GamePaneController can be created
-   *        e.g. PlayerAI or PlayerSingle, playersavatar and so on
+   *
+   * @param lobby The lobby that contains the players' information to create the GamePaneController.
+   *        It includes details such as PlayerAI or PlayerSingle, players' avatars, and more.
    */
+
   public static void startMultyplayerGame(Lobby lobby) {
     try {
       Stage stage = (Stage) topContainer.getScene().getWindow();
@@ -709,7 +715,7 @@ public class ServerMainWindowController extends VBox {
 
   public void setRankText() {
     int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
-    rankText.setText("Your Rating: " + rank + " \u2605");
+    rankText.setText("Your Rating: " + rank + " ★");
   }
 
   public static ChatWindow getChatPane() {
@@ -725,12 +731,13 @@ public class ServerMainWindowController extends VBox {
   }
 
   /**
-   * this method sets the client in this class, also it sets the caht pain in this class and the
-   * client instance in the ChatWindow class *
-   * 
-   * @param client the client is given from each GUI ServerMainWindowController,
-   *        GamePaneController,EndGamePodiumController
+   * This method sets the client in this class. It also sets the chat pane in this class and the
+   * client instance in the ChatWindow class.
+   *
+   * @param client The client instance provided from each GUI, such as ServerMainWindowController,
+   *        GamePaneController, and EndGamePodiumController.
    */
+
   public void setClient(Client client) {
     this.client = client;
     client.setChat(chatPane);

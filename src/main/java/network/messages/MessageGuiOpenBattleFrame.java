@@ -8,10 +8,13 @@ import gameState.GameState;
  * The MessageGUIOpenBattleFrame class represents a message used to indicate the opening of the
  * battle frame in the game GUI. It includes the game state, the battle information, and the
  * associated lobby.
- * 
+ *
  * @author dignatov
  */
-public class MessageGUIOpenBattleFrame extends Message {
+
+
+
+public class MessageGuiOpenBattleFrame extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
@@ -26,7 +29,7 @@ public class MessageGUIOpenBattleFrame extends Message {
    * @param battle The battle information
    * @param clientsLobby The associated lobby
    */
-  public MessageGUIOpenBattleFrame(GameState gameState, Battle battle, Lobby clientsLobby) {
+  public MessageGuiOpenBattleFrame(GameState gameState, Battle battle, Lobby clientsLobby) {
     super(MessageType.MessageGUIOpenBattleFrame);
     this.gameState = gameState;
     this.battle = battle;

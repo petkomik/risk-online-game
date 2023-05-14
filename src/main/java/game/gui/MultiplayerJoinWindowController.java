@@ -69,10 +69,11 @@ public class MultiplayerJoinWindowController extends StackPane {
   private double ratio;
 
   /**
-   * constructor for the class
-   * 
-   * @throws FileNotFoundException for the world map image
+   * Constructor for the class.
+   *
+   * @throws FileNotFoundException If the world map image is not found.
    */
+
 
   public MultiplayerJoinWindowController() throws FileNotFoundException {
     super();
@@ -84,11 +85,12 @@ public class MultiplayerJoinWindowController extends StackPane {
   }
 
   /**
-   * initializes all the GUI items that are needed for the construction of the GUI and places them
-   * on the previously planned out place.
-   * 
-   * @throws FileNotFoundException for the world map image
+   * Initializes all the GUI items needed for constructing the GUI and places them in their
+   * designated positions.
+   *
+   * @throws FileNotFoundException If the world map image is not found.
    */
+
 
   public void setup() throws FileNotFoundException {
 
@@ -236,8 +238,8 @@ public class MultiplayerJoinWindowController extends StackPane {
 
           if (portNumber.isBlank()) {
             AppController.setPortNumber(Parameter.portDefault);
-          } else if (portNumber.matches(
-              "\\b(0|[1-9]\\d{0,4}|[1-5]\\d{4}|6[0-4]\\d{3}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])\\b")) {
+          } else if (portNumber.matches("\\b(0|[1-9]\\d{0,4}|[1-5]\\d{4}|6[0-4]\\d{3}"
+              + "|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])\\b")) {
             AppController.setPortNumber(Integer.parseInt(portNumber));
           } else {
             throw new WrongTextFieldInputException("The Input can not be resolved to be an Port");

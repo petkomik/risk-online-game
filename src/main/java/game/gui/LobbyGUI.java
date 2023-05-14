@@ -36,10 +36,11 @@ public class LobbyGUI extends ToggleButton implements Serializable {
   private Label playersJoined;
 
   /**
-   * Constructor for the class
-   * 
-   * @param lobby information needed to visualize it
+   * Constructor for the class.
+   *
+   * @param lobby Information needed to visualize it.
    */
+
   public LobbyGUI(Lobby lobby) {
     super();
     this.lobby = lobby;
@@ -78,7 +79,7 @@ public class LobbyGUI extends ToggleButton implements Serializable {
     lobbyName.setStyle("-fx-background-color: transparent;" + "-fx-text-fill: white");
 
     rating = new Label();
-    rating.setText(ratingString + " \u2605");
+    rating.setText(ratingString + " ★");
     rating.setFont(Font.font("Cooper Black", FontWeight.NORMAL, ratio * 28));
     rating.setMouseTransparent(true);
     rating.setStyle("-fx-background-color: transparent;" + "-fx-text-fill: white");

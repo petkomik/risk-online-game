@@ -596,17 +596,15 @@ public class GamePaneController implements Initializable {
     nextPhaseButton.hoverProperty()
         .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
           if (newValue) {
-            nextPhaseButton.setStyle(
-                "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;"
-                    + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-                    + "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: "
-                    + getRelativeVer(4) + "px;");
+            nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30"
+                + " 30 0 1 1 30 0\"; -fx-background-color: #64441f;" + "-fx-background-radius: 15;"
+                + "-fx-background-insets: 1 1 1 1;" + "-fx-border-radius: 12;"
+                + "-fx-border-color: #ffff;" + "-fx-border-width: " + getRelativeVer(4) + "px;");
           } else {
-            nextPhaseButton.setStyle(
-                "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
-                    + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-                    + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: "
-                    + getRelativeVer(4) + "px;");
+            nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30"
+                + " 0 1 1 30 0\"; -fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+                + "-fx-background-insets: 1 1 1 1;" + "-fx-border-radius: 12;"
+                + "-fx-border-color: #b87331;" + "-fx-border-width: " + getRelativeVer(4) + "px;");
           }
         });
 
@@ -809,17 +807,16 @@ public class GamePaneController implements Initializable {
     falseButtonChoosingTroops.hoverProperty()
         .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
           if (newValue) {
-            falseButtonChoosingTroops.setStyle(
-                "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;"
-                    + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-                    + "-fx-border-radius: 12;" + "-fx-border-color: #ffff;"
-                    + "-fx-border-width: 3px;");
+            falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 "
+                + "60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;"
+                + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+                + "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
           } else {
-            falseButtonChoosingTroops.setStyle(
-                "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
-                    + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-                    + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
-                    + "-fx-border-width: 3px;");
+            falseButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 "
+                + "60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
+                + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+                + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
+                + "-fx-border-width: 3px;");
           }
         });
     falseButtonChoosingTroops.setLayoutX(getRelativeHorz(586.0));
@@ -841,17 +838,16 @@ public class GamePaneController implements Initializable {
     trueButtonChoosingTroops.hoverProperty()
         .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
           if (newValue) {
-            trueButtonChoosingTroops.setStyle(
-                "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;"
-                    + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-                    + "-fx-border-radius: 12;" + "-fx-border-color: #ffff;"
-                    + "-fx-border-width: 3px;");
+            trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 "
+                + "60 A 30 30 0 1 1 30 0\"; -fx-background-color: #64441f;"
+                + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+                + "-fx-border-radius: 12;" + "-fx-border-color: #ffff;" + "-fx-border-width: 3px;");
           } else {
-            trueButtonChoosingTroops.setStyle(
-                "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
-                    + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-                    + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
-                    + "-fx-border-width: 3px;");
+            trueButtonChoosingTroops.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 "
+                + "60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
+                + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
+                + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;"
+                + "-fx-border-width: 3px;");
           }
         });
     trueButtonChoosingTroops.setLayoutX(getRelativeHorz(879.0));

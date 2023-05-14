@@ -44,14 +44,14 @@ public class AppController {
     if (firstName.isBlank()) {
       throw new WrongTextFieldInputException("Firstname must not be blank.");
     } else if (!firstName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-      throw new WrongTextFieldInputException(
-          "Firstname must only contains characters or hyphens and must start and end with a character.");
+      throw new WrongTextFieldInputException("Firstname must only contains characters "
+          + "or hyphens and must start and end with a character.");
     }
     if (lastName.isBlank()) {
       throw new WrongTextFieldInputException("Lastname must not be blank.");
     } else if (!lastName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-      throw new WrongTextFieldInputException(
-          "Lastname must only contains characters or hyphens and must start and end with a character.");
+      throw new WrongTextFieldInputException("Lastname must only contains characters "
+          + "or hyphens and must start and end with a character.");
     }
     if (password.isBlank()) {
       throw new WrongTextFieldInputException("Password must not be blank.");
@@ -83,14 +83,14 @@ public class AppController {
     if (firstName.isBlank()) {
       throw new WrongTextFieldInputException("Firstname must not be blank.");
     } else if (!firstName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-      throw new WrongTextFieldInputException(
-          "Firstname must only contains characters or hyphens and must start and end with a character.");
+      throw new WrongTextFieldInputException("Firstname must only contains characters or"
+          + " hyphens and must start and end with a character.");
     }
     if (lastName.isBlank()) {
       throw new WrongTextFieldInputException("Lastname must not be blank.");
     } else if (!lastName.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-      throw new WrongTextFieldInputException(
-          "Lastname must only contains characters or hyphens and must start and end with a character.");
+      throw new WrongTextFieldInputException("Lastname must only contains characters or hyphens"
+          + " and must start and end with a character.");
     }
     if (password.isBlank()) {
       throw new WrongTextFieldInputException("Password must not be blank.");
@@ -160,14 +160,14 @@ public class AppController {
     if (attribute.equals("FirstName") && value.isBlank()) {
       throw new WrongTextFieldInputException("Firstname must not be blank.");
     } else if (attribute.equals("FirstName") && !value.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-      throw new WrongTextFieldInputException(
-          "Firstname must only contains characters or hyphens and must start and end with a character.");
+      throw new WrongTextFieldInputException("Firstname must only contains characters or "
+          + "hyphens and must start and end with a character.");
     }
     if (attribute.equals("LastName") && value.isBlank()) {
       throw new WrongTextFieldInputException("Lastname must not be blank.");
     } else if (attribute.equals("LastName") && !value.matches("^(?!-)[a-zA-Z\\-]+(?<!-)$")) {
-      throw new WrongTextFieldInputException(
-          "Lastname must only contains characters or hyphens and must start and end with a character.");
+      throw new WrongTextFieldInputException("Lastname must only contains characters or "
+          + "hyphens and must start and end with a character.");
     }
     if (attribute.equals("Password") && value.isBlank()) {
       throw new WrongTextFieldInputException("Password must not be blank.");

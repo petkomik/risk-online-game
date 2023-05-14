@@ -9,11 +9,12 @@ import java.util.ArrayList;
  * The MessageGUIgameIsOver class represents a message used to indicate that the game is over in the
  * game GUI. It includes the game state, the podium (list of players in finishing order), and the
  * associated lobby.
- * 
- * @author dignatov
+ *
+ * @author: dignatov
  */
 
-public class MessageGUIgameIsOver extends Message {
+
+public class MessageuigameIsOver extends Message {
 
   private static final long serialVersionUID = 1L;
 
@@ -29,7 +30,7 @@ public class MessageGUIgameIsOver extends Message {
    * @param clientsLobby The associated lobby
    *
    */
-  public MessageGUIgameIsOver(GameState gameState, ArrayList<Player> podium, Lobby clientsLobby) {
+  public MessageuigameIsOver(GameState gameState, ArrayList<Player> podium, Lobby clientsLobby) {
     super(MessageType.MessageGUIgameIsOver);
     this.gameState = gameState;
     this.podium = podium;

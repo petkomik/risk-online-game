@@ -3,22 +3,40 @@ package network.messages;
 /**
  * The MessageType enum contains all the message types used in the network communication.
  *
- * author dignatov
+ * @author dignatov
  */
 
 public enum MessageType {
-  Connect, Disconnect, MessageServerCloseConnection, MessageSend, MessageSendInGame, MessageProfile, MessageToPerson, MessageAllProfiles,
+  Connect, Disconnect, MessageServerCloseConnection,
 
-  MessageCreateLobby, MessageJoinLobby, MessageUpdateLobby, MessageUpdateLobbyList, MessageinLobby, MessageReadyToPlay,
+  MessageSend, MessageSendInGame, MessageProfile, MessageToPerson, MessageAllProfiles,
+
+  MessageCreateLobby, MessageJoinLobby, MessageUpdateLobby, MessageUpdateLobbyList,
+
+  MessageinLobby, MessageReadyToPlay,
 
   MessageCreateGame, MessageJoinGame,
 
   // In Game
   MessageGameState, MessageGUIRollInitalDice, //
-  MessageGUIRollDiceBattle, MessageGUIshowExcption, MessageGUIsetPeriod, MessageGUIsetPhase, MessageGUIpossessCountry, MessageGUIconquerCountry, MessageGUIsetCurrentPlayer,
+  MessageGUIRollDiceBattle, MessageGUIshowExcption, MessageGUIsetPeriod,
 
-  MessageGUIchnagePlayer, MessageGUIchooseNumberOfTroops, MessageGUIcloseTroopsPane, MessageGUIsetTroopsOnTerritory, MessageGUIsetTroopsOnTerritoryAndLeft, MessageGUImoveTroopsFromTerritoryToOther, MessageGUIOpenBattleFrame,
+  MessageGUIsetPhase, MessageGUIpossessCountry, MessageGUIconquerCountry,
 
-  MessageGUIendBattle, MessageGUIriskCardsTurnedInSuccess, MessageGUIselectTerritoryAndSteDisabledTerritories, MessageGUIresetAll, MessageGUIupdateRanks, MessageGUIgameIsOver
+  MessageGUIsetCurrentPlayer,
+
+  MessageGUIchnagePlayer, MessageGUIchooseNumberOfTroops, MessageGUIcloseTroopsPane,
+
+  MessageGUIsetTroopsOnTerritory, MessageGUIsetTroopsOnTerritoryAndLeft,
+
+  MessageGUImoveTroopsFromTerritoryToOther,
+
+  MessageGUIOpenBattleFrame,
+
+  MessageGUIendBattle, MessageGUIriskCardsTurnedInSuccess,
+
+  MessageGUIselectTerritoryAndSteDisabledTerritories,
+
+  MessageGUIresetAll, MessageGUIupdateRanks, MessageGUIgameIsOver
 
 }

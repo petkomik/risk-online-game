@@ -14,30 +14,37 @@ import java.util.concurrent.LinkedBlockingQueue;
 import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageDisconnect;
-import network.messages.MessageGUIOpenBattleFrame;
 import network.messages.MessageGUIRollDiceBattle;
 import network.messages.MessageGUIRollInitalDice;
 import network.messages.MessageGUIconquerCountry;
-import network.messages.MessageGUIendBattle;
-import network.messages.MessageGUIgameIsOver;
-import network.messages.MessageGUImoveTroopsFromTerritoryToOther;
-import network.messages.MessageGUIpossessCountry;
+import network.messages.MessageGuimoveTroopsFromTerritoryToOther;
+import network.messages.MessageGuipossessCountry;
 import network.messages.MessageGUIsetCurrentPlayer;
 import network.messages.MessageGUIsetPeriod;
 import network.messages.MessageGUIsetPhase;
 import network.messages.MessageGUIsetTroopsOnTerritory;
 import network.messages.MessageGUIsetTroopsOnTerritoryAndLeft;
 import network.messages.MessageGUIupdateRanks;
+import network.messages.MessageGuiOpenBattleFrame;
+import network.messages.MessageGuiendBattle;
 import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
 import network.messages.MessageSendInGame;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
+import network.messages.MessageuigameIsOver;
 
-/*
- * @author dignatov
+/**
+ * The {@code ClientHandler} class handles the communication between the server and a client. It
+ * manages the socket connection, input/output streams, and message broadcasting to other clients.
+ * Each connected client is associated with a separate instance of the {@code ClientHandler} class.
+ * This class implements the {@code Runnable} interface to handle client communication in a separate
+ * thread.
  * 
+ *
+ * @author dignatov
  */
+
 public class ClientHandler implements Runnable {
 
   public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
@@ -51,6 +58,13 @@ public class ClientHandler implements Runnable {
   private Thread clieantHandlerThread;
   private Lobby lobby;
 
+  /**
+   * Creates a new instance of {@code ClientHandler} to handle the communication between the server
+   * and a client.
+   *
+   * @param socket The {@code Socket} representing the connection with the client.
+   * @throws IOException If an I/O error occurs when creating the input/output streams.
+   */
   public ClientHandler(Socket socket) {
     this.socket = socket;
 
@@ -164,11 +178,11 @@ public class ClientHandler implements Runnable {
   }
 
   /**
-   * 
    * Broadcasts a message to all connected client handlers, including the current one.
-   * 
-   * @param message The message to be broadcasted
+   *
+   * @param message The message to be broadcasted.
    */
+
 
   public void broadcastMessageToAllIncludingMe(Message message) {
     for (ClientHandler clientHandler : clientHandlers) {
@@ -194,9 +208,10 @@ public class ClientHandler implements Runnable {
 
   /**
    * Sends a personal text message to the specified client.
-   * 
-   * @param message The message to be sent
+   *
+   * @param message The message to be sent.
    */
+
   public void personalTextMessage(Message message) {
 
     for (ClientHandler clientHandler : clientHandlers) {
@@ -333,7 +348,7 @@ public class ClientHandler implements Runnable {
             break;
           case MessageGUIpossessCountry:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIpossessCountry) messageFromClient).getLobby());
+                ((MessageGuipossessCountry) messageFromClient).getLobby());
             break;
           case MessageGUIconquerCountry:
             broadcastMessageWithinLobby(messageFromClient,
@@ -351,7 +366,7 @@ public class ClientHandler implements Runnable {
             break;
           case MessageGUImoveTroopsFromTerritoryToOther:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUImoveTroopsFromTerritoryToOther) messageFromClient).getLobby());
+                ((MessageGuimoveTroopsFromTerritoryToOther) messageFromClient).getLobby());
             break;
           case MessageGUIsetTroopsOnTerritoryAndLeft:
             broadcastMessageWithinLobby(messageFromClient,
@@ -359,11 +374,11 @@ public class ClientHandler implements Runnable {
             break;
           case MessageGUIOpenBattleFrame:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIOpenBattleFrame) messageFromClient).getLobby());
+                ((MessageGuiOpenBattleFrame) messageFromClient).getLobby());
             break;
           case MessageGUIendBattle:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIendBattle) messageFromClient).getLobby());
+                ((MessageGuiendBattle) messageFromClient).getLobby());
             break;
           case MessageGUIupdateRanks:
             broadcastMessageWithinLobby(messageFromClient,
@@ -371,7 +386,7 @@ public class ClientHandler implements Runnable {
             break;
           case MessageGUIgameIsOver:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIgameIsOver) messageFromClient).getLobby());
+                ((MessageuigameIsOver) messageFromClient).getLobby());
             break;
           default:
             break;
@@ -385,7 +400,6 @@ public class ClientHandler implements Runnable {
   }
 
   /**
-   *
    * Closes the socket, input stream, and output stream associated with this client handler.
    */
   public void closeEverything() {
@@ -422,11 +436,11 @@ public class ClientHandler implements Runnable {
   }
 
   /**
-   *
    * Removes the specified profile from the list of connected clients and client handlers.
-   * 
-   * @param profile The profile to be removed
+   *
+   * @param profile The profile to be removed.
    */
+
   public void removeClient(Profile profile) {
 
     for (ClientHandler clientHandler : clientHandlers) {
@@ -460,6 +474,10 @@ public class ClientHandler implements Runnable {
 
   public void setLobby(Lobby lobby) {
     this.lobby = lobby;
+  }
+
+  public HashMap<String, Lobby> getLobbies() {
+    return lobbies;
   }
 
 }

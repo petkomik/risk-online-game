@@ -81,11 +81,12 @@ public class EndGamePodiumController extends StackPane {
 
   /**
    * Constructor for the class.
-   * 
-   * @param podiumPlayers has the top 3 players saved, we use their avatar to construct the GUI
-   * @param singleplayer is a boolean parameter that we use to define how the back button will work
-   * @throws FileNotFoundException is thrown because of the background and avatar images
+   *
+   * @param podiumPlayers The top 3 players saved, used to construct the GUI with their avatars.
+   * @param singleplayer A boolean parameter used to define how the back button will work.
+   * @throws FileNotFoundException If the background and avatar images are not found.
    */
+
 
   public EndGamePodiumController(List<Player> podiumPlayers, boolean singleplayer)
       throws FileNotFoundException {
@@ -102,10 +103,10 @@ public class EndGamePodiumController extends StackPane {
   }
 
   /**
-   * initializes all the GUI items that are needed for the construction of the GUI and places them
-   * on the previously planned out place.
-   * 
-   * @throws FileNotFoundException is thrown because of the background and avatar images
+   * Initializes all the GUI items needed for constructing the GUI and places them in their
+   * designated positions.
+   *
+   * @throws FileNotFoundException If the background and avatar images are not found.
    */
 
   public void setup() throws FileNotFoundException {

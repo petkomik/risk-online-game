@@ -9,10 +9,10 @@ import gameState.GameState;
  * movement of troops from one territory to another in the game GUI. It includes the game state, the
  * source territory, the destination territory, the number of troops to move from the source, the
  * number of troops to move to the destination, and the associated lobby.
- * 
+ *
  * @author dignatov
  */
-public class MessageGUImoveTroopsFromTerritoryToOther extends Message {
+public class MessageGuimoveTroopsFromTerritoryToOther extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
@@ -34,7 +34,7 @@ public class MessageGUImoveTroopsFromTerritoryToOther extends Message {
    * @param numberTo The number of troops to move to the destination territory
    * @param clientsLobby The associated lobby
    */
-  public MessageGUImoveTroopsFromTerritoryToOther(GameState gameState, CountryName from,
+  public MessageGuimoveTroopsFromTerritoryToOther(GameState gameState, CountryName from,
       CountryName to, int numberFrom, int numberTo, Lobby clientsLobby) {
     super(MessageType.MessageGUImoveTroopsFromTerritoryToOther);
     this.gameState = gameState;

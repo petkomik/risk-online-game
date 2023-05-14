@@ -35,14 +35,14 @@ import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageCreateLobby;
 import network.messages.MessageDisconnect;
-import network.messages.MessageGUIOpenBattleFrame;
+import network.messages.MessageGuiOpenBattleFrame;
 import network.messages.MessageGUIRollDiceBattle;
 import network.messages.MessageGUIRollInitalDice;
 import network.messages.MessageGUIconquerCountry;
-import network.messages.MessageGUIendBattle;
-import network.messages.MessageGUIgameIsOver;
-import network.messages.MessageGUImoveTroopsFromTerritoryToOther;
-import network.messages.MessageGUIpossessCountry;
+import network.messages.MessageGuiendBattle;
+import network.messages.MessageuigameIsOver;
+import network.messages.MessageGuimoveTroopsFromTerritoryToOther;
+import network.messages.MessageGuipossessCountry;
 import network.messages.MessageGUIsetCurrentPlayer;
 import network.messages.MessageGUIsetPeriod;
 import network.messages.MessageGUIsetPhase;
@@ -90,7 +90,7 @@ public class Client {
   /**
    * Constructor for the Client class. Initializes the client with a socket and profile, sets up
    * input/output streams and sends an initial profile message.
-   * 
+   *
    * @param socket The socket for communication.
    * @param profile The profile associated with the client.
    */
@@ -123,12 +123,13 @@ public class Client {
 
   /**
    * Creates a client and connects it to the specified host and port.
-   * 
+   *
    * @param host The host to connect to.
    * @param port The port to connect to.
    * @return The created client.
    * @throws IOException If an I/O error occurs when creating the socket.
    */
+
   public static Client createClient(String host, int port) throws IOException {
     Profile profile = AppController.getProfile();
     Socket socket;
@@ -140,9 +141,10 @@ public class Client {
 
   /**
    * Sets the chat window for the client.
-   * 
+   *
    * @param serverMainWindowController The main window controller for the server.
    */
+
   public void setChat(GUISupportClasses.ChatWindow serverMainWindowController) {
     chat = serverMainWindowController;
   }
@@ -157,11 +159,12 @@ public class Client {
 
   /**
    * Closes all the resources associated with the client.
-   * 
+   *
    * @param socket2 The socket to close.
    * @param inputStream2 The input stream to close.
    * @param outputStream2 The output stream to close.
    */
+
   private void closeEverything(Socket socket2, ObjectInputStream inputStream2,
       ObjectOutputStream outputStream2) {
     try {
@@ -183,9 +186,10 @@ public class Client {
 
   /**
    * Removes a profile from the static list of profiles.
-   * 
+   *
    * @param profilee The profile to remove.
    */
+
   public static void removeProfile(Profile profilee) {
     for (Profile profile : profiles) {
       if (profile.equals(profilee)) {
@@ -194,11 +198,13 @@ public class Client {
     }
   }
 
+
   /**
    * Sends a message.
-   * 
+   *
    * @param message The message to send.
    */
+
   public void sendMessage(Message message) {
     try {
       outputStream.flush();
@@ -211,26 +217,13 @@ public class Client {
   }
 
   /**
-   * Initiates a thread to listen for incoming messages from the client.
+   * Listens for incoming messages from the client. This method creates a new thread to continuously
+   * listen for messages from the client. It retrieves messages from the input stream and processes
+   * them based on their type. The method handles various types of messages including regular chat
+   * messages, in-game chat messages, client connection and disconnection messages, and server close
+   * connection message.
    *
-   * This method starts a new client thread that constantly checks for incoming messages from the
-   * client. If there is a new message in the message queue, it is processed according to its type,
-   * which can be Connect, Disconnect, MessageServerCloseConnection, MessageSend, MessageSendInGame,
-   * MessageProfile, MessageToPerson, MessageAllProfiles, MessageCreateLobby, MessageJoinLobby,
-   * MessageUpdateLobby, MessageUpdateLobbyList, MessageinLobby, MessageReadyToPlay,
-   * MessageCreateGame, MessageJoinGame, MessageGameState, MessageGUIRollInitalDice,
-   * MessageGUIRollDiceBattle, MessageGUIshowExcption, MessageGUIsetPeriod, MessageGUIsetPhase,
-   * MessageGUIpossessCountry, MessageGUIconquerCountry, MessageGUIsetCurrentPlayer,
-   * MessageGUIchnagePlayer, MessageGUIchooseNumberOfTroops, MessageGUIcloseTroopsPane,
-   * MessageGUIsetTroopsOnTerritory, MessageGUIsetTroopsOnTerritoryAndLeft,
-   * MessageGUImoveTroopsFromTerritoryToOther, MessageGUIOpenBattleFrame, MessageGUIendBattle,
-   * MessageGUIriskCardsTurnedInSuccess, MessageGUIselectTerritoryAndSteDisabledTerritories,
-   * MessageGUIresetAll, MessageGUIupdateRanks, MessageGUIgameIsOver.
-   *
-   * The processing of the message varies depending on its type, but it generally involves updating
-   * the server's view of the state of the client or the game, and sending appropriate responses
-   * back to the client or other connected clients.
-   *
+   * @throws Exception if an error occurs while reading messages from the input stream.
    */
 
   public void listenForMessage() {
@@ -507,12 +500,12 @@ public class Client {
                 break;
 
               case MessageGUIpossessCountry:
-                MessageGUIpossessCountry mesCo = ((MessageGUIpossessCountry) message);
+                MessageGuipossessCountry mesCo = ((MessageGuipossessCountry) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIpossessCountry) mesCo).getGameState());
+                  gameHandler.setGameState(((MessageGuipossessCountry) mesCo).getGameState());
                   gamePane.claimCountry(mesCo.getCountry(), mesCo.getId());
                   gamePane.setAmountOfTroopsLeftToDeploy(
-                      ((MessageGUIpossessCountry) mesCo).getTroopsLeft());
+                      ((MessageGuipossessCountry) mesCo).getTroopsLeft());
                 });
                 break;
 
@@ -570,36 +563,36 @@ public class Client {
 
               case MessageGUImoveTroopsFromTerritoryToOther:
 
-                MessageGUImoveTroopsFromTerritoryToOther mesTrFromTeToO =
-                    ((MessageGUImoveTroopsFromTerritoryToOther) message);
+                MessageGuimoveTroopsFromTerritoryToOther mesTrFromTeToO =
+                    ((MessageGuimoveTroopsFromTerritoryToOther) message);
 
                 Platform.runLater(() -> {
                   gameHandler.setGameState(
-                      ((MessageGUImoveTroopsFromTerritoryToOther) mesTrFromTeToO).getGameState());
+                      ((MessageGuimoveTroopsFromTerritoryToOther) mesTrFromTeToO).getGameState());
                   gamePane.setNumTroops(
-                      ((MessageGUImoveTroopsFromTerritoryToOther) mesTrFromTeToO).getFrom(),
-                      ((MessageGUImoveTroopsFromTerritoryToOther) mesTrFromTeToO).getNumberFrom());
+                      ((MessageGuimoveTroopsFromTerritoryToOther) mesTrFromTeToO).getFrom(),
+                      ((MessageGuimoveTroopsFromTerritoryToOther) mesTrFromTeToO).getNumberFrom());
                   gamePane.setNumTroops(
-                      ((MessageGUImoveTroopsFromTerritoryToOther) mesTrFromTeToO).getTo(),
-                      ((MessageGUImoveTroopsFromTerritoryToOther) mesTrFromTeToO).getNumberTo());
+                      ((MessageGuimoveTroopsFromTerritoryToOther) mesTrFromTeToO).getTo(),
+                      ((MessageGuimoveTroopsFromTerritoryToOther) mesTrFromTeToO).getNumberTo());
                 });
                 break;
 
               case MessageGUIOpenBattleFrame:
 
-                MessageGUIOpenBattleFrame mesOBF = ((MessageGUIOpenBattleFrame) message);
+                MessageGuiOpenBattleFrame mesOBF = ((MessageGuiOpenBattleFrame) message);
 
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIOpenBattleFrame) mesOBF).getGameState());
-                  gamePane.openBattleFrame(((MessageGUIOpenBattleFrame) mesOBF).getBattle());
+                  gameHandler.setGameState(((MessageGuiOpenBattleFrame) mesOBF).getGameState());
+                  gamePane.openBattleFrame(((MessageGuiOpenBattleFrame) mesOBF).getBattle());
                 });
                 break;
 
               case MessageGUIendBattle:
 
-                MessageGUIendBattle mesEB = ((MessageGUIendBattle) message);
+                MessageGuiendBattle mesEB = ((MessageGuiendBattle) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIendBattle) mesEB).getGameState());
+                  gameHandler.setGameState(((MessageGuiendBattle) mesEB).getGameState());
                   gamePane.closeBattleFrame();
                 });
 
@@ -616,10 +609,10 @@ public class Client {
                 break;
               case MessageGUIgameIsOver:
 
-                MessageGUIgameIsOver mesGaOv = ((MessageGUIgameIsOver) message);
+                MessageuigameIsOver mesGaOv = ((MessageuigameIsOver) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIgameIsOver) mesGaOv).getGameState());
-                  gamePane.endGame(((MessageGUIgameIsOver) mesGaOv).getPodium());
+                  gameHandler.setGameState(((MessageuigameIsOver) mesGaOv).getGameState());
+                  gamePane.endGame(((MessageuigameIsOver) mesGaOv).getPodium());
                 });
 
                 if (!mesGaOv.getPodium().get(0).isAi()) {
@@ -939,7 +932,7 @@ public class Client {
    */
   public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
     Platform.runLater(() -> {
-      sendMessage(new MessageGUIpossessCountry(gameHandler.getGameState(), country, id, troopsLeft,
+      sendMessage(new MessageGuipossessCountry(gameHandler.getGameState(), country, id, troopsLeft,
           clientsLobby));
     });
   }
@@ -1061,7 +1054,7 @@ public class Client {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUImoveTroopsFromTerritoryToOther(gameHandler.getGameState(), from, to,
+      sendMessage(new MessageGuimoveTroopsFromTerritoryToOther(gameHandler.getGameState(), from, to,
           numberFrom, numberTo, clientsLobby));
     });
   }
@@ -1076,7 +1069,7 @@ public class Client {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIOpenBattleFrame(gameHandler.getGameState(), battle, clientsLobby));
+      sendMessage(new MessageGuiOpenBattleFrame(gameHandler.getGameState(), battle, clientsLobby));
     });
   }
 
@@ -1087,7 +1080,7 @@ public class Client {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIendBattle(gameHandler.getGameState(), clientsLobby));
+      sendMessage(new MessageGuiendBattle(gameHandler.getGameState(), clientsLobby));
     });
   }
 
@@ -1132,7 +1125,7 @@ public class Client {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIgameIsOver(gameHandler.getGameState(), podium, clientsLobby));
+      sendMessage(new MessageuigameIsOver(gameHandler.getGameState(), podium, clientsLobby));
     });
   }
 
@@ -1167,10 +1160,10 @@ public class Client {
 
   /**
    * Sets the client's lobby.
-   * 
+   *
    * @param clientsLobby The lobby to set for the client.
-   * 
    */
+
 
   public void setClientsLobby(Lobby clientsLobby) {
     this.clientsLobby = clientsLobby;

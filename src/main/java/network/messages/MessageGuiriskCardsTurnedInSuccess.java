@@ -8,10 +8,11 @@ import java.util.ArrayList;
  * The MessageGUIriskCardsTurnedInSuccess class represents a message used to indicate the successful
  * turning in of Risk cards in the game GUI. It includes the game state, the list of turned in
  * cards, the ID of the player, and the bonus troops earned.
- * 
+ *
+ *
  * @author dignatov
  */
-public class MessageGUIriskCardsTurnedInSuccess extends Message {
+public class MessageGuiriskCardsTurnedInSuccess extends Message {
 
   private static final long serialVersionUID = 1L;
 
@@ -29,7 +30,7 @@ public class MessageGUIriskCardsTurnedInSuccess extends Message {
    * @param idOfPlayer The ID of the player turning in the cards
    * @param bonusTroops The bonus troops earned from turning in the cards
    */
-  public MessageGUIriskCardsTurnedInSuccess(GameState gamestate, ArrayList<Card> card,
+  public MessageGuiriskCardsTurnedInSuccess(GameState gamestate, ArrayList<Card> card,
       int idOfPlayer, int bonusTroops) {
     super(MessageType.MessageGUIriskCardsTurnedInSuccess);
     this.gamestate = gamestate;
