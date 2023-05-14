@@ -1,7 +1,5 @@
 package gameState;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import game.logic.AiLogic;
 import game.logic.Logic;
 import game.models.Battle;
@@ -11,6 +9,8 @@ import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerAI;
 import game.models.Territory;
+import java.util.ArrayList;
+import java.util.Collections;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -935,15 +935,20 @@ public class GameHandler {
   public void turnInRiskCards(ArrayList<String> cards, int idOfPlayer) {
     ArrayList<Card> cardsCards =
         Logic.arrayListFromStringsToCard(cards, this.gameState, idOfPlayer);
-    for (Card s : cardsCards) {
-      System.out.println(s.toString());
-    }
-    System.out.println("Reinforce Called Test");
 
     if (Logic.turnInRiskCards(cardsCards, this.gameState.getPlayers().get(idOfPlayer),
         this.gameState)) {
       ArrayList<Card> newCards =
           (ArrayList<Card>) this.gameState.getRiskCardsInPlayers().get(idOfPlayer).clone();
+      for (Card c : cardsCards) {
+        if (!c.isJoker()) {
+          if (this.gameState.getTerritories().get(c.getName()).getOwnedByPlayer()
+              .getId() == idOfPlayer) {
+            System.out.println("Bonus troops added in gamehandler");
+            this.gameState.getTerritories().get(c.getName()).addNumberOfTroops(2);
+          }
+        }
+      }
       newCards.removeAll(cardsCards);
       this.gameState.editRiskCardsInPlayers(newCards, idOfPlayer);
       int bonusTroops = this.gameState.playerTurnsInCard();
@@ -956,15 +961,43 @@ public class GameHandler {
             this.singlePlayerHandler.riskCardsTurnedInSuccessOnGui(newCards, idOfPlayer,
                 this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
           }
+          for (Card c : cardsCards) {
+            if (!c.isJoker()) {
+              if (this.gameState.getTerritories().get(c.getName()).getOwnedByPlayer()
+                  .getId() == idOfPlayer) {
+                System.out.println("Bonus troops added in singleplayer");
+                this.singlePlayerHandler.setTroopsOnTerritoryOnGui(c.getName(),
+                    this.gameState.getTerritories().get(c.getName()).getNumberOfTroops());
+              }
+            }
+          }
           break;
         case Multiplayer:
           this.client.riskCardsTurnedInSuccessOnGUI(newCards, idOfPlayer,
               this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
+          for (Card c : cardsCards) {
+            if (!c.isJoker()) {
+              if (this.gameState.getTerritories().get(c.getName()).getOwnedByPlayer()
+                  .getId() == idOfPlayer) {
+                this.client.setTroopsOnTerritory(c.getName(),
+                    this.gameState.getTerritories().get(c.getName()).getNumberOfTroops());
+              }
+            }
+          }
           break;
         case Tutorial:
           if (!this.gameState.getCurrentPlayer().isAi()) {
             this.singlePlayerHandler.riskCardsTurnedInSuccessOnGui(newCards, idOfPlayer,
                 this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
+          }
+          for (Card c : cardsCards) {
+            if (!c.isJoker()) {
+              if (this.gameState.getTerritories().get(c.getName()).getOwnedByPlayer()
+                  .getId() == idOfPlayer) {
+                this.singlePlayerHandler.setTroopsOnTerritoryOnGui(c.getName(),
+                    this.gameState.getTerritories().get(c.getName()).getNumberOfTroops());
+              }
+            }
           }
           break;
         default:
