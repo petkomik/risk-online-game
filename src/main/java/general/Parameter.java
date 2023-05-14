@@ -1,15 +1,13 @@
 package general;
 
-import java.util.ArrayList;
-
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 
 /**
  * Parameter class to get to directories, files, the database, etc.
  *
  * @author jorohr
  */
+
 
 public class Parameter {
 

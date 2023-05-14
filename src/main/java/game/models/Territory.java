@@ -2,7 +2,6 @@ package game.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import general.Parameter;
 
 /**
@@ -14,86 +13,87 @@ import general.Parameter;
 
 public class Territory implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private Player ownedByPlayer;
-	private final Continent continent;
-	private int numberOfTroops;
-	private final CountryName countryName;
-	private ArrayList<Territory> neighboringTerritories;
-	private String addressToPNG;
+  private Player ownedByPlayer;
+  private final Continent continent;
+  private int numberOfTroops;
+  private final CountryName countryName;
+  private ArrayList<Territory> neighboringTerritories;
+  private String addressToPNG;
 
-	/**
-	 * constructor for building an territory object
-	 * 
-	 * @param countryName
-	 * @param continent
-	 */
-	public Territory(CountryName countryName, Continent continent) {
-		this.countryName = countryName;
-		this.continent = continent;
-		neighboringTerritories = new ArrayList<>();
-		addressToPNG = Parameter.territoryPNGdir + continent.toString().toLowerCase() + "-"
-				+ countryName.toString().toLowerCase() + ".png";
-	}
+  /**
+   * constructor for building an territory object
+   * 
+   * @param countryName
+   * @param continent
+   */
+  public Territory(CountryName countryName, Continent continent) {
+    this.countryName = countryName;
+    this.continent = continent;
+    neighboringTerritories = new ArrayList<>();
+    addressToPNG = Parameter.territoryPNGdir + continent.toString().toLowerCase() + "-"
+        + countryName.toString().toLowerCase() + ".png";
+  }
 
-	/** constructor for defensive copying */
-	public Territory(Territory territory) {
-		this.ownedByPlayer = territory.getOwnedByPlayer() != null ? new PlayerSingle(territory.getOwnedByPlayer())
-				: null;
-		this.continent = territory.getContinent();
-		this.numberOfTroops = territory.getNumberOfTroops();
-		this.countryName = territory.getCountryName();
-		// Defensive copy of neighboringTerritories
-		this.neighboringTerritories = new ArrayList<>(territory.getNeighboringTerritories());
-		this.addressToPNG = territory.getAddressToPNG();
-	}
+  /** constructor for defensive copying */
+  public Territory(Territory territory) {
+    this.ownedByPlayer =
+        territory.getOwnedByPlayer() != null ? new PlayerSingle(territory.getOwnedByPlayer())
+            : null;
+    this.continent = territory.getContinent();
+    this.numberOfTroops = territory.getNumberOfTroops();
+    this.countryName = territory.getCountryName();
+    // Defensive copy of neighboringTerritories
+    this.neighboringTerritories = new ArrayList<>(territory.getNeighboringTerritories());
+    this.addressToPNG = territory.getAddressToPNG();
+  }
 
-	/** Getters */
+  /** Getters */
 
-	public String getAddressToPNG() {
-		return addressToPNG;
-	}
+  public String getAddressToPNG() {
+    return addressToPNG;
+  }
 
-	public Player getOwnedByPlayer() {
-		return ownedByPlayer;
-	}
+  public Player getOwnedByPlayer() {
+    return ownedByPlayer;
+  }
 
-	public int getNumberOfTroops() {
-		return numberOfTroops;
-	}
+  public int getNumberOfTroops() {
+    return numberOfTroops;
+  }
 
-	public Continent getContinent() {
-		return continent;
-	}
+  public Continent getContinent() {
+    return continent;
+  }
 
-	public CountryName getCountryName() {
-		return countryName;
-	}
+  public CountryName getCountryName() {
+    return countryName;
+  }
 
-	public ArrayList<Territory> getNeighboringTerritories() {
-		return neighboringTerritories;
-	}
+  public ArrayList<Territory> getNeighboringTerritories() {
+    return neighboringTerritories;
+  }
 
-	/** Setters */
-	public void addNumberOfTroops(int numberOfTroops) {
-		this.numberOfTroops += numberOfTroops;
-	}
+  /** Setters */
+  public void addNumberOfTroops(int numberOfTroops) {
+    this.numberOfTroops += numberOfTroops;
+  }
 
-	public void setNumberOfTroops(int numberOfTroops) {
-		this.numberOfTroops = numberOfTroops;
-	}
+  public void setNumberOfTroops(int numberOfTroops) {
+    this.numberOfTroops = numberOfTroops;
+  }
 
-	public void removeNumberOfTroops(int numberOfTroops) {
-		this.numberOfTroops -= numberOfTroops;
-	}
+  public void removeNumberOfTroops(int numberOfTroops) {
+    this.numberOfTroops -= numberOfTroops;
+  }
 
-	public void setOwnedByPlayer(Player ownedByPlayer) {
-		this.ownedByPlayer = ownedByPlayer;
-	}
+  public void setOwnedByPlayer(Player ownedByPlayer) {
+    this.ownedByPlayer = ownedByPlayer;
+  }
 
-	public void setNeighboringTerritories(ArrayList<Territory> territoryNeighbours) {
-		this.neighboringTerritories = territoryNeighbours;
-	}
+  public void setNeighboringTerritories(ArrayList<Territory> territoryNeighbours) {
+    this.neighboringTerritories = territoryNeighbours;
+  }
 
 }
