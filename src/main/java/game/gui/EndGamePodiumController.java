@@ -1,16 +1,17 @@
 package game.gui;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Lobby;
 import game.models.Player;
-import general.*;
+import general.AppController;
+import general.GameSound;
+import general.Parameter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,7 +20,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -347,7 +351,6 @@ public class EndGamePodiumController extends StackPane {
    */
 
   public void actionEventsSetup() {
-
     backButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
@@ -370,12 +373,12 @@ public class EndGamePodiumController extends StackPane {
             serverMenu = new ServerMainWindowController();
             serverMenu.setClient(AppController.getClient());
             serverMenu.actionEventsSetup();
-			for (Lobby lobby : AppController.getClient().getLobbies().values()) {
-				serverMenu.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
-			}
-			serverMenu.drawLobbies(true);
-			AppController.getClient().setClientsLobby(null);
-			AppController.getClient().setInAGame(false);
+            for (Lobby lobby : AppController.getClient().getLobbies().values()) {
+              serverMenu.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
+            }
+            serverMenu.drawLobbies(true);
+            AppController.getClient().setClientsLobby(null);
+            AppController.getClient().setInAGame(false);
             stage.getScene().setRoot(serverMenu);
           } catch (Exception e) {
             e.printStackTrace();
