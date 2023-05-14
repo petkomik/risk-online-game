@@ -680,8 +680,6 @@ public class ServerMainWindowController extends VBox {
     chatPane.setClient(client);
     client.setChat(chatPane);
     client.setHost(false);
-    int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
-    rankText.setText("Your Rating: " + rank + " \u2605");
 
   }
 
@@ -707,6 +705,11 @@ public class ServerMainWindowController extends VBox {
       e.printStackTrace();
     }
 
+  }
+  
+  public void setRankText() {
+	    int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
+	    rankText.setText("Your Rating: " + rank + " \u2605");
   }
 
   public static ChatWindow getChatPane() {

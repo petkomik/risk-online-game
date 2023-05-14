@@ -2014,9 +2014,11 @@ public class GamePaneController implements Initializable {
           stage.getScene().setRoot(serverMainWindowController);
           serverMainWindowController.setClient(this.client);
           serverMainWindowController.actionEventsSetup();
+          
           for (Lobby lobby : client.getLobbies().values()) {
             serverMainWindowController.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
           }
+          
           serverMainWindowController.drawLobbies(true);
           client.setClientsLobby(null);
           client.setInAGame(false);

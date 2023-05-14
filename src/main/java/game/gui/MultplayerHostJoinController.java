@@ -188,6 +188,7 @@ public class MultplayerHostJoinController extends StackPane {
           ServerMainWindowController serverMenu = new ServerMainWindowController();
           serverMenu.initServer();
           serverMenu.actionEventsSetup();
+          serverMenu.setRankText();
           stage.getScene().setRoot(serverMenu);
 
         } catch (Exception e) {
