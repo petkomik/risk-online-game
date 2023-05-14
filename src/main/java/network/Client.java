@@ -637,7 +637,8 @@ public class Client {
                         AppController.dbH.getProfileById(p.getId()).getLoses() + 1, "Loses",
                         p.getId());
                   }
-                  if (p.getId() == AppController.getProfile().getId()) {
+                  if (p.getId() == AppController.getProfile().getId()
+                      && p.getId() != (mesGaOv.getPodium().get(0).getId())) {
                     AppController.getProfile().setLoses(AppController.getProfile().getLoses() + 1);
                   }
                 }
