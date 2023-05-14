@@ -68,6 +68,9 @@ public final class GameSound {
 		effectsSoundPlayer.setMute(!effectsSoundPlayer.isMute());
 	}
 
+	/**
+	 * plays the effects button sound
+	 */
 	public void buttonClickForwardSound() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -81,6 +84,9 @@ public final class GameSound {
 		});
 	}
 
+	/**
+	 * plays the effects button sound
+	 */
 	public void buttonClickBackwardSound() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -94,6 +100,9 @@ public final class GameSound {
 		});
 	}
 
+	/**
+	 * plays the helicopter sound
+	 */
 	public void buttonClickHelicopterSound() {
 		Platform.runLater(new Runnable() {
 			@Override
