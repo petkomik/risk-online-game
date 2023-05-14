@@ -451,7 +451,12 @@ public class ServerMainWindowController extends VBox {
           stage.getScene().setRoot(mlt);
           if (!client.isHost()) {
             client.sendMessage(new MessageDisconnect(client.getProfile()));
-            client.closeEverything();
+            Platform.runLater(()->{
+            	client.setStopFlag(true);
+            	client.closeEverything();
+            	
+            });
+            
           } else {
             client.sendMessage(new MessageServerCloseConnection());
           }

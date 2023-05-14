@@ -54,6 +54,7 @@ import network.messages.MessageProfile;
 import network.messages.MessageReadyToPlay;
 import network.messages.MessageSend;
 import network.messages.MessageSendInGame;
+import network.messages.MessageServerCloseConnection;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
 import network.messages.MessageUpdateLobbyList;
@@ -84,6 +85,7 @@ public class Client {
   private boolean isInAGame;
   private GamePaneController gamePane;
   private GameHandler gameHandler;
+  private volatile boolean  stopFlag = false;
 
   /**
    * Sets the client's lobby.
@@ -116,10 +118,17 @@ public class Client {
       outputStream.flush();
     } catch (Exception e) {
       System.out.println("DSICONNECT");
+      if(host){
+    	// sendMessage(new MessageServerCloseConnection());
+    	 closeEverything(socket, inputStream, outputStream);
+    	 host=false;
+    	 Server.closeServerSocket();
+      }else {
       MessageDisconnect disconnectMessage = new MessageDisconnect(profile);
       sendMessage(disconnectMessage);
       closeEverything(socket, inputStream, outputStream);
       e.printStackTrace();
+      }
     }
 
   }
@@ -291,7 +300,7 @@ public class Client {
       public void run() {
         Message message;
         BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
-        while (socket.isConnected()) {
+        while (socket.isConnected() && !stopFlag ) {
           try {
 
             if (!messageQueue.isEmpty()) {
@@ -381,7 +390,7 @@ public class Client {
 
                 break;
               case Disconnect:
-                System.out.println("case MessageConnect Success 2 ");
+                System.out.println("case MessageDisconnect Success 2 ");
 
                 chat.addLabel(
                     ((MessageDisconnect) message).getProfile().getUserName() + " has left ");
@@ -390,12 +399,32 @@ public class Client {
                 // vBoxMessages);
                 chat.removeItemsInComboBox(((MessageDisconnect) message).getProfile());
                 break;
+                
               case MessageServerCloseConnection:
                 System.out.println("case MessageServerDisconnect in Clients Server Success 3 ");
                 chat.addLabel("Host has left, please reconnect to a new server ");
-
-                closeEverything(socket, inputStream, outputStream);
-                Server.closeServerSocket();
+                try {
+                	   if(host){
+                       	// sendMessage(new MessageServerCloseConnection());
+                		   host=false;
+                		   setStopFlag(true);
+                       	 closeEverything(socket, inputStream, outputStream);
+                       	 Server.closeServerSocket();
+                	   }else{
+                		   setStopFlag(true);
+                         	 closeEverything(socket, inputStream, outputStream); 
+                	   }
+                }catch (Exception e2) {
+					e2.printStackTrace();
+				}
+              
+                
+//                	if(host){
+//                		Platform.runLater(()->{
+//                			closeEverything(socket, inputStream, outputStream);
+//                			Server.closeServerSocket();
+//                		});
+//                	}
                 break;
               case MessageToPerson:
                 System.out.println("case 4 in Client");
@@ -751,10 +780,12 @@ public class Client {
                 break;
 
               default:
+            	  
+            	  
                 break;
             }
           } catch (Exception e) {
-            closeEverything(socket, inputStream, outputStream);
+           // closeEverything(socket, inputStream, outputStream);
             e.printStackTrace();
           }
         }
@@ -1286,5 +1317,13 @@ public class Client {
   public boolean isInAGame() {
     return isInAGame;
   }
+
+public boolean isStopFlag() {
+	return stopFlag;
+}
+
+public void setStopFlag(boolean stopFlag) {
+	this.stopFlag = stopFlag;
+}
 
 }

@@ -13,6 +13,7 @@ public class Server {
 
   private static ServerSocket serverSocket;
   private static ClientHandler clientHandler;
+  private static Thread server;
 
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
@@ -21,7 +22,7 @@ public class Server {
   public void startServer() {
     System.out.println("The Server has been started ");
 
-    new Thread(new Runnable() {
+    server = new Thread( new Runnable() {
       @Override
       public void run() {
         try {
@@ -35,18 +36,22 @@ public class Server {
             player.start();
 
           }
+      	closeServerSocket();
 
         } catch (Exception e) {
+        	closeServerSocket();
           e.printStackTrace();
         }
       }
 
-    }).start();
+    });
+    server.start();
 
   }
 
   public static void closeServerSocket() {
-
+	  System.out.println("we reach server closer");
+	 server.interrupt();
     try {
       if (serverSocket != null) {
         serverSocket.close();

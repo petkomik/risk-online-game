@@ -11,6 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import database.Profile;
 import game.models.Lobby;
 import game.models.Player;
+import javafx.application.Platform;
 import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageDisconnect;
@@ -81,7 +82,21 @@ public class ClientHandler implements Runnable {
       }
     }
   }
-
+  public void broadcastMessageDisconnectWithoutProfile(Message message) {
+	    for (ClientHandler clientHandler : clientHandlers) {
+	      try {
+	        if ( clientHandler.getProfile().getId() != ((MessageDisconnect)message).getProfile().getId()) {
+	          clientHandler.objectOutputStream.writeObject(message);
+	          clientHandler.objectOutputStream.flush();
+	        }
+	      } catch (IOException e) {
+	        closeEverything(socket, objectInputStream, objectOutputStream);
+	        e.printStackTrace();
+	      }
+	    }
+	  }
+  
+  
   public void broadcastMessageWithinLobby(Message message, Lobby lobby) {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
@@ -240,7 +255,8 @@ public class ClientHandler implements Runnable {
           case Disconnect:
 
             System.out.println("case MessageDisconnect in Handler Success 3 ");
-            broadcastMessage(messageFromClient);
+            //broadcastMessage(messageFromClient);
+            broadcastMessageDisconnectWithoutProfile(messageFromClient);
             // try {
             // Thread.sleep(1000); // wait for the broadcast to finish
             // } catch (InterruptedException e) {
@@ -252,9 +268,11 @@ public class ClientHandler implements Runnable {
 
           case MessageServerCloseConnection:
             System.out.println("case MessageDisconnect Server Success 3 ");
-            broadcastMessage(messageFromClient);
-            closeEverything(socket, objectInputStream, objectOutputStream);
-            Server.closeServerSocket();
+            broadcastMessageToAllIncludingMe(messageFromClient);
+//            Platform.runLater(()->{
+//            	closeEverything(socket, objectInputStream, objectOutputStream);
+//            	Server.closeServerSocket();
+//            });
             // JoinClientMessengerController
             // .addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);
             break;
