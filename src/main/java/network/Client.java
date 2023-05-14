@@ -91,6 +91,7 @@ public class Client {
    * Sets the client's lobby.
    * 
    * @param clientsLobby The lobby to set for the client.
+   * 
    */
 
   public void setClientsLobby(Lobby clientsLobby) {
