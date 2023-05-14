@@ -336,38 +336,41 @@ public class GameHandler {
                     break;
                 }
               } else {
-                switch (this.gameType) {
-                  case SinglePlayer:
-                    if (!this.gameState.getCurrentPlayer().isAi()) {
-                      this.singlePlayerHandler.chooseNumberOfTroopsOnGui(country, 1,
-                          this.gameState.getTerritories()
-                              .get(this.gameState.getLastFortifyingCounty()).getNumberOfTroops()
-                              - 1,
-                          ChoosePane.FORTIFY);
-                    }
+                if (Logic.twoTerritoriesAreFortifiable(this.gameState.getLastFortifyingCounty(),
+                    country, this.gameState, new ArrayList<CountryName>(), idOfPlayer)) {
+                  switch (this.gameType) {
+                    case SinglePlayer:
+                      if (!this.gameState.getCurrentPlayer().isAi()) {
+                        this.singlePlayerHandler.chooseNumberOfTroopsOnGui(country, 1,
+                            this.gameState.getTerritories()
+                                .get(this.gameState.getLastFortifyingCounty()).getNumberOfTroops()
+                                - 1,
+                            ChoosePane.FORTIFY);
+                      }
 
-                    break;
-                  case Multiplayer:
-                    if (!this.gameState.getCurrentPlayer().isAi()) {
-                      this.client.chooseNumberOfTroopsOnGUI(country, 1,
-                          this.gameState.getTerritories()
-                              .get(this.gameState.getLastFortifyingCounty()).getNumberOfTroops()
-                              - 1,
-                          ChoosePane.FORTIFY);
-                    }
+                      break;
+                    case Multiplayer:
+                      if (!this.gameState.getCurrentPlayer().isAi()) {
+                        this.client.chooseNumberOfTroopsOnGUI(country, 1,
+                            this.gameState.getTerritories()
+                                .get(this.gameState.getLastFortifyingCounty()).getNumberOfTroops()
+                                - 1,
+                            ChoosePane.FORTIFY);
+                      }
 
-                    break;
-                  case Tutorial:
-                    if (!this.gameState.getCurrentPlayer().isAi()) {
-                      this.singlePlayerHandler.chooseNumberOfTroopsOnGui(country, 1,
-                          this.gameState.getTerritories()
-                              .get(this.gameState.getLastFortifyingCounty()).getNumberOfTroops()
-                              - 1,
-                          ChoosePane.FORTIFY);
-                    }
-                    break;
-                  default:
-                    break;
+                      break;
+                    case Tutorial:
+                      if (!this.gameState.getCurrentPlayer().isAi()) {
+                        this.singlePlayerHandler.chooseNumberOfTroopsOnGui(country, 1,
+                            this.gameState.getTerritories()
+                                .get(this.gameState.getLastFortifyingCounty()).getNumberOfTroops()
+                                - 1,
+                            ChoosePane.FORTIFY);
+                      }
+                      break;
+                    default:
+                      break;
+                  }
                 }
               }
             }

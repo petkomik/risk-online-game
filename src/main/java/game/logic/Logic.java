@@ -1,13 +1,5 @@
 package game.logic;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.stream.Collectors;
 import game.models.Battle;
 import game.models.Card;
 import game.models.Continent;
@@ -18,6 +10,14 @@ import game.models.Territory;
 import gameState.GameState;
 import gameState.Period;
 import gameState.Phase;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * This class contains the Rule Book and other game Logic. Consist of static methods that confirm
@@ -746,6 +746,36 @@ public class Logic {
     }
 
     return returnList;
+  }
+
+  /**
+   * Checks if there is a path between two territories to fulfill requirement. Uses Depth First
+   * Search
+   *
+   * @param from CountryName player wants to fortify from
+   * @param to CountryName player wants to fortify to
+   * @param gameState current Game State
+   * @param visited List with already visited Territories
+   * @param idOfPlayer ID of the player fortifying
+   * @return boolean whether action is allowed
+   */
+
+  public static boolean twoTerritoriesAreFortifiable(CountryName from, CountryName to,
+      GameState gameState, ArrayList<CountryName> visited, int idOfPlayer) {
+    if (from.equals(to)) {
+      return true;
+    }
+    visited.add(from);
+    for (Territory neighbor : gameState.getTerritories().get(from).getNeighboringTerritories()) {
+      if (!visited.contains(neighbor.getCountryName())
+          && neighbor.getOwnedByPlayer().getId() == idOfPlayer) {
+        if (twoTerritoriesAreFortifiable(neighbor.getCountryName(), to, gameState, visited,
+            idOfPlayer)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }
