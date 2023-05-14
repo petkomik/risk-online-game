@@ -2018,7 +2018,8 @@ public class GamePaneController implements Initializable {
             serverMainWindowController.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
           }
           serverMainWindowController.drawLobbies(true);
-
+          client.setClientsLobby(null);
+          client.setInAGame(false);
         } catch (Exception ev) {
           ev.printStackTrace();
         }

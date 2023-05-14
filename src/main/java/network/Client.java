@@ -1317,6 +1317,10 @@ public class Client {
   public boolean isInAGame() {
     return isInAGame;
   }
+  
+  public void setInAGame(boolean isInAGame) {
+	this.isInAGame = isInAGame;
+}
 
 public boolean isStopFlag() {
 	return stopFlag;
@@ -1325,5 +1329,6 @@ public boolean isStopFlag() {
 public void setStopFlag(boolean stopFlag) {
 	this.stopFlag = stopFlag;
 }
+
 
 }

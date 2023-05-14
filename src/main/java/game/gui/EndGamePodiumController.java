@@ -8,6 +8,7 @@ import java.util.List;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
+import game.models.Lobby;
 import game.models.Player;
 import general.*;
 import javafx.event.ActionEvent;
@@ -369,6 +370,12 @@ public class EndGamePodiumController extends StackPane {
             serverMenu = new ServerMainWindowController();
             serverMenu.setClient(AppController.getClient());
             serverMenu.actionEventsSetup();
+			for (Lobby lobby : AppController.getClient().getLobbies().values()) {
+				serverMenu.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
+			}
+			serverMenu.drawLobbies(true);
+			AppController.getClient().setClientsLobby(null);
+			AppController.getClient().setInAGame(false);
             stage.getScene().setRoot(serverMenu);
           } catch (Exception e) {
             e.printStackTrace();

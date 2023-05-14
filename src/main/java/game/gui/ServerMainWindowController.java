@@ -724,5 +724,6 @@ public class ServerMainWindowController extends VBox {
   public void setClient(Client client) {
     this.client = client;
     client.setChat(chatPane);
+    chatPane.setClient(client);
   }
 }
