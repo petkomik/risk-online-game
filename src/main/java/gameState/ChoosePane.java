@@ -1,5 +1,10 @@
 package gameState;
 
+/**
+ * @author pmikov
+ *
+ */
+
 public enum ChoosePane {
   REINFORCE {
     @Override
