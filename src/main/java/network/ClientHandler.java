@@ -11,7 +11,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import database.Profile;
 import game.models.Lobby;
 import game.models.Player;
-import general.AppController;
 import javafx.application.Platform;
 import network.messages.Message;
 import network.messages.MessageConnect;
@@ -60,11 +59,11 @@ public class ClientHandler implements Runnable {
 			this.objectInputStream = new ObjectInputStream(socket.getInputStream());
 			this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			Message clientIdentifierMessage = ((Message) objectInputStream.readObject());
-			this.profile = AppController.getProfile();
+			this.profile = ((MessageProfile) clientIdentifierMessage).getProfile();
 			this.clientUsername = profile.getUserName();
 			clientHandlers.add(this);
 			clients.add(profile);
-			System.out.println(profile.getWins() + " " + profile.getLoses());
+			System.out.println(profile.getWins() + " CH 66");
 			broadcastMessage(new MessageConnect(profile));
 		} catch (IOException | ClassNotFoundException e) {
 			MessageDisconnect disconnect = new MessageDisconnect(profile);
