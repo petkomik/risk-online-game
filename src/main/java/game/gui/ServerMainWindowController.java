@@ -451,12 +451,12 @@ public class ServerMainWindowController extends VBox {
           stage.getScene().setRoot(mlt);
           if (!client.isHost()) {
             client.sendMessage(new MessageDisconnect(client.getProfile()));
-            Platform.runLater(()->{
-            	client.setStopFlag(true);
-            	client.closeEverything();
-            	
+            Platform.runLater(() -> {
+              client.setStopFlag(true);
+              client.closeEverything();
+
             });
-            
+
           } else {
             client.sendMessage(new MessageServerCloseConnection());
           }
@@ -706,10 +706,10 @@ public class ServerMainWindowController extends VBox {
     }
 
   }
-  
+
   public void setRankText() {
-	    int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
-	    rankText.setText("Your Rating: " + rank + " \u2605");
+    int rank = 100 + (client.getProfile().getWins() * 3 - client.getProfile().getLoses());
+    rankText.setText("Your Rating: " + rank + " \u2605");
   }
 
   public static ChatWindow getChatPane() {
@@ -724,6 +724,13 @@ public class ServerMainWindowController extends VBox {
     return searchButton;
   }
 
+  /**
+   * this method sets the client in this class, also it sets the caht pain in this class and the
+   * client instance in the ChatWindow class *
+   * 
+   * @param client the client is given from each GUI ServerMainWindowController,
+   *        GamePaneController,EndGamePodiumController
+   */
   public void setClient(Client client) {
     this.client = client;
     client.setChat(chatPane);

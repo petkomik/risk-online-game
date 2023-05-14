@@ -1,5 +1,9 @@
 package game.gui;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import game.gui.GUISupportClasses.ArrowButton;
 import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
@@ -8,10 +12,6 @@ import game.models.Player;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -59,17 +59,25 @@ public class EndGamePodiumController extends StackPane {
   private Label lobbyTextBanner;
   private ArrowButton backButton;
 
-  private VBox vBoxIcons;
+  private VBox vboxIcons;
   private Text caption;
 
   private HBox captionBox;
   private HBox avatars;
-  private StackPane firstP, secondP, thirdP;
-  private Circle circleFirstP, circleSecondP, circleThirdP;
-  private ImageView circleFirstI, circleSecondI, circleThirdI;
+  private StackPane firstP;
+  private StackPane secondP;
+  private StackPane thirdP;
+  private Circle circleFirstP;
+  private Circle circleSecondP;
+  private Circle circleThirdP;
+  private ImageView circleFirstI;
+  private ImageView circleSecondI;
+  private ImageView circleThirdI;
 
   private HBox place;
-  private ImageView firstPlaceCup, secondPlaceCup, thirdPlaceCup;
+  private ImageView firstPlaceCup;
+  private ImageView secondPlaceCup;
+  private ImageView thirdPlaceCup;
 
   /**
    * Constructor for the class.
@@ -101,8 +109,8 @@ public class EndGamePodiumController extends StackPane {
    */
 
   public void setup() throws FileNotFoundException {
-    vBoxIcons = new VBox();
-    vBoxIcons.setAlignment(Pos.CENTER);
+    vboxIcons = new VBox();
+    vboxIcons.setAlignment(Pos.CENTER);
 
     avatars = new HBox(82 * ratio);
     avatars.setAlignment(Pos.BOTTOM_CENTER);
@@ -311,7 +319,8 @@ public class EndGamePodiumController extends StackPane {
     captionBox = new HBox();
     captionBox.setAlignment(Pos.CENTER);
     captionBox.setStyle("-fx-background-color: "
-        + "linear-gradient(to right,transparent 5%, rgba(100, 68, 31, 0.7) 20%, rgba(100, 68, 31, 1) 40%, rgba(100, 68, 31, 1) 60%, "
+        + "linear-gradient(to right,transparent 5%, rgba(100, 68, 31, 0.7) 20%,"
+        + " rgba(100, 68, 31, 1) 40%, rgba(100, 68, 31, 1) 60%, "
         + "rgba(100, 68, 31, 0.7) 80%, rgba(100, 68, 31, 0) 95%);");
     captionBox.minHeightProperty().bind(captionBox.maxHeightProperty());
     captionBox.maxHeightProperty().bind(captionBox.prefHeightProperty());
@@ -332,13 +341,13 @@ public class EndGamePodiumController extends StackPane {
      * adding the caption, cups and avatars to the vBox
      */
 
-    vBoxIcons.getChildren().addAll(captionBox, avatars, place);
+    vboxIcons.getChildren().addAll(captionBox, avatars, place);
 
     /*
      * adding everything to the top container
      */
 
-    this.getChildren().addAll(backgroundPic, backgroundColor, vBoxIcons, topBannerParent);
+    this.getChildren().addAll(backgroundPic, backgroundColor, vboxIcons, topBannerParent);
     StackPane.setMargin(topBannerParent, new Insets(50 * ratio, 0, 0, 0));
 
     actionEventsSetup();
