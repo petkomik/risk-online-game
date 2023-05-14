@@ -1,5 +1,11 @@
 package game.logic;
 
+import game.models.Card;
+import game.models.CountryName;
+import game.models.Player;
+import game.models.PlayerAI;
+import game.models.Territory;
+import gameState.GameState;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,12 +14,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.stream.Collectors;
-import game.models.Card;
-import game.models.CountryName;
-import game.models.Player;
-import game.models.PlayerAI;
-import game.models.Territory;
-import gameState.GameState;
 import javafx.util.Pair;
 
 /**
@@ -320,10 +320,19 @@ public class AiLogic {
     mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
     territoriesCopy
         .removeIf(x -> x.getCountryName() == mostOuterTerritories.get(0).getCountryName());
-    mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
-    territoriesCopy.removeIf(x -> x.getCountryName() == mostOuterTerritories.get(0).getCountryName()
-        || x.getCountryName() == mostOuterTerritories.get(1).getCountryName());
-    mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+    if (mostOuterCountry2(territoriesCopy, player) != null) {
+      mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+      territoriesCopy
+          .removeIf(x -> x.getCountryName() == mostOuterTerritories.get(0).getCountryName()
+              || x.getCountryName() == mostOuterTerritories.get(1).getCountryName());
+    } else {
+      mostOuterTerritories.add(mostOuterTerritories.get(0));
+    }
+    if (mostOuterCountry2(territoriesCopy, player) != null) {
+      mostOuterTerritories.add(mostOuterCountry2(territoriesCopy, player));
+    } else {
+      mostOuterTerritories.add(mostOuterTerritories.get(0));
+    }
 
     return mostOuterTerritories;
   }
@@ -484,6 +493,15 @@ public class AiLogic {
    * @return true if the player will attack, false otherwise
    */
   public static boolean willAttack(GameState gameState, PlayerAI player) {
+    boolean attack = false;
+    for (Territory t : getAllOwnTerritories(gameState, player)) {
+      if (t.getNumberOfTroops() > 1) {
+        attack = true;
+      }
+    }
+    if (!attack) {
+      return false;
+    }
     switch (player.getLevel()) {
       case EASY:
         int prob = (int) ((Math.random() * 10));
