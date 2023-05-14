@@ -1,5 +1,10 @@
 package game.models;
 
+/**
+ * @author pmikov
+ *
+ */
+
 public enum Difficulty {
   EASY {
     @Override
