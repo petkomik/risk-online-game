@@ -1,15 +1,5 @@
 package network;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import database.Profile;
 import game.gui.CreateProfilePaneController;
 import game.gui.GUISupportClasses;
@@ -26,6 +16,16 @@ import gameState.GameHandler;
 import gameState.Period;
 import gameState.Phase;
 import general.AppController;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -638,6 +638,8 @@ public class Client {
                   gameHandler.setGameState(mesCur.getGameState());
                   gamePane.setCurrentPlayer(mesCur.getId());
                   gamePane.setAmountOfTroopsLeftToDeploy(mesCur.getTroopsLeft());
+                  gamePane.setPlayerOnGUI(AppController.getProfile().getId(), mesCur.getGameState()
+                      .getRiskCardsInPlayers().get(AppController.getProfile().getId()));
                   System.out.println(gameHandler.getGameState().getCurrentPlayer().getId()
                       + "is set current player received message");
                 });
@@ -1227,13 +1229,13 @@ public class Client {
    * @param idOfPlayer The ID of the player who turned in the cards.
    * @param bonusTroops The number of bonus troops the player receives for turning in the cards.
    */
+
   public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
     Platform.runLater(() -> {
       this.gamePane.setAmountOfTroopsLeftToDeploy(bonusTroops);
       this.gamePane.setPlayerOnGUI(idOfPlayer, card);
-      for (Card c : card) {
-        System.out.println(c.toString());
-      }
+      sendMessage(new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), idOfPlayer,
+          bonusTroops, clientsLobby));
     });
   }
 

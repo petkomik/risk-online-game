@@ -1,10 +1,5 @@
 package game.gui;
 
-import java.io.FileNotFoundException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
 import game.gui.GUISupportClasses.ChatButton;
 import game.gui.GUISupportClasses.ChatWindow;
 import game.gui.GUISupportClasses.DesignButton;
@@ -22,6 +17,11 @@ import gameState.SinglePlayerHandler;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -1380,7 +1380,8 @@ public class GamePaneController implements Initializable {
         }
 
         if (dropOnPane1.getChildren().size() != 0 && dropOnPane2.getChildren().size() != 0
-            && dropOnPane3.getChildren().size() != 0 && this.currentPhase.equals(Phase.REINFORCE)) {
+            && dropOnPane3.getChildren().size() != 0 && this.currentPhase.equals(Phase.REINFORCE)
+            && this.currentPlayerID == this.playerOnGUI.getId()) {
           tradeButton.setDisable(false);
           tradeButton.setText("TRADE");
         } else {
