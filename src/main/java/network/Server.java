@@ -37,7 +37,6 @@ public class Server {
 	 * connections.
 	 */
 	public void startServer() {
-		System.out.println("The Server has been started ");
 
 		server = new Thread(new Runnable() {
 			@Override
@@ -70,20 +69,16 @@ public class Server {
 	 * Closes the server socket and any associated client sockets.
 	 */
 	public static void closeServerSocket() {
-		System.out.println("we reach server closer");
 		server.interrupt();
 		try {
 			if (serverSocket != null) {
 				serverSocket.close();
-				System.out.println("Server socket closed");
 
 				if (clientHandler != null) {
 					clientHandler.closeEverything();
-					System.out.println("Client socket closed");
 				}
 			}
 		} catch (IOException e) {
-			System.err.println("Error closing server socket: " + e.getMessage());
 		}
 
 	}
@@ -100,7 +95,6 @@ public class Server {
 		Server server = new Server(serverSocket);
 		server.startServer();
 
-		System.out.println(serverSocket.getLocalSocketAddress());
 		return server;
 
 	}

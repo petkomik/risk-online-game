@@ -41,442 +41,433 @@ import network.messages.MessageUpdateLobby;
  */
 public class ClientHandler implements Runnable {
 
-  public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-  public static ArrayList<Profile> clients = new ArrayList<>();
-  private HashMap<String, Lobby> lobbies = new HashMap<>();
-  private Socket socket;
-  private ObjectInputStream objectInputStream;
-  private ObjectOutputStream objectOutputStream;
-  private Profile profile;
-  private String clientUsername;
-  private Thread clieantHandlerThread;
-  private Lobby lobby;
+	public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+	public static ArrayList<Profile> clients = new ArrayList<>();
+	private HashMap<String, Lobby> lobbies = new HashMap<>();
+	private Socket socket;
+	private ObjectInputStream objectInputStream;
+	private ObjectOutputStream objectOutputStream;
+	private Profile profile;
+	private String clientUsername;
+	private Thread clieantHandlerThread;
+	private Lobby lobby;
 
-  public ClientHandler(Socket socket) {
-    this.socket = socket;
+	public ClientHandler(Socket socket) {
+		this.socket = socket;
 
-    try {
-      this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-      this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-      Message clientIdentifierMessage = ((Message) objectInputStream.readObject());
-      this.profile = ((MessageProfile) clientIdentifierMessage).getProfile();
-      this.clientUsername = profile.getUserName();
-      clientHandlers.add(this);
-      clients.add(profile);
-      broadcastMessage(new MessageConnect(profile));
-    } catch (IOException | ClassNotFoundException e) {
-      MessageDisconnect disconnect = new MessageDisconnect(profile);
-      broadcastMessage(disconnect);
-      closeEverything(socket, objectInputStream, objectOutputStream);
-      e.printStackTrace();
-    }
+		try {
+			this.objectInputStream = new ObjectInputStream(socket.getInputStream());
+			this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+			Message clientIdentifierMessage = ((Message) objectInputStream.readObject());
+			this.profile = ((MessageProfile) clientIdentifierMessage).getProfile();
+			this.clientUsername = profile.getUserName();
+			clientHandlers.add(this);
+			clients.add(profile);
+			broadcastMessage(new MessageConnect(profile));
+		} catch (IOException | ClassNotFoundException e) {
+			MessageDisconnect disconnect = new MessageDisconnect(profile);
+			broadcastMessage(disconnect);
+			closeEverything(socket, objectInputStream, objectOutputStream);
+			e.printStackTrace();
+		}
 
-  }
-  /**
-   * Broadcasts a message to all connected client handlers, except the current one.
-   *
-   * @param message The message to be broadcasted
-   */
+	}
 
-  public void broadcastMessage(Message message) {
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
-        if (!clientHandler.clientUsername.equals(clientUsername)) {
-          clientHandler.objectOutputStream.writeObject(message);
-          clientHandler.objectOutputStream.flush();
-        }
-      } catch (IOException e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        e.printStackTrace();
-      }
-    }
-  }
-  /**
-   * Broadcasts a message to all connected client handlers, except the current one and the one specified by the profile ID in the message.
-   *
-   * @param message The message to be broadcasted
-   */
-  
-  public void broadcastMessageDisconnectWithoutProfile(Message message) {
-	    for (ClientHandler clientHandler : clientHandlers) {
-	      try {
-	        if ( clientHandler.getProfile().getId() != ((MessageDisconnect)message).getProfile().getId()) {
-	          clientHandler.objectOutputStream.writeObject(message);
-	          clientHandler.objectOutputStream.flush();
-	        }
-	      } catch (IOException e) {
-	        closeEverything(socket, objectInputStream, objectOutputStream);
-	        e.printStackTrace();
-	      }
-	    }
-	  }
-  /**
-   * Broadcasts a message to all client handlers within a specific lobby.
-   *
-   * @param message The message to be broadcasted
-   * @param lobby The lobby to broadcast the message to
-   */
-  
-  public void broadcastMessageWithinLobby(Message message, Lobby lobby) {
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
-        // &&this.getProfile().getId() != player.getID()
-        for (Player player : lobby.getHumanPlayerList()) {
-          if (clientHandler.getProfile().getId() == player.getId()) {
-            clientHandler.objectOutputStream.writeObject(message);
-            clientHandler.objectOutputStream.flush();
-          }
-        }
-      } catch (IOException e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        e.printStackTrace();
-      }
-    }
-  }
-  /**
-   * Broadcasts a message to all client handlers within a specific lobby, except the current one checked by the Id.
-   *
-   * @param message The message to be broadcasted
-   * @param lobby The lobby
-*/
-  public void broadcastMessageWithinLobbyWithoutMeId(Message message, Lobby lobby) {
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
-        for (Player player : lobby.getHumanPlayerList()) {
-          if (clientHandler.getProfile().getId() == player.getId()
-              && this.profile.getId() != player.getId()) {
-            clientHandler.objectOutputStream.writeObject(message);
-            clientHandler.objectOutputStream.flush();
-          }
-        }
-      } catch (IOException e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        e.printStackTrace();
-      }
-    }
-  }
-  /**
+	/**
+	 * Broadcasts a message to all connected client handlers, except the current
+	 * one.
+	 *
+	 * @param message The message to be broadcasted
+	 */
 
-  Broadcasts a message to all connected client handlers, including the current one.
-  @param message The message to be broadcasted
-  */
+	public void broadcastMessage(Message message) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				if (!clientHandler.clientUsername.equals(clientUsername)) {
+					clientHandler.objectOutputStream.writeObject(message);
+					clientHandler.objectOutputStream.flush();
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
 
-  public void broadcastMessageToAllIncludingMe(Message message) {
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
+	/**
+	 * Broadcasts a message to all connected client handlers, except the current one
+	 * and the one specified by the profile ID in the message.
+	 *
+	 * @param message The message to be broadcasted
+	 */
 
-        clientHandler.objectOutputStream.writeObject(message);
-        clientHandler.objectOutputStream.flush();
+	public void broadcastMessageDisconnectWithoutProfile(Message message) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				if (clientHandler.getProfile().getId() != ((MessageDisconnect) message).getProfile().getId()) {
+					clientHandler.objectOutputStream.writeObject(message);
+					clientHandler.objectOutputStream.flush();
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
 
-      } catch (IOException e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        e.printStackTrace();
-      }
-    }
-  }
+	/**
+	 * Broadcasts a message to all client handlers within a specific lobby.
+	 *
+	 * @param message The message to be broadcasted
+	 * @param lobby   The lobby to broadcast the message to
+	 */
 
-  public Profile getProfile() {
-    return profile;
-  }
+	public void broadcastMessageWithinLobby(Message message, Lobby lobby) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				// &&this.getProfile().getId() != player.getID()
+				for (Player player : lobby.getHumanPlayerList()) {
+					if (clientHandler.getProfile().getId() == player.getId()) {
+						clientHandler.objectOutputStream.writeObject(message);
+						clientHandler.objectOutputStream.flush();
+					}
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
 
-  public String getClientUsername() {
-    return clientUsername;
-  }
+	/**
+	 * Broadcasts a message to all client handlers within a specific lobby, except
+	 * the current one checked by the Id.
+	 *
+	 * @param message The message to be broadcasted
+	 * @param lobby   The lobby
+	 */
+	public void broadcastMessageWithinLobbyWithoutMeId(Message message, Lobby lobby) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
+				for (Player player : lobby.getHumanPlayerList()) {
+					if (clientHandler.getProfile().getId() == player.getId()
+							&& this.profile.getId() != player.getId()) {
+						clientHandler.objectOutputStream.writeObject(message);
+						clientHandler.objectOutputStream.flush();
+					}
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
 
-  
-  /**
-  * Sends a personal text message to the specified client.
-  * @param message The message to be sent
-  */
-  public void personalTextMessage(Message message) {
-    System.out.println("messanger works");
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
+	/**
+	 * 
+	 * Broadcasts a message to all connected client handlers, including the current
+	 * one.
+	 * 
+	 * @param message The message to be broadcasted
+	 */
 
-        if (clientHandler.clientUsername
-            .equalsIgnoreCase(((MessageToPerson) message).getToProfile().getUserName())) {
-          System.out.println("that is what TO is: ");
+	public void broadcastMessageToAllIncludingMe(Message message) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
 
-          clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
-          clientHandler.objectOutputStream.flush();
+				clientHandler.objectOutputStream.writeObject(message);
+				clientHandler.objectOutputStream.flush();
 
-        }
-      } catch (IOException e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        e.printStackTrace();
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
+			}
+		}
+	}
 
-      }
-    }
+	public Profile getProfile() {
+		return profile;
+	}
 
-  }
-  /**
+	public String getClientUsername() {
+		return clientUsername;
+	}
 
-  * Sends a personal message to the client with the specified player ID.
-  *
-  * @param playerId The ID of the recipient player
-  * @param message The message to be sent
-  */
-  public void personalMessage(int playerId, Message message) {
-    System.out.println("messanger works");
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
+	/**
+	 * Sends a personal text message to the specified client.
+	 * 
+	 * @param message The message to be sent
+	 */
+	public void personalTextMessage(Message message) {
 
-        if (clientHandler.getProfile().getId() == playerId) {
-          System.out.println("that is what TO is: ");
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
 
-          clientHandler.objectOutputStream.writeObject(message);
-          clientHandler.objectOutputStream.flush();
+				if (clientHandler.clientUsername
+						.equalsIgnoreCase(((MessageToPerson) message).getToProfile().getUserName())) {
 
-        }
-      } catch (IOException e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        e.printStackTrace();
+					clientHandler.objectOutputStream.writeObject((MessageToPerson) message);
+					clientHandler.objectOutputStream.flush();
 
-      }
-    }
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
 
-  }
-  /**
-   *
-  * Sends a personal message to the client with the specified player ID.
-  *
-  * @param playerId The ID of the recipient player
-  * @param message The message to be sent
-  */
-  public void removeClientHandler() {
+			}
+		}
 
-    clientHandlers.remove(this);
+	}
 
-  }
+	/**
+	 * 
+	 * Sends a personal message to the client with the specified player ID.
+	 *
+	 * @param playerId The ID of the recipient player
+	 * @param message  The message to be sent
+	 */
+	public void personalMessage(int playerId, Message message) {
+		for (ClientHandler clientHandler : clientHandlers) {
+			try {
 
-  @Override
-  public void run() {
-    Message messageFromClient;
+				if (clientHandler.getProfile().getId() == playerId) {
 
-    BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
+					clientHandler.objectOutputStream.writeObject(message);
+					clientHandler.objectOutputStream.flush();
 
-    while (socket.isConnected()) {
-      try {
-        if (!messageQueue.isEmpty()) {
-          messageFromClient = messageQueue.take();
-        } else {
-          // Otherwise, wait for a message from the client
-          messageFromClient = (Message) objectInputStream.readObject();
-        }
-        switch (messageFromClient.getMessageType()) {
-          case MessageSend:
-            System.out.println("case MessageSend in Handler Success 0");
-            broadcastMessage(messageFromClient);
-            break;
-          case MessageSendInGame:
-            broadcastMessageWithinLobbyWithoutMeId(messageFromClient,
-                ((MessageSendInGame) messageFromClient).getLobby());
-            break;
-          case Connect:
-            // all clients send their profile to the new Client
-            System.out.println("MessageConnect on Handler works)");
-            // personal message with (iDTO , Profile of the sender with MessageProfile )
-            personalMessage(((MessageConnect) messageFromClient).getIdTo(),
-                new MessageProfile(((MessageConnect) messageFromClient).getProfile()));
-            // change connect to case
-            break;
-          case Disconnect:
+				}
+			} catch (IOException e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				e.printStackTrace();
 
-            System.out.println("case MessageDisconnect in Handler Success 3 ");
-            //broadcastMessage(messageFromClient);
-            broadcastMessageDisconnectWithoutProfile(messageFromClient);
-            // try {
-            // Thread.sleep(1000); // wait for the broadcast to finish
-            // } catch (InterruptedException e) {
-            // e.printStackTrace();
-            // }
-            // removeClient(((MessageDisconnect) messageFromClient).getProfile());
-            // closeEverything();
-            break;
+			}
+		}
 
-          case MessageServerCloseConnection:
-            System.out.println("case MessageDisconnect Server Success 3 ");
-            broadcastMessageToAllIncludingMe(messageFromClient);
-//            Platform.runLater(()->{
-//            	closeEverything(socket, objectInputStream, objectOutputStream);
-//            	Server.closeServerSocket();
-//            });
-            // JoinClientMessengerController
-            // .addLabel(((MessageServerCloseConnection) message).getMessage(), vBoxMessages);
-            break;
-          case MessageToPerson:
-            System.out.println("case 4 in Handler");
-            personalTextMessage((MessageToPerson) messageFromClient);
-            // theoretisch ein Thread
-            break;
-          case MessageProfile:
-            broadcastMessage(new MessageProfile(((MessageProfile) messageFromClient).getProfile()));
-            break;
+	}
 
-          case MessageCreateLobby:
-            broadcastMessageToAllIncludingMe(messageFromClient);
-            break;
+	/**
+	 *
+	 * Sends a personal message to the client with the specified player ID.
+	 *
+	 * @param playerId The ID of the recipient player
+	 * @param message  The message to be sent
+	 */
+	public void removeClientHandler() {
 
-          case MessageJoinLobby:
-            broadcastMessageToAllIncludingMe(((MessageJoinLobby) messageFromClient));
-            break;
-          case MessageUpdateLobby:
+		clientHandlers.remove(this);
 
-            broadcastMessageToAllIncludingMe(((MessageUpdateLobby) messageFromClient));
-            break;
-          case MessageUpdateLobbyList:
+	}
 
-            broadcastMessageToAllIncludingMe(messageFromClient);
-            break;
-          case MessageReadyToPlay:
-            broadcastMessageToAllIncludingMe(messageFromClient);
-            break;
-          case MessageGUIRollInitalDice:
-            // broadcastMessageToAllIncludingMe(messageFromClient);
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIRollInitalDice) messageFromClient).getLobby());
-            break;
-          case MessageGUIRollDiceBattle:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIRollDiceBattle) messageFromClient).getLobby());
-            break;
-          case MessageGUIsetPeriod:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetPeriod) messageFromClient).getLobby());
-            break;
-          case MessageGUIsetPhase:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetPhase) messageFromClient).getLobby());
-            break;
-          case MessageGUIpossessCountry:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIpossessCountry) messageFromClient).getLobby());
-            break;
-          case MessageGUIconquerCountry:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIconquerCountry) messageFromClient).getLobby());
+	@Override
+	public void run() {
+		Message messageFromClient;
 
-            break;
-          case MessageGUIsetCurrentPlayer:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetCurrentPlayer) messageFromClient).getLobby());
-            break;
-          case MessageGUIsetTroopsOnTerritory:
+		BlockingQueue<Message> messageQueue = new LinkedBlockingQueue<>();
 
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetTroopsOnTerritory) messageFromClient).getLobby());
-            break;
-          case MessageGUImoveTroopsFromTerritoryToOther:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUImoveTroopsFromTerritoryToOther) messageFromClient).getLobby());
-            break;
-          case MessageGUIsetTroopsOnTerritoryAndLeft:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetTroopsOnTerritoryAndLeft) messageFromClient).getLobby());
-            break;
-          case MessageGUIOpenBattleFrame:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIOpenBattleFrame) messageFromClient).getLobby());
-            break;
-          case MessageGUIendBattle:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIendBattle) messageFromClient).getLobby());
-            break;
-          case MessageGUIupdateRanks:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIupdateRanks) messageFromClient).getLobby());
-            break;
-          case MessageGUIgameIsOver:
-            broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIgameIsOver) messageFromClient).getLobby());
-            break;
-          default:
-            // Handle unknown message types, if necessary
-            break;
-        }
+		while (socket.isConnected()) {
+			try {
+				if (!messageQueue.isEmpty()) {
+					messageFromClient = messageQueue.take();
+				} else {
+					messageFromClient = (Message) objectInputStream.readObject();
+				}
+				switch (messageFromClient.getMessageType()) {
+				case MessageSend:
+					broadcastMessage(messageFromClient);
+					break;
 
-      } catch (Exception e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        break;
-      }
-    }
-  }
-  /**
-	*
-    * Closes the socket, input stream, and output stream associated with this client handler.
-  */
-  public void closeEverything() {
-    closeEverything(socket, objectInputStream, objectOutputStream);
+				case MessageSendInGame:
+					broadcastMessageWithinLobbyWithoutMeId(messageFromClient,
+							((MessageSendInGame) messageFromClient).getLobby());
+					break;
 
-  }
-  /**
+				case Connect:
+					personalMessage(((MessageConnect) messageFromClient).getIdTo(),
+							new MessageProfile(((MessageConnect) messageFromClient).getProfile()));
+					break;
 
-  * Closes the specified socket, input stream, and output stream.
-  * 
-  * @param socket The socket to be closed
-  * @param objectInputStream The input stream to be closed
-  * @param objectOutputStream The output stream to be closed
-  */
-  public void closeEverything(Socket socket2, ObjectInputStream objectInputStream2,
-      ObjectOutputStream objectOutputStream2) {
-    removeClientHandler();
-    try {
-      if (socket2 != null) {
-        socket2.close();
-      }
-      if (objectOutputStream2 != null) {
-        objectOutputStream2.close();
-      }
-      if (objectInputStream2 != null) {
-        objectInputStream2.close();
-      }
-      System.out.println("Pepi pita stiga li do tam");
-      clieantHandlerThread.interrupt();
+				case Disconnect:
+					broadcastMessageDisconnectWithoutProfile(messageFromClient);
+					break;
 
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+				case MessageServerCloseConnection:
+					broadcastMessageToAllIncludingMe(messageFromClient);
+					break;
+				case MessageToPerson:
+					personalTextMessage((MessageToPerson) messageFromClient);
+					break;
+				case MessageProfile:
+					broadcastMessage(new MessageProfile(((MessageProfile) messageFromClient).getProfile()));
+					break;
 
-  }
-  /**
-  *
-  * Removes the specified profile from the list of connected clients and client handlers.
-  
-  * @param profile The profile to be removed
-  */
-  public void removeClient(Profile profile) {
+				case MessageCreateLobby:
+					broadcastMessageToAllIncludingMe(messageFromClient);
+					break;
 
-    for (ClientHandler clientHandler : clientHandlers) {
+				case MessageJoinLobby:
+					broadcastMessageToAllIncludingMe(((MessageJoinLobby) messageFromClient));
+					break;
+				case MessageUpdateLobby:
 
-      if (clientHandler.getProfile().equals(profile)) {
-        clientHandlers.remove(clientHandler);
-        clieantHandlerThread.interrupt();
+					broadcastMessageToAllIncludingMe(((MessageUpdateLobby) messageFromClient));
+					break;
+				case MessageUpdateLobbyList:
 
-      }
-    }
-    for (Profile profile2 : clients) {
-      if (profile2.equals(profile)) {
-        clients.remove(profile2);
+					broadcastMessageToAllIncludingMe(messageFromClient);
+					break;
 
-      }
-    }
+				case MessageReadyToPlay:
+					broadcastMessageToAllIncludingMe(messageFromClient);
+					break;
 
-  }
+				case MessageGUIRollInitalDice:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIRollInitalDice) messageFromClient).getLobby());
+					break;
 
-  public Thread getClieantHandlerThread() {
-    return clieantHandlerThread;
-  }
+				case MessageGUIRollDiceBattle:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIRollDiceBattle) messageFromClient).getLobby());
+					break;
+				case MessageGUIsetPeriod:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetPeriod) messageFromClient).getLobby());
+					break;
+				case MessageGUIsetPhase:
+					broadcastMessageWithinLobby(messageFromClient, ((MessageGUIsetPhase) messageFromClient).getLobby());
+					break;
+				case MessageGUIpossessCountry:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIpossessCountry) messageFromClient).getLobby());
+					break;
+				case MessageGUIconquerCountry:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIconquerCountry) messageFromClient).getLobby());
 
-  public void setClieantHandlerThread(Thread clieantHandlerThread) {
-    this.clieantHandlerThread = clieantHandlerThread;
-  }
+					break;
+				case MessageGUIsetCurrentPlayer:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetCurrentPlayer) messageFromClient).getLobby());
+					break;
+				case MessageGUIsetTroopsOnTerritory:
 
-  public Lobby getLobby() {
-    return lobby;
-  }
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetTroopsOnTerritory) messageFromClient).getLobby());
+					break;
+				case MessageGUImoveTroopsFromTerritoryToOther:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUImoveTroopsFromTerritoryToOther) messageFromClient).getLobby());
+					break;
+				case MessageGUIsetTroopsOnTerritoryAndLeft:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIsetTroopsOnTerritoryAndLeft) messageFromClient).getLobby());
+					break;
+				case MessageGUIOpenBattleFrame:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIOpenBattleFrame) messageFromClient).getLobby());
+					break;
+				case MessageGUIendBattle:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIendBattle) messageFromClient).getLobby());
+					break;
+				case MessageGUIupdateRanks:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIupdateRanks) messageFromClient).getLobby());
+					break;
+				case MessageGUIgameIsOver:
+					broadcastMessageWithinLobby(messageFromClient,
+							((MessageGUIgameIsOver) messageFromClient).getLobby());
+					break;
+				default:
+					break;
+				}
 
-  public void setLobby(Lobby lobby) {
-    this.lobby = lobby;
-  }
+			} catch (Exception e) {
+				closeEverything(socket, objectInputStream, objectOutputStream);
+				break;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * Closes the socket, input stream, and output stream associated with this
+	 * client handler.
+	 */
+	public void closeEverything() {
+		closeEverything(socket, objectInputStream, objectOutputStream);
+
+	}
+
+	/**
+	 * 
+	 * Closes the specified socket, input stream, and output stream.
+	 * 
+	 * @param socket             The socket to be closed
+	 * @param objectInputStream  The input stream to be closed
+	 * @param objectOutputStream The output stream to be closed
+	 */
+	public void closeEverything(Socket socket2, ObjectInputStream objectInputStream2,
+			ObjectOutputStream objectOutputStream2) {
+		removeClientHandler();
+		try {
+			if (socket2 != null) {
+				socket2.close();
+			}
+			if (objectOutputStream2 != null) {
+				objectOutputStream2.close();
+			}
+			if (objectInputStream2 != null) {
+				objectInputStream2.close();
+			}
+			clieantHandlerThread.interrupt();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 *
+	 * Removes the specified profile from the list of connected clients and client
+	 * handlers.
+	 * 
+	 * @param profile The profile to be removed
+	 */
+	public void removeClient(Profile profile) {
+
+		for (ClientHandler clientHandler : clientHandlers) {
+
+			if (clientHandler.getProfile().equals(profile)) {
+				clientHandlers.remove(clientHandler);
+				clieantHandlerThread.interrupt();
+
+			}
+		}
+		for (Profile profile2 : clients) {
+			if (profile2.equals(profile)) {
+				clients.remove(profile2);
+
+			}
+		}
+
+	}
+
+	public Thread getClieantHandlerThread() {
+		return clieantHandlerThread;
+	}
+
+	public void setClieantHandlerThread(Thread clieantHandlerThread) {
+		this.clieantHandlerThread = clieantHandlerThread;
+	}
+
+	public Lobby getLobby() {
+		return lobby;
+	}
+
+	public void setLobby(Lobby lobby) {
+		this.lobby = lobby;
+	}
 
 }
