@@ -92,7 +92,7 @@ public class Card implements Serializable {
   }
 
   public String getPngDir() {
-    String[] fullpath = pngDir.split(System.getProperty("file.separator"));
+    String[] fullpath = pngDir.split(Parameter.sep.equals("\\") ? "\\\\" : Parameter.sep);
     return Parameter.territoryPNGdir + fullpath[fullpath.length - 1];
   }
 
