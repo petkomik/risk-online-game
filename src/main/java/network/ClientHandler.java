@@ -35,6 +35,10 @@ import network.messages.MessageSendInGame;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
 
+/*
+ * @author dignatov
+ * 
+ */
 public class ClientHandler implements Runnable {
 
   public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
@@ -68,6 +72,11 @@ public class ClientHandler implements Runnable {
     }
 
   }
+  /**
+   * Broadcasts a message to all connected client handlers, except the current one.
+   *
+   * @param message The message to be broadcasted
+   */
 
   public void broadcastMessage(Message message) {
     for (ClientHandler clientHandler : clientHandlers) {
@@ -82,6 +91,12 @@ public class ClientHandler implements Runnable {
       }
     }
   }
+  /**
+   * Broadcasts a message to all connected client handlers, except the current one and the one specified by the profile ID in the message.
+   *
+   * @param message The message to be broadcasted
+   */
+  
   public void broadcastMessageDisconnectWithoutProfile(Message message) {
 	    for (ClientHandler clientHandler : clientHandlers) {
 	      try {
@@ -95,7 +110,12 @@ public class ClientHandler implements Runnable {
 	      }
 	    }
 	  }
-  
+  /**
+   * Broadcasts a message to all client handlers within a specific lobby.
+   *
+   * @param message The message to be broadcasted
+   * @param lobby The lobby to broadcast the message to
+   */
   
   public void broadcastMessageWithinLobby(Message message, Lobby lobby) {
     for (ClientHandler clientHandler : clientHandlers) {
@@ -113,11 +133,15 @@ public class ClientHandler implements Runnable {
       }
     }
   }
-
+  /**
+   * Broadcasts a message to all client handlers within a specific lobby, except the current one checked by the Id.
+   *
+   * @param message The message to be broadcasted
+   * @param lobby The lobby
+*/
   public void broadcastMessageWithinLobbyWithoutMeId(Message message, Lobby lobby) {
     for (ClientHandler clientHandler : clientHandlers) {
       try {
-        // &&this.getProfile().getId() != player.getID()
         for (Player player : lobby.getHumanPlayerList()) {
           if (clientHandler.getProfile().getId() == player.getId()
               && this.profile.getId() != player.getId()) {
@@ -131,23 +155,11 @@ public class ClientHandler implements Runnable {
       }
     }
   }
+  /**
 
-  public void broadcastMessageWithinLobbyWithoutMe(Message message, Lobby lobby) {
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
-        for (Player player : lobby.getHumanPlayerList()) {
-          if (clientHandler.getProfile().getId() == player.getId()
-              && !clientHandler.clientUsername.equals(clientUsername)) {
-            clientHandler.objectOutputStream.writeObject(message);
-            clientHandler.objectOutputStream.flush();
-          }
-        }
-      } catch (IOException e) {
-        closeEverything(socket, objectInputStream, objectOutputStream);
-        e.printStackTrace();
-      }
-    }
-  }
+  Broadcasts a message to all connected client handlers, including the current one.
+  @param message The message to be broadcasted
+  */
 
   public void broadcastMessageToAllIncludingMe(Message message) {
     for (ClientHandler clientHandler : clientHandlers) {
@@ -171,6 +183,11 @@ public class ClientHandler implements Runnable {
     return clientUsername;
   }
 
+  
+  /**
+  * Sends a personal text message to the specified client.
+  * @param message The message to be sent
+  */
   public void personalTextMessage(Message message) {
     System.out.println("messanger works");
     for (ClientHandler clientHandler : clientHandlers) {
@@ -192,7 +209,13 @@ public class ClientHandler implements Runnable {
     }
 
   }
+  /**
 
+  * Sends a personal message to the client with the specified player ID.
+  *
+  * @param playerId The ID of the recipient player
+  * @param message The message to be sent
+  */
   public void personalMessage(int playerId, Message message) {
     System.out.println("messanger works");
     for (ClientHandler clientHandler : clientHandlers) {
@@ -213,8 +236,13 @@ public class ClientHandler implements Runnable {
     }
 
   }
-  // methode for one to one player
-
+  /**
+   *
+  * Sends a personal message to the client with the specified player ID.
+  *
+  * @param playerId The ID of the recipient player
+  * @param message The message to be sent
+  */
   public void removeClientHandler() {
 
     clientHandlers.remove(this);
@@ -241,7 +269,7 @@ public class ClientHandler implements Runnable {
             broadcastMessage(messageFromClient);
             break;
           case MessageSendInGame:
-            broadcastMessageWithinLobbyWithoutMe(messageFromClient,
+            broadcastMessageWithinLobbyWithoutMeId(messageFromClient,
                 ((MessageSendInGame) messageFromClient).getLobby());
             break;
           case Connect:
@@ -373,12 +401,22 @@ public class ClientHandler implements Runnable {
       }
     }
   }
-
+  /**
+	*
+    * Closes the socket, input stream, and output stream associated with this client handler.
+  */
   public void closeEverything() {
     closeEverything(socket, objectInputStream, objectOutputStream);
 
   }
+  /**
 
+  * Closes the specified socket, input stream, and output stream.
+  * 
+  * @param socket The socket to be closed
+  * @param objectInputStream The input stream to be closed
+  * @param objectOutputStream The output stream to be closed
+  */
   public void closeEverything(Socket socket2, ObjectInputStream objectInputStream2,
       ObjectOutputStream objectOutputStream2) {
     removeClientHandler();
@@ -400,7 +438,12 @@ public class ClientHandler implements Runnable {
     }
 
   }
-
+  /**
+  *
+  * Removes the specified profile from the list of connected clients and client handlers.
+  
+  * @param profile The profile to be removed
+  */
   public void removeClient(Profile profile) {
 
     for (ClientHandler clientHandler : clientHandlers) {

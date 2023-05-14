@@ -3,85 +3,64 @@ package network.messages;
 import database.Profile;
 import network.Client;
 
+/**
+ * The MessageToPerson class represents a message sent to a specific person. It
+ * can contain various types of messages and is used for direct communication
+ * between clients.
+ *
+ * author dignatov
+ */
 public class MessageToPerson extends Message {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  String to;
-  Message message;
-  String strinMessage;
+	String stringMessage;
+	private Profile fromProfile;
+	private Profile toProfile;
+	private boolean inALobby;
 
-  private Profile fromProfile;
-  private Profile toProfile;
-  private boolean inALobby;
+	/**
+	 * Constructs a MessageToPerson object with a string message, sender and
+	 * recipient profiles, and lobby information.
+	 *
+	 * @param message     The string message to be sent.
+	 * @param fromProfile The profile of the sender.
+	 * @param toProfile   The profile of the recipient.
+	 * @param inALobby    Indicates whether the message is sent within a lobby.
+	 */
+	public MessageToPerson(String message, Profile fromProfile, Profile toProfile, boolean inAlobby) {
+		super(MessageType.MessageToPerson);
+		this.fromProfile = fromProfile;
+		this.toProfile = toProfile;
+		this.stringMessage = message;
+		this.setInALobby(inAlobby);
+	}
 
-  public Message getMessage() {
-    return message;
-  }
+	public MessageToPerson(String message, Profile fromProfile, Profile toProfile) {
+		super(MessageType.MessageToPerson);
+		this.fromProfile = fromProfile;
+		this.toProfile = toProfile;
+		this.stringMessage = message;
 
-  public void setMessage(Message message) {
-    this.message = message;
-  }
+	}
 
-  public MessageToPerson(Message message, String to) {
-    super(MessageType.MessageToPerson);
+	public boolean isInALobby() {
+		return inALobby;
+	}
 
-    this.to = to;
-    this.message = message;
-  }
+	public void setInALobby(boolean inALobby) {
+		this.inALobby = inALobby;
+	}
 
-  public MessageToPerson(String message, Profile fromProfile, Profile toProfile, boolean inAlobby) {
-    super(MessageType.MessageToPerson);
-    this.fromProfile = fromProfile;
-    this.toProfile = toProfile;
-    this.strinMessage = message;
-    this.setInALobby(inAlobby);
-  }
+	public String getStringMessage() {
+		return stringMessage;
+	}
 
-  public MessageToPerson(String message, Profile fromProfile, Profile toProfile) {
-    super(MessageType.MessageToPerson);
-    this.fromProfile = fromProfile;
-    this.toProfile = toProfile;
-    this.strinMessage = message;
+	public Profile getFromProfile() {
+		return fromProfile;
+	}
 
-  }
-
-  public MessageToPerson(String stringMessage, String username) {
-    super(MessageType.MessageToPerson);
-    this.strinMessage = stringMessage;
-    to = username;
-  }
-
-  public String getTo() {
-    return to;
-  }
-
-
-  public void setTo(String to) {
-    this.to = to;
-  }
-
-  public String getStringMessage() {
-    return strinMessage;
-  }
-
-  public Profile getFromProfile() {
-    return fromProfile;
-  }
-
-  public Profile getToProfile() {
-    return toProfile;
-  }
-
-  public boolean isInALobby() {
-    return inALobby;
-  }
-
-  public void setInALobby(boolean inALobby) {
-    this.inALobby = inALobby;
-  }
-
+	public Profile getToProfile() {
+		return toProfile;
+	}
 }
