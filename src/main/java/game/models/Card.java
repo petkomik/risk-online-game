@@ -1,5 +1,6 @@
 package game.models;
 
+import general.Parameter;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -91,7 +92,8 @@ public class Card implements Serializable {
   }
 
   public String getPngDir() {
-    return pngDir;
+    String[] fullpath = pngDir.split(System.getProperty("file.separator"));
+    return Parameter.territoryPNGdir + fullpath[fullpath.length - 1];
   }
 
   public boolean isJoker() {
