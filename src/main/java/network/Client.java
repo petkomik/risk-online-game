@@ -2,8 +2,8 @@ package network;
 
 import database.Profile;
 import game.gui.CreateProfilePaneController;
-import game.gui.GUISupportClasses;
 import game.gui.GamePaneController;
+import game.gui.GuiSupportClasses;
 import game.gui.LobbyGui;
 import game.gui.ServerMainWindowController;
 import game.models.Battle;
@@ -79,7 +79,7 @@ public class Client {
   public static ArrayList<Profile> profiles = new ArrayList<>();
   private HashMap<String, Lobby> lobbies = new HashMap<>();
   private Lobby clientsLobby;
-  GUISupportClasses.ChatWindow chat;
+  GuiSupportClasses.ChatWindow chat;
   private boolean host;
   private boolean isInaLobby;
   private boolean isInaGame;
@@ -145,7 +145,7 @@ public class Client {
    * @param serverMainWindowController The main window controller for the server.
    */
 
-  public void setChat(GUISupportClasses.ChatWindow serverMainWindowController) {
+  public void setChat(GuiSupportClasses.ChatWindow serverMainWindowController) {
     chat = serverMainWindowController;
   }
 
@@ -526,7 +526,7 @@ public class Client {
                   gameHandler.setGameState(mesCur.getGameState());
                   gamePane.setCurrentPlayer(mesCur.getId());
                   gamePane.setAmountOfTroopsLeftToDeploy(mesCur.getTroopsLeft());
-                  gamePane.setPlayerOnGUI(AppController.getProfile().getId(), mesCur.getGameState()
+                  gamePane.setPlayerOnGui(AppController.getProfile().getId(), mesCur.getGameState()
                       .getRiskCardsInPlayers().get(AppController.getProfile().getId()));
                 });
                 break;
@@ -739,7 +739,7 @@ public class Client {
    * @return The root node of the loaded FXML file.
    * @throws IOException If an error occurs during loading.
    */
-  private static Parent loadFXML(String fxml) throws IOException {
+  private static Parent loadFxml(String fxml) throws IOException {
     FXMLLoader fxmlLoader =
         new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
     return fxmlLoader.load();
@@ -978,7 +978,7 @@ public class Client {
    */
   public void chnagePlayerOnGui(int id, ArrayList<Card> cards) {
     Platform.runLater(() -> {
-      this.gamePane.setPlayerOnGUI(id, cards);
+      this.gamePane.setPlayerOnGui(id, cards);
     });
   }
 
@@ -1095,7 +1095,7 @@ public class Client {
   public void riskCardsTurnedInSuccessOnGui(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
     Platform.runLater(() -> {
       this.gamePane.setAmountOfTroopsLeftToDeploy(bonusTroops);
-      this.gamePane.setPlayerOnGUI(idOfPlayer, card);
+      this.gamePane.setPlayerOnGui(idOfPlayer, card);
       sendMessage(new MessageGuisetCurrentPlayer(gameHandler.getGameState(), idOfPlayer,
           bonusTroops, clientsLobby));
     });

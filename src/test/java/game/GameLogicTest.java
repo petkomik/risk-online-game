@@ -223,7 +223,7 @@ public class GameLogicTest {
    * Testing the attack confirmation method.
    */
   @Test
-  void testPlayerAttackAttackConfirmedIsOK() {
+  void testPlayerAttackAttackConfirmedIsOk() {
     // Test case where all conditions are satisfied and attack is confirmed
     gameState.setCurrentGamePeriod(Period.MAINPERIOD);
     gameState.setCurrentTurnPhase(Phase.ATTACK);

@@ -1,13 +1,13 @@
 package game.gui;
 
 import database.Profile;
-import game.gui.GUISupportClasses.ArrowButton;
-import game.gui.GUISupportClasses.ChatButton;
-import game.gui.GUISupportClasses.ChatWindow;
-import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.ImageViewPane;
-import game.gui.GUISupportClasses.PlayerCard;
-import game.gui.GUISupportClasses.Spacing;
+import game.gui.GuiSupportClasses.ArrowButton;
+import game.gui.GuiSupportClasses.ChatButton;
+import game.gui.GuiSupportClasses.ChatWindow;
+import game.gui.GuiSupportClasses.DesignButton;
+import game.gui.GuiSupportClasses.ImageViewPane;
+import game.gui.GuiSupportClasses.PlayerCard;
+import game.gui.GuiSupportClasses.Spacing;
 import game.models.Difficulty;
 import game.models.Lobby;
 import game.models.Player;
@@ -49,12 +49,11 @@ import network.Client;
 import network.messages.MessageReadyToPlay;
 import network.messages.MessageUpdateLobby;
 
-/*
- * Class for the Battle Frame
- * 
+/**
+ * Class for the Battle Frame.
+ *
  * @author pmikov
  * 
- * This class creates a Lobby menu root node Uses Lobby instance to initialize
  */
 
 public class LobbyMenuController extends StackPane {
@@ -94,9 +93,9 @@ public class LobbyMenuController extends StackPane {
   private VBox numberOfAiDiv;
   private Label numberOfAiLabel;
   private HBox numberOfAiControls;
-  private ArrowButton lessBtnAI;
-  private Label labelBtnAI;
-  private ArrowButton moreBtnAI;
+  private ArrowButton lessBtnAi;
+  private Label labelBtnAi;
+  private ArrowButton moreBtnAi;
 
   private VBox aiDifficultyDiv;
   private Label aiDifficultyLabel;
@@ -114,7 +113,7 @@ public class LobbyMenuController extends StackPane {
 
   double ratio;
   boolean singleplayerLobby;
-  private String dirAvatarOnThisPC;
+  private String dirAvatarOnThisPc;
   private ChatWindow chatWindow;
 
   private Client client = AppController.getClient();
@@ -123,6 +122,8 @@ public class LobbyMenuController extends StackPane {
   public LobbyMenuController() {
 
   }
+
+  /** Constructor. */
 
   public LobbyMenuController(Lobby lobby, boolean singleplayerLobby) throws FileNotFoundException {
     this.lobby = lobby;
@@ -273,10 +274,10 @@ public class LobbyMenuController extends StackPane {
     numberOfAiDiv = new VBox();
     numberOfAiLabel = new Label("Number of AI Players");
     numberOfAiControls = new HBox();
-    lessBtnAI = new ArrowButton(30 * ratio);
-    labelBtnAI = new Label("0");
+    lessBtnAi = new ArrowButton(30 * ratio);
+    labelBtnAi = new Label("0");
     // TODO
-    moreBtnAI = new ArrowButton(30 * ratio);
+    moreBtnAi = new ArrowButton(30 * ratio);
 
     aiDifficultyDiv = new VBox();
     aiDifficultyLabel = new Label("AI Player Difficulty");
@@ -346,11 +347,11 @@ public class LobbyMenuController extends StackPane {
         .setText(String.valueOf(this.singleplayerLobby ? this.lobby.getHumanPlayerList().size()
             : this.lobby.getMaxNumberOfPlayers()));
 
-    moreBtnAI.setRotate(180);
-    labelBtnAI.setText(String.valueOf(this.lobby.getAiPlayerList().size()));
+    moreBtnAi.setRotate(180);
+    labelBtnAi.setText(String.valueOf(this.lobby.getAiPlayerList().size()));
 
     moreBtnDiff.setRotate(180);
-    labelBtnDiff.setText(lobby.getDifficultyOfAI().toString());
+    labelBtnDiff.setText(lobby.getDifficultyOfAi().toString());
 
     labelBtnPlayers.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
     labelBtnPlayers.textOverrunProperty().set(OverrunStyle.CLIP);
@@ -358,11 +359,11 @@ public class LobbyMenuController extends StackPane {
     labelBtnPlayers.setAlignment(Pos.CENTER);
     labelBtnPlayers.setTextFill(Color.WHITE);
 
-    labelBtnAI.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
-    labelBtnAI.textOverrunProperty().set(OverrunStyle.CLIP);
-    labelBtnAI.setMinWidth(50 * ratio);
-    labelBtnAI.setAlignment(Pos.CENTER);
-    labelBtnAI.setTextFill(Color.WHITE);
+    labelBtnAi.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
+    labelBtnAi.textOverrunProperty().set(OverrunStyle.CLIP);
+    labelBtnAi.setMinWidth(50 * ratio);
+    labelBtnAi.setAlignment(Pos.CENTER);
+    labelBtnAi.setTextFill(Color.WHITE);
 
     labelBtnDiff.setFont(Font.font("Cooper Black", FontWeight.BOLD, 30 * ratio));
     labelBtnDiff.textOverrunProperty().set(OverrunStyle.CLIP);
@@ -393,7 +394,7 @@ public class LobbyMenuController extends StackPane {
         moreBtnPlayers);
     Spacing spacing3 = new Spacing(1);
     Spacing spacing4 = new Spacing(1);
-    numberOfAiControls.getChildren().addAll(lessBtnAI, spacing3, labelBtnAI, spacing4, moreBtnAI);
+    numberOfAiControls.getChildren().addAll(lessBtnAi, spacing3, labelBtnAi, spacing4, moreBtnAi);
     Spacing spacing5 = new Spacing(1);
     Spacing spacing6 = new Spacing(1);
     aiDifficultyControls.getChildren().addAll(lessBtnDiff, spacing5, labelBtnDiff, spacing6,
@@ -476,16 +477,16 @@ public class LobbyMenuController extends StackPane {
       }
     });
 
-    moreBtnAI.setOnAction(new EventHandler<ActionEvent>() {
+    moreBtnAi.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         gameSound.buttonClickForwardSound();
         // TODO
-        int labelBefore = Integer.parseInt(labelBtnAI.getText());
+        int labelBefore = Integer.parseInt(labelBtnAi.getText());
         if (lobby.getAiPlayerList().size() < 5
             && lobby.getMaxNumberOfPlayers() > lobby.getPlayerList().size()) {
           lobby.addAi();
-          labelBtnAI.setText(String.valueOf(lobby.getAiPlayerList().size()));
+          labelBtnAi.setText(String.valueOf(lobby.getAiPlayerList().size()));
         }
         try {
           setUpPlayerCards();
@@ -500,13 +501,13 @@ public class LobbyMenuController extends StackPane {
       }
     });
 
-    lessBtnAI.setOnAction(new EventHandler<ActionEvent>() {
+    lessBtnAi.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         gameSound.buttonClickForwardSound();
         if (lobby.getAiPlayerList().size() > 0) {
           lobby.removeAi();
-          labelBtnAI.setText(String.valueOf(lobby.getAiPlayerList().size()));
+          labelBtnAi.setText(String.valueOf(lobby.getAiPlayerList().size()));
         }
         try {
           setUpPlayerCards();
@@ -676,6 +677,8 @@ public class LobbyMenuController extends StackPane {
     }
   }
 
+  /** Repaints the player cards based on current lobby info. */
+
   public void setUpPlayerCards() throws FileNotFoundException {
     playerCardsPane.getChildren().removeAll(playerCardsPane.getChildren());
     // ArrayList<PlayerInLobby> players = new
@@ -684,15 +687,15 @@ public class LobbyMenuController extends StackPane {
     Iterator<Player> itt = players.iterator();
     while (itt.hasNext()) {
       Player ply = itt.next();
-      dirAvatarOnThisPC = new String();
+      dirAvatarOnThisPc = new String();
 
       for (String avatar : Parameter.allAvatars) {
         if (ply.getAvatar().contains(avatar)) {
-          dirAvatarOnThisPC = Parameter.avatarsdir + avatar;
+          dirAvatarOnThisPc = Parameter.avatarsdir + avatar;
         }
       }
 
-      PlayerCard plyc = new PlayerCard(ply, dirAvatarOnThisPC, Color.web(ply.getColor()), ratio,
+      PlayerCard plyc = new PlayerCard(ply, dirAvatarOnThisPc, Color.web(ply.getColor()), ratio,
           lobby.isReady(ply));
       if (lobby.getAiPlayerList().contains(ply)) {
         plyc.setReady(true);
@@ -706,11 +709,13 @@ public class LobbyMenuController extends StackPane {
     return backButton;
   }
 
-  private static Parent loadFXML(String fxml) throws IOException {
+  private static Parent loadFxml(String fxml) throws IOException {
     FXMLLoader fxmlLoader =
         new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
     return fxmlLoader.load();
   }
+
+  /** Returns Chat Window. */
 
   public ChatWindow getChatWindow() {
     this.getChildren().remove(chatWindow);
@@ -719,11 +724,16 @@ public class LobbyMenuController extends StackPane {
     return chatWindow;
   }
 
+  /** Disables controlls for guest. */
+
+
   public void disableForGuest(int id) {
     if (lobby.getLobbyHost() != id) {
       settingsControlPane.setDisable(true);
     }
   }
+
+  /** Enables controlls for host. */
 
   public void enableForNewHost(int id) {
     if (lobby.getLobbyHost() == id) {

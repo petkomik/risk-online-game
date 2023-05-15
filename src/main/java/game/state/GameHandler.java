@@ -55,7 +55,6 @@ public class GameHandler {
   }
 
   public void initSingleplayer(SinglePlayerHandler singlePlayerHandler) {
-    System.out.println("Some one called init single");
     this.singlePlayerHandler = singlePlayerHandler;
     this.gameType = GameType.SinglePlayer;
   }
@@ -431,8 +430,8 @@ public class GameHandler {
           Player atPly = atTer.getOwnedByPlayer();
           Player dfPly = dfTer.getOwnedByPlayer();
           Battle battle = new Battle(atTer.getContinent(), atTer.getCountryName(),
-              dfTer.getContinent(), dfTer.getCountryName(), atTer.getAddressToPNG(),
-              dfTer.getAddressToPNG(), troops, dfTer.getNumberOfTroops(), atPly.getAvatar(),
+              dfTer.getContinent(), dfTer.getCountryName(), atTer.getAddressToPng(),
+              dfTer.getAddressToPng(), troops, dfTer.getNumberOfTroops(), atPly.getAvatar(),
               dfPly.getAvatar(), atPly.getColor(), dfPly.getColor(), Math.min(3, troops),
               Math.min(2, dfTer.getNumberOfTroops()), this.gameType, atPly.getId(), dfPly.getId());
           this.gameState.setBattle(battle);

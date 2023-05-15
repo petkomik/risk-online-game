@@ -1,10 +1,10 @@
 package game.gui;
 
 import game.exceptions.WrongTextFieldInputException;
-import game.gui.GUISupportClasses.ArrowButton;
-import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.ImageViewPane;
-import game.gui.GUISupportClasses.Spacing;
+import game.gui.GuiSupportClasses.ArrowButton;
+import game.gui.GuiSupportClasses.DesignButton;
+import game.gui.GuiSupportClasses.ImageViewPane;
+import game.gui.GuiSupportClasses.Spacing;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;

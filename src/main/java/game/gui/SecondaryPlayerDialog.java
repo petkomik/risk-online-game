@@ -2,7 +2,7 @@ package game.gui;
 
 import database.Profile;
 import game.exceptions.WrongTextFieldInputException;
-import game.gui.GUISupportClasses.Spacing;
+import game.gui.GuiSupportClasses.Spacing;
 import general.AppController;
 import general.Parameter;
 import java.util.Optional;

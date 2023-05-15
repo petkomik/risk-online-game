@@ -245,7 +245,7 @@ public class SinglePlayerHandler {
    */
 
   public void chnagePlayerOnGui(int id, ArrayList<Card> cards) {
-    this.gamePaneController.setPlayerOnGUI(id, cards);
+    this.gamePaneController.setPlayerOnGui(id, cards);
   }
 
   /**
@@ -340,7 +340,7 @@ public class SinglePlayerHandler {
 
   public void riskCardsTurnedInSuccessOnGui(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
     this.gamePaneController.setAmountOfTroopsLeftToDeploy(bonusTroops);
-    this.gamePaneController.setPlayerOnGUI(idOfPlayer, card);
+    this.gamePaneController.setPlayerOnGui(idOfPlayer, card);
     for (Card c : card) {
       System.out.println(c.toString());
     }

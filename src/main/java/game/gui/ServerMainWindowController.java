@@ -1,11 +1,11 @@
 package game.gui;
 
-import game.gui.GUISupportClasses.ArrowButton;
-import game.gui.GUISupportClasses.ChatButton;
-import game.gui.GUISupportClasses.ChatWindow;
-import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.ImageViewPane;
-import game.gui.GUISupportClasses.Spacing;
+import game.gui.GuiSupportClasses.ArrowButton;
+import game.gui.GuiSupportClasses.ChatButton;
+import game.gui.GuiSupportClasses.ChatWindow;
+import game.gui.GuiSupportClasses.DesignButton;
+import game.gui.GuiSupportClasses.ImageViewPane;
+import game.gui.GuiSupportClasses.Spacing;
 import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
@@ -477,8 +477,8 @@ public class ServerMainWindowController extends VBox {
       public void handle(ActionEvent event) {
         gameSound.buttonClickForwardSound();
 
-        Lobby aLobby = new Lobby(client.getProfile().getId());
-        aLobby.joinLobby(new PlayerSingle(client.getProfile()));
+        Lobby alobby = new Lobby(client.getProfile().getId());
+        alobby.joinLobby(new PlayerSingle(client.getProfile()));
 
         // checks if the lobbyname is taken
 
@@ -492,15 +492,15 @@ public class ServerMainWindowController extends VBox {
           client.getLobbies().put(newUsername, lobby);
           lobby.setLobbyName(newUsername);
         };
-        addLobby.accept(client.getProfile().getUserName(), aLobby);
-        client.sendMessage(new MessageCreateLobby(aLobby));
+        addLobby.accept(client.getProfile().getUserName(), alobby);
+        client.sendMessage(new MessageCreateLobby(alobby));
         client.setInaLobby(true);
-        drawLobbyMenu(aLobby);
+        drawLobbyMenu(alobby);
         Platform.runLater(() -> {
           lobbyMenuController.getReadyBtn().fire();
         });
 
-        System.out.println("im in lobby " + aLobby.getLobbyName());
+        System.out.println("im in lobby " + alobby.getLobbyName());
       }
 
     });

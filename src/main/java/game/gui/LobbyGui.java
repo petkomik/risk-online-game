@@ -1,6 +1,6 @@
 package game.gui;
 
-import game.gui.GUISupportClasses.Spacing;
+import game.gui.GuiSupportClasses.Spacing;
 import game.models.Lobby;
 import java.io.Serializable;
 import javafx.geometry.Insets;

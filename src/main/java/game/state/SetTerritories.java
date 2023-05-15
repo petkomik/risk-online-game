@@ -66,7 +66,7 @@ public class SetTerritories {
       HashMap<CountryName, Territory> territories) {
     int i = 1;
     for (CountryName countryName : CountryName.values()) {
-      cards.add(new Card(countryName, i, territories.get(countryName).getAddressToPNG()));
+      cards.add(new Card(countryName, i, territories.get(countryName).getAddressToPng()));
       i++;
     }
     cards.add(new Card(true, i));

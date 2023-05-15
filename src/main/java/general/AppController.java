@@ -194,6 +194,8 @@ public class AppController {
     dbH.createGameStatistic(gameStatistic);
   }
 
+  /** Logs out and sets values to null. */
+
   public static void logoutAndSetValuesToNull() {
     profile = null;
     client = null;

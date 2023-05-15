@@ -1,12 +1,12 @@
 package game.gui;
 
-import game.gui.GUISupportClasses.ArrowButton;
-import game.gui.GUISupportClasses.ChatButton;
-import game.gui.GUISupportClasses.ChatWindow;
-import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.DiceFactory;
-import game.gui.GUISupportClasses.ImageViewPane;
-import game.gui.GUISupportClasses.Spacing;
+import game.gui.GuiSupportClasses.ArrowButton;
+import game.gui.GuiSupportClasses.ChatButton;
+import game.gui.GuiSupportClasses.ChatWindow;
+import game.gui.GuiSupportClasses.DesignButton;
+import game.gui.GuiSupportClasses.DiceFactory;
+import game.gui.GuiSupportClasses.ImageViewPane;
+import game.gui.GuiSupportClasses.Spacing;
 import game.models.Battle;
 import game.models.Continent;
 import game.models.CountryName;
@@ -43,9 +43,9 @@ import javafx.stage.Screen;
 import javafx.util.Duration;
 import network.Client;
 
-/*
- * Class for the Battle Frame
- * 
+/**
+ * Class for the Battle Frame.
+ *
  * @author pmikov
  * 
  */
@@ -58,8 +58,8 @@ public class BattleFrameController extends StackPane {
   private int defendingDice;
   private int[] dicesAttacker;
   private int[] dicesDefender;
-  private String attackingPNG;
-  private String defendingPNG;
+  private String attackingPng;
+  private String defendingPng;
   private int troopsInAttackAt;
   private int troopsInAttackDf;
   private String attackingAvatar;
@@ -117,14 +117,16 @@ public class BattleFrameController extends StackPane {
 
   private Timeline timeline;
 
+  /** Constructor. */
+
   public BattleFrameController() throws Exception {
     super();
     this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
         * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
     this.menuRatio = Math.min(ratio + 0.3, 1);
-    this.attackingPNG =
-        new Territory(CountryName.SouthernEurope, Continent.Europe).getAddressToPNG();
-    this.defendingPNG = new Territory(CountryName.Ukraine, Continent.Europe).getAddressToPNG();
+    this.attackingPng =
+        new Territory(CountryName.SouthernEurope, Continent.Europe).getAddressToPng();
+    this.defendingPng = new Territory(CountryName.Ukraine, Continent.Europe).getAddressToPng();
     this.troopsInAttackAt = 50;
     this.troopsInAttackDf = 38;
     this.maxDiceToThrow = Math.min(3, this.troopsInAttackAt);
@@ -139,6 +141,8 @@ public class BattleFrameController extends StackPane {
     setup();
   }
 
+  /** Constructor. */
+
   public BattleFrameController(Battle battle, SinglePlayerHandler singlePlayerHandler,
       boolean attacker) throws Exception {
     super();
@@ -146,8 +150,8 @@ public class BattleFrameController extends StackPane {
         * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
     this.menuRatio = Math.min(ratio + 0.3, 1);
     this.menuRatio = Math.min(ratio + 0.3, 1);
-    this.attackingPNG = battle.getAttackingPng();
-    this.defendingPNG = battle.getDefendingPng();
+    this.attackingPng = battle.getAttackingPng();
+    this.defendingPng = battle.getDefendingPng();
     this.troopsInAttackAt = battle.getTroopsInAttackAt();
     this.troopsInAttackDf = battle.getTroopsInAttackDf();
     this.maxDiceToThrow = battle.getMaxDiceToThrow();
@@ -164,6 +168,8 @@ public class BattleFrameController extends StackPane {
     this.chatButton.setVisible(false);
   }
 
+  /** Constructor Multiplayer. */
+
   public BattleFrameController(Battle battle, Client client, boolean attacker,
       ChatWindow chatWindow) throws Exception {
     super();
@@ -171,10 +177,10 @@ public class BattleFrameController extends StackPane {
         * Screen.getPrimary().getVisualBounds().getHeight() / (1846 * 1080);
     this.menuRatio = Math.min(ratio + 0.3, 1);
     this.menuRatio = Math.min(ratio + 0.3, 1);
-    this.attackingPNG =
-        new Territory(battle.getCountryNameAt(), battle.getContinentAt()).getAddressToPNG();
-    this.defendingPNG =
-        new Territory(battle.getCountryNameDf(), battle.getContinentDf()).getAddressToPNG();
+    this.attackingPng =
+        new Territory(battle.getCountryNameAt(), battle.getContinentAt()).getAddressToPng();
+    this.defendingPng =
+        new Territory(battle.getCountryNameDf(), battle.getContinentDf()).getAddressToPng();
     this.troopsInAttackAt = battle.getTroopsInAttackAt();
     this.troopsInAttackDf = battle.getTroopsInAttackDf();
     this.maxDiceToThrow = battle.getMaxDiceToThrow();
@@ -197,6 +203,8 @@ public class BattleFrameController extends StackPane {
     setup();
     this.throwBtn.setVisible(attacker);
   }
+
+  /** Setup. */
 
   public void setup() throws Exception {
 
@@ -239,7 +247,7 @@ public class BattleFrameController extends StackPane {
     imgTerritories = new HBox();
 
     imgAttacking = new ImageView();
-    imgAttacking.setImage(new Image(new FileInputStream(this.attackingPNG)));
+    imgAttacking.setImage(new Image(new FileInputStream(this.attackingPng)));
     imgAttacking.setPreserveRatio(true);
     imgAttacking.setSmooth(true);
     imgAttacking.setCache(true);
@@ -259,7 +267,7 @@ public class BattleFrameController extends StackPane {
     attackingStack.getChildren().addAll(imgAttackingPane, armiesFlowAt);
 
     imgDefending = new ImageView();
-    imgDefending.setImage(new Image(new FileInputStream(this.defendingPNG)));
+    imgDefending.setImage(new Image(new FileInputStream(this.defendingPng)));
     imgDefending.setPreserveRatio(true);
     imgDefending.setSmooth(true);
     imgDefending.setCache(true);
@@ -501,6 +509,8 @@ public class BattleFrameController extends StackPane {
     }
   }
 
+  /** Fills Pane with dice images. */
+
   public FlowPane diceImageFactory(int k, boolean at) throws FileNotFoundException {
     FlowPane diceImages = new FlowPane();
 
@@ -530,6 +540,8 @@ public class BattleFrameController extends StackPane {
     this.setCorrectTroops(this.armiesFlowAt, true);
     this.setCorrectTroops(this.armiesFlowDf, false);
   }
+
+  /** Sets correct troops. */
 
   public void setCorrectTroops(FlowPane flow, boolean attacking) throws FileNotFoundException {
 
@@ -616,6 +628,8 @@ public class BattleFrameController extends StackPane {
         .setPadding(new Insets(0, 160 * multiplier, 50 * multiplier, 160 * multiplier));
   }
 
+  /** Throwing dice approved. */
+
   public void rollBattleDice(int[] attackerDiceValues, int[] defenderDiceValues,
       int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice) throws FileNotFoundException {
     this.troopsInAttackAt = troopsInAttackAt;
@@ -669,6 +683,8 @@ public class BattleFrameController extends StackPane {
       });
     });
   }
+
+  /** Sets correct final values. */
 
   public void timelineFinished(int[] attackerDiceValues, int[] defenderDiceValues)
       throws FileNotFoundException {

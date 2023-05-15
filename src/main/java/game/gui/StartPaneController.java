@@ -1,9 +1,9 @@
 package game.gui;
 
-import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.ImageViewPane;
-import game.gui.GUISupportClasses.SettingsButton;
-import game.gui.GUISupportClasses.SettingsPane;
+import game.gui.GuiSupportClasses.DesignButton;
+import game.gui.GuiSupportClasses.ImageViewPane;
+import game.gui.GuiSupportClasses.SettingsButton;
+import game.gui.GuiSupportClasses.SettingsPane;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
@@ -39,7 +39,7 @@ public class StartPaneController extends StackPane {
   private ImageView imgBackground;
   private ImageViewPane imgBackgroundPane;
   private VBox vboxColor;
-  private VBox contentVBox;
+  private VBox contentVbox;
   private ImageView riskLogo;
   private DesignButton playButton;
   private SettingsButton settingsButton;
@@ -100,8 +100,8 @@ public class StartPaneController extends StackPane {
     vboxColor.setFillWidth(true);
     vboxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
 
-    contentVBox = new VBox();
-    contentVBox.setAlignment(Pos.CENTER);
+    contentVbox = new VBox();
+    contentVbox.setAlignment(Pos.CENTER);
 
     riskLogo = new ImageView();
     riskLogo.setImage(new Image(new FileInputStream(Parameter.logoImage)));
@@ -118,10 +118,10 @@ public class StartPaneController extends StackPane {
         new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 300 * ratio);
     playButton.setText("Play");
 
-    contentVBox.setSpacing(30 * ratio);
+    contentVbox.setSpacing(30 * ratio);
 
-    contentVBox.getChildren().addAll(riskLogo, playButton, settingsButton);
-    contentVBox.setPadding(new Insets(0, 0, 50 * ratio, 0));
+    contentVbox.getChildren().addAll(riskLogo, playButton, settingsButton);
+    contentVbox.setPadding(new Insets(0, 0, 50 * ratio, 0));
 
     double w = MainApp.screenWidth;
     double h = MainApp.screenHeight;
@@ -130,7 +130,7 @@ public class StartPaneController extends StackPane {
     settingsButton.setPickOnBounds(true);
 
     // maybe add vBoxColor
-    this.getChildren().addAll(vbox, vboxColor, contentVBox);
+    this.getChildren().addAll(vbox, vboxColor, contentVbox);
 
     playButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -177,7 +177,7 @@ public class StartPaneController extends StackPane {
           }
         });
 
-    contentVBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
+    contentVbox.setOnKeyPressed(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.ENTER) {

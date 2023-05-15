@@ -331,7 +331,7 @@ public class Lobby implements Serializable {
   }
 
 
-  public Difficulty getDifficultyOfAI() {
+  public Difficulty getDifficultyOfAi() {
     return difficultyOfAi;
   }
 

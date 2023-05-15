@@ -55,7 +55,7 @@ import network.messages.MessageToPerson;
  *
  */
 
-public class GUISupportClasses {
+public class GuiSupportClasses {
   static class Spacing extends Region {
     public Spacing() {
       super();
@@ -112,7 +112,12 @@ public class GUISupportClasses {
     }
   }
 
+  /** Button used throughout the codebase. */
+
   public static class DesignButton extends Button {
+
+    /** Constructor. */
+
     public DesignButton() {
       super();
       this.setPadding(new Insets(10, 20, 10, 20));
@@ -135,6 +140,8 @@ public class GUISupportClasses {
             }
           });
     }
+
+    /** Constructor. */
 
     public DesignButton(Insets inst, int radius, double fontSize, double width) {
       super();
@@ -165,6 +172,8 @@ public class GUISupportClasses {
           });
 
     }
+
+    /** Constructor. */
 
     public DesignButton(Insets inst, int radius, double fontSize, double width, boolean chatButton)
         throws FileNotFoundException {
@@ -411,19 +420,21 @@ public class GUISupportClasses {
       imageViewProperty.addListener(new ChangeListener<ImageView>() {
 
         @Override
-        public void changed(ObservableValue<? extends ImageView> arg0, ImageView oldIV,
-            ImageView newIV) {
-          if (oldIV != null) {
-            getChildren().remove(oldIV);
+        public void changed(ObservableValue<? extends ImageView> arg0, ImageView oldIv,
+            ImageView newIv) {
+          if (oldIv != null) {
+            getChildren().remove(oldIv);
           }
-          if (newIV != null) {
-            getChildren().add(newIV);
+          if (newIv != null) {
+            getChildren().add(newIv);
           }
         }
       });
       this.imageViewProperty.set(imageView);
     }
   }
+
+  /** Constructor. */
 
   public static class ChatWindow extends VBox {
 
@@ -445,6 +456,8 @@ public class GUISupportClasses {
     private double ycord;
     private ObservableList<String> items;
 
+    /** Constructor. */
+
     public ChatWindow() {
 
       ratio = Screen.getPrimary().getVisualBounds().getWidth()
@@ -454,6 +467,8 @@ public class GUISupportClasses {
       actionEventsSetup();
 
     }
+
+    /** Constructor. */
 
     public ChatWindow(ChatWindow chatPane) {
       this.chat = chatPane.chat;
@@ -474,6 +489,8 @@ public class GUISupportClasses {
       this.ycord = chatPane.ycord;
       this.items = chatPane.items;
     }
+
+    /** setup. */
 
     public void setup() {
 
@@ -574,6 +591,8 @@ public class GUISupportClasses {
       this.setPickOnBounds(true);
       this.getChildren().addAll(dragArea, chat, textfieldAndButtons);
     }
+
+    /** Mouse Events. */
 
     public void actionEventsSetup() {
 
@@ -699,8 +718,8 @@ public class GUISupportClasses {
 
     }
 
-    /*
-     * finds the username from the send message so that it can be a private message
+    /**
+     * finds the username from the send message so that it can be a private message.
      */
 
     private Profile findProfileFromString(String username) {
@@ -715,13 +734,13 @@ public class GUISupportClasses {
       return null;
     }
 
-    /*
-     * adds to the GUI the incomming message from other users to all users
+    /**
+     * adds to the GUI the incomming message from other users to all users.
      */
 
-    public void addLabel(String messageFromCLient) {
+    public void addLabel(String messageFromClient) {
 
-      Text text = new Text(messageFromCLient);
+      Text text = new Text(messageFromClient);
       text.setFill(Color.WHITE);
       text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
@@ -744,13 +763,13 @@ public class GUISupportClasses {
 
     }
 
-    /*
-     * method for the GUI to display the personal message
+    /**
+     * method for the GUI to display the personal message.
      */
 
-    public void addLabel(String messageFromCLient, String profile) {
+    public void addLabel(String messageFromClient, String profile) {
 
-      Text text = new Text(messageFromCLient);
+      Text text = new Text(messageFromClient);
       text.setFill(Color.WHITE);
       text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
@@ -779,9 +798,11 @@ public class GUISupportClasses {
 
     }
 
-    public void addLabelFromSystem(String messageFromCLient) {
+    /** Adds label. */
 
-      Text text = new Text(messageFromCLient);
+    public void addLabelFromSystem(String messageFromClient) {
+
+      Text text = new Text(messageFromClient);
       text.setFill(Color.YELLOW);
       text.setFont(Font.font("Cooper Black", FontWeight.LIGHT, ratio * 15));
 
@@ -804,17 +825,23 @@ public class GUISupportClasses {
 
     }
 
+    /** Adds in ComboBox. */
+
     public void addItemsInComboBox(Profile profile) {
       Platform.runLater(() -> {
         items.add(profile.getUserName());
       });
     }
 
+    /** Removes from combobox. */
+
     public void removeItemsInComboBox(Profile profile) {
       Platform.runLater(() -> {
         items.remove(profile.getUserName());
       });
     }
+
+    /** Clears combobox. */
 
     public void clearItemsInComboBox() {
       Platform.runLater(() -> {
@@ -916,6 +943,8 @@ public class GUISupportClasses {
 
     }
   }
+
+  /** Settings Pane fpr music controlls. */
 
   public static class SettingsPane extends VBox {
     double fontSize;

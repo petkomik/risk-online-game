@@ -1,8 +1,8 @@
 package game.gui;
 
-import game.gui.GUISupportClasses.DesignButton;
-import game.gui.GUISupportClasses.ImageViewPane;
-import game.gui.GUISupportClasses.Spacing;
+import game.gui.GuiSupportClasses.DesignButton;
+import game.gui.GuiSupportClasses.ImageViewPane;
+import game.gui.GuiSupportClasses.Spacing;
 import game.models.Lobby;
 import game.models.PlayerSingle;
 import game.state.GameType;
@@ -296,7 +296,7 @@ public class MainMenuPaneController extends StackPane {
    * 
    */
 
-  private static Parent loadFXML(String fxml) throws IOException {
+  private static Parent loadFxml(String fxml) throws IOException {
     FXMLLoader fxmlLoader =
         new FXMLLoader(CreateProfilePaneController.class.getResource(fxml + ".fxml"));
     return fxmlLoader.load();

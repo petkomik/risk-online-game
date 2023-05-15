@@ -46,10 +46,10 @@ public class Territory implements Serializable {
     this.countryName = territory.getCountryName();
     // Defensive copy of neighboringTerritories
     this.neighboringTerritories = new ArrayList<>(territory.getNeighboringTerritories());
-    this.addressToPng = territory.getAddressToPNG();
+    this.addressToPng = territory.getAddressToPng();
   }
 
-  public String getAddressToPNG() {
+  public String getAddressToPng() {
     return addressToPng;
   }
 
