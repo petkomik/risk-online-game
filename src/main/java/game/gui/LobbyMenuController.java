@@ -12,8 +12,8 @@ import game.models.Difficulty;
 import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
-import gameState.GameType;
-import gameState.SinglePlayerHandler;
+import game.state.GameType;
+import game.state.SinglePlayerHandler;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
@@ -347,7 +347,7 @@ public class LobbyMenuController extends StackPane {
             : this.lobby.getMaxNumberOfPlayers()));
 
     moreBtnAI.setRotate(180);
-    labelBtnAI.setText(String.valueOf(this.lobby.getAIPlayerList().size()));
+    labelBtnAI.setText(String.valueOf(this.lobby.getAiPlayerList().size()));
 
     moreBtnDiff.setRotate(180);
     labelBtnDiff.setText(lobby.getDifficultyOfAI().toString());
@@ -378,12 +378,6 @@ public class LobbyMenuController extends StackPane {
     numberOfAiDiv.setAlignment(Pos.CENTER);
     AIDifficultyDiv.setAlignment(Pos.CENTER);
 
-    Spacing spacing1 = new Spacing(1);
-    Spacing spacing2 = new Spacing(1);
-    Spacing spacing3 = new Spacing(1);
-    Spacing spacing4 = new Spacing(1);
-    Spacing spacing5 = new Spacing(1);
-    Spacing spacing6 = new Spacing(1);
 
     readyBtn.setText("Ready");
     settingsReadyPane.setSpacing(30 * ratio);
@@ -393,9 +387,15 @@ public class LobbyMenuController extends StackPane {
     settingsBanner.getChildren().add(settingsName);
     readyButtonPane.getChildren().add(readyBtn);
 
+    Spacing spacing1 = new Spacing(1);
+    Spacing spacing2 = new Spacing(1);
     numberPlayersControls.getChildren().addAll(lessBtnPlayers, spacing1, labelBtnPlayers, spacing2,
         moreBtnPlayers);
+    Spacing spacing3 = new Spacing(1);
+    Spacing spacing4 = new Spacing(1);
     numberOfAiControls.getChildren().addAll(lessBtnAI, spacing3, labelBtnAI, spacing4, moreBtnAI);
+    Spacing spacing5 = new Spacing(1);
+    Spacing spacing6 = new Spacing(1);
     AIDifficultyControls.getChildren().addAll(lessBtnDiff, spacing5, labelBtnDiff, spacing6,
         moreBtnDiff);
 
@@ -443,10 +443,10 @@ public class LobbyMenuController extends StackPane {
         gameSound.buttonClickForwardSound();
         String current = labelBtnDiff.getText();
         if (current.equals(Difficulty.EASY.toString())) {
-          lobby.setDifficultyOfAI(Difficulty.CASUAL);
+          lobby.setDifficultyOfAi(Difficulty.CASUAL);
           labelBtnDiff.setText(Difficulty.CASUAL.toString());
         } else if (current.equals(Difficulty.CASUAL.toString())) {
-          lobby.setDifficultyOfAI(Difficulty.HARD);
+          lobby.setDifficultyOfAi(Difficulty.HARD);
           labelBtnDiff.setText(Difficulty.HARD.toString());
         }
 
@@ -463,10 +463,10 @@ public class LobbyMenuController extends StackPane {
         gameSound.buttonClickForwardSound();
         String current = labelBtnDiff.getText();
         if (current.equals(Difficulty.HARD.toString())) {
-          lobby.setDifficultyOfAI(Difficulty.CASUAL);
+          lobby.setDifficultyOfAi(Difficulty.CASUAL);
           labelBtnDiff.setText(Difficulty.CASUAL.toString());
         } else if (current.equals(Difficulty.CASUAL.toString())) {
-          lobby.setDifficultyOfAI(Difficulty.EASY);
+          lobby.setDifficultyOfAi(Difficulty.EASY);
           labelBtnDiff.setText(Difficulty.EASY.toString());
         }
 
@@ -482,10 +482,10 @@ public class LobbyMenuController extends StackPane {
         gameSound.buttonClickForwardSound();
         // TODO
         int labelBefore = Integer.parseInt(labelBtnAI.getText());
-        if (lobby.getAIPlayerList().size() < 5
+        if (lobby.getAiPlayerList().size() < 5
             && lobby.getMaxNumberOfPlayers() > lobby.getPlayerList().size()) {
-          lobby.addAI();
-          labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size()));
+          lobby.addAi();
+          labelBtnAI.setText(String.valueOf(lobby.getAiPlayerList().size()));
         }
         try {
           setUpPlayerCards();
@@ -504,9 +504,9 @@ public class LobbyMenuController extends StackPane {
       @Override
       public void handle(ActionEvent event) {
         gameSound.buttonClickForwardSound();
-        if (lobby.getAIPlayerList().size() > 0) {
-          lobby.removeAI();
-          labelBtnAI.setText(String.valueOf(lobby.getAIPlayerList().size()));
+        if (lobby.getAiPlayerList().size() > 0) {
+          lobby.removeAi();
+          labelBtnAI.setText(String.valueOf(lobby.getAiPlayerList().size()));
         }
         try {
           setUpPlayerCards();
@@ -694,7 +694,7 @@ public class LobbyMenuController extends StackPane {
 
       PlayerCard plyc = new PlayerCard(ply, dirAvatarOnThisPC, Color.web(ply.getColor()), ratio,
           lobby.isReady(ply));
-      if (lobby.getAIPlayerList().contains(ply)) {
+      if (lobby.getAiPlayerList().contains(ply)) {
         plyc.setReady(true);
         lobby.setReady(ply, true);
       }

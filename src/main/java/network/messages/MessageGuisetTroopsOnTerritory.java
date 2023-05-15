@@ -2,7 +2,7 @@ package network.messages;
 
 import game.models.CountryName;
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIsetTroopsOnTerritory class represents a message used to set the number of troops on
@@ -23,7 +23,6 @@ public class MessageGuisetTroopsOnTerritory extends Message {
    * Constructs a MessageGUIsetTroopsOnTerritory object with the specified game state, country name,
    * number of troops, and lobby information.
    *
-   * @param gameState The game state associated with the message
    * @param countryName The name of the country where troops are being set
    * @param numTroopsOfCountry The number of troops to set on the country
    * @param clientsLobby The lobby information

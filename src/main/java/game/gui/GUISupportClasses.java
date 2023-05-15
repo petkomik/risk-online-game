@@ -314,9 +314,6 @@ public class GUISupportClasses {
     private void buildCard() {
 
       HBox cardBanner = new HBox();
-      Label playerName = new Label(name.toUpperCase());
-      StackPane playerImage = new StackPane();
-      HBox readyBanner = new HBox();
       this.setFillWidth(true);
 
       String hex = String.format("#%02X%02X%02X", (int) (color.getRed() * 255),
@@ -326,6 +323,7 @@ public class GUISupportClasses {
       cardBanner.setAlignment(Pos.TOP_CENTER);
       cardBanner.setPadding(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio));
 
+      Label playerName = new Label(name.toUpperCase());
       playerName.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 22 * ratio));
       playerName.setTextFill(Color.WHITE);
       playerName.setAlignment(Pos.CENTER);
@@ -343,9 +341,11 @@ public class GUISupportClasses {
       this.avatar.setSmooth(true);
       this.avatar.setCache(true);
 
+      StackPane playerImage = new StackPane();
       playerImage.getChildren().addAll(circlePl, this.avatar);
       playerImage.setAlignment(Pos.CENTER);
 
+      HBox readyBanner = new HBox();
       readyBanner.setAlignment(Pos.BOTTOM_CENTER);
 
       playerReady.setFont(Font.font("Cooper Black", FontWeight.NORMAL, 24 * ratio));
@@ -663,7 +663,7 @@ public class GUISupportClasses {
 
                 } else if (!messageToBeSend.equals(null) && names.getValue().equals("All")) {
                   // send the message to the general chat
-                  // Assume that lobbyGUIList is a HashMap<String, LobbyGUI> and client refers to
+                  // Assume that lobbyGUIList is a HashMap<String, LobbyGui> and client refers to
                   // the client object
                   if (!client.isInaGame()) {
                     client.sendMessage(
@@ -936,10 +936,10 @@ public class GUISupportClasses {
       return (y / 864.0) * h;
     }
 
+    /** Creates a pane for the audui settings. */
+
     public static StackPane createMutePane(double fontSize, SettingsButton settingsButton,
         double ratio) {
-      MediaPlayer musicPlayer = AppController.getGameSound().getMusicSoundPlayer();
-      MediaPlayer soundPlayer = AppController.getGameSound().getEffectsSoundPlayer();
       // Create buttons for music and sound effects mute/unmute
       DesignButton musicButton =
           new DesignButton(new Insets(10 * ratio, 20, 10 * ratio, 20), 35, 40 * ratio, 600 * ratio);
@@ -965,6 +965,8 @@ public class GUISupportClasses {
         e.printStackTrace();
       }
 
+      MediaPlayer musicPlayer = AppController.getGameSound().getMusicSoundPlayer();
+      MediaPlayer soundPlayer = AppController.getGameSound().getEffectsSoundPlayer();
       // Add event handlers to toggle mute/unmute state of media players
       musicButton.setOnAction(event -> {
         if (musicPlayer != null) {

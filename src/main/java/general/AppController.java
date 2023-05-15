@@ -12,7 +12,6 @@ import network.Server;
  * Class for the application logic handling.
  *
  * @author srogalsk
- *
  */
 
 public class AppController {
@@ -25,13 +24,13 @@ public class AppController {
   private static Server server;
 
   /**
-   * creates the initial profile after starting the game
-   * 
-   * @param firstName
-   * @param lastName
-   * @param userName
-   * @param password
-   * @throws WrongTextFieldInputException
+   * Creates the initial profile after starting the game.
+   *
+   * @param firstName firstName
+   * @param lastName lastName
+   * @param userName userName
+   * @param password password
+   * @throws WrongTextFieldInputException WrongTextFieldInputException
    */
   public static void createFirstProfile(String firstName, String lastName, String userName,
       String password) throws WrongTextFieldInputException {
@@ -62,15 +61,14 @@ public class AppController {
   }
 
   /**
-   * 
-   * creates secondary profile
-   * 
-   * @param firstName
-   * @param lastName
-   * @param userName
-   * @param password
-   * @return Profile
-   * @throws WrongTextFieldInputException
+   * creates secondary profile.
+   *
+   * @param firstName firstName
+   * @param lastName lastName
+   * @param userName userName
+   * @param password password
+   * @return Profile Profile
+   * @throws WrongTextFieldInputException WrongTextFieldInputException
    */
   public static Profile createFirstSecondaryProfile(String firstName, String lastName,
       String userName, String password) throws WrongTextFieldInputException {
@@ -103,12 +101,11 @@ public class AppController {
   }
 
   /**
-   * 
-   * handles the log into profiles
-   * 
-   * @param username
-   * @param password
-   * @return
+   * Handles the log into profiles.
+   *
+   * @param username username
+   * @param password password
+   * @return boolean
    */
   public static boolean logIntoProfile(String username, String password) {
     for (Profile profile : dbH.getAllProfiles()) {
@@ -125,12 +122,11 @@ public class AppController {
   }
 
   /**
-   * 
-   * handles the log in into secondary profiles
-   * 
-   * @param username
-   * @param password
-   * @return
+   * handles the log in into secondary profiles.
+   *
+   * @param username username
+   * @param password password
+   * @return Profile
    */
   public static Profile logIntoSecondProfile(String username, String password) {
     for (Profile profile : dbH.getAllProfiles()) {
@@ -142,12 +138,11 @@ public class AppController {
   }
 
   /**
-   * 
-   * updates the profile according to the choosen attribute in the settings pane
-   * 
-   * @param value
-   * @param attribute
-   * @throws WrongTextFieldInputException
+   * updates the profile according to the choosen attribute in the settings pane.
+   *
+   * @param value value
+   * @param attribute attribute
+   * @throws WrongTextFieldInputException WrongTextFieldInputException
    */
   public static void updateProfile(String value, String attribute)
       throws WrongTextFieldInputException {

@@ -1,7 +1,7 @@
 package network.messages;
 
-import gameState.ChoosePane;
-import gameState.GameState;
+import game.state.ChoosePane;
+import game.state.GameState;
 
 /**
  * This class is a message for the number of troops.
@@ -22,7 +22,6 @@ public class MessageGuichooseNumberOfTroops extends Message {
    * Constructs a MessageGUIchooseNumberOfTroops object with the specified game state, minimum and
    * maximum number of troops, and ChoosePane.
    *
-   * @param gameState The game state associated with the message
    * @param min The minimum number of troops that can be chosen
    * @param max The maximum number of troops that can be chosen
    * @param choosePane The ChoosePane used for selecting the number of troops

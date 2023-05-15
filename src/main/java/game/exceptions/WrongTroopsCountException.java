@@ -1,8 +1,8 @@
 package game.exceptions;
 
 /**
- * Exception class for wrong troops count
- * 
+ * Exception class for wrong troops count.
+ *
  * @author srogalsk
  *
  */

@@ -2,7 +2,7 @@ package network.messages;
 
 import game.models.CountryName;
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIpossessCountry class represents a message used to indicate the possession of a
@@ -24,7 +24,6 @@ public class MessageGuipossessCountry extends Message {
    * Constructs a MessageGUIpossessCountry object with the specified game state, country name,
    * player ID, number of troops left, and lobby.
    *
-   * @param gameState The game state associated with the message
    * @param country The name of the possessed country
    * @param id The ID of the player possessing the country
    * @param troopsLeft The number of troops left in the country

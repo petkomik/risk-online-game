@@ -1,6 +1,6 @@
 package network.messages;
 
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * Message for the closer of toops Pane.
@@ -15,7 +15,6 @@ public class MessageGuicloseTroopsPane extends Message {
   /**
    * Constructs a MessageGUIcloseTroopsPane object with the specified game state.
    *
-   * @param gameState The game state associated with the message
    */
   public MessageGuicloseTroopsPane(GameState gameState) {
     super(MessageType.MessageGUIcloseTroopsPane);

@@ -8,11 +8,11 @@ import game.models.CountryName;
 import game.models.Difficulty;
 import game.models.Lobby;
 import game.models.Player;
-import game.models.PlayerAI;
+import game.models.PlayerAi;
 import game.models.PlayerSingle;
 import game.models.Territory;
-import gameState.GameState;
-import gameState.Period;
+import game.state.GameState;
+import game.state.Period;
 import general.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,23 +25,23 @@ import org.junit.jupiter.api.Test;
 
 /**
  * This class includes tests for the AI Logic.
- * 
+ *
  * @author majda
  *
  */
 
-class AILogicTest {
+class AiLogicTest {
 
   private GameState gameState;
   private PlayerSingle player1;
-  private PlayerAI player2;
+  private PlayerAi player2;
   private HashMap<CountryName, Territory> territories;
 
   @BeforeEach
   void setUp() throws Exception {
     // Set up a new GameState and Player object before each test
     player1 = new PlayerSingle("Player 1", 0);
-    player2 = new PlayerAI("Player 2", 1, Difficulty.HARD);
+    player2 = new PlayerAi("Player 2", 1, Difficulty.HARD);
     Lobby lobby = new Lobby();
     ArrayList<Player> playerList = new ArrayList<>();
     playerList.add(player1);

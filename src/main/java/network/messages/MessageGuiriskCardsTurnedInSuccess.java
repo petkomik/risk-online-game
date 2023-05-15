@@ -1,7 +1,7 @@
 package network.messages;
 
 import game.models.Card;
-import gameState.GameState;
+import game.state.GameState;
 import java.util.ArrayList;
 
 /**

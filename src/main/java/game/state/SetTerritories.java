@@ -1,4 +1,4 @@
-package gameState;
+package game.state;
 
 import game.models.Card;
 import game.models.Continent;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Sets the territories, card decks and continents for the gameState of the game.
+ * Sets the territories, card decks and continents for the game.state of the game.
  *
  * @author srogalsk
  */

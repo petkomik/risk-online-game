@@ -1,7 +1,7 @@
-package gameState;
+package game.state;
 
 /**
- * enum for game type
+ * enum for game type.
  *
  * @author srogalsk
  *

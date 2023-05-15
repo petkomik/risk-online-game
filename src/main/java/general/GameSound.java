@@ -7,8 +7,8 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 /**
- * Class for sound and sound effects of the game
- * 
+ * Class for sound and sound effects of the game.
+ *
  * @author srogalsk
  *
  */
@@ -41,7 +41,7 @@ public final class GameSound {
   }
 
   /**
-   * Method for starting the theme song
+   * Method for starting the theme song.
    */
   public void startThemeSong() {
 
@@ -57,21 +57,21 @@ public final class GameSound {
   }
 
   /**
-   * toggle the mute/unmute sound button
+   * toggle the mute/unmute sound button.
    */
   public void mute_unmute_MusicSound() {
     musicSoundPlayer.setMute(!musicSoundPlayer.isMute());
   }
 
   /**
-   * toggle the mute/unmute effects button
+   * toggle the mute/unmute effects button.
    */
   public void mute_unmute_EffectsSound() {
     effectsSoundPlayer.setMute(!effectsSoundPlayer.isMute());
   }
 
   /**
-   * plays the effects button sound
+   * plays the effects button sound.
    */
   public void buttonClickForwardSound() {
     Platform.runLater(new Runnable() {
@@ -87,7 +87,7 @@ public final class GameSound {
   }
 
   /**
-   * plays the effects button sound
+   * plays the effects button sound.
    */
   public void buttonClickBackwardSound() {
     Platform.runLater(new Runnable() {
@@ -103,7 +103,7 @@ public final class GameSound {
   }
 
   /**
-   * plays the helicopter sound
+   * plays the helicopter sound.
    */
   public void buttonClickHelicopterSound() {
     Platform.runLater(new Runnable() {

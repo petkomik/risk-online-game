@@ -3,7 +3,7 @@ package general;
 import game.gui.MainApp;
 
 /**
- * Main class to run the implementation
+ * Main class to run the implementation.
  *
  * @author srogalsk
  */

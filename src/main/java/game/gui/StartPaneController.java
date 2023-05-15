@@ -29,16 +29,16 @@ import javafx.stage.Stage;
 
 /**
  * First Window shown to the player on Application load.
- * 
+ *
  * @author pmikov
  *
  */
 public class StartPaneController extends StackPane {
   private Stage stage;
-  private VBox vBox;
+  private VBox vbox;
   private ImageView imgBackground;
   private ImageViewPane imgBackgroundPane;
-  private VBox vBoxColor;
+  private VBox vboxColor;
   private VBox contentVBox;
   private ImageView riskLogo;
   private DesignButton playButton;
@@ -76,9 +76,9 @@ public class StartPaneController extends StackPane {
      * First layer of stack Background map image
      */
 
-    vBox = new VBox();
-    vBox.setAlignment(Pos.CENTER);
-    vBox.setFillWidth(true);
+    vbox = new VBox();
+    vbox.setAlignment(Pos.CENTER);
+    vbox.setFillWidth(true);
 
     imgBackground = new ImageView();
     imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
@@ -89,16 +89,16 @@ public class StartPaneController extends StackPane {
     imgBackgroundPane = new ImageViewPane(imgBackground);
     VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
 
-    vBox.getChildren().add(imgBackgroundPane);
+    vbox.getChildren().add(imgBackgroundPane);
 
     /*
      * Second layer of stack Color mask
      */
 
-    vBoxColor = new VBox();
-    vBoxColor.setAlignment(Pos.CENTER);
-    vBoxColor.setFillWidth(true);
-    vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
+    vboxColor = new VBox();
+    vboxColor.setAlignment(Pos.CENTER);
+    vboxColor.setFillWidth(true);
+    vboxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
 
     contentVBox = new VBox();
     contentVBox.setAlignment(Pos.CENTER);
@@ -110,7 +110,6 @@ public class StartPaneController extends StackPane {
     riskLogo.setSmooth(true);
     riskLogo.setCache(true);
 
-    Pane home = this;
     settingsPane = new StackPane();
     settingsButton = new SettingsButton(new Insets(10 * ratio, 20 * ratio, 10 * ratio, 20 * ratio),
         30, 28 * ratio, 170 * ratio, true);
@@ -131,7 +130,7 @@ public class StartPaneController extends StackPane {
     settingsButton.setPickOnBounds(true);
 
     // maybe add vBoxColor
-    this.getChildren().addAll(vBox, vBoxColor, contentVBox);
+    this.getChildren().addAll(vbox, vboxColor, contentVBox);
 
     playButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -153,6 +152,7 @@ public class StartPaneController extends StackPane {
     });
 
 
+    Pane home = this;
 
     settingsButton.setOnAction(new EventHandler<ActionEvent>() {
       @Override

@@ -1,8 +1,8 @@
 package game.exceptions;
 
 /**
- * Exception class for wrong period
- * 
+ * Exception class for wrong period.
+ *
  * @author srogalsk
  *
  */

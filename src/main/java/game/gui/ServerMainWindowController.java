@@ -57,7 +57,7 @@ import network.messages.MessageUpdateLobby;
 /**
  * this class is responsible for constructing the GUI pane, when you have joined a server or hosted
  * one. its the server main menu with all the available lobbies in it.
- * 
+ *
  * @author pmalamov
  * 
  */
@@ -90,7 +90,7 @@ public class ServerMainWindowController extends VBox {
   private static DesignButton searchButton;
   private static Text rankText;
 
-  private HBox buttonsHBox;
+  private HBox buttonsHbox;
   private DesignButton hostGameButton;
   private DesignButton joinGameButton;
   private Button cancelButton;
@@ -100,8 +100,8 @@ public class ServerMainWindowController extends VBox {
 
   private static ScrollPane lobbyListContainer;
   private static volatile VBox vbox;
-  public static HashMap<String, LobbyGUI> lobbyGUIList;
-  public static HashMap<String, LobbyGUI> lobbyGUIListSearch;
+  public static HashMap<String, LobbyGui> lobbyGUIList;
+  public static HashMap<String, LobbyGui> lobbyGUIListSearch;
   public static Lobby selectedLobby;
 
   private static StackPane topContainer;
@@ -137,7 +137,7 @@ public class ServerMainWindowController extends VBox {
 
   public void setup() throws FileNotFoundException {
 
-    lobbyGUIList = new HashMap<String, LobbyGUI>();
+    lobbyGUIList = new HashMap<String, LobbyGui>();
     topContainer = new StackPane();
 
     /*
@@ -331,17 +331,17 @@ public class ServerMainWindowController extends VBox {
      * assembling the host and join buttons
      */
 
-    buttonsHBox = new HBox();
-    buttonsHBox.setAlignment(Pos.CENTER);
-    buttonsHBox.getChildren().addAll(hostGameButton, joinGameButton);
-    buttonsHBox.setSpacing(20 * ratio);
-    buttonsHBox.setPadding(new Insets(30 * ratio, 0, 0, 0));
+    buttonsHbox = new HBox();
+    buttonsHbox.setAlignment(Pos.CENTER);
+    buttonsHbox.getChildren().addAll(hostGameButton, joinGameButton);
+    buttonsHbox.setSpacing(20 * ratio);
+    buttonsHbox.setPadding(new Insets(30 * ratio, 0, 0, 0));
 
     /*
      * assembling menu and scrollpane with lobbies
      */
 
-    menuAndScrollAndButtons.getChildren().addAll(menu, lobbyListContainer, buttonsHBox);
+    menuAndScrollAndButtons.getChildren().addAll(menu, lobbyListContainer, buttonsHbox);
     menuAndScrollAndButtons.setAlignment(Pos.CENTER);
     menuAndScrollAndButtons.setPadding(new Insets(50 * ratio, 0, 0, 0));
 
@@ -389,7 +389,7 @@ public class ServerMainWindowController extends VBox {
       public void handle(ActionEvent event) {
         String lobbyName = searchField.getText();
         if (!lobbyName.isEmpty()) {
-          lobbyGUIListSearch = new HashMap<String, LobbyGUI>();
+          lobbyGUIListSearch = new HashMap<String, LobbyGui>();
 
           for (String key : lobbyGUIList.keySet()) {
             if (key.contains(lobbyName)) {
@@ -510,7 +510,7 @@ public class ServerMainWindowController extends VBox {
       public void handle(ActionEvent event) {
         gameSound.buttonClickForwardSound();
 
-        for (LobbyGUI lobbyEnt : lobbyGUIList.values()) {
+        for (LobbyGui lobbyEnt : lobbyGUIList.values()) {
           if (lobbyEnt.isSelected()) {
             selectedLobby = lobbyEnt.getLobby();
           }
@@ -531,7 +531,7 @@ public class ServerMainWindowController extends VBox {
   }
 
   /**
-   * This method draws the LobbyGUIs in the ServerMainWindow. LobbyGUI is the representation of the
+   * This method draws the LobbyGUIs in the ServerMainWindow. LobbyGui is the representation of the
    * Lobby class in the GUI.
    *
    * @param all A boolean value to check if all lobbies should be drawn or only ones from the search

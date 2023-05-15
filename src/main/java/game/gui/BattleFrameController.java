@@ -11,8 +11,8 @@ import game.models.Battle;
 import game.models.Continent;
 import game.models.CountryName;
 import game.models.Territory;
-import gameState.GameType;
-import gameState.SinglePlayerHandler;
+import game.state.GameType;
+import game.state.SinglePlayerHandler;
 import general.AppController;
 import general.Parameter;
 import java.io.FileInputStream;
@@ -137,7 +137,6 @@ public class BattleFrameController extends StackPane {
     this.defenderColor = Parameter.greenColor;
     this.gameType = GameType.SinglePlayer;
     setup();
-
   }
 
   public BattleFrameController(Battle battle, SinglePlayerHandler singlePlayerHandler,
@@ -564,12 +563,10 @@ public class BattleFrameController extends StackPane {
       }
     }
 
-    ImageView[] artAr = new ImageView[art];
-    ImageView[] cavAr = new ImageView[cav];
-    ImageView[] infAr = new ImageView[inf];
 
     flow.getChildren().removeAll(flow.getChildren());
 
+    ImageView[] artAr = new ImageView[art];
     for (ImageView iv : artAr) {
       iv = new ImageView();
       iv.setImage(new Image(new FileInputStream(Parameter.artillery)));
@@ -581,6 +578,7 @@ public class BattleFrameController extends StackPane {
 
     }
 
+    ImageView[] cavAr = new ImageView[cav];
     for (ImageView iv : cavAr) {
       iv = new ImageView();
       iv.setImage(new Image(new FileInputStream(Parameter.cavalry)));
@@ -592,6 +590,7 @@ public class BattleFrameController extends StackPane {
 
     }
 
+    ImageView[] infAr = new ImageView[inf];
     for (ImageView iv : infAr) {
       iv = new ImageView();
       iv.setImage(new Image(new FileInputStream(Parameter.infantry)));

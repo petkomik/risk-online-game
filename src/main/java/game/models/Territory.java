@@ -20,7 +20,7 @@ public class Territory implements Serializable {
   private int numberOfTroops;
   private final CountryName countryName;
   private ArrayList<Territory> neighboringTerritories;
-  private String addressToPNG;
+  private String addressToPng;
 
   /**
    * Constructor for building an territory object.
@@ -32,7 +32,7 @@ public class Territory implements Serializable {
     this.countryName = countryName;
     this.continent = continent;
     neighboringTerritories = new ArrayList<>();
-    addressToPNG = Parameter.territoryPNGdir + continent.toString().toLowerCase() + "-"
+    addressToPng = Parameter.territoryPNGdir + continent.toString().toLowerCase() + "-"
         + countryName.toString().toLowerCase() + ".png";
   }
 
@@ -46,13 +46,11 @@ public class Territory implements Serializable {
     this.countryName = territory.getCountryName();
     // Defensive copy of neighboringTerritories
     this.neighboringTerritories = new ArrayList<>(territory.getNeighboringTerritories());
-    this.addressToPNG = territory.getAddressToPNG();
+    this.addressToPng = territory.getAddressToPNG();
   }
 
-  /** Getters */
-
   public String getAddressToPNG() {
-    return addressToPNG;
+    return addressToPng;
   }
 
   public Player getOwnedByPlayer() {
@@ -75,7 +73,6 @@ public class Territory implements Serializable {
     return neighboringTerritories;
   }
 
-  /** Setters */
   public void addNumberOfTroops(int numberOfTroops) {
     this.numberOfTroops += numberOfTroops;
   }

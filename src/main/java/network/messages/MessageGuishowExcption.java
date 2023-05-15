@@ -1,6 +1,6 @@
 package network.messages;
 
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIshowExcption class represents a message used to show an exception in the game GUI.
@@ -30,7 +30,6 @@ public class MessageGuishowExcption extends Message {
   /**
    * Constructs a MessageGUIshowExcption object with the specified game state and exception.
    *
-   * @param gameState The game state associated with the message
    * @param e The exception object to be shown
    */
   public MessageGuishowExcption(GameState gameState, Exception e) {

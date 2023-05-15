@@ -1,4 +1,4 @@
-package gameState;
+package game.state;
 
 import game.logic.AiLogic;
 import game.logic.Logic;
@@ -7,7 +7,7 @@ import game.models.Card;
 import game.models.CountryName;
 import game.models.Lobby;
 import game.models.Player;
-import game.models.PlayerAI;
+import game.models.PlayerAi;
 import game.models.Territory;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -590,7 +590,7 @@ public class GameHandler {
                   break;
               }
               if (this.gameState.getCurrentPlayer().isAi()) {
-                this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
               }
             }
             break;
@@ -614,7 +614,7 @@ public class GameHandler {
                 break;
             }
             if (this.gameState.getCurrentPlayer().isAi()) {
-              this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+              this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
             }
             break;
           case FORTIFY:
@@ -641,7 +641,7 @@ public class GameHandler {
                     this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 } else {
                   this.singlePlayerHandler
                       .chnagePlayerOnGui(this.gameState.getCurrentPlayer().getId(), this.gameState
@@ -653,7 +653,7 @@ public class GameHandler {
                 this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 }
                 break;
               case Tutorial:
@@ -662,7 +662,7 @@ public class GameHandler {
                     this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 } else {
                   this.singlePlayerHandler
                       .chnagePlayerOnGui(this.gameState.getCurrentPlayer().getId(), this.gameState
@@ -696,7 +696,7 @@ public class GameHandler {
                   this.singlePlayerHandler.setPeriodOnGui(Period.COUNTRYPOSESSION);
                   if (this.gameState.getCurrentPlayer().isAi()) {
                     // calls the AI
-                    this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                    this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                   } else {
                     this.singlePlayerHandler.chnagePlayerOnGui(
                         this.gameState.getCurrentPlayer().getId(),
@@ -708,7 +708,7 @@ public class GameHandler {
                       this.gameState.getTroopsLeftForCurrent());
                   this.client.setPeriodOnGui(Period.COUNTRYPOSESSION);
                   if (this.gameState.getCurrentPlayer().isAi()) {
-                    this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                    this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                   }
                   break;
                 case Tutorial:
@@ -725,7 +725,7 @@ public class GameHandler {
                   this.singlePlayerHandler.setPeriodOnGui(Period.COUNTRYPOSESSION);
                   if (this.gameState.getCurrentPlayer().isAi()) {
                     // calls the AI
-                    this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                    this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                   } else {
                     this.singlePlayerHandler.chnagePlayerOnGui(
                         this.gameState.getCurrentPlayer().getId(),
@@ -744,7 +744,7 @@ public class GameHandler {
                       this.gameState.getTroopsLeftForCurrent());
                   if (this.gameState.getCurrentPlayer().isAi()) {
                     // calls the AI
-                    this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                    this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                   } else {
                     this.singlePlayerHandler.chnagePlayerOnGui(
                         this.gameState.getCurrentPlayer().getId(),
@@ -755,7 +755,7 @@ public class GameHandler {
                   this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                       this.gameState.getTroopsLeftForCurrent());
                   if (this.gameState.getCurrentPlayer().isAi()) {
-                    this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                    this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                   }
                   break;
                 case Tutorial:
@@ -763,7 +763,7 @@ public class GameHandler {
                       this.gameState.getCurrentPlayer().getId(),
                       this.gameState.getTroopsLeftForCurrent());
                   if (this.gameState.getCurrentPlayer().isAi()) {
-                    this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                    this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                   } else {
                     this.singlePlayerHandler.chnagePlayerOnGui(
                         this.gameState.getCurrentPlayer().getId(),
@@ -805,7 +805,7 @@ public class GameHandler {
                     this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 } else {
                   this.singlePlayerHandler.chnagePlayerOnGui(
                       this.gameState.getCurrentPlayer().getId(),
@@ -816,7 +816,7 @@ public class GameHandler {
                 this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 }
                 break;
               case Tutorial:
@@ -824,7 +824,7 @@ public class GameHandler {
                     this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 } else {
                   this.singlePlayerHandler.chnagePlayerOnGui(
                       this.gameState.getCurrentPlayer().getId(),
@@ -872,7 +872,7 @@ public class GameHandler {
                     this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 } else {
                   this.singlePlayerHandler.chnagePlayerOnGui(
                       this.gameState.getCurrentPlayer().getId(),
@@ -883,7 +883,7 @@ public class GameHandler {
                 this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 }
                 break;
               case Tutorial:
@@ -891,7 +891,7 @@ public class GameHandler {
                     this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
-                  this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
+                  this.simulateAi(gameState, ((PlayerAi) this.gameState.getCurrentPlayer()));
                 } else {
                   this.singlePlayerHandler.chnagePlayerOnGui(
                       this.gameState.getCurrentPlayer().getId(),
@@ -912,7 +912,7 @@ public class GameHandler {
 
   }
 
-  /** Updated the In-Game Ranking based on current gameState. */
+  /** Updated the In-Game Ranking based on current game.state. */
   public void updateInGameLeaderBoard() {
     int[] ranks = Logic.getInGameRanks(this.gameState, this.lobby);
     switch (this.gameType) {
@@ -1180,11 +1180,10 @@ public class GameHandler {
    * Method to simulate AI behaviour. Called from GameHandler when a player end turn and next on is
    * AI.
    *
-   * @param gameState Current GameState
-   * @param player PlayerAI instance of the player that is to be simulated.
+   * @param player PlayerAi instance of the player that is to be simulated.
    */
 
-  public void simulateAi(GameState gameState, PlayerAI player) {
+  public void simulateAi(GameState gameState, PlayerAi player) {
     CountryName country = null;
     switch (gameState.getCurrentGamePeriod()) {
       case DICETHROW:

@@ -8,12 +8,12 @@ import game.models.Card;
 import game.models.CountryName;
 import game.models.Lobby;
 import game.models.Player;
-import gameState.ChoosePane;
-import gameState.GameType;
-import gameState.Hint;
-import gameState.Period;
-import gameState.Phase;
-import gameState.SinglePlayerHandler;
+import game.state.ChoosePane;
+import game.state.GameType;
+import game.state.Hint;
+import game.state.Period;
+import game.state.Phase;
+import game.state.SinglePlayerHandler;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
@@ -178,7 +178,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Calculates the relative horizontal position of a given value.
-   * 
+   *
    * @param x the value to be calculated
    * @return the relative horizontal position of the given value based on the width of the container
    */
@@ -188,7 +188,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Calculates the relative vertical position of a given value.
-   * 
+   *
    * @param x the value to be calculated
    * @return the relative vertical position of the given value based on the height of the container
    */
@@ -198,8 +198,8 @@ public class GamePaneController implements Initializable {
 
   /**
    * Initializes the singleplayerHandler and sets the first player in the lobby the current player
-   * and the player on the gui
-   * 
+   * and the player on the gui.
+   *
    * @param singlePlayerHandler the handler for a singleplayer game
    * @param lobby the lobby for getting the playing players
    */
@@ -381,7 +381,7 @@ public class GamePaneController implements Initializable {
   }
 
   /**
-   * Brings the elements of the map
+   * Brings the elements of the map.
    */
   private void setUpMapComponents() {
     double scaleX = (0.7 * w) / map.getPrefWidth();
@@ -435,7 +435,7 @@ public class GamePaneController implements Initializable {
   }
 
   /**
-   * Sets the player list on the side where all players are shown and display who is now playing
+   * Sets the player list on the side where all players are shown and display who is now playing.
    */
   public void setUpPlayerList() {
     vbPlayerList = new VBox();
@@ -579,7 +579,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets up the next phase button, it's kind of confirming button for changing the turn, phase and
-   * period
+   * period.
    */
   private void setUpNextPhaseButton() {
     nextPhaseButton = new Button();
@@ -587,11 +587,10 @@ public class GamePaneController implements Initializable {
     endTurnIV.setFitWidth(getRelativeHorz(31.0));
     endTurnIV.setFitHeight(getRelativeHorz(31.0));
     nextPhaseButton.setGraphic(endTurnIV);
-    nextPhaseButton.setStyle(
-        "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
-            + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-            + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: "
-            + getRelativeVer(4) + "px;");
+    nextPhaseButton.setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; "
+        + "-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+        + "-fx-background-insets: 1 1 1 1;" + "-fx-border-radius: 12;"
+        + "-fx-border-color: #b87331;" + "-fx-border-width: " + getRelativeVer(4) + "px;");
 
     nextPhaseButton.hoverProperty()
         .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
@@ -643,7 +642,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets up the phase board, shows the current phase or period, phase logo, avatar and color of the
-   * current player and the cards of the player on GUI
+   * current player and the cards of the player on GUI.
    */
   public void setUpPhaseBoard() {
     phaseBoard = new Pane();
@@ -786,7 +785,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets up the pane where the player can choose the number of the troops that he can play with in
-   * phases where it is needed
+   * phases where it is needed.
    */
   public void setUpChoosingTroopsPane() {
     choosingTroopsPane = new Pane();
@@ -794,15 +793,16 @@ public class GamePaneController implements Initializable {
     choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
     /* Creating button for closing the pane and canceling the choosing process */
-    ImageView cancelIV = new ImageView(Parameter.phaseLogosdir + "cancel.png");
-    cancelIV.setFitWidth(getRelativeHorz(31.0));
-    cancelIV.setFitHeight(getRelativeHorz(31.0));
+    ImageView cancelIv = new ImageView(Parameter.phaseLogosdir + "cancel.png");
+    cancelIv.setFitWidth(getRelativeHorz(31.0));
+    cancelIv.setFitHeight(getRelativeHorz(31.0));
     falseButtonChoosingTroops = new Button();
-    falseButtonChoosingTroops.setGraphic(cancelIV);
-    falseButtonChoosingTroops.setStyle(
-        "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
-            + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-            + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+    falseButtonChoosingTroops.setGraphic(cancelIv);
+    falseButtonChoosingTroops
+        .setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; "
+            + "-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+            + "-fx-background-insets: 1 1 1 1;" + "-fx-border-radius: 12;"
+            + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 
     falseButtonChoosingTroops.hoverProperty()
         .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
@@ -830,10 +830,11 @@ public class GamePaneController implements Initializable {
     endTurnIV.setFitHeight(getRelativeHorz(31.0));
     trueButtonChoosingTroops = new Button();
     trueButtonChoosingTroops.setGraphic(endTurnIV);
-    trueButtonChoosingTroops.setStyle(
-        "-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; -fx-background-color: #b87331;"
-            + "-fx-background-radius: 15;" + "-fx-background-insets: 1 1 1 1;"
-            + "-fx-border-radius: 12;" + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
+    trueButtonChoosingTroops
+        .setStyle("-fx-shape: \"M 30 0 A 30 30 0 1 1 30 60 A 30 30 0 1 1 30 0\"; "
+            + "-fx-background-color: #b87331;" + "-fx-background-radius: 15;"
+            + "-fx-background-insets: 1 1 1 1;" + "-fx-border-radius: 12;"
+            + "-fx-border-color: #b87331;" + "-fx-border-width: 3px;");
 
     trueButtonChoosingTroops.hoverProperty()
         .addListener((ChangeListener<Boolean>) (observable, oldValue, newValue) -> {
@@ -903,7 +904,7 @@ public class GamePaneController implements Initializable {
   }
 
   /**
-   * Sets up the pane where cards are shown and where the player can select and trade them
+   * Sets up the pane where cards are shown and where the player can select and trade theme.
    */
   private void setUpCardsPopUp() {
     cardsPopUp = new Pane();
@@ -931,9 +932,6 @@ public class GamePaneController implements Initializable {
     tradeButton.setDisable(true);
 
     Rectangle dropOnCard1 = new Rectangle();
-    Rectangle dropOnCard2 = new Rectangle();
-    Rectangle dropOnCard3 = new Rectangle();
-
     dropOnCard1.setStroke(Color.BLACK);
     dropOnCard1.setStrokeType(StrokeType.OUTSIDE);
     dropOnCard1.setStrokeWidth(3);
@@ -944,6 +942,7 @@ public class GamePaneController implements Initializable {
     dropOnCard1.setLayoutX(getRelativeHorz(435.0));
     dropOnCard1.setLayoutY(getRelativeVer(125.0));
 
+    Rectangle dropOnCard2 = new Rectangle();
     dropOnCard2.setStroke(Color.BLACK);
     dropOnCard2.setStrokeType(StrokeType.OUTSIDE);
     dropOnCard2.setStrokeWidth(3);
@@ -954,6 +953,7 @@ public class GamePaneController implements Initializable {
     dropOnCard2.setLayoutX(getRelativeHorz(668.0));
     dropOnCard2.setLayoutY(getRelativeVer(77.0));
 
+    Rectangle dropOnCard3 = new Rectangle();
     dropOnCard3.setStroke(Color.BLACK);
     dropOnCard3.setStrokeType(StrokeType.OUTSIDE);
     dropOnCard3.setStrokeWidth(3);
@@ -990,7 +990,7 @@ public class GamePaneController implements Initializable {
   }
 
   /**
-   * Sets up the pane where the hints are displayed
+   * Sets up the pane where the hints are displayed.
    */
   private void setUpTutorialsPane() {
     tutorialMainPane = new Pane();
@@ -1093,10 +1093,10 @@ public class GamePaneController implements Initializable {
   /**
    * Claims the country accordingly to the parameter countryName and change the color of the country
    * accordingly to the color of the player who has the id in the parameter and sets the number of
-   * the troops on the country on 1
-   * 
-   * @param countryName
-   * @param id
+   * the troops on the country on 1.
+   *
+   * @param countryName CountryName enum of Territory
+   * @param id of the player claiming
    */
   public void claimCountry(CountryName countryName, int id) {
     for (Player p : this.lobby.getPlayerList()) {
@@ -1139,7 +1139,7 @@ public class GamePaneController implements Initializable {
   /**
    * Sets the current player based on their ID, updates the turn counter, and updates the GUI to
    * reflect the new player's turn.
-   * 
+   *
    * @param id the ID of the player who is the new current player
    */
   public void setCurrentPlayer(int id) {
@@ -1170,10 +1170,10 @@ public class GamePaneController implements Initializable {
   }
 
   /**
-   * Sets the number of troops on the given country
-   * 
-   * @param countryName
-   * @param numTroops
+   * Sets the number of troops on the given country.
+   *
+   * @param countryName enum of the Territory
+   * @param numTroops number of troops to be set
    */
   public void setNumTroops(CountryName countryName, int numTroops) {
     if (numTroops > 99) {
@@ -1188,7 +1188,7 @@ public class GamePaneController implements Initializable {
    * Displays the choosing troops pane for the given country with the specified minimum and maximum
    * number of troops allowed to be selected, and sets the text of the choosing troops phase label
    * and number label.
-   * 
+   *
    * @param countryName The name of the country for which the choosing troops pane should be
    *        displayed.
    * @param minTroops The minimum number of troops allowed to be selected.
@@ -1286,7 +1286,7 @@ public class GamePaneController implements Initializable {
   }
 
   /**
-   * Closes choosing troops pane
+   * Closes choosing troops pane.
    */
   public void closeChoosingTroopsPane() {
     choosingTroopsPane.setVisible(false);
@@ -1410,23 +1410,23 @@ public class GamePaneController implements Initializable {
         armiesVB.setLayoutX((countryArmyPane.getPrefWidth() - armiesVB.getPrefWidth()) / 2.0);
         armiesVB.setLayoutY((countryArmyPane.getPrefHeight() - armiesVB.getPrefHeight()) / 2.0);
 
-        ImageView armyIV1 = new ImageView(Parameter.infantry);
-        armyIV1.setFitHeight(55.0);
-        armyIV1.setPreserveRatio(true);
-        armyIV1.setSmooth(true);
-        armyIV1.setCache(true);
+        ImageView armyIv1 = new ImageView(Parameter.infantry);
+        armyIv1.setFitHeight(55.0);
+        armyIv1.setPreserveRatio(true);
+        armyIv1.setSmooth(true);
+        armyIv1.setCache(true);
 
-        ImageView armyIV2 = new ImageView(Parameter.artillery);
-        armyIV2.setFitHeight(55.0);
-        armyIV2.setPreserveRatio(true);
-        armyIV2.setSmooth(true);
-        armyIV2.setCache(true);
+        ImageView armyIv2 = new ImageView(Parameter.artillery);
+        armyIv2.setFitHeight(55.0);
+        armyIv2.setPreserveRatio(true);
+        armyIv2.setSmooth(true);
+        armyIv2.setCache(true);
 
-        ImageView armyIV3 = new ImageView(Parameter.cavalry);
-        armyIV3.setFitHeight(55.0);
-        armyIV3.setPreserveRatio(true);
-        armyIV3.setSmooth(true);
-        armyIV3.setCache(true);
+        ImageView armyIv3 = new ImageView(Parameter.cavalry);
+        armyIv3.setFitHeight(55.0);
+        armyIv3.setPreserveRatio(true);
+        armyIv3.setSmooth(true);
+        armyIv3.setCache(true);
 
         Label countryNameLabel = new Label("Joker");
         countryNameLabel.setAlignment(Pos.CENTER);
@@ -1435,7 +1435,7 @@ public class GamePaneController implements Initializable {
             .setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20.0)));
         countryNameLabel.setTextAlignment(TextAlignment.CENTER);
 
-        armiesVB.getChildren().addAll(armyIV1, armyIV2, armyIV3);
+        armiesVB.getChildren().addAll(armyIv1, armyIv2, armyIv3);
         countryArmyPane.getChildren().add(armiesVB);
         countryNamePane.getChildren().add(countryNameLabel);
       } else {
@@ -1459,13 +1459,13 @@ public class GamePaneController implements Initializable {
         armyIV.setSmooth(true);
         armyIV.setCache(true);
 
-        ImageView countryIV = new ImageView(c.getPngDir());
-        countryIV.setFitWidth(countryArmyPane.getPrefWidth() - 30.0);
-        countryIV.setFitHeight(countryArmyPane.getPrefHeight() - 50.0);
-        countryIV.setLayoutX((countryArmyPane.getPrefWidth() - countryIV.getFitWidth()) / 2.0);
-        countryIV.setLayoutY((countryArmyPane.getPrefHeight() - countryIV.getFitHeight()) / 2.0);
+        ImageView countryIv = new ImageView(c.getPngDir());
+        countryIv.setFitWidth(countryArmyPane.getPrefWidth() - 30.0);
+        countryIv.setFitHeight(countryArmyPane.getPrefHeight() - 50.0);
+        countryIv.setLayoutX((countryArmyPane.getPrefWidth() - countryIv.getFitWidth()) / 2.0);
+        countryIv.setLayoutY((countryArmyPane.getPrefHeight() - countryIv.getFitHeight()) / 2.0);
 
-        countryArmyPane.getChildren().add(countryIV);
+        countryArmyPane.getChildren().add(countryIv);
         countryArmyPane.getChildren().add(armyIV);
 
         Label countryNameLabel = new Label(c.getName().toString()
@@ -1493,7 +1493,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets the current game phase and updates the GUI accordingly.
-   * 
+   *
    * @param phase The current game phase.
    */
   public void setPhase(Phase phase) {
@@ -1516,7 +1516,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets the current game period and updates the GUI accordingly.
-   * 
+   *
    * @param period The current game period.
    */
   public void setPeriod(Period period) {
@@ -1557,7 +1557,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets the player currently shown on the GUI and updates the corresponding GUI elements.
-   * 
+   *
    * @param idOfPlayer The ID of the player to be shown on the GUI.
    * @param cards The cards held by the player.
    */
@@ -1589,7 +1589,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Turns the color of a country on the map to grey.
-   * 
+   *
    * @param countryName The name of the country to be turned grey.
    */
   public void turnCountryGrey(CountryName countryName) {
@@ -1605,7 +1605,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Highlights the given country with a lighting effect.
-   * 
+   *
    * @param countryName The name of the country to be highlighted.
    */
   public void pointUpCountry(CountryName countryName) {
@@ -1633,7 +1633,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Removes any effects applied to the given country.
-   * 
+   *
    * @param countryName The name of the country to remove effects from.
    */
   public void resetCountryEffect(CountryName countryName) {
@@ -1648,7 +1648,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Enables the given country so that it can be clicked on.
-   * 
+   *
    * @param countryName The name of the country to be enabled.
    */
   public void activateCountry(CountryName countryName) {
@@ -1663,7 +1663,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Disables the given country so that it cannot be clicked on.
-   * 
+   *
    * @param countryName The name of the country to be disabled.
    */
   public void deactivateCountry(CountryName countryName) {
@@ -1685,7 +1685,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets the amount of troops left to deploy label to the given number.
-   * 
+   *
    * @param number The number to display in the label.
    */
   public void setAmountOfTroopsLeftToDeploy(int number) {
@@ -1698,7 +1698,7 @@ public class GamePaneController implements Initializable {
    * ArrayList of Players sorted by their rank and creates a new EndGamePodiumController object with
    * this list and a boolean indicating whether the game type is SinglePlayer or not. It then sets
    * the scene of the current stage to the EndGamePodiumController root.
-   * 
+   *
    * @param playersByRank An ArrayList of Players sorted by their rank
    */
   public void endGame(ArrayList<Player> playersByRank) {
@@ -1726,7 +1726,7 @@ public class GamePaneController implements Initializable {
   /**
    * Opens the battle frame for a given battle object. The battle frame contains the GUI for the
    * battle between two players.
-   * 
+   *
    * @param battle The battle object that contains information about the battle.
    */
   public void openBattleFrame(Battle battle) {
@@ -1840,7 +1840,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * This method is used to roll the dice for a battle between two players.
-   * 
+   *
    * @param attackerDiceValues an array of integers containing the dice values of the attacker
    * @param defenderDiceValues an array of integers containing the dice values of the defender
    * @param troopsInAttackAt an integer representing the number of troops in the attacking territory
@@ -1879,7 +1879,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Displays an error dialog with the specified message.
-   * 
+   *
    * @param message the message to be displayed in the error dialog
    */
   public void showException(String message) {
@@ -1901,7 +1901,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Returns a hexadecimal representation of the specified color in the format #RRGGBB.
-   * 
+   *
    * @param c the color to be converted to hexadecimal format
    * @return a string representation of the input color in hexadecimal format, with the red, green,
    *         and blue components represented by their hexadecimal equivalents.
@@ -1916,7 +1916,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Returns a darker shade of the specified color in hexadecimal format.
-   * 
+   *
    * @param c the color to be made darker
    * @return a string representation of the darker shade of the color in hexadecimal format. The
    *         shade is obtained by subtracting 20 from the RGB values of the input color and
@@ -1934,7 +1934,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Returns the color name as a string representation based on the specified Color object.
-   * 
+   *
    * @param color the color object to convert to a string representation
    * @return the string representation of the color name. Possible values are "Blue", "Green",
    *         "Orange", "Purple", "Red", or "Yellow". If the specified color object does not match
@@ -1960,7 +1960,7 @@ public class GamePaneController implements Initializable {
 
   /**
    * Sets the ranking of each player in the game and updates the display accordingly.
-   * 
+   *
    * @param playersRanking an integer array containing the ranking of each player, where the index
    *        of the array corresponds to the player number. The ranking should be greater than or
    *        equal to 0, where 0 indicates that the player is not ranked.
@@ -2009,7 +2009,7 @@ public class GamePaneController implements Initializable {
           serverMainWindowController.actionEventsSetup();
 
           for (Lobby lobby : client.getLobbies().values()) {
-            serverMainWindowController.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
+            serverMainWindowController.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGui(lobby));
           }
 
           serverMainWindowController.drawLobbies(true);

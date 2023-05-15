@@ -5,8 +5,8 @@ import game.gui.GUISupportClasses.ImageViewPane;
 import game.gui.GUISupportClasses.Spacing;
 import game.models.Lobby;
 import game.models.PlayerSingle;
-import gameState.GameType;
-import gameState.SinglePlayerHandler;
+import game.state.GameType;
+import game.state.SinglePlayerHandler;
 import general.AppController;
 import general.GameSound;
 import general.Parameter;
@@ -36,7 +36,7 @@ import javafx.stage.Stage;
 
 /**
  * Class for the Main Menu Pane. Paints GUI and sets Button action events.
- * 
+ *
  * @author pmikov
  */
 public class MainMenuPaneController extends StackPane {
@@ -80,7 +80,7 @@ public class MainMenuPaneController extends StackPane {
 
   /**
    * Setup method, creates and positions nodes.
-   * 
+   *
    * @throws FileNotFoundException for map background image not found
    */
 
@@ -193,8 +193,8 @@ public class MainMenuPaneController extends StackPane {
         gameSound.buttonClickForwardSound();
         Lobby lobby = new Lobby();
         lobby.joinLobby(new PlayerSingle(AppController.getProfile()));
-        lobby.addAI();
-        lobby.addAI();
+        lobby.addAi();
+        lobby.addAi();
         Node node = (Node) event.getSource();
         stage = (Stage) node.getScene().getWindow();
         try {

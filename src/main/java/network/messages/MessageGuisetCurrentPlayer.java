@@ -1,7 +1,7 @@
 package network.messages;
 
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIsetCurrentPlayer class represents a message used to update the current player in
@@ -23,7 +23,6 @@ public class MessageGuisetCurrentPlayer extends Message {
    * Constructs a MessageGUIsetCurrentPlayer object with the specified game state, player ID, number
    * of troops left, and lobby information.
    *
-   * @param gameState The game state associated with the message
    * @param id The player ID
    * @param troopsLeft The number of troops left for the player
    * @param clientsLobby The lobby information

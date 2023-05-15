@@ -4,17 +4,17 @@ import database.Profile;
 import game.gui.CreateProfilePaneController;
 import game.gui.GUISupportClasses;
 import game.gui.GamePaneController;
-import game.gui.LobbyGUI;
+import game.gui.LobbyGui;
 import game.gui.ServerMainWindowController;
 import game.models.Battle;
 import game.models.Card;
 import game.models.CountryName;
 import game.models.Lobby;
 import game.models.Player;
-import gameState.ChoosePane;
-import gameState.GameHandler;
-import gameState.Period;
-import gameState.Phase;
+import game.state.ChoosePane;
+import game.state.GameHandler;
+import game.state.Period;
+import game.state.Phase;
 import general.AppController;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -360,14 +360,14 @@ public class Client {
               case MessageCreateLobby:
 
                 MessageCreateLobby mcL = (MessageCreateLobby) message;
-                LobbyGUI lobbyGui = new LobbyGUI(mcL.getLobby());
+                LobbyGui lobbyGui = new LobbyGui(mcL.getLobby());
 
                 lobbyGui.setOnAction(new EventHandler<ActionEvent>() {
                   @Override
                   public void handle(ActionEvent event) {
                     AppController.getGameSound().buttonClickBackwardSound();
                     ServerMainWindowController.selectedLobby = lobbyGui.getLobby();
-                    for (LobbyGUI lobbyEnt : ServerMainWindowController.lobbyGUIList.values()) {
+                    for (LobbyGui lobbyEnt : ServerMainWindowController.lobbyGUIList.values()) {
                       lobbyEnt.setSelected(false);
                     }
 
@@ -386,7 +386,7 @@ public class Client {
                 MessageJoinLobby mjL = (MessageJoinLobby) message;
                 lobbies.replace(mjL.getLobby().getLobbyName(), mjL.getLobby());
                 ServerMainWindowController.lobbyGUIList.replace(mjL.getLobby().getLobbyName(),
-                    new LobbyGUI(mjL.getLobby()));
+                    new LobbyGui(mjL.getLobby()));
 
                 for (Player player : mjL.getLobby().getPlayersJoined()) {
                   if (profile.getId() == player.getId()) {
@@ -404,7 +404,7 @@ public class Client {
                     messageUpdateLobby.getLobby());
                 ServerMainWindowController.lobbyGUIList.replace(
                     messageUpdateLobby.getLobby().getLobbyName(),
-                    new LobbyGUI(messageUpdateLobby.getLobby()));
+                    new LobbyGui(messageUpdateLobby.getLobby()));
                 for (Player player : messageUpdateLobby.getLobby().getPlayersJoined()) {
                   if (profile.getId() == player.getId()) {
                     ServerMainWindowController
@@ -432,7 +432,7 @@ public class Client {
                 lobbies.forEach((key, value) -> {
 
                   if (!ServerMainWindowController.lobbyGUIList.containsKey(key)) {
-                    ServerMainWindowController.lobbyGUIList.put(key, new LobbyGUI(value));
+                    ServerMainWindowController.lobbyGUIList.put(key, new LobbyGui(value));
                   }
                 });
                 ServerMainWindowController.drawLobbies(true);

@@ -385,7 +385,7 @@ public class EndGamePodiumController extends StackPane {
             serverMenu.actionEventsSetup();
             serverMenu.setRankText();
             for (Lobby lobby : AppController.getClient().getLobbies().values()) {
-              serverMenu.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGUI(lobby));
+              serverMenu.lobbyGUIList.put(lobby.getLobbyName(), new LobbyGui(lobby));
             }
             serverMenu.drawLobbies(true);
             AppController.getClient().setClientsLobby(null);

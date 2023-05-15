@@ -9,9 +9,9 @@ import game.models.Lobby;
 import game.models.Player;
 import game.models.PlayerSingle;
 import game.models.Territory;
-import gameState.GameState;
-import gameState.Period;
-import gameState.Phase;
+import game.state.GameState;
+import game.state.Period;
+import game.state.Phase;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ public class GameLogicTest {
   }
 
   /**
-   * Testing the claim territory method
+   * Testing the claim territory method.
    */
   @Test
   void testClaimTerritory() {
@@ -85,7 +85,7 @@ public class GameLogicTest {
   }
 
   /**
-   * Testing the initial deploy method
+   * Testing the initial deploy method.
    */
   @Test
   void testCanInitialDeployTroopsToTerritory() {
@@ -112,7 +112,7 @@ public class GameLogicTest {
   }
 
   /**
-   * Testing the reinforcement method
+   * Testing the reinforcement method.
    */
   @Test
   void testCanReinforceTroopsToTerritory() {
@@ -147,7 +147,7 @@ public class GameLogicTest {
   }
 
   /**
-   * Testing the attack method
+   * Testing the attack method.
    */
   @Test
   void testCanAttack() {
@@ -173,24 +173,24 @@ public class GameLogicTest {
   }
 
   /**
-   * Testing the fortification method
+   * Testing the fortification method.
    */
   @Test
   void testPlayerForitfyConfirmedIsOk() {
     // Set Up
-    CountryName from = CountryName.Argentina;
-    CountryName to = CountryName.Brazil;
-    int troopsNumber = 2;
     gameState.setCurrentPlayer(player1.getId());
     gameState.setCurrentGamePeriod(Period.MAINPERIOD);
     gameState.setCurrentTurnPhase(Phase.FORTIFY);
+    CountryName from = CountryName.Argentina;
     Territory fromTerritory = gameState.getTerritories().get(from);
     fromTerritory.setOwnedByPlayer(player1);
     fromTerritory.setNumberOfTroops(4);
+    CountryName to = CountryName.Brazil;
     Territory toTerritory = gameState.getTerritories().get(to);
     toTerritory.setOwnedByPlayer(player1);
     // Test Cases
     // Assert that player can fortify from Argentina to Brazil with 2 troops
+    int troopsNumber = 2;
     assertTrue(Logic.playerForitfyConfirmedIsOk(gameState, player1, from, to, troopsNumber));
 
     // Assert that player cannot fortify during other periods or phases
@@ -220,7 +220,7 @@ public class GameLogicTest {
   }
 
   /**
-   * Testing the attack confirmation method
+   * Testing the attack confirmation method.
    */
   @Test
   void testPlayerAttackAttackConfirmedIsOK() {

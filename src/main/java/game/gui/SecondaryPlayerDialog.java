@@ -51,7 +51,6 @@ public class SecondaryPlayerDialog {
     ButtonType confirmButtonType = new ButtonType("Confirm", ButtonData.OK_DONE);
     dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType);
 
-    VBox vBox = new VBox();
     HBox userRow = new HBox();
     TextField username = new TextField();
     Label userLabel = new Label();
@@ -78,6 +77,7 @@ public class SecondaryPlayerDialog {
     lastNameRow.getChildren().addAll(lastLabel, new Spacing(1), lastName);
     lastNameRow.setSpacing(20);
 
+    VBox vBox = new VBox();
     vBox.setSpacing(10);
     vBox.setPadding(new Insets(50, 50, 50, 50));
     vBox.setAlignment(Pos.CENTER);

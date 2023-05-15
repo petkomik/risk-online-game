@@ -1,7 +1,7 @@
 package network.messages;
 
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIendBattle class represents a message used to indicate the end of a battle in the
@@ -20,7 +20,6 @@ public class MessageGuiendBattle extends Message {
   /**
    * Constructs a MessageGUIendBattle object with the specified game state and lobby.
    *
-   * @param gameState The game state associated with the message
    * @param clientsLobby The associated lobby
    */
   public MessageGuiendBattle(GameState gameState, Lobby clientsLobby) {

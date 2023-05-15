@@ -1,7 +1,7 @@
 package network.messages;
 
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIRollInitalDice class represents a message used to indicate the result of rolling
@@ -24,7 +24,6 @@ public class MessageGuiRollInitalDice extends Message {
    * Constructs a MessageGUIRollInitalDice object with the specified game state, player ID, rolled
    * value, and associated lobby.
    *
-   * @param gameState The game state associated with the message
    * @param id The ID of the player
    * @param value The rolled value
    * @param lobby The associated lobby

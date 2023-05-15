@@ -1,8 +1,8 @@
 package game.exceptions;
 
 /**
- * Exception class for wrong cards
- * 
+ * Exception class for wrong cards.
+ *
  * @author srogalsk
  *
  */

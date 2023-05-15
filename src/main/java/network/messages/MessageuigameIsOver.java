@@ -2,7 +2,7 @@ package network.messages;
 
 import game.models.Lobby;
 import game.models.Player;
-import gameState.GameState;
+import game.state.GameState;
 import java.util.ArrayList;
 
 /**
@@ -25,7 +25,6 @@ public class MessageuigameIsOver extends Message {
   /**
    * Constructs a MessageGUIgameIsOver object with the specified game state, podium, and lobby.
    *
-   * @param gameState The game state associated with the message
    * @param podium The list of players in the finishing order (podium)
    * @param clientsLobby The associated lobby
    *

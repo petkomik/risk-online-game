@@ -3,9 +3,9 @@ package game.logic;
 import game.models.Card;
 import game.models.CountryName;
 import game.models.Player;
-import game.models.PlayerAI;
+import game.models.PlayerAi;
 import game.models.Territory;
-import gameState.GameState;
+import game.state.GameState;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,11 +27,10 @@ public class AiLogic {
    * Selects a territory for the initial claim phase of the game. This method is called when an AI
    * player is choosing a territory to claim during the initial claim phase of the game.
    *
-   * @param gameState The current game state.
    * @param player The AI player choosing the territory.
    * @return The name of the selected territory.
    */
-  public static CountryName chooseTerritoryToInitialClaim(GameState gameState, PlayerAI player) {
+  public static CountryName chooseTerritoryToInitialClaim(GameState gameState, PlayerAi player) {
 
     HashMap<CountryName, Territory> territories = gameState.getTerritories();
 
@@ -123,12 +122,11 @@ public class AiLogic {
    * This method chooses a territory for initial reinforcement for the given player based on their
    * level and game state.
    *
-   * @param gameState the current game state
    * @param player the player for whom to choose the territory
    * @return the name of the chosen territory, or null if the player's level is not recognized
    */
   public static CountryName chooseTerritoryToInitialReinforce(GameState gameState,
-      PlayerAI player) {
+      PlayerAi player) {
 
     HashMap<CountryName, Territory> territories = gameState.getTerritories();
 
@@ -172,12 +170,11 @@ public class AiLogic {
    * Returns a Pair of a CountryName that the AI chooses to reinforce and the number of troops to
    * reinforce based on the game state and the AI level.
    *
-   * @param gameState the current state of the game
    * @param player the AI player making the decision
    * @return Pair of CountryName and int
    */
   public static Pair<CountryName, Integer> chooseTerritoryToReinforce(GameState gameState,
-      PlayerAI player) {
+      PlayerAi player) {
     HashMap<Integer, Integer> troopsLeft = gameState.getPlayerTroopsLeft();
     switch (player.getLevel()) {
       case EASY:
@@ -221,7 +218,7 @@ public class AiLogic {
    * @return an ArrayList of the three most outer territories
    */
   private static ArrayList<Territory> getThreeMostOuterCountries(GameState gameState,
-      PlayerAI player) {
+      PlayerAi player) {
     ArrayList<Territory> list = new ArrayList<>();
     int min = Integer.MAX_VALUE;
     int count = 0;
@@ -292,7 +289,7 @@ public class AiLogic {
    */
 
   private static ArrayList<Territory> getThreeMostOuterTerritories(
-      Collection<Territory> territories, PlayerAI player) {
+      Collection<Territory> territories, PlayerAi player) {
     List<Territory> territoriesCopy = new ArrayList<>();
     for (Territory t : territories) {
       territoriesCopy.add(t);
@@ -322,7 +319,6 @@ public class AiLogic {
   /**
    * This method selects the name of a random unowned territory in the given game state.
    *
-   * @param gameState the current game state
    * @return the name of a random unowned territory, or null if all territories are owned
    */
   public static CountryName getRandomFreeCountryName(GameState gameState) {
@@ -339,10 +335,9 @@ public class AiLogic {
   /**
    * This method selects the name of a random owned territory in the given game state.
    *
-   * @param gameState the current game state
    * @return the name of a random owned territory, or null if all territories are owned
    */
-  public static CountryName getRandomOwnedCountryName(GameState gameState, PlayerAI player) {
+  public static CountryName getRandomOwnedCountryName(GameState gameState, PlayerAi player) {
     Object[] territories = gameState.getTerritories().keySet().stream()
         .filter(x -> gameState.getTerritories().get(x).getOwnedByPlayer().equals(player)).toArray();
     Random generator = new Random();
@@ -357,7 +352,7 @@ public class AiLogic {
    * @param player the player for whom to find the most outer territory
    * @return the most outer territory owned by the player, or null if none is found
    */
-  public static Territory mostOuterCountry(GameState gameState, PlayerAI player) {
+  public static Territory mostOuterCountry(GameState gameState, PlayerAi player) {
 
     int max = Integer.MIN_VALUE;
     int count = 0;
@@ -388,7 +383,7 @@ public class AiLogic {
    * @param player the player for whom to find the most outer territory
    * @return the most outer territory owned by the player, or null if none is found
    */
-  public static Territory mostOuterCountry2(Collection<Territory> territories, PlayerAI player) {
+  public static Territory mostOuterCountry2(Collection<Territory> territories, PlayerAi player) {
     int max = Integer.MIN_VALUE;
     int count = 0;
     Territory terr = null;
@@ -416,7 +411,7 @@ public class AiLogic {
    * @param player the player for whom to find the most outer territory
    * @return the most inner territory owned by the player, or null if none is found
    */
-  public static Territory mostInnerCountry(Collection<Territory> territories, PlayerAI player) {
+  public static Territory mostInnerCountry(Collection<Territory> territories, PlayerAi player) {
 
     int min = Integer.MAX_VALUE;
     int count = 0;
@@ -448,7 +443,7 @@ public class AiLogic {
    * @return an ArrayList of the three most inner territories
    */
   private static ArrayList<Territory> getThreeMostInnerTerritories(
-      Collection<Territory> territories, PlayerAI player) {
+      Collection<Territory> territories, PlayerAi player) {
     List<Territory> territoriesCopy = new ArrayList<>();
     for (Territory t : territories) {
       territoriesCopy.add(t);
@@ -480,7 +475,7 @@ public class AiLogic {
    * @param player the player for whom to determine whether to attack
    * @return true if the player will attack, false otherwise
    */
-  public static boolean willAttack(GameState gameState, PlayerAI player) {
+  public static boolean willAttack(GameState gameState, PlayerAi player) {
     boolean attack = false;
     for (Territory t : getAllOwnTerritories(gameState, player)) {
       if (t.getNumberOfTroops() > 1) {
@@ -522,7 +517,7 @@ public class AiLogic {
    * @param player The player to check for neighboring territories.
    * @return true if there is a neighboring territory with less troops, false otherwise.
    */
-  public static boolean isNeighbourWithLessTroops(GameState gameState, PlayerAI player) {
+  public static boolean isNeighbourWithLessTroops(GameState gameState, PlayerAi player) {
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
       if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
         for (Territory neighbour : set.getValue().getNeighboringTerritories()) {
@@ -545,7 +540,7 @@ public class AiLogic {
    * @return a pair of countries for the attack
    */
   public static Pair<CountryName, CountryName> chooseTerritoryPairAttack(GameState gameState,
-      PlayerAI player) {
+      PlayerAi player) {
 
     Territory attacker = null;
 
@@ -593,7 +588,7 @@ public class AiLogic {
     }
   }
 
-  private static ArrayList<Territory> getAllOwnTerritories(GameState gameState, PlayerAI player) {
+  private static ArrayList<Territory> getAllOwnTerritories(GameState gameState, PlayerAi player) {
     ArrayList<Territory> list = new ArrayList<Territory>();
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
       if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
@@ -613,7 +608,7 @@ public class AiLogic {
    * @return the name of the neighboring country with the highest number of troops that is not owned
    *         by the given AI player
    */
-  public static CountryName getNeighbourWithHighestNumb(Territory territory, PlayerAI player) {
+  public static CountryName getNeighbourWithHighestNumb(Territory territory, PlayerAi player) {
     int max = 0;
     CountryName highNeigh = null;
     for (Territory t : territory.getNeighboringTerritories()) {
@@ -634,7 +629,7 @@ public class AiLogic {
    * @return the name of the neighboring country with the lowest number of troops that is not owned
    *         by the given AI player
    */
-  public static CountryName getNeighbourWithLowestNumb(Territory territory, PlayerAI player) {
+  public static CountryName getNeighbourWithLowestNumb(Territory territory, PlayerAi player) {
     int min = Integer.MAX_VALUE;
     CountryName lowNeigh = null;
     for (Territory t : territory.getNeighboringTerritories()) {
@@ -651,7 +646,7 @@ public class AiLogic {
   }
 
   private static int chooseTroopsToSendToConqueredTerritoryHard(Territory oldTerritory,
-      Territory newTerritory, PlayerAI player) {
+      Territory newTerritory, PlayerAi player) {
     int numNeighbourOldTerritories = 0;
     int numNeighbourNewTerritories = 0;
 
@@ -697,7 +692,7 @@ public class AiLogic {
    * @return the number of troops to send from the old territory to the conquered territory
    */
   public static int chooseTroopsToSendToConqueredTerritory(Territory oldTerritory,
-      Territory newTerritory, PlayerAI player) {
+      Territory newTerritory, PlayerAi player) {
     int troopsRandom = (int) (Math.random() * oldTerritory.getNumberOfTroops() - 1);
     troopsRandom = troopsRandom < 1 ? 1 : troopsRandom;
     switch (player.getLevel()) {
@@ -723,7 +718,7 @@ public class AiLogic {
    * @param player the player who is making the decision to fortify
    * @return true if the player should fortify, false otherwise
    */
-  public static boolean willFortify(GameState gameState, PlayerAI player) {
+  public static boolean willFortify(GameState gameState, PlayerAi player) {
     switch (player.getLevel()) {
       case EASY:
         int prob = (int) (Math.random() * 2);
@@ -782,7 +777,7 @@ public class AiLogic {
    *         territories also owned by the AI player
    */
   public static ArrayList<Territory> countriesSurroundedByOwnedCountries(GameState gameState,
-      PlayerAI player) {
+      PlayerAi player) {
     ArrayList<Territory> list = new ArrayList<Territory>();
     for (Entry<CountryName, Territory> set : gameState.getTerritories().entrySet()) {
       if (set.getValue().getOwnedByPlayer().getId() == player.getId()) {
@@ -801,14 +796,14 @@ public class AiLogic {
    *
    * Chooses a pair of territories for fortification when AI level is hard
    *
-   * @param gameState the current state of the game
+   * @param game.state the current state of the game
    * 
    * @param player the AI player making the decision
    * 
    * @return a Pair object of CountryName representing the source and destination territories
    */
   private static Pair<CountryName, CountryName> chooseTerritoriesPairFortifyHard(
-      GameState gameState, PlayerAI player) {
+      GameState gameState, PlayerAi player) {
     CountryName fromCountry = null;
     ArrayList<Territory> threeMostInner =
         getThreeMostInnerTerritories(gameState.getTerritories().values(), player);
@@ -828,12 +823,11 @@ public class AiLogic {
   /**
    * Chooses a pair of territories for fortification when AI level is hard.
    *
-   * @param gameState the current state of the game
    * @param player the AI player making the decision
    * @return a Pair object of CountryName representing the source and destination territories
    */
   public static Pair<CountryName, CountryName> chooseTerritoriesPairFortify(GameState gameState,
-      PlayerAI player) {
+      PlayerAi player) {
     switch (player.getLevel()) {
       case EASY:
         return new Pair<CountryName, CountryName>(getRandomOwnedCountryName(gameState, player),
@@ -860,7 +854,7 @@ public class AiLogic {
    * @param player the AI player choosing how many troops to send
    * @return the number of troops to send from the territory
    */
-  public static int chooseTroopsToSendFortify(Territory territory, PlayerAI player) {
+  public static int chooseTroopsToSendFortify(Territory territory, PlayerAi player) {
     switch (player.getLevel()) {
       case EASY:
         return (int) (Math.random() * territory.getNumberOfTroops() - 1) + 1;
@@ -885,11 +879,11 @@ public class AiLogic {
    * 
    * @param player the AI player initiating the attack
    * 
-   * @param gameState the current state of the game
+   * @param game.state the current state of the game
    * 
    * @return the number of troops to attack with
    */
-  public static int chooseTroopsToAttackWith(Territory territory, PlayerAI player,
+  public static int chooseTroopsToAttackWith(Territory territory, PlayerAi player,
       GameState gameState) {
     // TODO Auto-generated method stub
     return gameState.getTerritories().get(territory.getCountryName()).getNumberOfTroops() - 1;

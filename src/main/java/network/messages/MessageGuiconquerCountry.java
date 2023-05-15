@@ -2,7 +2,7 @@ package network.messages;
 
 import game.models.CountryName;
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIconquerCountry class represents a message used to convey the conquering of a
@@ -40,7 +40,6 @@ public class MessageGuiconquerCountry extends Message {
    * Constructs a MessageGUIconquerCountry object with the specified game state, country name,
    * player ID, number of troops, and lobby.
    *
-   * @param gameState The game state associated with the message
    * @param country The name of the conquered country
    * @param id The ID of the player who conquered the country
    * @param troops The number of troops used for conquering

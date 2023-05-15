@@ -29,14 +29,12 @@ import javafx.stage.Stage;
 
 public class UserAccessPaneController extends StackPane {
 
-  private double w = MainApp.screenWidth;
-  private double h = MainApp.screenHeight;
   private GameSound gameSound = AppController.getGameSound();
   private Stage stage;
-  private VBox vBox;
+  private VBox vbox;
   private ImageView imgBackground;
   private ImageViewPane imgBackgroundPane;
-  private VBox vBoxColor;
+  private VBox vboxColor;
   private VBox contentVBox;
   private ImageView riskLogo;
   private DesignButton logIn;
@@ -67,9 +65,9 @@ public class UserAccessPaneController extends StackPane {
      * First layer of stack Background map image
      */
 
-    vBox = new VBox();
-    vBox.setAlignment(Pos.CENTER);
-    vBox.setFillWidth(true);
+    vbox = new VBox();
+    vbox.setAlignment(Pos.CENTER);
+    vbox.setFillWidth(true);
 
     imgBackground = new ImageView();
     imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
@@ -80,16 +78,16 @@ public class UserAccessPaneController extends StackPane {
     imgBackgroundPane = new ImageViewPane(imgBackground);
     VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
 
-    vBox.getChildren().add(imgBackgroundPane);
+    vbox.getChildren().add(imgBackgroundPane);
 
     /*
      * Second layer of stack Color mask
      */
 
-    vBoxColor = new VBox();
-    vBoxColor.setAlignment(Pos.CENTER);
-    vBoxColor.setFillWidth(true);
-    vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
+    vboxColor = new VBox();
+    vboxColor.setAlignment(Pos.CENTER);
+    vboxColor.setFillWidth(true);
+    vboxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.7);");
 
 
     contentVBox = new VBox();
@@ -117,7 +115,7 @@ public class UserAccessPaneController extends StackPane {
 
 
     // maybe add vBoxColor
-    this.getChildren().addAll(vBox, vBoxColor, contentVBox);
+    this.getChildren().addAll(vbox, vboxColor, contentVBox);
 
     logIn.setOnAction(new EventHandler<ActionEvent>() {
       @Override

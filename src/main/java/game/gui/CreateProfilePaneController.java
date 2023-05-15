@@ -43,8 +43,6 @@ import javafx.stage.Stage;
 
 public class CreateProfilePaneController extends StackPane {
 
-  private double w = MainApp.screenWidth;
-  private double h = MainApp.screenHeight;
   private GameSound gameSound = AppController.getGameSound();
   private Stage stage;
   private VBox vBox;
@@ -247,8 +245,6 @@ public class CreateProfilePaneController extends StackPane {
     contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
     this.getChildren().addAll(vBox, vBoxColor, contentVBox);
   }
-
-  /** Sets up the button events */
 
   public void buttonEvents() {
     createProfileButton.setOnAction(new EventHandler<ActionEvent>() {

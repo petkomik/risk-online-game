@@ -2,7 +2,7 @@ package network.messages;
 
 import game.models.Battle;
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIOpenBattleFrame class represents a message used to indicate the opening of the
@@ -25,7 +25,6 @@ public class MessageGuiOpenBattleFrame extends Message {
    * Constructs a MessageGUIOpenBattleFrame object with the specified game state, battle
    * information, and lobby.
    *
-   * @param gameState The game state associated with the message
    * @param battle The battle information
    * @param clientsLobby The associated lobby
    */

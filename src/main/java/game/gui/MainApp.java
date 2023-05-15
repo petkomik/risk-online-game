@@ -31,18 +31,15 @@ public class MainApp extends Application {
   public static GameSound gameSound;
   public static AppController appController;
 
-  /**
-   * This method returns the GameController instance
-   * 
-   * @return gameController
-   */
   public static AppController getAppController() {
     MainApp.appController = AppController.getInstance();
     return MainApp.appController;
   }
 
   /**
-   * This method initializes the required elements
+   * This method initializes the required elements.
+   *
+   * @param stage to initalize the window with
    */
   @Override
   public void start(Stage stage) throws IOException {
@@ -84,9 +81,9 @@ public class MainApp extends Application {
   }
 
   /**
-   * this class method enables the launching of the App outside the class
-   * 
-   * @param args
+   * This class method enables the launching of the App outside the class.
+   *
+   * @param args arguments
    */
   public static void runMainApp(String[] args) {
     launch(args);

@@ -3,8 +3,8 @@ package game.exceptions;
 import game.models.CountryName;
 
 /**
- * Exception class for wrong country
- * 
+ * Exception class for wrong country.
+ *
  * @author srogalsk
  *
  */

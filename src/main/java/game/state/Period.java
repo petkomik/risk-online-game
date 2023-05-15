@@ -1,4 +1,4 @@
-package gameState;
+package game.state;
 
 /**
  * Enums do the game periods.

@@ -62,7 +62,7 @@ public class Lobby implements Serializable {
       this.avaiableAiNames.add(k);
     }
     this.readyHashMap = new HashMap<Player, Boolean>();
-    this.setDifficultyOfAI(Difficulty.EASY);
+    this.setDifficultyOfAi(Difficulty.EASY);
   }
 
   /** Sets Id of lobby admin and calls default constructor. */
@@ -121,18 +121,18 @@ public class Lobby implements Serializable {
 
   /** Returns a List with Ai Players present in the lobby. */
 
-  public List<Player> getAIPlayerList() {
-    ArrayList<Player> AiplayersInLobby = new ArrayList<Player>();
+  public List<Player> getAiPlayerList() {
+    ArrayList<Player> aiPlayersInLobby = new ArrayList<Player>();
     Iterator<Player> itt = playersJoined.iterator();
     while (itt.hasNext()) {
       Player k = itt.next();
       // add multiplayer ai
-      if (k instanceof PlayerAI) {
-        AiplayersInLobby.add(k);
+      if (k instanceof PlayerAi) {
+        aiPlayersInLobby.add(k);
       }
     }
 
-    return AiplayersInLobby;
+    return aiPlayersInLobby;
   }
 
   /** Returns a list with the human players in the lobby. */
@@ -143,7 +143,7 @@ public class Lobby implements Serializable {
     while (itt.hasNext()) {
       Player k = itt.next();
       // add multiplayer ai
-      if (!(k instanceof PlayerAI)) {
+      if (!(k instanceof PlayerAi)) {
         players.add(k);
       }
     }
@@ -201,7 +201,7 @@ public class Lobby implements Serializable {
 
   /** Adds an Ai Player to the lobby. */
 
-  public void addAI() {
+  public void addAi() {
     String aiN = avaiableAiNames.get(this.avaiableAiNames.size() - 1);
     this.avaiableAiNames.remove(aiN);
     String aiC = avaiableColors.get(this.avaiableColors.size() - 1);
@@ -209,7 +209,7 @@ public class Lobby implements Serializable {
     String aiA = avaiableAvatars.get(this.avaiableAvatars.size() - 1);
     this.avaiableAvatars.remove(aiA);
 
-    PlayerAI aiP = new PlayerAI(aiN, 3000, this.difficultyOfAi);
+    PlayerAi aiP = new PlayerAi(aiN, 3000, this.difficultyOfAi);
     aiP.setColor(aiC);
     aiP.setAvatar(aiA);
     this.getPlayerList().add(aiP);
@@ -231,9 +231,9 @@ public class Lobby implements Serializable {
 
   /** Removes one of the Ai instances. */
 
-  public void removeAI() {
-    if (this.getAIPlayerList().size() > 0) {
-      Player k = this.getAIPlayerList().get(this.getAIPlayerList().size() - 1);
+  public void removeAi() {
+    if (this.getAiPlayerList().size() > 0) {
+      Player k = this.getAiPlayerList().get(this.getAiPlayerList().size() - 1);
       this.playersJoined.remove(k);
       this.avaiableAiNames.add(k.getName());
       this.avaiableAvatars.add(k.getAvatar());
@@ -245,10 +245,10 @@ public class Lobby implements Serializable {
 
   /** Updates the Difficulty of Ai player to match lobby settings. */
 
-  public void updateAILevel() {
+  public void updateAiLevel() {
     for (Player ply : this.playersJoined) {
-      if (ply instanceof PlayerAI) {
-        ((PlayerAI) ply).setLevel(difficultyOfAi);
+      if (ply instanceof PlayerAi) {
+        ((PlayerAi) ply).setLevel(difficultyOfAi);
       }
     }
   }
@@ -321,7 +321,7 @@ public class Lobby implements Serializable {
   }
 
 
-  public ArrayList<String> getAvaiableAINames() {
+  public ArrayList<String> getAvaiableAiNames() {
     return avaiableAiNames;
   }
 
@@ -370,8 +370,8 @@ public class Lobby implements Serializable {
   }
 
 
-  public void setAvaiableAINames(ArrayList<String> avaiableAINames) {
-    this.avaiableAiNames = avaiableAINames;
+  public void setAvaiableAiNames(ArrayList<String> avaiableAiNames) {
+    this.avaiableAiNames = avaiableAiNames;
   }
 
 
@@ -385,9 +385,9 @@ public class Lobby implements Serializable {
   }
 
 
-  public void setDifficultyOfAI(Difficulty difficultyOfAI) {
-    this.difficultyOfAi = difficultyOfAI;
-    this.updateAILevel();
+  public void setDifficultyOfAi(Difficulty difficultyOfAi) {
+    this.difficultyOfAi = difficultyOfAi;
+    this.updateAiLevel();
   }
 
 

@@ -19,7 +19,7 @@ import javafx.stage.Screen;
  * @author pmalamov
  *
  */
-public class LobbyGUI extends ToggleButton implements Serializable {
+public class LobbyGui extends ToggleButton implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private double ratio;
@@ -41,7 +41,7 @@ public class LobbyGUI extends ToggleButton implements Serializable {
    * @param lobby Information needed to visualize it.
    */
 
-  public LobbyGUI(Lobby lobby) {
+  public LobbyGui(Lobby lobby) {
     super();
     this.lobby = lobby;
     this.ratio = Screen.getPrimary().getVisualBounds().getWidth()
@@ -55,7 +55,7 @@ public class LobbyGUI extends ToggleButton implements Serializable {
   }
 
   /**
-   * initializes all the GUI items that are needed for the construction of the LobbyGUI and places
+   * initializes all the GUI items that are needed for the construction of the LobbyGui and places
    * them on the previously planned out place.
    * 
    */

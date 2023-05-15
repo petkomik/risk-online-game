@@ -1,7 +1,7 @@
 package network.messages;
 
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIRollDiceBattle class represents a message used to indicate the result of rolling
@@ -30,7 +30,6 @@ public class MessageGuiRollDiceBattle extends Message {
    * values, defender's dice values, number of troops in the attacking territory, number of troops
    * in the defending territory, number of dice rolled by each player, and associated lobby.
    *
-   * @param gameState The game state associated with the message
    * @param attackerDiceValues The values of the attacker's dice
    * @param defenderDiceValues The values of the defender's dice
    * @param troopsInAttackAt The number of troops in the attacking territory

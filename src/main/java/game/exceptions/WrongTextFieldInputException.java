@@ -1,8 +1,8 @@
 package game.exceptions;
 
 /**
- * Exception class for wrong text input
- * 
+ * Exception class for wrong text input.
+ *
  * @author srogalsk
  *
  */

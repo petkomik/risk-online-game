@@ -1,6 +1,6 @@
 package game.models;
 
-import gameState.GameType;
+import game.state.GameType;
 import java.io.Serializable;
 
 /**

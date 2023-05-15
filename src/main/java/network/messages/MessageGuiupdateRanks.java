@@ -1,7 +1,7 @@
 package network.messages;
 
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIupdateRanks class represents a message used to update player ranks in the game GUI.
@@ -21,7 +21,6 @@ public class MessageGuiupdateRanks extends Message {
   /**
    * Constructs a MessageGUIupdateRanks object with the specified game state, ranks, and lobby.
    *
-   * @param gameState The game state associated with the message
    * @param ranks The array of player ranks
    * @param clientsLobby The lobby associated with the message
    */

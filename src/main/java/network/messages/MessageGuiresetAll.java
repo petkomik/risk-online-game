@@ -1,6 +1,6 @@
 package network.messages;
 
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUIresetAll class represents a message used to reset all game state in the game GUI.
@@ -17,7 +17,6 @@ public class MessageGuiresetAll extends Message {
   /**
    * Constructs a MessageGUIresetAll object with the specified game state.
    *
-   * @param gameState The game state associated with the message
    */
   public MessageGuiresetAll(GameState gameState) {
     super(MessageType.MessageGUIresetAll);

@@ -1,4 +1,4 @@
-package gameState;
+package game.state;
 
 import game.models.Battle;
 import game.models.Card;

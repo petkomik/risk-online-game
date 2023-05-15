@@ -100,7 +100,7 @@ public class Card implements Serializable {
     return isJoker;
   }
 
-  public int getID() {
+  public int getId() {
     return id;
   }
 

@@ -1,6 +1,6 @@
 package network.messages;
 
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * This Message is used to send a Game State instance.
@@ -24,7 +24,6 @@ public class MessageGameState extends Message {
   /**
    * Constructs a MessageGameState.
    *
-   * @param gameState to be send
    */
   public MessageGameState(GameState gameState) {
     super(MessageType.MessageGameState);

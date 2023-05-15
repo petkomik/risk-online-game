@@ -1,7 +1,7 @@
 package network.messages;
 
 import game.models.CountryName;
-import gameState.GameState;
+import game.state.GameState;
 import java.util.ArrayList;
 
 /**
@@ -24,7 +24,6 @@ public class MessageGuiselectTerritoryAndSteDisabledTerritories extends Message 
    * Constructs a MessageGUIselectTerritoryAndSteDisabledTerritories object with the specified game
    * state, selected territory, and list of unreachable territories.
    *
-   * @param gameState The game state associated with the message
    * @param countryName The selected territory
    * @param unreachableCountries The list of unreachable territories
    */

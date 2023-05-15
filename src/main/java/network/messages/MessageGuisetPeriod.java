@@ -3,8 +3,8 @@ package network.messages;
 
 
 import game.models.Lobby;
-import gameState.GameState;
-import gameState.Period;
+import game.state.GameState;
+import game.state.Period;
 
 /**
  * The MessageGUIsetPeriod class represents a message used to set the current period in the game
@@ -23,7 +23,6 @@ public class MessageGuisetPeriod extends Message {
    * Constructs a MessageGUIsetPeriod object with the specified game state, period, and lobby
    * information.
    *
-   * @param gameState The game state associated with the message
    * @param period The period to be set in the GUI
    * @param lobby The lobby information
    */

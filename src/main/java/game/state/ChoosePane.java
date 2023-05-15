@@ -1,23 +1,29 @@
-package gameState;
+package game.state;
 
 /**
- * Enums for the phases during a player turn in main period.
+ * This enum is used to differentiate between different pane types in Game Pane.
  *
  * @author pmikov
  *
  */
 
-public enum Phase {
+public enum ChoosePane {
   REINFORCE {
     @Override
     public String toString() {
       return "Reinforce";
     }
   },
-  ATTACK {
+  ATTACK_ATTACK {
     @Override
     public String toString() {
       return "Attack";
+    }
+  },
+  ATTACK_COLONISE {
+    @Override
+    public String toString() {
+      return "Move Troops";
     }
   },
   FORTIFY {

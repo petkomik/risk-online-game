@@ -1,8 +1,8 @@
 package network.messages;
 
 import game.models.Lobby;
-import gameState.GameState;
-import gameState.Phase;
+import game.state.GameState;
+import game.state.Phase;
 
 /**
  * The MessageGUIsetPhase class represents a message used to set the current phase in the game GUI.
@@ -21,7 +21,6 @@ public class MessageGuisetPhase extends Message {
    * Constructs a MessageGUIsetPhase object with the specified game state, phase, and lobby
    * information.
    *
-   * @param gameState The game state associated with the message
    * @param phase The phase to be set in the GUI
    * @param clientsLobby The lobby information
    */

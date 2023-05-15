@@ -2,7 +2,7 @@ package network.messages;
 
 import game.models.CountryName;
 import game.models.Lobby;
-import gameState.GameState;
+import game.state.GameState;
 
 /**
  * The MessageGUImoveTroopsFromTerritoryToOther class represents a message used to indicate the
@@ -27,7 +27,6 @@ public class MessageGuimoveTroopsFromTerritoryToOther extends Message {
    * source territory, destination territory, number of troops to move from the source, number of
    * troops to move to the destination, and lobby.
    *
-   * @param gameState The game state associated with the message
    * @param from The source territory from which troops are being moved
    * @param to The destination territory to which troops are being moved
    * @param numberFrom The number of troops to move from the source territory

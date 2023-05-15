@@ -1,8 +1,8 @@
 package game.exceptions;
 
 /**
- * Exception class for wrong phase
- * 
+ * Exception class for wrong phase.
+ *
  * @author srogalsk
  *
  */
