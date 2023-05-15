@@ -77,10 +77,10 @@ public class SecondaryPlayerDialog {
     lastNameRow.getChildren().addAll(lastLabel, new Spacing(1), lastName);
     lastNameRow.setSpacing(20);
 
-    VBox vBox = new VBox();
-    vBox.setSpacing(10);
-    vBox.setPadding(new Insets(50, 50, 50, 50));
-    vBox.setAlignment(Pos.CENTER);
+    VBox vbox = new VBox();
+    vbox.setSpacing(10);
+    vbox.setPadding(new Insets(50, 50, 50, 50));
+    vbox.setAlignment(Pos.CENTER);
 
     username.setPromptText("Username");
     password.setPromptText("Password");
@@ -94,7 +94,7 @@ public class SecondaryPlayerDialog {
     Button logIn = new Button("Log In");
     Button signUp = new Button("Sign Up");
 
-    vBox.getChildren().addAll(logIn, signUp);
+    vbox.getChildren().addAll(logIn, signUp);
 
 
     Node confirmButton = dialog.getDialogPane().lookupButton(confirmButtonType);
@@ -104,8 +104,8 @@ public class SecondaryPlayerDialog {
     logIn.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        vBox.getChildren().removeIf(x -> true);
-        vBox.getChildren().addAll(userRow, passRow);
+        vbox.getChildren().removeIf(x -> true);
+        vbox.getChildren().addAll(userRow, passRow);
         dialog.setTitle("Log In");
         confirmButton.setVisible(true);
 
@@ -115,8 +115,8 @@ public class SecondaryPlayerDialog {
     signUp.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        vBox.getChildren().removeIf(x -> true);
-        vBox.getChildren().addAll(userRow, passRow, firstNameRow, lastNameRow);
+        vbox.getChildren().removeIf(x -> true);
+        vbox.getChildren().addAll(userRow, passRow, firstNameRow, lastNameRow);
         dialog.setTitle("Sign Up");
         confirmButton.setVisible(true);
 
@@ -125,7 +125,7 @@ public class SecondaryPlayerDialog {
 
 
 
-    dialog.getDialogPane().setContent(vBox);
+    dialog.getDialogPane().setContent(vbox);
 
     // Convert the result to a username-password-pair when the login button is clicked.
     dialog.setResultConverter(dialogButton -> {

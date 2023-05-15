@@ -29,7 +29,7 @@ public class LobbyGui extends ToggleButton implements Serializable {
   private int ratingString;
   private Lobby lobby;
 
-  private HBox hBox;
+  private HBox hbox;
   private Label lobbyName;
   private Label rating;
 
@@ -69,8 +69,8 @@ public class LobbyGui extends ToggleButton implements Serializable {
     this.setPickOnBounds(true);
 
 
-    hBox = new HBox();
-    hBox.setPadding(new Insets(20, 40, 20, 40));
+    hbox = new HBox();
+    hbox.setPadding(new Insets(20, 40, 20, 40));
 
     lobbyName = new Label();
     lobbyName.setText(lobbyNameString);
@@ -95,8 +95,8 @@ public class LobbyGui extends ToggleButton implements Serializable {
     HBox.setHgrow(spacing1, Priority.ALWAYS);
     Spacing spacing2 = new Spacing(1);
     HBox.setHgrow(spacing2, Priority.ALWAYS);
-    hBox.getChildren().addAll(lobbyName, spacing2, rating, spacing1, playersJoined);
-    this.setGraphic(hBox);
+    hbox.getChildren().addAll(lobbyName, spacing2, rating, spacing1, playersJoined);
+    this.setGraphic(hbox);
 
     this.selectedProperty().addListener(((observable, oldValue, newValue) -> {
       if (newValue) {

@@ -61,11 +61,11 @@ public class LobbyMenuController extends StackPane {
 
   private Lobby lobby;
 
-  private VBox vBox;
+  private VBox vbox;
   private ImageView imgBackground;
   private ImageViewPane imgBackgroundPane;
-  private VBox vBoxColor;
-  private VBox contentVBox;
+  private VBox vboxColor;
+  private VBox contentVbox;
 
   private HBox topBannerParent;
   private HBox topBannerContent;
@@ -98,9 +98,9 @@ public class LobbyMenuController extends StackPane {
   private Label labelBtnAI;
   private ArrowButton moreBtnAI;
 
-  private VBox AIDifficultyDiv;
-  private Label AIDifficultyLabel;
-  private HBox AIDifficultyControls;
+  private VBox aiDifficultyDiv;
+  private Label aiDifficultyLabel;
+  private HBox aiDifficultyControls;
   private ArrowButton lessBtnDiff;
   private Label labelBtnDiff;
   private ArrowButton moreBtnDiff;
@@ -149,9 +149,9 @@ public class LobbyMenuController extends StackPane {
      * First layer of stack Background map image
      */
 
-    vBox = new VBox();
-    vBox.setAlignment(Pos.CENTER);
-    vBox.setFillWidth(true);
+    vbox = new VBox();
+    vbox.setAlignment(Pos.CENTER);
+    vbox.setFillWidth(true);
 
     imgBackground = new ImageView();
     imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
@@ -162,21 +162,21 @@ public class LobbyMenuController extends StackPane {
     imgBackgroundPane = new ImageViewPane(imgBackground);
     VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
 
-    vBox.getChildren().add(imgBackgroundPane);
+    vbox.getChildren().add(imgBackgroundPane);
 
     /*
      * Second layer of stack Color mask
      */
 
-    vBoxColor = new VBox();
-    vBoxColor.setAlignment(Pos.CENTER);
-    vBoxColor.setFillWidth(true);
-    vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
+    vboxColor = new VBox();
+    vboxColor.setAlignment(Pos.CENTER);
+    vboxColor.setFillWidth(true);
+    vboxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
 
-    this.getChildren().addAll(vBox, vBoxColor);
+    this.getChildren().addAll(vbox, vboxColor);
 
-    contentVBox = new VBox();
-    contentVBox.setAlignment(Pos.CENTER);
+    contentVbox = new VBox();
+    contentVbox.setAlignment(Pos.CENTER);
 
     /*
      * Setting up top banner Includes topBannerContent and topBannerSpacing topBannerContent has a
@@ -278,9 +278,9 @@ public class LobbyMenuController extends StackPane {
     // TODO
     moreBtnAI = new ArrowButton(30 * ratio);
 
-    AIDifficultyDiv = new VBox();
-    AIDifficultyLabel = new Label("AI Player Difficulty");
-    AIDifficultyControls = new HBox();
+    aiDifficultyDiv = new VBox();
+    aiDifficultyLabel = new Label("AI Player Difficulty");
+    aiDifficultyControls = new HBox();
     lessBtnDiff = new ArrowButton(30 * ratio);
     labelBtnDiff = new Label();
     moreBtnDiff = new ArrowButton(30 * ratio);
@@ -327,7 +327,7 @@ public class LobbyMenuController extends StackPane {
 
     numberPlayersDiv.setAlignment(Pos.CENTER);
     numberOfAiDiv.setAlignment(Pos.CENTER);
-    AIDifficultyDiv.setAlignment(Pos.CENTER);
+    aiDifficultyDiv.setAlignment(Pos.CENTER);
 
     numberPlayersLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20 * ratio));
     numberPlayersLabel.setTextFill(Color.WHITE);
@@ -337,9 +337,9 @@ public class LobbyMenuController extends StackPane {
     numberOfAiLabel.setTextFill(Color.WHITE);
     numberOfAiLabel.setAlignment(Pos.CENTER);
 
-    AIDifficultyLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20 * ratio));
-    AIDifficultyLabel.setTextFill(Color.WHITE);
-    AIDifficultyLabel.setAlignment(Pos.CENTER);
+    aiDifficultyLabel.setFont(Font.font("Cooper Black", FontWeight.BOLD, 20 * ratio));
+    aiDifficultyLabel.setTextFill(Color.WHITE);
+    aiDifficultyLabel.setAlignment(Pos.CENTER);
 
     moreBtnPlayers.setRotate(180);
     labelBtnPlayers
@@ -372,11 +372,11 @@ public class LobbyMenuController extends StackPane {
 
     numberPlayersControls.setAlignment(Pos.CENTER);
     numberOfAiControls.setAlignment(Pos.CENTER);
-    AIDifficultyControls.setAlignment(Pos.CENTER);
+    aiDifficultyControls.setAlignment(Pos.CENTER);
 
     numberPlayersDiv.setAlignment(Pos.CENTER);
     numberOfAiDiv.setAlignment(Pos.CENTER);
-    AIDifficultyDiv.setAlignment(Pos.CENTER);
+    aiDifficultyDiv.setAlignment(Pos.CENTER);
 
 
     readyBtn.setText("Ready");
@@ -396,24 +396,24 @@ public class LobbyMenuController extends StackPane {
     numberOfAiControls.getChildren().addAll(lessBtnAI, spacing3, labelBtnAI, spacing4, moreBtnAI);
     Spacing spacing5 = new Spacing(1);
     Spacing spacing6 = new Spacing(1);
-    AIDifficultyControls.getChildren().addAll(lessBtnDiff, spacing5, labelBtnDiff, spacing6,
+    aiDifficultyControls.getChildren().addAll(lessBtnDiff, spacing5, labelBtnDiff, spacing6,
         moreBtnDiff);
 
     numberPlayersDiv.getChildren().addAll(numberPlayersLabel, numberPlayersControls);
     numberOfAiDiv.getChildren().addAll(numberOfAiLabel, numberOfAiControls);
-    AIDifficultyDiv.getChildren().addAll(AIDifficultyLabel, AIDifficultyControls);
+    aiDifficultyDiv.getChildren().addAll(aiDifficultyLabel, aiDifficultyControls);
 
     numberPlayersDiv.setSpacing(7 * ratio * ratio);
     numberOfAiDiv.setSpacing(7 * ratio);
-    AIDifficultyDiv.setSpacing(7 * ratio);
+    aiDifficultyDiv.setSpacing(7 * ratio);
 
-    settingsControlPane.getChildren().addAll(numberPlayersDiv, numberOfAiDiv, AIDifficultyDiv);
+    settingsControlPane.getChildren().addAll(numberPlayersDiv, numberOfAiDiv, aiDifficultyDiv);
     settingsPane.getChildren().addAll(settingsBanner, settingsControlPane);
 
     settingsReadyPane.getChildren().addAll(settingsPane, readyButtonPane);
     chatWindow = ServerMainWindowController.getChatPane();
     mainContent.getChildren().addAll(playerCardsPane, settingsReadyPane);
-    contentVBox.getChildren().addAll(mainContent);
+    contentVbox.getChildren().addAll(mainContent);
 
     /*
      * Action Handlers for all the buttons
@@ -669,7 +669,7 @@ public class LobbyMenuController extends StackPane {
       }
     });
 
-    this.getChildren().addAll(contentVBox, topBannerParent);
+    this.getChildren().addAll(contentVbox, topBannerParent);
     if (!singleplayerLobby) {
       this.getChildren().add(chatWindow);
 

@@ -72,8 +72,8 @@ public class GamePaneController implements Initializable {
 
   private GameSound gameSound = AppController.getGameSound();
 
-  private double w = MainApp.screenWidth;
-  private double h = MainApp.screenHeight;
+  private double width = MainApp.screenWidth;
+  private double height = MainApp.screenHeight;
 
   @FXML
   private AnchorPane gameBoard;
@@ -183,7 +183,7 @@ public class GamePaneController implements Initializable {
    * @return the relative horizontal position of the given value based on the width of the container
    */
   private double getRelativeHorz(double x) {
-    return (x / 1536.0) * w;
+    return (x / 1536.0) * width;
   }
 
   /**
@@ -193,7 +193,7 @@ public class GamePaneController implements Initializable {
    * @return the relative vertical position of the given value based on the height of the container
    */
   private double getRelativeVer(double y) {
-    return (y / 864.0) * h;
+    return (y / 864.0) * height;
   }
 
   /**
@@ -330,7 +330,7 @@ public class GamePaneController implements Initializable {
     diceIV = new ImageView(Parameter.dicedir + "dice1.png");
     diceIV.setFitWidth(getRelativeHorz(60.0));
     diceIV.setFitHeight(getRelativeHorz(60.0));
-    diceIV.setLayoutX((w - diceIV.getFitWidth()) / 2.0);
+    diceIV.setLayoutX((width - diceIV.getFitWidth()) / 2.0);
     diceIV.setLayoutY(getRelativeVer(695.0));
     diceIV.setPickOnBounds(true);
 
@@ -338,7 +338,7 @@ public class GamePaneController implements Initializable {
     throwDiceButton.setText("THROW DICE");
     throwDiceButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(18)));
     throwDiceButton.setPrefSize(getRelativeHorz(200.0), getRelativeVer(45.0));
-    throwDiceButton.setLayoutX((w - throwDiceButton.getPrefWidth()) / 2.0);
+    throwDiceButton.setLayoutX((width - throwDiceButton.getPrefWidth()) / 2.0);
     throwDiceButton.setLayoutY(getRelativeVer(760.0));
     throwDiceButton.setPickOnBounds(true);
     throwDiceButton.setOnAction(e -> {
@@ -384,8 +384,8 @@ public class GamePaneController implements Initializable {
    * Brings the elements of the map.
    */
   private void setUpMapComponents() {
-    double scaleX = (0.7 * w) / map.getPrefWidth();
-    double scaleY = (0.7 * h) / map.getPrefHeight();
+    double scaleX = (0.7 * width) / map.getPrefWidth();
+    double scaleY = (0.7 * height) / map.getPrefHeight();
     map.setScaleX(scaleX);
     map.setScaleY(-scaleY);
 
@@ -394,8 +394,8 @@ public class GamePaneController implements Initializable {
     map.setTranslateX(translateX);
     map.setTranslateY(translateY);
 
-    double layoutX = ((w - scaleX * map.getPrefWidth()) / 2.0) - 45.0;
-    double layoutY = ((h - scaleY * map.getPrefHeight()) / 2.0) - 40.0;
+    double layoutX = ((width - scaleX * map.getPrefWidth()) / 2.0) - 45.0;
+    double layoutY = ((height - scaleY * map.getPrefHeight()) / 2.0) - 40.0;
     map.setLayoutX(layoutX);
     map.setLayoutY(layoutY);
 
@@ -507,7 +507,7 @@ public class GamePaneController implements Initializable {
     }
     vbPlayerList.getChildren().addAll(panesPlayerList);
     vbPlayerList.setLayoutX(getRelativeHorz(1325.0));
-    vbPlayerList.setLayoutY((h - vbPlayerList.getPrefHeight()) / 2.0);
+    vbPlayerList.setLayoutY((height - vbPlayerList.getPrefHeight()) / 2.0);
     vbPlayerList.setSpacing(getRelativeVer(20.0));
 
     gameBoard.getChildren().add(vbPlayerList);
@@ -518,8 +518,8 @@ public class GamePaneController implements Initializable {
       chatWindow = ServerMainWindowController.getChatPane();
       chatWindow.setVisible(false);
       chatWindow.setPickOnBounds(true);
-      chatWindow.setLayoutX(0.5 * w - chatWindow.getMaxWidth() / 2);
-      chatWindow.setLayoutY((0.5 * h - chatWindow.getPrefHeight() / 2));
+      chatWindow.setLayoutX(0.5 * width - chatWindow.getMaxWidth() / 2);
+      chatWindow.setLayoutY((0.5 * height - chatWindow.getPrefHeight() / 2));
       gameBoard.getChildren().add(chatWindow);
     }
 
@@ -532,10 +532,10 @@ public class GamePaneController implements Initializable {
       e1.printStackTrace();
     }
 
-    chatButton.setLayoutX((1300.0 / 1536.0) * w);
-    chatButton.setLayoutY((40.0 / 864.0) * h);
+    chatButton.setLayoutX((1300.0 / 1536.0) * width);
+    chatButton.setLayoutY((40.0 / 864.0) * height);
     chatButton.setPickOnBounds(true);
-    chatButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, (18.0 / 1536.0) * w));
+    chatButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, (18.0 / 1536.0) * width));
     if (lobby.getHumanPlayerList().size() == 1) {
 
       chatButton.setDisable(true);
@@ -568,11 +568,11 @@ public class GamePaneController implements Initializable {
     leaveGameButton.setText("LEAVE GAME");
     leaveGameButton.setOnAction(e -> clickLeaveGameButton(e));
 
-    leaveGameButton.setPrefSize((200.0 / 1536.0) * w, (50.0 / 864.0) * h);
-    leaveGameButton.setLayoutX((40.0 / 1536.0) * w);
-    leaveGameButton.setLayoutY((40.0 / 864.0) * h);
+    leaveGameButton.setPrefSize((200.0 / 1536.0) * width, (50.0 / 864.0) * height);
+    leaveGameButton.setLayoutX((40.0 / 1536.0) * width);
+    leaveGameButton.setLayoutY((40.0 / 864.0) * height);
     leaveGameButton.setPickOnBounds(true);
-    leaveGameButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, (18.0 / 1536.0) * w));
+    leaveGameButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, (18.0 / 1536.0) * width));
 
     gameBoard.getChildren().add(leaveGameButton);
   }
@@ -776,7 +776,8 @@ public class GamePaneController implements Initializable {
     phaseBoard.getChildren().addAll(vbPhase, spPhase, spNum, labPhase, firstPhaseLogo,
         middlePhaseLogo, lastPhaseLogo, rectCards, cardsImageView, numCardsLabel);
 
-    phaseBoard.setLayoutX(((w - phaseBoard.getPrefWidth()) / 2.0) - vbPhase.getPrefWidth() / 2.0);
+    phaseBoard
+        .setLayoutX(((width - phaseBoard.getPrefWidth()) / 2.0) - vbPhase.getPrefWidth() / 2.0);
     phaseBoard.setLayoutY(getRelativeVer(700.0));
     phaseBoard.setVisible(false);
     phaseBoard.setPickOnBounds(true);
@@ -789,7 +790,7 @@ public class GamePaneController implements Initializable {
    */
   public void setUpChoosingTroopsPane() {
     choosingTroopsPane = new Pane();
-    choosingTroopsPane.setPrefSize(w, h);
+    choosingTroopsPane.setPrefSize(width, height);
     choosingTroopsPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
     /* Creating button for closing the pane and canceling the choosing process */
@@ -859,7 +860,7 @@ public class GamePaneController implements Initializable {
     /* Selected Number of troops is displayed */
     choosingTroopsPhaseLabel = new Label();
     choosingTroopsPhaseLabel.setPrefSize(getRelativeHorz(204.0), getRelativeVer(72.0));
-    choosingTroopsPhaseLabel.setLayoutX((w - choosingTroopsPhaseLabel.getPrefWidth()) / 2.0);
+    choosingTroopsPhaseLabel.setLayoutX((width - choosingTroopsPhaseLabel.getPrefWidth()) / 2.0);
     choosingTroopsPhaseLabel.setLayoutY(getRelativeVer(608.0));
     choosingTroopsPhaseLabel.setAlignment(Pos.CENTER);
     choosingTroopsPhaseLabel
@@ -882,7 +883,7 @@ public class GamePaneController implements Initializable {
     numTroopsBP.setCenter(numberLabel);
     numTroopsBP.setRight(moreBtn);
     numTroopsBP.setPrefSize(getRelativeHorz(300.0), getRelativeVer(60.0));
-    numTroopsBP.setLayoutX((w - numTroopsBP.getPrefWidth()) / 2.0);
+    numTroopsBP.setLayoutX((width - numTroopsBP.getPrefWidth()) / 2.0);
     numTroopsBP.setLayoutY(getRelativeVer(514.0));
 
     Rectangle backgroundChoosingTroops = new Rectangle();
@@ -892,7 +893,7 @@ public class GamePaneController implements Initializable {
     backgroundChoosingTroops.setStroke(Color.web("#b87331"));
     backgroundChoosingTroops.setWidth(getRelativeHorz(400.0));
     backgroundChoosingTroops.setHeight(getRelativeVer(200.0));
-    backgroundChoosingTroops.setLayoutX((w - backgroundChoosingTroops.getWidth()) / 2.0);
+    backgroundChoosingTroops.setLayoutX((width - backgroundChoosingTroops.getWidth()) / 2.0);
     backgroundChoosingTroops.setLayoutY(getRelativeVer(500));
 
     choosingTroopsPane.getChildren().addAll(backgroundChoosingTroops, choosingTroopsPhaseLabel,
@@ -908,7 +909,7 @@ public class GamePaneController implements Initializable {
    */
   private void setUpCardsPopUp() {
     cardsPopUp = new Pane();
-    cardsPopUp.setPrefSize(w, h);
+    cardsPopUp.setPrefSize(width, height);
     cardsPopUp.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
     cardsPopUp.setVisible(false);
 
@@ -926,8 +927,8 @@ public class GamePaneController implements Initializable {
     tradeButton = new DesignButton();
     tradeButton.setText("NO TRADE");
     tradeButton.setPrefSize(getRelativeHorz(180.0), getRelativeVer(45.0));
-    tradeButton.setLayoutX((w - tradeButton.getPrefWidth()) / 2.0);
-    tradeButton.setLayoutY((h - tradeButton.getPrefHeight()) / 2.0);
+    tradeButton.setLayoutX((width - tradeButton.getPrefWidth()) / 2.0);
+    tradeButton.setLayoutY((height - tradeButton.getPrefHeight()) / 2.0);
     tradeButton.setFont(Font.font("Cooper Black", FontWeight.NORMAL, getRelativeHorz(20)));
     tradeButton.setDisable(true);
 
@@ -994,13 +995,13 @@ public class GamePaneController implements Initializable {
    */
   private void setUpTutorialsPane() {
     tutorialMainPane = new Pane();
-    tutorialMainPane.setPrefSize(w, h);
+    tutorialMainPane.setPrefSize(width, height);
     tutorialMainPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
     Pane tutorialTextPane = new Pane();
     tutorialTextPane.setPrefSize(getRelativeHorz(800.0), getRelativeVer(600.0));
-    tutorialTextPane.setLayoutX((w - tutorialTextPane.getPrefWidth()) / 2.0);
-    tutorialTextPane.setLayoutY((h - tutorialTextPane.getPrefHeight()) / 2.0);
+    tutorialTextPane.setLayoutX((width - tutorialTextPane.getPrefWidth()) / 2.0);
+    tutorialTextPane.setLayoutY((height - tutorialTextPane.getPrefHeight()) / 2.0);
     tutorialTextPane.setStyle("-fx-background-color: #ecd9c6;");
 
     cancelHintButton = new DesignButton();
@@ -1733,7 +1734,7 @@ public class GamePaneController implements Initializable {
     // Create a new pane for the battle frame
     battlePane = new Pane();
     // Set the preferred size of the pane
-    battlePane.setPrefSize(w, h);
+    battlePane.setPrefSize(width, height);
     // Set the style of the pane to a semi-transparent black color
     battlePane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.2);");
 
@@ -1748,7 +1749,7 @@ public class GamePaneController implements Initializable {
           // Create a new battle frame for single player mode
           this.battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
           // Set the preferred size of the battle frame
-          this.battleFrame.setPrefSize(w, h);
+          this.battleFrame.setPrefSize(width, height);
           // Add the battle frame to the battle pane
           battlePane.getChildren().add(battleFrame);
           // Add the battle pane to the game board
@@ -1779,7 +1780,7 @@ public class GamePaneController implements Initializable {
       case Tutorial:
         try {
           this.battleFrame = new BattleFrameController(battle, this.singlePlayerHandler, attacker);
-          this.battleFrame.setPrefSize(w, h);
+          this.battleFrame.setPrefSize(width, height);
           battlePane.getChildren().add(battleFrame);
           gameBoard.getChildren().add(battlePane);
           battleFrame.setCorrectTroops();
@@ -1806,7 +1807,7 @@ public class GamePaneController implements Initializable {
           // Create a new battle frame for multiplayer mode
           this.battleFrame = new BattleFrameController(battle, this.client, attacker, chatWindow);
           // Set the preferred size of the battle frame
-          this.battleFrame.setPrefSize(w, h);
+          this.battleFrame.setPrefSize(width, height);
           // Add the battle frame to the battle pane
           battlePane.getChildren().add(battleFrame);
           // Add the battle pane to the game board

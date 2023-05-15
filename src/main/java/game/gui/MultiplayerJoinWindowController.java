@@ -48,11 +48,11 @@ public class MultiplayerJoinWindowController extends StackPane {
 
   private GameSound gameSound = AppController.getGameSound();
   private Stage stage;
-  private VBox vBox;
+  private VBox vbox;
   private ImageView imgBackground;
   private ImageViewPane imgBackgroundPane;
-  private VBox vBoxColor;
-  private VBox contentVBox;
+  private VBox vboxColor;
+  private VBox contentVbox;
   private HBox banner;
   private HBox topBannerContent;
   private Label lobbyTextBanner;
@@ -99,9 +99,9 @@ public class MultiplayerJoinWindowController extends StackPane {
     /*
      * First layer of stack Background map image
      */
-    vBox = new VBox();
-    vBox.setAlignment(Pos.CENTER);
-    vBox.setFillWidth(true);
+    vbox = new VBox();
+    vbox.setAlignment(Pos.CENTER);
+    vbox.setFillWidth(true);
 
     imgBackground = new ImageView();
     imgBackground.setImage(new Image(new FileInputStream(Parameter.imagesdir + "world-map.png")));
@@ -112,19 +112,19 @@ public class MultiplayerJoinWindowController extends StackPane {
     imgBackgroundPane = new ImageViewPane(imgBackground);
     VBox.setVgrow(imgBackgroundPane, Priority.ALWAYS);
 
-    vBox.getChildren().add(imgBackgroundPane);
+    vbox.getChildren().add(imgBackgroundPane);
 
     /*
      * Second layer of stack Color mask
      */
 
-    vBoxColor = new VBox();
-    vBoxColor.setAlignment(Pos.CENTER);
-    vBoxColor.setFillWidth(true);
-    vBoxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
+    vboxColor = new VBox();
+    vboxColor.setAlignment(Pos.CENTER);
+    vboxColor.setFillWidth(true);
+    vboxColor.setStyle("-fx-background-color: rgba(225, 211, 184, 0.9);");
 
-    contentVBox = new VBox();
-    contentVBox.setAlignment(Pos.CENTER);
+    contentVbox = new VBox();
+    contentVbox.setAlignment(Pos.CENTER);
 
     banner = new HBox();
     banner.setAlignment(Pos.TOP_LEFT);
@@ -207,8 +207,8 @@ public class MultiplayerJoinWindowController extends StackPane {
     buttonRow.getChildren().addAll(joinButton);
 
     mainContent.getChildren().addAll(ipAddressRow, portNumberRow, buttonRow);
-    contentVBox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
-    this.getChildren().addAll(vBox, vBoxColor, contentVBox);
+    contentVbox.getChildren().addAll(banner, new Spacing(50), mainContent, new Spacing(50));
+    this.getChildren().addAll(vbox, vboxColor, contentVbox);
   }
 
   /**

@@ -90,9 +90,9 @@ public class GUISupportClasses {
 
     public DiceFactory(int i, boolean at, double ratio) throws FileNotFoundException {
       super();
-      String bDice = at ? "" : "b";
+      String bdice = at ? "" : "b";
       this.setImage(new Image(
-          new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bDice + ".png")));
+          new FileInputStream(Parameter.dicedir + "dice" + String.valueOf(i) + bdice + ".png")));
       this.setFitWidth(70 * ratio);
       this.setFitHeight(70 * ratio);
       this.setPreserveRatio(true);
@@ -428,7 +428,7 @@ public class GUISupportClasses {
   public static class ChatWindow extends VBox {
 
     private ScrollPane chat;
-    private VBox vBoxMessages;
+    private VBox vboxMessages;
     private HBox textfieldAndButtons;
     private TextField textfieldMessage;
     private VBox comboAndSend;
@@ -441,8 +441,8 @@ public class GUISupportClasses {
 
     private boolean dragAreaHover = false;
     private double ratio;
-    private double xCord;
-    private double yCord;
+    private double xcord;
+    private double ycord;
     private ObservableList<String> items;
 
     public ChatWindow() {
@@ -457,7 +457,7 @@ public class GUISupportClasses {
 
     public ChatWindow(ChatWindow chatPane) {
       this.chat = chatPane.chat;
-      this.vBoxMessages = chatPane.vBoxMessages;
+      this.vboxMessages = chatPane.vboxMessages;
       this.textfieldAndButtons = chatPane.textfieldAndButtons;
       this.textfieldMessage = chatPane.textfieldMessage;
       this.comboAndSend = chatPane.comboAndSend;
@@ -470,15 +470,15 @@ public class GUISupportClasses {
 
       this.dragAreaHover = chatPane.dragAreaHover;
       this.ratio = chatPane.ratio;
-      this.xCord = chatPane.xCord;
-      this.yCord = chatPane.yCord;
+      this.xcord = chatPane.xcord;
+      this.ycord = chatPane.ycord;
       this.items = chatPane.items;
     }
 
     public void setup() {
 
       chat = new ScrollPane();
-      vBoxMessages = new VBox();
+      vboxMessages = new VBox();
       textfieldAndButtons = new HBox();
       textfieldMessage = new TextField();
       comboAndSend = new VBox();
@@ -548,10 +548,10 @@ public class GUISupportClasses {
       textfieldAndButtons.getChildren().addAll(textfieldMessage, new Spacing(20), comboAndSend);
       textfieldAndButtons.setPickOnBounds(true);
 
-      vBoxMessages.setPrefWidth(ratio * 600);
-      vBoxMessages.setSpacing(ratio * 5);
-      vBoxMessages.setPadding(new Insets(5 * ratio, 50 * ratio, 0, 5 * ratio));
-      vBoxMessages.heightProperty().addListener(new ChangeListener<Number>() {
+      vboxMessages.setPrefWidth(ratio * 600);
+      vboxMessages.setSpacing(ratio * 5);
+      vboxMessages.setPadding(new Insets(5 * ratio, 50 * ratio, 0, 5 * ratio));
+      vboxMessages.heightProperty().addListener(new ChangeListener<Number>() {
         @Override
         public void changed(ObservableValue<? extends Number> observable, Number oldValue,
             Number newValue) {
@@ -561,7 +561,7 @@ public class GUISupportClasses {
 
       // TODO decide if (host message if needed) stays
 
-      chat.setContent(vBoxMessages);
+      chat.setContent(vboxMessages);
 
       /*
        * setting up main window Proportions
@@ -578,8 +578,8 @@ public class GUISupportClasses {
     public void actionEventsSetup() {
 
       dragArea.setOnMousePressed(event -> {
-        xCord = event.getSceneX();
-        yCord = event.getSceneY();
+        xcord = event.getSceneX();
+        ycord = event.getSceneY();
         dragAreaHover = true;
 
       });
@@ -621,7 +621,7 @@ public class GUISupportClasses {
             message.getChildren().addAll(new Spacing(200 * ratio, 1 * ratio), textFlow);
             HBox.setHgrow(message, Priority.ALWAYS);
 
-            vBoxMessages.getChildren().add(message);
+            vboxMessages.getChildren().add(message);
             Platform.runLater(new Runnable() {
               @Override
               public void run() {
@@ -738,7 +738,7 @@ public class GUISupportClasses {
       Platform.runLater(new Runnable() {
         @Override
         public void run() {
-          vBoxMessages.getChildren().add(message);
+          vboxMessages.getChildren().add(message);
         }
       });
 
@@ -773,7 +773,7 @@ public class GUISupportClasses {
       Platform.runLater(new Runnable() {
         @Override
         public void run() {
-          vBoxMessages.getChildren().add(message);
+          vboxMessages.getChildren().add(message);
         }
       });
 
@@ -798,7 +798,7 @@ public class GUISupportClasses {
       Platform.runLater(new Runnable() {
         @Override
         public void run() {
-          vBoxMessages.getChildren().add(message);
+          vboxMessages.getChildren().add(message);
         }
       });
 
@@ -822,20 +822,20 @@ public class GUISupportClasses {
       });
     }
 
-    public void setxCord(double xCord) {
-      this.xCord = xCord;
+    public void setxCord(double xcord) {
+      this.xcord = xcord;
     }
 
     public double getxCord() {
-      return xCord;
+      return xcord;
     }
 
-    public void setyCord(double yCord) {
-      this.yCord = yCord;
+    public void setyCord(double ycord) {
+      this.ycord = ycord;
     }
 
     public double getyCord() {
-      return yCord;
+      return ycord;
     }
 
     public boolean isDragAreaHover() {
