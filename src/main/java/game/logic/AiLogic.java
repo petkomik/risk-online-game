@@ -182,17 +182,16 @@ public class AiLogic {
         return new Pair<CountryName, Integer>(getRandomOwnedCountryName(gameState, player),
             randNumbTroops);
       case CASUAL:
-        int randomNumTroops = (int) (Math.random() * (troopsLeft.get(player.getId()) - 1) + 1);
-        List<Territory> list = new ArrayList<>();
-        for (Territory t : gameState.getTerritories().values()) {
-          if (t.getOwnedByPlayer().getId() == player.getId()) {
-            list.add(t);
-          }
-        }
-        int randomCountryIndex = (int) (Math.random() * (list.size() - 1) + 1);
-        return new Pair<CountryName, Integer>(list.get(randomCountryIndex).getCountryName(),
-            randomNumTroops);
-      case HARD:
+        // int randomNumTroops = (int) (Math.random() * (troopsLeft.get(player.getId()) - 1) + 1);
+        // List<Territory> list = new ArrayList<>();
+        // for (Territory t : gameState.getTerritories().values()) {
+        // if (t.getOwnedByPlayer().getId() == player.getId()) {
+        // list.add(t);
+        // }
+        // }
+        // int randomCountryIndex = (int) (Math.random() * (list.size() - 1) + 1);
+        // return new Pair<CountryName, Integer>(list.get(randomCountryIndex).getCountryName(),
+        // randomNumTroops);
         ArrayList<Territory> threeMostOuterCountries =
             getThreeMostOuterTerritories(gameState.getTerritories().values(), player);
         int min = Integer.MAX_VALUE;
@@ -204,6 +203,18 @@ public class AiLogic {
           }
         }
         return new Pair<CountryName, Integer>(minCountryName, troopsLeft.get(player.getId()));
+      case HARD:
+        ArrayList<Territory> threeMostOuterCountriesTwo =
+            getThreeMostOuterTerritories(gameState.getTerritories().values(), player);
+        int minTwo = Integer.MAX_VALUE;
+        CountryName minCountryNameTwo = CountryName.Afghanistan;
+        for (Territory t : threeMostOuterCountriesTwo) {
+          if (t.getNumberOfTroops() < minTwo) {
+            minTwo = t.getNumberOfTroops();
+            minCountryName = t.getCountryName();
+          }
+        }
+        return new Pair<CountryName, Integer>(minCountryNameTwo, troopsLeft.get(player.getId()));
       default:
         return null;
     }
@@ -482,27 +493,27 @@ public class AiLogic {
         attack = true;
       }
     }
-    if (!attack) {
+    if (!attack || mostOuterCountry(gameState, player) == null) {
       return false;
     }
     switch (player.getLevel()) {
       case EASY:
-        int prob = (int) ((Math.random() * 10));
-        if (prob <= 5) {
-          return true;
-        } else {
-          return false;
-        }
+        // int prob = (int) ((Math.random() * 10));
+        // if (prob <= 5) {
+        // return true;
+        // } else {
+        return false;
+      // }
       case CASUAL:
-        if (Math.random() < 0.4) {
-          if (Math.random() < 0.5) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return isNeighbourWithLessTroops(gameState, player);
-        }
+        // if (Math.random() < 0.4) {
+        // if (Math.random() < 0.5) {
+        // return true;
+        // } else {
+        // return false;
+        // }
+        // } else {
+        return isNeighbourWithLessTroops(gameState, player);
+      // }
       case HARD:
         return isNeighbourWithLessTroops(gameState, player);
       default:
@@ -550,30 +561,30 @@ public class AiLogic {
         return new Pair<CountryName, CountryName>(attacker.getCountryName(),
             getNeighbourWithHighestNumb(attacker, player));
       case CASUAL:
-        if (Math.random() < 0.25) {
-          attacker = mostOuterCountry(gameState, player);
-          return new Pair<CountryName, CountryName>(attacker.getCountryName(),
-              getNeighbourWithHighestNumb(attacker, player));
-        } else {
-          ArrayList<Territory> ownTerritories = getAllOwnTerritories(gameState, player);
-          Collections.sort(ownTerritories,
-              (t1, t2) -> t2.getNumberOfTroops() - t1.getNumberOfTroops());
-          A: for (Territory t : ownTerritories) {
-            for (Territory neigh : t.getNeighboringTerritories()) {
-              if (neigh.getOwnedByPlayer().getId() != player.getId()) {
-                attacker = t;
-                break A;
-              }
-            }
-          }
-          return new Pair<CountryName, CountryName>(attacker.getCountryName(),
-              getNeighbourWithLowestNumb(attacker, player));
-        }
-      case HARD:
+        // if (Math.random() < 0.25) {
+        // attacker = mostOuterCountry(gameState, player);
+        // return new Pair<CountryName, CountryName>(attacker.getCountryName(),
+        // getNeighbourWithHighestNumb(attacker, player));
+        // } else {
         ArrayList<Territory> ownTerritories = getAllOwnTerritories(gameState, player);
         Collections.sort(ownTerritories,
             (t1, t2) -> t2.getNumberOfTroops() - t1.getNumberOfTroops());
         A: for (Territory t : ownTerritories) {
+          for (Territory neigh : t.getNeighboringTerritories()) {
+            if (neigh.getOwnedByPlayer().getId() != player.getId()) {
+              attacker = t;
+              break A;
+            }
+          }
+        }
+        return new Pair<CountryName, CountryName>(attacker.getCountryName(),
+            getNeighbourWithLowestNumb(attacker, player));
+      // }
+      case HARD:
+        ArrayList<Territory> ownTerritoriesTwo = getAllOwnTerritories(gameState, player);
+        Collections.sort(ownTerritoriesTwo,
+            (t1, t2) -> t2.getNumberOfTroops() - t1.getNumberOfTroops());
+        A: for (Territory t : ownTerritoriesTwo) {
           for (Territory neigh : t.getNeighboringTerritories()) {
             if (neigh.getOwnedByPlayer().getId() != player.getId()) {
               attacker = t;

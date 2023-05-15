@@ -1281,26 +1281,27 @@ public class GameHandler {
               System.out.println("Attack Called II");
               Pair<CountryName, CountryName> pairAttack =
                   AiLogic.chooseTerritoryPairAttack(gameState, player);
-              int troops = AiLogic.chooseTroopsToAttackWith(
-                  this.gameState.getTerritories().get(pairAttack.getKey()), player, gameState);
-              this.clickCountry(player.getId(), pairAttack.getKey());
-              this.clickCountry(player.getId(), pairAttack.getValue());
-              this.confirmTroopsToCountry(pairAttack.getValue(), troops, ChoosePane.ATTACK_ATTACK,
-                  player.getId());
-              System.out.println("Attack Called III");
+              if (pairAttack.getValue() != null) {
+                int troops = AiLogic.chooseTroopsToAttackWith(
+                    this.gameState.getTerritories().get(pairAttack.getKey()), player, gameState);
+                this.clickCountry(player.getId(), pairAttack.getKey());
+                this.clickCountry(player.getId(), pairAttack.getValue());
+                this.confirmTroopsToCountry(pairAttack.getValue(), troops, ChoosePane.ATTACK_ATTACK,
+                    player.getId());
+                System.out.println("Attack Called III");
 
-              while (this.gameState.getBattle() != null) {
-                this.battleDiceThrow();
+                while (this.gameState.getBattle() != null) {
+                  this.battleDiceThrow();
+                }
+                System.out.println("Attack Called IV");
+
+                int troopsColonise = AiLogic.chooseTroopsToSendToConqueredTerritory(
+                    gameState.getTerritories().get(pairAttack.getKey()),
+                    gameState.getTerritories().get(pairAttack.getValue()), player);
+                this.confirmTroopsToCountry(pairAttack.getValue(), troopsColonise,
+                    ChoosePane.ATTACK_COLONISE, player.getId());
+                timer11.play();
               }
-
-              System.out.println("Attack Called IV");
-
-              int troopsColonise = AiLogic.chooseTroopsToSendToConqueredTerritory(
-                  gameState.getTerritories().get(pairAttack.getKey()),
-                  gameState.getTerritories().get(pairAttack.getValue()), player);
-              this.confirmTroopsToCountry(pairAttack.getValue(), troopsColonise,
-                  ChoosePane.ATTACK_COLONISE, player.getId());
-              timer11.play();
             });
 
             Timeline timer10 = new Timeline(new KeyFrame(Duration.seconds(1)));
