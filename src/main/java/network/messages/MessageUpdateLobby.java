@@ -6,7 +6,7 @@ import game.models.Lobby;
  * MessageUpdateLobby class represents a message for updating the lobby information. It contains the
  * updated lobby object.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageUpdateLobby extends Message {
 

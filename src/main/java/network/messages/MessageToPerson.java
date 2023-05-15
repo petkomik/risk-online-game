@@ -6,7 +6,7 @@ import database.Profile;
  * The MessageToPerson class represents a message sent to a specific person. It can contain various
  * types of messages and is used for direct communication between clients.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageToPerson extends Message {
 
@@ -15,7 +15,7 @@ public class MessageToPerson extends Message {
   String stringMessage;
   private Profile fromProfile;
   private Profile toProfile;
-  private boolean inALobby;
+  private boolean inaLobby;
 
   /**
    * Constructs a MessageToPerson object with a string message, sender and recipient profiles, and
@@ -24,14 +24,14 @@ public class MessageToPerson extends Message {
    * @param message The string message to be sent.
    * @param fromProfile The profile of the sender.
    * @param toProfile The profile of the recipient.
-   * @param inAlobby Indicates whether the message is sent within a lobby.
+   * @param inalobby Indicates whether the message is sent within a lobby.
    */
-  public MessageToPerson(String message, Profile fromProfile, Profile toProfile, boolean inAlobby) {
+  public MessageToPerson(String message, Profile fromProfile, Profile toProfile, boolean inalobby) {
     super(MessageType.MessageToPerson);
     this.fromProfile = fromProfile;
     this.toProfile = toProfile;
     this.stringMessage = message;
-    this.setInALobby(inAlobby);
+    this.setInaLobby(inalobby);
   }
 
   /**
@@ -51,12 +51,12 @@ public class MessageToPerson extends Message {
 
   }
 
-  public boolean isInALobby() {
-    return inALobby;
+  public boolean isInaLobby() {
+    return inaLobby;
   }
 
-  public void setInALobby(boolean inALobby) {
-    this.inALobby = inALobby;
+  public void setInaLobby(boolean inaLobby) {
+    this.inaLobby = inaLobby;
   }
 
   public String getStringMessage() {

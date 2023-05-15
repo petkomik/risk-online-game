@@ -7,7 +7,7 @@ import game.models.Lobby;
  * The MessageSendInGame class represents a message that is sent from a player within the game. It
  * contains the message content, the lobby where the game is being played, and the sender's profile.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageSendInGame extends Message {
 

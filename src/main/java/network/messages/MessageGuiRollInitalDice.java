@@ -8,9 +8,10 @@ import gameState.GameState;
  * the initial dice in the game GUI. It includes the game state, the ID of the player, the rolled
  * value, and the associated lobby.
  * 
+ * </p>
  * author dignatov
  */
-public class MessageGUIRollInitalDice extends Message {
+public class MessageGuiRollInitalDice extends Message {
 
   private static final long serialVersionUID = 1L;
   GameState gameState;
@@ -28,7 +29,7 @@ public class MessageGUIRollInitalDice extends Message {
    * @param value The rolled value
    * @param lobby The associated lobby
    */
-  public MessageGUIRollInitalDice(GameState gameState, int id, int value, Lobby lobby) {
+  public MessageGuiRollInitalDice(GameState gameState, int id, int value, Lobby lobby) {
     super(MessageType.MessageGUIRollInitalDice);
     this.gameState = gameState;
     this.id = id;

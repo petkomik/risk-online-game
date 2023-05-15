@@ -2,15 +2,15 @@ package network.messages;
 
 import database.Profile;
 
+/**
+ * The MessageConnect class represents a message used for client connection. It includes the
+ * player's name, profile, and an optional ID for targeted connection.
+ *
+ * @author dignatov
+ * 
+ */
 public class MessageConnect extends Message {
 
-  /**
-   * The MessageConnect class represents a message used for client connection. It includes the
-   * player's name, profile, and an optional ID for targeted connection.
-   *
-   * @author dignatov
-   * 
-   */
 
   private static final long serialVersionUID = 1L;
   private String playername;

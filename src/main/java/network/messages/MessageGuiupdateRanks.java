@@ -7,9 +7,9 @@ import gameState.GameState;
  * The MessageGUIupdateRanks class represents a message used to update player ranks in the game GUI.
  * It includes the game state, an array of ranks, and the lobby associated with the message.
  *
- * author dignatov
+ * @author dignatov
  */
-public class MessageGUIupdateRanks extends Message {
+public class MessageGuiupdateRanks extends Message {
 
   private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class MessageGUIupdateRanks extends Message {
    * @param ranks The array of player ranks
    * @param clientsLobby The lobby associated with the message
    */
-  public MessageGUIupdateRanks(GameState gameState, int[] ranks, Lobby clientsLobby) {
+  public MessageGuiupdateRanks(GameState gameState, int[] ranks, Lobby clientsLobby) {
     super(MessageType.MessageGUIupdateRanks);
     this.gameState = gameState;
     this.ranks = ranks;

@@ -7,10 +7,10 @@ import gameState.GameState;
  * The MessageGUIsetCurrentPlayer class represents a message used to update the current player in
  * the game GUI. It includes the game state, the player ID, the number of troops left for the
  * player, and the lobby information.
- * 
- * author dignatov
+ *
+ * @author dignatov
  */
-public class MessageGUIsetCurrentPlayer extends Message {
+public class MessageGuisetCurrentPlayer extends Message {
 
   private static final long serialVersionUID = 1L;
   private int id;
@@ -28,7 +28,7 @@ public class MessageGUIsetCurrentPlayer extends Message {
    * @param troopsLeft The number of troops left for the player
    * @param clientsLobby The lobby information
    */
-  public MessageGUIsetCurrentPlayer(GameState gameState, int id, int troopsLeft,
+  public MessageGuisetCurrentPlayer(GameState gameState, int id, int troopsLeft,
       Lobby clientsLobby) {
     super(MessageType.MessageGUIsetCurrentPlayer);
     this.id = id;

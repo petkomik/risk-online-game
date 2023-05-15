@@ -8,7 +8,7 @@ import java.util.HashMap;
  * HashMap of lobby names mapped to their corresponding Lobby objects, as well as an ID for the
  * recipient of the message.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageUpdateLobbyList extends Message {
 
@@ -26,6 +26,13 @@ public class MessageUpdateLobbyList extends Message {
 
   private int idTo;
 
+  /**
+   * The MessageUpdateLobbyList class represents a message used to update the lobby list in the game
+   * GUI. It includes the updated lobby list and the ID of the recipient.
+   *
+   * @param lobbyList The updated lobby list
+   * @param idTo The ID of the recipient
+   */
   public MessageUpdateLobbyList(HashMap<String, Lobby> lobbyList, int idTo) {
     super(MessageType.MessageUpdateLobbyList);
     this.idTo = idTo;

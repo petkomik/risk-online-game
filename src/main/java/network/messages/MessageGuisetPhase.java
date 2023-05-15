@@ -8,14 +8,12 @@ import gameState.Phase;
  * The MessageGUIsetPhase class represents a message used to set the current phase in the game GUI.
  * It includes the game state, the phase, and the lobby information.
  *
- * author dignatov
+ * @author dignatov
  */
-public class MessageGUIsetPhase extends Message {
-
+public class MessageGuisetPhase extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
-
   private Lobby lobby;
   private Phase phase;
 
@@ -27,7 +25,7 @@ public class MessageGUIsetPhase extends Message {
    * @param phase The phase to be set in the GUI
    * @param clientsLobby The lobby information
    */
-  public MessageGUIsetPhase(GameState gameState, Phase phase, Lobby clientsLobby) {
+  public MessageGuisetPhase(GameState gameState, Phase phase, Lobby clientsLobby) {
     super(MessageType.MessageGUIsetPhase);
     this.gameState = gameState;
     this.phase = phase;

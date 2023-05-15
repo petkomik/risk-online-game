@@ -4,14 +4,14 @@ import game.models.CountryName;
 import game.models.Lobby;
 import gameState.GameState;
 
-public class MessageGUIconquerCountry extends Message {
-  /**
-   * Author: dignatov
-   *
-   * The MessageGUIconquerCountry class represents a message used to convey the conquering of a
-   * country in the game GUI. It includes the game state, the name of the conquered country, player
-   * ID, number of troops, and the associated lobby.
-   */
+/**
+ * The MessageGUIconquerCountry class represents a message used to convey the conquering of a
+ * country in the game GUI. It includes the game state, the name of the conquered country, player
+ * ID, number of troops, and the associated lobby.
+ *
+ * @author dignatov
+ */
+public class MessageGuiconquerCountry extends Message {
   private static final long serialVersionUID = 1L;
 
   public GameState getGameState() {
@@ -46,7 +46,7 @@ public class MessageGUIconquerCountry extends Message {
    * @param troops The number of troops used for conquering
    * @param clientsLobby The associated lobby
    */
-  public MessageGUIconquerCountry(GameState gameState, CountryName country, int id, int troops,
+  public MessageGuiconquerCountry(GameState gameState, CountryName country, int id, int troops,
       Lobby clientsLobby) {
     super(MessageType.MessageGUIconquerCountry);
     this.country = country;

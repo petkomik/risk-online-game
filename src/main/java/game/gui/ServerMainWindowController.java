@@ -494,7 +494,7 @@ public class ServerMainWindowController extends VBox {
         };
         addLobby.accept(client.getProfile().getUserName(), aLobby);
         client.sendMessage(new MessageCreateLobby(aLobby));
-        client.setInALobby(true);
+        client.setInaLobby(true);
         drawLobbyMenu(aLobby);
         Platform.runLater(() -> {
           lobbyMenuController.getReadyBtn().fire();
@@ -520,7 +520,7 @@ public class ServerMainWindowController extends VBox {
 
           selectedLobby.joinLobby(new PlayerSingle(client.getProfile()));
           client.sendMessage(new MessageJoinLobby(selectedLobby));
-          client.setInALobby(true);
+          client.setInaLobby(true);
           drawLobbyMenu(selectedLobby);
 
         }
@@ -606,7 +606,7 @@ public class ServerMainWindowController extends VBox {
 
                 }
                 lobby.leaveLobby(player);
-                client.setInALobby(false);
+                client.setInaLobby(false);
                 client.sendMessage(new MessageUpdateLobby(lobby));
                 searchButton.fire();
               }

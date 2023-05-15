@@ -83,7 +83,7 @@ public class GameHandler {
           this.singlePlayerHandler.rollInitialDiceOnGui(idOfPlayer, i);
           break;
         case Multiplayer:
-          client.rollInitialDiceOnGUI(idOfPlayer, i);
+          client.rollInitialDiceOnGui(idOfPlayer, i);
           break;
         case Tutorial:
           this.singlePlayerHandler.rollInitialDiceOnGui(idOfPlayer, i);
@@ -181,7 +181,7 @@ public class GameHandler {
                   this.gameState.getTroopsLeftForCurrent());
               break;
             case Multiplayer:
-              this.client.possesCountryOnGUI(country, idOfPlayer,
+              this.client.possesCountryOnGui(country, idOfPlayer,
                   this.gameState.getTroopsLeftForCurrent());
               break;
             case Tutorial:
@@ -204,7 +204,7 @@ public class GameHandler {
                   gameState.getTerritories().get(country).getNumberOfTroops(), numTroopsPlayer);
               break;
             case Multiplayer:
-              this.client.setTroopsOnTerritoryAndLeftOnGUI(country,
+              this.client.setTroopsOnTerritoryAndLeftOnGui(country,
                   gameState.getTerritories().get(country).getNumberOfTroops(), numTroopsPlayer);
               break;
             case Tutorial:
@@ -230,7 +230,7 @@ public class GameHandler {
                   break;
                 case Multiplayer:
                   if (!this.gameState.getCurrentPlayer().isAi()) {
-                    this.client.chooseNumberOfTroopsOnGUI(country, 1,
+                    this.client.chooseNumberOfTroopsOnGui(country, 1,
                         this.gameState.getPlayerTroopsLeft().get(idOfPlayer), ChoosePane.REINFORCE);
                   }
                   break;
@@ -276,7 +276,7 @@ public class GameHandler {
                   break;
                 case Multiplayer:
                   if (!this.gameState.getCurrentPlayer().isAi()) {
-                    this.client.chooseNumberOfTroopsOnGUI(country, 1,
+                    this.client.chooseNumberOfTroopsOnGui(country, 1,
                         this.gameState.getTerritories()
                             .get(this.gameState.getLastAttackingCountry()).getNumberOfTroops() - 1,
                         ChoosePane.ATTACK_ATTACK);
@@ -353,7 +353,7 @@ public class GameHandler {
                       break;
                     case Multiplayer:
                       if (!this.gameState.getCurrentPlayer().isAi()) {
-                        this.client.chooseNumberOfTroopsOnGUI(country, 1,
+                        this.client.chooseNumberOfTroopsOnGui(country, 1,
                             this.gameState.getTerritories()
                                 .get(this.gameState.getLastFortifyingCounty()).getNumberOfTroops()
                                 - 1,
@@ -409,7 +409,7 @@ public class GameHandler {
                       .getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer().getId()));
               break;
             case Multiplayer:
-              this.client.setTroopsOnTerritoryAndLeftOnGUI(country,
+              this.client.setTroopsOnTerritoryAndLeftOnGui(country,
                   this.gameState.getTerritories().get(country).getNumberOfTroops(), this.gameState
                       .getPlayerTroopsLeft().get(this.gameState.getCurrentPlayer().getId()));
               break;
@@ -441,7 +441,7 @@ public class GameHandler {
               this.singlePlayerHandler.openBattleFrameOnGui(battle);
               break;
             case Multiplayer:
-              this.client.openBattleFrameOnGUI(battle);
+              this.client.openBattleFrameOnGui(battle);
               break;
             case Tutorial:
               this.singlePlayerHandler.openBattleFrameOnGui(battle);
@@ -467,7 +467,7 @@ public class GameHandler {
               break;
             case Multiplayer:
               this.client
-                  .moveTroopsFromTerritoryToOtherOnGUI(this.gameState.getLastAttackingCountry(),
+                  .moveTroopsFromTerritoryToOtherOnGui(this.gameState.getLastAttackingCountry(),
                       country, this.gameState.getTerritories()
                           .get(this.gameState.getLastAttackingCountry()).getNumberOfTroops(),
                       troops);
@@ -503,7 +503,7 @@ public class GameHandler {
                   this.gameState.getTerritories().get(country).getNumberOfTroops());
               break;
             case Multiplayer:
-              this.client.moveTroopsFromTerritoryToOtherOnGUI(
+              this.client.moveTroopsFromTerritoryToOtherOnGui(
                   this.gameState.getLastFortifyingCounty(), country,
                   this.gameState.getTerritories().get(this.gameState.getLastFortifyingCounty())
                       .getNumberOfTroops(),
@@ -581,7 +581,7 @@ public class GameHandler {
                   this.singlePlayerHandler.setPhaseOnGui(Phase.ATTACK);
                   break;
                 case Multiplayer:
-                  this.client.setPhaseOnGUI(Phase.ATTACK);
+                  this.client.setPhaseOnGui(Phase.ATTACK);
                   break;
                 case Tutorial:
                   this.singlePlayerHandler.setPhaseOnGui(Phase.ATTACK);
@@ -605,7 +605,7 @@ public class GameHandler {
                 this.singlePlayerHandler.setPhaseOnGui(Phase.FORTIFY);
                 break;
               case Multiplayer:
-                this.client.setPhaseOnGUI(Phase.FORTIFY);
+                this.client.setPhaseOnGui(Phase.FORTIFY);
                 break;
               case Tutorial:
                 this.singlePlayerHandler.setPhaseOnGui(Phase.FORTIFY);
@@ -649,8 +649,8 @@ public class GameHandler {
                 }
                 break;
               case Multiplayer:
-                this.client.setPhaseOnGUI(Phase.REINFORCE);
-                this.client.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getId(),
+                this.client.setPhaseOnGui(Phase.REINFORCE);
+                this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
                   this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
@@ -704,9 +704,9 @@ public class GameHandler {
                   }
                   break;
                 case Multiplayer:
-                  this.client.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getId(),
+                  this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                       this.gameState.getTroopsLeftForCurrent());
-                  this.client.setPeriodOnGUI(Period.COUNTRYPOSESSION);
+                  this.client.setPeriodOnGui(Period.COUNTRYPOSESSION);
                   if (this.gameState.getCurrentPlayer().isAi()) {
                     this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
                   }
@@ -752,7 +752,7 @@ public class GameHandler {
                   }
                   break;
                 case Multiplayer:
-                  this.client.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getId(),
+                  this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                       this.gameState.getTroopsLeftForCurrent());
                   if (this.gameState.getCurrentPlayer().isAi()) {
                     this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
@@ -783,7 +783,7 @@ public class GameHandler {
                   this.singlePlayerHandler.setPeriodOnGui(Period.INITIALDEPLOY);
                   break;
                 case Multiplayer:
-                  this.client.setPeriodOnGUI(Period.INITIALDEPLOY);
+                  this.client.setPeriodOnGui(Period.INITIALDEPLOY);
                   break;
                 case Tutorial:
                   Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1)));
@@ -813,7 +813,7 @@ public class GameHandler {
                 }
                 break;
               case Multiplayer:
-                this.client.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getId(),
+                this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
                   this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
@@ -847,8 +847,8 @@ public class GameHandler {
                   this.singlePlayerHandler.setPhaseOnGui(Phase.REINFORCE);
                   break;
                 case Multiplayer:
-                  this.client.setPeriodOnGUI(Period.MAINPERIOD);
-                  this.client.setPhaseOnGUI(Phase.REINFORCE);
+                  this.client.setPeriodOnGui(Period.MAINPERIOD);
+                  this.client.setPhaseOnGui(Phase.REINFORCE);
                   break;
                 case Tutorial:
                   if (!this.gameState.getCurrentPlayer().isAi()) {
@@ -880,7 +880,7 @@ public class GameHandler {
                 }
                 break;
               case Multiplayer:
-                this.client.setCurrentPlayerOnGUI(this.gameState.getCurrentPlayer().getId(),
+                this.client.setCurrentPlayerOnGui(this.gameState.getCurrentPlayer().getId(),
                     this.gameState.getTroopsLeftForCurrent());
                 if (this.gameState.getCurrentPlayer().isAi()) {
                   this.simulateAi(gameState, ((PlayerAI) this.gameState.getCurrentPlayer()));
@@ -923,7 +923,7 @@ public class GameHandler {
         this.singlePlayerHandler.updateRanksOnGui(ranks);
         break;
       case Multiplayer:
-        this.client.updateRanksOnGUI(ranks);
+        this.client.updateRanksOnGui(ranks);
         break;
       default:
         break;
@@ -978,7 +978,7 @@ public class GameHandler {
           }
           break;
         case Multiplayer:
-          this.client.riskCardsTurnedInSuccessOnGUI(newCards, idOfPlayer,
+          this.client.riskCardsTurnedInSuccessOnGui(newCards, idOfPlayer,
               this.gameState.getPlayerTroopsLeft().get(idOfPlayer));
           for (Card c : cardsCards) {
             if (!c.isJoker()) {
@@ -1093,12 +1093,12 @@ public class GameHandler {
           break;
         case Multiplayer:
           try {
-            this.client.rollDiceBattleOnGUI(diceValuesAt, diceValuesDf,
+            this.client.rollDiceBattleOnGui(diceValuesAt, diceValuesDf,
                 changed.getTroopsInAttackAt(), changed.getTroopsInAttackDf(), numberOfDices);
             if (overAt || overDf) {
               timer.play();
               timer.setOnFinished(x -> {
-                this.client.endBattleOnGUI();
+                this.client.endBattleOnGui();
                 this.client.setTroopsOnTerritory(changed.getCountryNameAt(), this.gameState
                     .getTerritories().get(changed.getCountryNameAt()).getNumberOfTroops());
                 this.client.setTroopsOnTerritory(changed.getCountryNameDf(), this.gameState
@@ -1106,10 +1106,10 @@ public class GameHandler {
               });
             }
             if (overDf) {
-              this.client.conquerCountryOnGUI(changed.getCountryNameDf(),
+              this.client.conquerCountryOnGui(changed.getCountryNameDf(),
                   this.gameState.getCurrentPlayer().getId(), 0);
               if (!this.gameState.getCurrentPlayer().isAi()) {
-                this.client.chooseNumberOfTroopsOnGUI(changed.getCountryNameDf(),
+                this.client.chooseNumberOfTroopsOnGui(changed.getCountryNameDf(),
                     Math.min(Math.min(changed.getTroopsInAttackAtFinal(), 3),
                         this.gameState.getTerritories().get(changed.getCountryNameAt())
                             .getNumberOfTroops() - 1),
@@ -1122,7 +1122,7 @@ public class GameHandler {
                 ArrayList<Player> podium = this.gameState.getDeadPlayers();
 
                 Collections.reverse(podium);
-                this.client.gameIsOverOnGUI(podium);
+                this.client.gameIsOverOnGui(podium);
 
               }
             }

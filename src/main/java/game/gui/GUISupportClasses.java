@@ -636,7 +636,7 @@ public class GUISupportClasses {
                 // client.sendMessage( new MessageinLobby(lobby1, messageToBeSend));
                 //
                 // }
-                System.out.println(client.isInALobby() + " sender");
+                System.out.println(client.isInaLobby() + " sender");
 
                 if (!names.getValue().equals("All")) {
 
@@ -652,9 +652,9 @@ public class GUISupportClasses {
                   // refers to the client object
                   // Assume that client.getLobbies() returns a HashMap<String, Lobby> and client
                   // refers to the client object
-                  if (!client.isInAGame()) {
+                  if (!client.isInaGame()) {
                     client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
-                        findProfileFromString(username), client.isInALobby()));
+                        findProfileFromString(username), client.isInaLobby()));
                   } else {
                     client.sendMessage(new MessageToPerson(messageToBeSend, client.getProfile(),
                         findProfileFromString(username)));
@@ -665,9 +665,9 @@ public class GUISupportClasses {
                   // send the message to the general chat
                   // Assume that lobbyGUIList is a HashMap<String, LobbyGUI> and client refers to
                   // the client object
-                  if (!client.isInAGame()) {
+                  if (!client.isInaGame()) {
                     client.sendMessage(
-                        new MessageSend(messageToBeSend, client.getProfile(), client.isInALobby()));
+                        new MessageSend(messageToBeSend, client.getProfile(), client.isInaLobby()));
                   } else {
                     System.out.println(client.getClientsLobby().getLobbyName());
 

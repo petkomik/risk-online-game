@@ -6,7 +6,7 @@ import game.models.Lobby;
  * The MessageJoinLobby class represents a message used to join a lobby. It includes the lobby to
  * join.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageJoinLobby extends Message {
 

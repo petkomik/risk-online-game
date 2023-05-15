@@ -9,9 +9,9 @@ import gameState.GameState;
  * a territory in the game GUI. It includes the game state, the country name, the number of troops,
  * and the lobby information.
  *
- * author dignatov
+ * @author dignatov
  */
-public class MessageGUIsetTroopsOnTerritory extends Message {
+public class MessageGuisetTroopsOnTerritory extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
@@ -29,7 +29,7 @@ public class MessageGUIsetTroopsOnTerritory extends Message {
    * @param clientsLobby The lobby information
    */
 
-  public MessageGUIsetTroopsOnTerritory(GameState gameState, CountryName countryName,
+  public MessageGuisetTroopsOnTerritory(GameState gameState, CountryName countryName,
       int numTroopsOfCountry, Lobby clientsLobby) {
     super(MessageType.MessageGUIsetTroopsOnTerritory);
     this.gameState = gameState;

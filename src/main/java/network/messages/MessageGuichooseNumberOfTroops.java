@@ -3,11 +3,14 @@ package network.messages;
 import gameState.ChoosePane;
 import gameState.GameState;
 
-public class MessageGUIchooseNumberOfTroops extends Message {
-  /*
-   * @author dignatov
-   * 
-   */
+/**
+ * This class is a message for the number of troops.
+ *
+ * @author dignatov
+ * 
+ */
+
+public class MessageGuichooseNumberOfTroops extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
@@ -24,7 +27,7 @@ public class MessageGUIchooseNumberOfTroops extends Message {
    * @param max The maximum number of troops that can be chosen
    * @param choosePane The ChoosePane used for selecting the number of troops
    */
-  public MessageGUIchooseNumberOfTroops(GameState gameState, int min, int max,
+  public MessageGuichooseNumberOfTroops(GameState gameState, int min, int max,
       ChoosePane choosePane) {
     super(MessageType.MessageGUIchooseNumberOfTroops);
     this.gameState = gameState;

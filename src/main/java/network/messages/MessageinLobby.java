@@ -6,7 +6,7 @@ import game.models.Lobby;
  * The MessageinLobby class represents a message used to send a message within a lobby. It includes
  * the lobby and the message content.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageinLobby extends Message {
 

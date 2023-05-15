@@ -7,11 +7,12 @@ import java.util.ArrayList;
 /**
  * The MessageGUIselectTerritoryAndSteDisabledTerritories class represents a message used to
  * indicate the selection of a territory and provide a list of disabled territories in the game GUI.
- * It includes the game state, the selected territory, and a list of unreachable territories.
- * 
- * author dignatov
+ * It includes the game state, the selected territory, and a list of unreachable territories. &&
+ *
+ * @author dignatov
  */
-public class MessageGUIselectTerritoryAndSteDisabledTerritories extends Message {
+
+public class MessageGuiselectTerritoryAndSteDisabledTerritories extends Message {
 
   private static final long serialVersionUID = 1L;
 
@@ -27,7 +28,7 @@ public class MessageGUIselectTerritoryAndSteDisabledTerritories extends Message 
    * @param countryName The selected territory
    * @param unreachableCountries The list of unreachable territories
    */
-  public MessageGUIselectTerritoryAndSteDisabledTerritories(GameState gameState,
+  public MessageGuiselectTerritoryAndSteDisabledTerritories(GameState gameState,
       CountryName countryName, ArrayList<CountryName> unreachableCountries) {
     super(MessageType.MessageGUIselectTerritoryAndSteDisabledTerritories);
     this.gameState = gameState;

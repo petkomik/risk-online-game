@@ -6,7 +6,7 @@ import game.models.Lobby;
  * The MessageReadyToPlay class represents a message indicating that a player is ready to play. It
  * is used to notify the server or other players about the player's readiness.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageReadyToPlay extends Message {
 

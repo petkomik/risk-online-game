@@ -5,10 +5,10 @@ import gameState.GameState;
 /**
  * The MessageGUIresetAll class represents a message used to reset all game state in the game GUI.
  * It includes the game state.
- * 
- * author dignatov
+ *
+ * @author dignatov
  */
-public class MessageGUIresetAll extends Message {
+public class MessageGuiresetAll extends Message {
 
   private static final long serialVersionUID = 1L;
 
@@ -19,7 +19,7 @@ public class MessageGUIresetAll extends Message {
    *
    * @param gameState The game state associated with the message
    */
-  public MessageGUIresetAll(GameState gameState) {
+  public MessageGuiresetAll(GameState gameState) {
     super(MessageType.MessageGUIresetAll);
     this.gameState = gameState;
   }

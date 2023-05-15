@@ -10,9 +10,9 @@ import gameState.GameState;
  * game state, the country name, the number of troops on the territory, the number of troops left
  * for the player, and the lobby information.
  *
- * author dignatov
+ * @author dignatov
  */
-public class MessageGUIsetTroopsOnTerritoryAndLeft extends Message {
+public class MessageGuisetTroopsOnTerritoryAndLeft extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
@@ -32,7 +32,7 @@ public class MessageGUIsetTroopsOnTerritoryAndLeft extends Message {
    * @param numTroopsOfPlayer The number of troops left for the player
    * @param clientsLobby The lobby information
    */
-  public MessageGUIsetTroopsOnTerritoryAndLeft(GameState gameState, CountryName countryName,
+  public MessageGuisetTroopsOnTerritoryAndLeft(GameState gameState, CountryName countryName,
       int numTroopsOfCountry, int numTroopsOfPlayer, Lobby clientsLobby) {
     super(MessageType.MessageGUIsetTroopsOnTerritoryAndLeft);
     this.gameState = gameState;

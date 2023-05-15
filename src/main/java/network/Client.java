@@ -36,19 +36,18 @@ import network.messages.MessageConnect;
 import network.messages.MessageCreateLobby;
 import network.messages.MessageDisconnect;
 import network.messages.MessageGuiOpenBattleFrame;
-import network.messages.MessageGUIRollDiceBattle;
-import network.messages.MessageGUIRollInitalDice;
-import network.messages.MessageGUIconquerCountry;
+import network.messages.MessageGuiRollDiceBattle;
+import network.messages.MessageGuiRollInitalDice;
+import network.messages.MessageGuiconquerCountry;
 import network.messages.MessageGuiendBattle;
-import network.messages.MessageuigameIsOver;
 import network.messages.MessageGuimoveTroopsFromTerritoryToOther;
 import network.messages.MessageGuipossessCountry;
-import network.messages.MessageGUIsetCurrentPlayer;
-import network.messages.MessageGUIsetPeriod;
-import network.messages.MessageGUIsetPhase;
-import network.messages.MessageGUIsetTroopsOnTerritory;
-import network.messages.MessageGUIsetTroopsOnTerritoryAndLeft;
-import network.messages.MessageGUIupdateRanks;
+import network.messages.MessageGuisetCurrentPlayer;
+import network.messages.MessageGuisetPeriod;
+import network.messages.MessageGuisetPhase;
+import network.messages.MessageGuisetTroopsOnTerritory;
+import network.messages.MessageGuisetTroopsOnTerritoryAndLeft;
+import network.messages.MessageGuiupdateRanks;
 import network.messages.MessageJoinLobby;
 import network.messages.MessageProfile;
 import network.messages.MessageReadyToPlay;
@@ -58,6 +57,7 @@ import network.messages.MessageServerCloseConnection;
 import network.messages.MessageToPerson;
 import network.messages.MessageUpdateLobby;
 import network.messages.MessageUpdateLobbyList;
+import network.messages.MessageuigameIsOver;
 
 /**
  * Client class represents a client that connects to the server. It has properties such as socket,
@@ -81,8 +81,8 @@ public class Client {
   private Lobby clientsLobby;
   GUISupportClasses.ChatWindow chat;
   private boolean host;
-  private boolean isInALobby;
-  private boolean isInAGame;
+  private boolean isInaLobby;
+  private boolean isInaGame;
   private GamePaneController gamePane;
   private GameHandler gameHandler;
   private volatile boolean stopFlag = false;
@@ -98,8 +98,8 @@ public class Client {
     this.profile = profile;
     this.userName = profile.getUserName();
     this.socket = socket;
-    isInALobby = false;
-    isInAGame = false;
+    isInaLobby = false;
+    isInaGame = false;
     try {
       this.outputStream = new ObjectOutputStream(socket.getOutputStream());
       this.inputStream = new ObjectInputStream(socket.getInputStream());
@@ -258,7 +258,7 @@ public class Client {
                         profileFrom.getUserName() + ": " + ((MessageSend) message).getMessage());
                   }
                 } else {
-                  if (!isInALobby) {
+                  if (!isInaLobby) {
                     chat.addLabel(
                         profileFrom.getUserName() + ": " + ((MessageSend) message).getMessage());
                   }
@@ -320,7 +320,7 @@ public class Client {
 
                 String textMessage1 = ((MessageToPerson) message).getStringMessage();
                 Profile profileFrom1 = ((MessageToPerson) message).getFromProfile();
-                boolean isInLobby1 = ((MessageToPerson) message).isInALobby();
+                boolean isInLobby1 = ((MessageToPerson) message).isInaLobby();
                 boolean isSenderInSameLobby1 = lobbies.values().stream()
                     .anyMatch(lobby -> lobby.getHumanPlayerList().stream()
                         .anyMatch(player -> player.getId() == profileFrom1.getId())
@@ -334,7 +334,7 @@ public class Client {
                   }
 
                 } else {
-                  if (!isInALobby) {
+                  if (!isInaLobby) {
                     chat.addLabel(textMessage1, "(private) " + profileFrom1.getUserName());
                   }
 
@@ -359,39 +359,39 @@ public class Client {
 
               case MessageCreateLobby:
 
-                MessageCreateLobby mCL = (MessageCreateLobby) message;
-                LobbyGUI lobbyGUI = new LobbyGUI(mCL.getLobby());
+                MessageCreateLobby mcL = (MessageCreateLobby) message;
+                LobbyGUI lobbyGui = new LobbyGUI(mcL.getLobby());
 
-                lobbyGUI.setOnAction(new EventHandler<ActionEvent>() {
+                lobbyGui.setOnAction(new EventHandler<ActionEvent>() {
                   @Override
                   public void handle(ActionEvent event) {
                     AppController.getGameSound().buttonClickBackwardSound();
-                    ServerMainWindowController.selectedLobby = lobbyGUI.getLobby();
+                    ServerMainWindowController.selectedLobby = lobbyGui.getLobby();
                     for (LobbyGUI lobbyEnt : ServerMainWindowController.lobbyGUIList.values()) {
                       lobbyEnt.setSelected(false);
                     }
 
-                    lobbyGUI.setSelected(true);
+                    lobbyGui.setSelected(true);
 
                   }
                 });
-                ServerMainWindowController.lobbyGUIList.put(mCL.getLobby().getLobbyName(),
-                    lobbyGUI);
+                ServerMainWindowController.lobbyGUIList.put(mcL.getLobby().getLobbyName(),
+                    lobbyGui);
                 ServerMainWindowController.drawLobbies(true);
                 ServerMainWindowController.getSearchButton().fire();
-                lobbies.put(mCL.getLobby().getLobbyName(), mCL.getLobby());
+                lobbies.put(mcL.getLobby().getLobbyName(), mcL.getLobby());
                 break;
 
               case MessageJoinLobby:
-                MessageJoinLobby mJL = (MessageJoinLobby) message;
-                lobbies.replace(mJL.getLobby().getLobbyName(), mJL.getLobby());
-                ServerMainWindowController.lobbyGUIList.replace(mJL.getLobby().getLobbyName(),
-                    new LobbyGUI(mJL.getLobby()));
+                MessageJoinLobby mjL = (MessageJoinLobby) message;
+                lobbies.replace(mjL.getLobby().getLobbyName(), mjL.getLobby());
+                ServerMainWindowController.lobbyGUIList.replace(mjL.getLobby().getLobbyName(),
+                    new LobbyGUI(mjL.getLobby()));
 
-                for (Player player : mJL.getLobby().getPlayersJoined()) {
+                for (Player player : mjL.getLobby().getPlayersJoined()) {
                   if (profile.getId() == player.getId()) {
                     ServerMainWindowController
-                        .drawLobbyMenu(lobbies.get(mJL.getLobby().getLobbyName()));
+                        .drawLobbyMenu(lobbies.get(mjL.getLobby().getLobbyName()));
                   }
                 }
                 ServerMainWindowController.drawLobbies(true);
@@ -451,8 +451,8 @@ public class Client {
                       gameHandler.initMultiplayer(returnClient());
                       clientsLobby = lobbyWithAvatars;
                       ServerMainWindowController.startMultyplayerGame(lobbyWithAvatars);
-                      isInAGame = true;
-                      setInALobby(false);
+                      isInaGame = true;
+                      setInaLobby(false);
                       chat = gamePane.getChatWindow();
                     });
                   }
@@ -463,7 +463,7 @@ public class Client {
                 break;
 
               case MessageGUIRollInitalDice:
-                final MessageGUIRollInitalDice me = ((MessageGUIRollInitalDice) message);
+                final MessageGuiRollInitalDice me = ((MessageGuiRollInitalDice) message);
                 Platform.runLater(() -> {
                   gameHandler.setGameState(me.getGameState());
                   gamePane.rollInitialDice(me.getId(), me.getValue());
@@ -471,9 +471,9 @@ public class Client {
                 break;
 
               case MessageGUIRollDiceBattle:
-                final MessageGUIRollDiceBattle mes = ((MessageGUIRollDiceBattle) message);
+                final MessageGuiRollDiceBattle mes = ((MessageGuiRollDiceBattle) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIRollDiceBattle) mes).getGameState());
+                  gameHandler.setGameState(((MessageGuiRollDiceBattle) mes).getGameState());
                   try {
                     gamePane.rollDiceBattle(mes.getAttackerDiceValues(),
                         mes.getDefenderDiceValues(), mes.getTroopsInAttackAt(),
@@ -485,16 +485,16 @@ public class Client {
                 break;
 
               case MessageGUIsetPeriod:
-                MessageGUIsetPeriod mesP = ((MessageGUIsetPeriod) message);
+                MessageGuisetPeriod mesP = ((MessageGuisetPeriod) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIsetPeriod) mesP).getGameState());
+                  gameHandler.setGameState(((MessageGuisetPeriod) mesP).getGameState());
                   gamePane.setPeriod(mesP.getPeriod());
                 });
                 break;
               case MessageGUIsetPhase:
-                MessageGUIsetPhase mesPh = ((MessageGUIsetPhase) message);
+                MessageGuisetPhase mesPh = ((MessageGuisetPhase) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIsetPhase) mesPh).getGameState());
+                  gameHandler.setGameState(((MessageGuisetPhase) mesPh).getGameState());
                   gamePane.setPhase(mesPh.getPhase());
                 });
                 break;
@@ -511,17 +511,17 @@ public class Client {
 
               case MessageGUIconquerCountry:
 
-                MessageGUIconquerCountry mesCoCo = ((MessageGUIconquerCountry) message);
+                MessageGuiconquerCountry mesCoCo = ((MessageGuiconquerCountry) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIconquerCountry) mesCoCo).getGameState());
-                  gamePane.conquerCountry(((MessageGUIconquerCountry) mesCoCo).getCountry(),
-                      ((MessageGUIconquerCountry) mesCoCo).getId(),
-                      ((MessageGUIconquerCountry) mesCoCo).getTroops());
+                  gameHandler.setGameState(((MessageGuiconquerCountry) mesCoCo).getGameState());
+                  gamePane.conquerCountry(((MessageGuiconquerCountry) mesCoCo).getCountry(),
+                      ((MessageGuiconquerCountry) mesCoCo).getId(),
+                      ((MessageGuiconquerCountry) mesCoCo).getTroops());
                 });
                 break;
 
               case MessageGUIsetCurrentPlayer:
-                final MessageGUIsetCurrentPlayer mesCur = ((MessageGUIsetCurrentPlayer) message);
+                final MessageGuisetCurrentPlayer mesCur = ((MessageGuisetCurrentPlayer) message);
                 Platform.runLater(() -> {
                   gameHandler.setGameState(mesCur.getGameState());
                   gamePane.setCurrentPlayer(mesCur.getId());
@@ -533,30 +533,30 @@ public class Client {
 
               case MessageGUIsetTroopsOnTerritory:
 
-                MessageGUIsetTroopsOnTerritory mesTrOnTe =
-                    ((MessageGUIsetTroopsOnTerritory) message);
+                MessageGuisetTroopsOnTerritory mesTrOnTe =
+                    ((MessageGuisetTroopsOnTerritory) message);
                 Platform.runLater(() -> {
                   gameHandler
-                      .setGameState(((MessageGUIsetTroopsOnTerritory) mesTrOnTe).getGameState());
+                      .setGameState(((MessageGuisetTroopsOnTerritory) mesTrOnTe).getGameState());
                   gamePane.setNumTroops(
-                      ((MessageGUIsetTroopsOnTerritory) mesTrOnTe).getCountryName(),
-                      ((MessageGUIsetTroopsOnTerritory) mesTrOnTe).getNumTroopsOfCountry());
+                      ((MessageGuisetTroopsOnTerritory) mesTrOnTe).getCountryName(),
+                      ((MessageGuisetTroopsOnTerritory) mesTrOnTe).getNumTroopsOfCountry());
                 });
                 break;
 
               case MessageGUIsetTroopsOnTerritoryAndLeft:
-                MessageGUIsetTroopsOnTerritoryAndLeft mesTrOnTeAndLe =
-                    ((MessageGUIsetTroopsOnTerritoryAndLeft) message);
+                MessageGuisetTroopsOnTerritoryAndLeft mesTrOnTeAndLe =
+                    ((MessageGuisetTroopsOnTerritoryAndLeft) message);
 
                 Platform.runLater(() -> {
                   gameHandler.setGameState(
-                      ((MessageGUIsetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe).getGameState());
+                      ((MessageGuisetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe).getGameState());
                   gamePane.setNumTroops(
-                      ((MessageGUIsetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe).getCountryName(),
-                      ((MessageGUIsetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe)
+                      ((MessageGuisetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe).getCountryName(),
+                      ((MessageGuisetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe)
                           .getNumTroopsOfCountry());
                   gamePane.setAmountOfTroopsLeftToDeploy(
-                      ((MessageGUIsetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe)
+                      ((MessageGuisetTroopsOnTerritoryAndLeft) mesTrOnTeAndLe)
                           .getNumTroopsOfPlayer());
                 });
                 break;
@@ -580,19 +580,19 @@ public class Client {
 
               case MessageGUIOpenBattleFrame:
 
-                MessageGuiOpenBattleFrame mesOBF = ((MessageGuiOpenBattleFrame) message);
+                MessageGuiOpenBattleFrame mesobF = ((MessageGuiOpenBattleFrame) message);
 
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGuiOpenBattleFrame) mesOBF).getGameState());
-                  gamePane.openBattleFrame(((MessageGuiOpenBattleFrame) mesOBF).getBattle());
+                  gameHandler.setGameState(((MessageGuiOpenBattleFrame) mesobF).getGameState());
+                  gamePane.openBattleFrame(((MessageGuiOpenBattleFrame) mesobF).getBattle());
                 });
                 break;
 
               case MessageGUIendBattle:
 
-                MessageGuiendBattle mesEB = ((MessageGuiendBattle) message);
+                MessageGuiendBattle meseB = ((MessageGuiendBattle) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGuiendBattle) mesEB).getGameState());
+                  gameHandler.setGameState(((MessageGuiendBattle) meseB).getGameState());
                   gamePane.closeBattleFrame();
                 });
 
@@ -600,10 +600,10 @@ public class Client {
 
               case MessageGUIupdateRanks:
 
-                MessageGUIupdateRanks mesUpRa = ((MessageGUIupdateRanks) message);
+                MessageGuiupdateRanks mesUpRa = ((MessageGuiupdateRanks) message);
                 Platform.runLater(() -> {
-                  gameHandler.setGameState(((MessageGUIupdateRanks) mesUpRa).getGameState());
-                  gamePane.setPlayersRanking(((MessageGUIupdateRanks) mesUpRa).getRanks());
+                  gameHandler.setGameState(((MessageGuiupdateRanks) mesUpRa).getGameState());
+                  gamePane.setPlayersRanking(((MessageGuiupdateRanks) mesUpRa).getRanks());
                 });
 
                 break;
@@ -719,17 +719,17 @@ public class Client {
    *
    * @return True if the client is in a lobby, false otherwise.
    */
-  public boolean isInALobby() {
-    return isInALobby;
+  public boolean isInaLobby() {
+    return isInaLobby;
   }
 
   /**
    * Sets the client's status of being in a lobby.
    *
-   * @param isInALobby The new lobby status of the client.
+   * @param isInaLobby The new lobby status of the client.
    */
-  public void setInALobby(boolean isInALobby) {
-    this.isInALobby = isInALobby;
+  public void setInaLobby(boolean isInaLobby) {
+    this.isInaLobby = isInaLobby;
   }
 
   /**
@@ -769,11 +769,11 @@ public class Client {
   /**
    * Method description goes here.
    *
-   * @param iD Description of parameter goes here.
+   * @param id Description of parameter goes here.
    */
-  public void playerThrowsInitalDice(int iD) {
+  public void playerThrowsInitalDice(int id) {
     Platform.runLater(() -> {
-      this.gameHandler.playerThrowsInitialDice(iD);
+      this.gameHandler.playerThrowsInitialDice(id);
     });
   }
 
@@ -859,10 +859,10 @@ public class Client {
    * @param idOfPlayer The ID of the player.
    * @param i The value of the dice.
    */
-  public void rollInitialDiceOnGUI(int idOfPlayer, int i) {
+  public void rollInitialDiceOnGui(int idOfPlayer, int i) {
     Platform.runLater(() -> {
       sendMessage(
-          new MessageGUIRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
+          new MessageGuiRollInitalDice(gameHandler.getGameState(), idOfPlayer, i, clientsLobby));
     });
   }
 
@@ -877,12 +877,12 @@ public class Client {
    * @param numberOfDice The number of dice.
    * @throws FileNotFoundException If an error occurs when accessing the file.
    */
-  public void rollDiceBattleOnGUI(int[] attackerDiceValues, int[] defenderDiceValues,
+  public void rollDiceBattleOnGui(int[] attackerDiceValues, int[] defenderDiceValues,
       int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice) throws FileNotFoundException {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIRollDiceBattle(gameHandler.getGameState(), attackerDiceValues,
+      sendMessage(new MessageGuiRollDiceBattle(gameHandler.getGameState(), attackerDiceValues,
           defenderDiceValues, troopsInAttackAt, troopsInAttackDf, numberOfDice, clientsLobby));
     });
   }
@@ -892,7 +892,7 @@ public class Client {
    *
    * @param e The exception to be shown.
    */
-  public void showExeceptionOnGUI(Exception e) {
+  public void showExeceptionOnGui(Exception e) {
     Platform.runLater(() -> {
       this.gamePane.showException(e.toString());
     });
@@ -903,9 +903,9 @@ public class Client {
    *
    * @param period The period to be set.
    */
-  public void setPeriodOnGUI(Period period) {
+  public void setPeriodOnGui(Period period) {
     Platform.runLater(() -> {
-      sendMessage(new MessageGUIsetPeriod(gameHandler.getGameState(), period, clientsLobby));
+      sendMessage(new MessageGuisetPeriod(gameHandler.getGameState(), period, clientsLobby));
     });
   }
 
@@ -914,11 +914,11 @@ public class Client {
    *
    * @param phase The phase to be set.
    */
-  public void setPhaseOnGUI(Phase phase) {
+  public void setPhaseOnGui(Phase phase) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIsetPhase(gameHandler.getGameState(), phase, clientsLobby));
+      sendMessage(new MessageGuisetPhase(gameHandler.getGameState(), phase, clientsLobby));
     });
   }
 
@@ -930,7 +930,7 @@ public class Client {
    * @param id The ID of the player.
    * @param troopsLeft The number of troops left.
    */
-  public void possesCountryOnGUI(CountryName country, int id, int troopsLeft) {
+  public void possesCountryOnGui(CountryName country, int id, int troopsLeft) {
     Platform.runLater(() -> {
       sendMessage(new MessageGuipossessCountry(gameHandler.getGameState(), country, id, troopsLeft,
           clientsLobby));
@@ -945,11 +945,11 @@ public class Client {
    * @param id The ID of the player.
    * @param troops The number of troops.
    */
-  public void conquerCountryOnGUI(CountryName country, int id, int troops) {
+  public void conquerCountryOnGui(CountryName country, int id, int troops) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIconquerCountry(gameHandler.getGameState(), country, id, troops,
+      sendMessage(new MessageGuiconquerCountry(gameHandler.getGameState(), country, id, troops,
           clientsLobby));
     });
   }
@@ -961,12 +961,12 @@ public class Client {
    * @param id The ID of the player.
    * @param troopsLeft The number of troops left.
    */
-  public void setCurrentPlayerOnGUI(int id, int troopsLeft) {
+  public void setCurrentPlayerOnGui(int id, int troopsLeft) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
       sendMessage(
-          new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));
+          new MessageGuisetCurrentPlayer(gameHandler.getGameState(), id, troopsLeft, clientsLobby));
     });
   }
 
@@ -976,7 +976,7 @@ public class Client {
    * @param id The ID of the player.
    * @param cards The list of cards of the player.
    */
-  public void chnagePlayerOnGUI(int id, ArrayList<Card> cards) {
+  public void chnagePlayerOnGui(int id, ArrayList<Card> cards) {
     Platform.runLater(() -> {
       this.gamePane.setPlayerOnGUI(id, cards);
     });
@@ -990,7 +990,7 @@ public class Client {
    * @param max The maximum number of troops.
    * @param choosePane The choosePane to be used.
    */
-  public void chooseNumberOfTroopsOnGUI(CountryName country, int min, int max,
+  public void chooseNumberOfTroopsOnGui(CountryName country, int min, int max,
       ChoosePane choosePane) {
     Platform.runLater(() -> {
       this.gamePane.showChoosingTroopsPane(country, min, max, choosePane);
@@ -1000,7 +1000,7 @@ public class Client {
   /**
    * Closes the troops pane on GUI.
    */
-  public void closeTroopsPaneOnGUI() {
+  public void closeTroopsPaneOnGui() {
     Platform.runLater(() -> {
       this.gamePane.closeChoosingTroopsPane();
     });
@@ -1017,7 +1017,7 @@ public class Client {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIsetTroopsOnTerritory(gameHandler.getGameState(), countryName,
+      sendMessage(new MessageGuisetTroopsOnTerritory(gameHandler.getGameState(), countryName,
           numTroopsOfCountry, clientsLobby));
     });
   }
@@ -1030,12 +1030,12 @@ public class Client {
    * @param numTroopsOfCountry The number of troops in the country.
    * @param numTroopsOfPlayer The number of troops left for the player.
    */
-  public void setTroopsOnTerritoryAndLeftOnGUI(CountryName countryName, int numTroopsOfCountry,
+  public void setTroopsOnTerritoryAndLeftOnGui(CountryName countryName, int numTroopsOfCountry,
       int numTroopsOfPlayer) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
-      sendMessage(new MessageGUIsetTroopsOnTerritoryAndLeft(gameHandler.getGameState(), countryName,
+      sendMessage(new MessageGuisetTroopsOnTerritoryAndLeft(gameHandler.getGameState(), countryName,
           numTroopsOfCountry, numTroopsOfPlayer, clientsLobby));
     });
   }
@@ -1049,7 +1049,7 @@ public class Client {
    * @param numberFrom The number of troops left in the 'from' country.
    * @param numberTo The number of troops in the 'to' country after the move.
    */
-  public void moveTroopsFromTerritoryToOtherOnGUI(CountryName from, CountryName to, int numberFrom,
+  public void moveTroopsFromTerritoryToOtherOnGui(CountryName from, CountryName to, int numberFrom,
       int numberTo) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
@@ -1065,7 +1065,7 @@ public class Client {
    *
    * @param battle The battle to be displayed.
    */
-  public void openBattleFrameOnGUI(Battle battle) {
+  public void openBattleFrameOnGui(Battle battle) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
@@ -1076,7 +1076,7 @@ public class Client {
   /**
    * Ends the battle on the GUI and sends a 'MessageGUIendBattle' message to all other clients.
    */
-  public void endBattleOnGUI() {
+  public void endBattleOnGui() {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
@@ -1092,11 +1092,11 @@ public class Client {
    * @param bonusTroops The number of bonus troops the player receives for turning in the cards.
    */
 
-  public void riskCardsTurnedInSuccessOnGUI(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
+  public void riskCardsTurnedInSuccessOnGui(ArrayList<Card> card, int idOfPlayer, int bonusTroops) {
     Platform.runLater(() -> {
       this.gamePane.setAmountOfTroopsLeftToDeploy(bonusTroops);
       this.gamePane.setPlayerOnGUI(idOfPlayer, card);
-      sendMessage(new MessageGUIsetCurrentPlayer(gameHandler.getGameState(), idOfPlayer,
+      sendMessage(new MessageGuisetCurrentPlayer(gameHandler.getGameState(), idOfPlayer,
           bonusTroops, clientsLobby));
     });
   }
@@ -1106,12 +1106,12 @@ public class Client {
    *
    * @param ranks The updated ranks.
    */
-  public void updateRanksOnGUI(int[] ranks) {
+  public void updateRanksOnGui(int[] ranks) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
 
-      sendMessage(new MessageGUIupdateRanks(gameHandler.getGameState(), ranks, clientsLobby));
+      sendMessage(new MessageGuiupdateRanks(gameHandler.getGameState(), ranks, clientsLobby));
     });
   }
 
@@ -1121,7 +1121,7 @@ public class Client {
    *
    * @param podium The list of players in the podium.
    */
-  public void gameIsOverOnGUI(ArrayList<Player> podium) {
+  public void gameIsOverOnGui(ArrayList<Player> podium) {
     Platform.runLater(() -> {
       gameHandler.getGameState()
           .setGameStateVersion(1 + gameHandler.getGameState().getGameStateVersion());
@@ -1134,12 +1134,12 @@ public class Client {
    *
    * @return True if the client is in a game, false otherwise.
    */
-  public boolean isInAGame() {
-    return isInAGame;
+  public boolean isInaGame() {
+    return isInaGame;
   }
 
-  public void setInAGame(boolean isInAGame) {
-    this.isInAGame = isInAGame;
+  public void setInaGame(boolean isInaGame) {
+    this.isInaGame = isInaGame;
   }
 
   public boolean isStopFlag() {

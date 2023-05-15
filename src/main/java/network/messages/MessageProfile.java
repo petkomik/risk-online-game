@@ -6,7 +6,7 @@ import database.Profile;
  * The MessageProfile class represents a message containing a profile. It is used to transmit
  * profile information.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageProfile extends Message {
 

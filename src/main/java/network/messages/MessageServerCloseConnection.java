@@ -5,7 +5,7 @@ package network.messages;
  * close the connection. It serves as a signal for closing the connection between the client and the
  * server.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageServerCloseConnection extends Message {
   private static final long serialVersionUID = 1L;

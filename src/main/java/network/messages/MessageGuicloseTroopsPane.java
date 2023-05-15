@@ -2,10 +2,12 @@ package network.messages;
 
 import gameState.GameState;
 
-/*
+/**
+ * Message for the closer of toops Pane.
+ *
  * @author dignatov
  */
-public class MessageGUIcloseTroopsPane extends Message {
+public class MessageGuicloseTroopsPane extends Message {
 
   private static final long serialVersionUID = 1L;
   private GameState gameState;
@@ -15,7 +17,7 @@ public class MessageGUIcloseTroopsPane extends Message {
    *
    * @param gameState The game state associated with the message
    */
-  public MessageGUIcloseTroopsPane(GameState gameState) {
+  public MessageGuicloseTroopsPane(GameState gameState) {
     super(MessageType.MessageGUIcloseTroopsPane);
     this.gameState = gameState;
   }

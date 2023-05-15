@@ -14,17 +14,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 import network.messages.Message;
 import network.messages.MessageConnect;
 import network.messages.MessageDisconnect;
-import network.messages.MessageGUIRollDiceBattle;
-import network.messages.MessageGUIRollInitalDice;
-import network.messages.MessageGUIconquerCountry;
+import network.messages.MessageGuiRollDiceBattle;
+import network.messages.MessageGuiRollInitalDice;
+import network.messages.MessageGuiconquerCountry;
 import network.messages.MessageGuimoveTroopsFromTerritoryToOther;
 import network.messages.MessageGuipossessCountry;
-import network.messages.MessageGUIsetCurrentPlayer;
-import network.messages.MessageGUIsetPeriod;
-import network.messages.MessageGUIsetPhase;
-import network.messages.MessageGUIsetTroopsOnTerritory;
-import network.messages.MessageGUIsetTroopsOnTerritoryAndLeft;
-import network.messages.MessageGUIupdateRanks;
+import network.messages.MessageGuisetCurrentPlayer;
+import network.messages.MessageGuisetPeriod;
+import network.messages.MessageGuisetPhase;
+import network.messages.MessageGuisetTroopsOnTerritory;
+import network.messages.MessageGuisetTroopsOnTerritoryAndLeft;
+import network.messages.MessageGuiupdateRanks;
 import network.messages.MessageGuiOpenBattleFrame;
 import network.messages.MessageGuiendBattle;
 import network.messages.MessageJoinLobby;
@@ -331,20 +331,20 @@ public class ClientHandler implements Runnable {
 
           case MessageGUIRollInitalDice:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIRollInitalDice) messageFromClient).getLobby());
+                ((MessageGuiRollInitalDice) messageFromClient).getLobby());
             break;
 
           case MessageGUIRollDiceBattle:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIRollDiceBattle) messageFromClient).getLobby());
+                ((MessageGuiRollDiceBattle) messageFromClient).getLobby());
             break;
           case MessageGUIsetPeriod:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetPeriod) messageFromClient).getLobby());
+                ((MessageGuisetPeriod) messageFromClient).getLobby());
             break;
           case MessageGUIsetPhase:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetPhase) messageFromClient).getLobby());
+                ((MessageGuisetPhase) messageFromClient).getLobby());
             break;
           case MessageGUIpossessCountry:
             broadcastMessageWithinLobby(messageFromClient,
@@ -352,17 +352,17 @@ public class ClientHandler implements Runnable {
             break;
           case MessageGUIconquerCountry:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIconquerCountry) messageFromClient).getLobby());
+                ((MessageGuiconquerCountry) messageFromClient).getLobby());
 
             break;
           case MessageGUIsetCurrentPlayer:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetCurrentPlayer) messageFromClient).getLobby());
+                ((MessageGuisetCurrentPlayer) messageFromClient).getLobby());
             break;
           case MessageGUIsetTroopsOnTerritory:
 
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetTroopsOnTerritory) messageFromClient).getLobby());
+                ((MessageGuisetTroopsOnTerritory) messageFromClient).getLobby());
             break;
           case MessageGUImoveTroopsFromTerritoryToOther:
             broadcastMessageWithinLobby(messageFromClient,
@@ -370,7 +370,7 @@ public class ClientHandler implements Runnable {
             break;
           case MessageGUIsetTroopsOnTerritoryAndLeft:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIsetTroopsOnTerritoryAndLeft) messageFromClient).getLobby());
+                ((MessageGuisetTroopsOnTerritoryAndLeft) messageFromClient).getLobby());
             break;
           case MessageGUIOpenBattleFrame:
             broadcastMessageWithinLobby(messageFromClient,
@@ -382,7 +382,7 @@ public class ClientHandler implements Runnable {
             break;
           case MessageGUIupdateRanks:
             broadcastMessageWithinLobby(messageFromClient,
-                ((MessageGUIupdateRanks) messageFromClient).getLobby());
+                ((MessageGuiupdateRanks) messageFromClient).getLobby());
             break;
           case MessageGUIgameIsOver:
             broadcastMessageWithinLobby(messageFromClient,

@@ -389,7 +389,7 @@ public class EndGamePodiumController extends StackPane {
             }
             serverMenu.drawLobbies(true);
             AppController.getClient().setClientsLobby(null);
-            AppController.getClient().setInAGame(false);
+            AppController.getClient().setInaGame(false);
             stage.getScene().setRoot(serverMenu);
           } catch (Exception e) {
             e.printStackTrace();

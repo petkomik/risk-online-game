@@ -2014,7 +2014,7 @@ public class GamePaneController implements Initializable {
 
           serverMainWindowController.drawLobbies(true);
           client.setClientsLobby(null);
-          client.setInAGame(false);
+          client.setInaGame(false);
         } catch (Exception ev) {
           ev.printStackTrace();
         }

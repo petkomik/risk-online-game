@@ -10,9 +10,10 @@ import gameState.GameState;
  * troops in the defending territory, the number of dice rolled by each player, and the associated
  * lobby.
  * 
+ * </p>
  * author dignatov
  */
-public class MessageGUIRollDiceBattle extends Message {
+public class MessageGuiRollDiceBattle extends Message {
 
   private static final long serialVersionUID = 1L;
   private int[] attackerDiceValues;
@@ -37,7 +38,7 @@ public class MessageGUIRollDiceBattle extends Message {
    * @param numberOfDice The number of dice rolled by each player
    * @param lobby The associated lobby
    */
-  public MessageGUIRollDiceBattle(GameState gameState, int[] attackerDiceValues,
+  public MessageGuiRollDiceBattle(GameState gameState, int[] attackerDiceValues,
       int[] defenderDiceValues, int troopsInAttackAt, int troopsInAttackDf, int[] numberOfDice,
       Lobby lobby) {
     super(MessageType.MessageGUIRollDiceBattle);

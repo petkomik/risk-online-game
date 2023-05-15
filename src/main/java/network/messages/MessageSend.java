@@ -1,14 +1,13 @@
 package network.messages;
 
 import database.Profile;
-import game.models.Player;
 
 /**
  * The MessageSend class represents a message that is sent from a player to other players or the
  * lobby. It contains the message content, the sender's profile, and a flag indicating whether it is
  * intended for the lobby or other players.
  *
- * author dignatov
+ * @author dignatov
  */
 public class MessageSend extends Message {
 
