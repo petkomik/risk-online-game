@@ -140,23 +140,25 @@ public class Logic {
               .get((gameState.getAlivePlayers().indexOf(player) + gameState.getAlivePlayers().size()
                   + 1) % gameState.getAlivePlayers().size())
               .getId() == Logic.getFirstPlayer(gameState)) {
-            if (gameState.getPlayerTroopsLeft().get(player.getId()) > gameState
+            if (gameState.getPlayerTroopsLeft().get(player.getId()).intValue() > gameState
                 .getPlayerTroopsLeft()
                 .get(gameState.getAlivePlayers()
                     .get((gameState.getAlivePlayers().indexOf(player)
                         + gameState.getAlivePlayers().size() + 1)
                         % gameState.getAlivePlayers().size())
-                    .getId())) {
+                    .getId())
+                .intValue()) {
               return true;
             }
           } else {
-            if (gameState.getPlayerTroopsLeft().get(player.getId()) == gameState
+            if (gameState.getPlayerTroopsLeft().get(player.getId()).intValue() == gameState
                 .getPlayerTroopsLeft()
                 .get(gameState.getAlivePlayers()
                     .get((gameState.getAlivePlayers().indexOf(player)
                         + gameState.getAlivePlayers().size() + 1)
                         % gameState.getAlivePlayers().size())
-                    .getId())) {
+                    .getId())
+                .intValue()) {
               return true;
             }
           }
@@ -204,23 +206,25 @@ public class Logic {
                 .get((gameState.getAlivePlayers().indexOf(player)
                     + gameState.getAlivePlayers().size() + 1) % gameState.getAlivePlayers().size())
                 .getId() == Logic.getFirstPlayer(gameState)) {
-              if (gameState.getPlayerTroopsLeft().get(player.getId()) > gameState
+              if (gameState.getPlayerTroopsLeft().get(player.getId()).intValue() > gameState
                   .getPlayerTroopsLeft()
                   .get(gameState.getAlivePlayers()
                       .get((gameState.getAlivePlayers().indexOf(player)
                           + gameState.getAlivePlayers().size() + 1)
                           % gameState.getAlivePlayers().size())
-                      .getId())) {
+                      .getId())
+                  .intValue()) {
                 return true;
               }
             } else {
-              if (gameState.getPlayerTroopsLeft().get(player.getId()) == gameState
+              if (gameState.getPlayerTroopsLeft().get(player.getId()).intValue() == gameState
                   .getPlayerTroopsLeft()
                   .get(gameState.getAlivePlayers()
                       .get((gameState.getAlivePlayers().indexOf(player)
                           + gameState.getAlivePlayers().size() + 1)
                           % gameState.getAlivePlayers().size())
-                      .getId())) {
+                      .getId())
+                  .intValue()) {
                 return true;
               }
             }
